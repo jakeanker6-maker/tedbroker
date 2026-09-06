@@ -59,6 +59,7 @@ class CreatePlan(BaseModel):
     minimum_investment: float = Field(..., gt=0, description="Minimum investment amount")
     expected_return_percent: float = Field(..., description="Expected return percentage")
     holding_period_months: int = Field(..., gt=0, description="Holding period in months")
+    current_subscribers: int = Field(default=0, ge=0, description="Number of current subscribers")
     is_active: bool = Field(default=True, description="Whether the plan is active")
 
 
@@ -1173,7 +1174,7 @@ async def create_plan(
         "minimum_investment": plan_data.minimum_investment,
         "expected_return_percent": plan_data.expected_return_percent,
         "holding_period_months": plan_data.holding_period_months,
-        "current_subscribers": 0,
+        "current_subscribers": plan_data.current_subscribers,
         "is_active": plan_data.is_active,
         "created_at": datetime.utcnow(),
         "updated_at": datetime.utcnow()
@@ -1236,6 +1237,7 @@ async def update_plan(
         "minimum_investment": plan_data.minimum_investment,
         "expected_return_percent": plan_data.expected_return_percent,
         "holding_period_months": plan_data.holding_period_months,
+        "current_subscribers": plan_data.current_subscribers,
         "is_active": plan_data.is_active,
         "updated_at": datetime.utcnow()
     }
