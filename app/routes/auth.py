@@ -138,12 +138,16 @@ async def register(request: Request, user_data: UserRegister):
         print(f"2FA Code for {user_dict['email']}: {code}")
 
     # Return response indicating 2FA is required
-    return {
+    response = {
         "message": "Registration successful. Please verify your email with the code sent to you.",
         "requires_2fa": True,
         "email": user_dict["email"],
-        "user_id": str(user_dict["_id"])
+        "user_id": str(user_dict["_id"]),
+        "email_sent": email_sent
     }
+    if not email_sent:
+        response["code"] = code
+    return response
 
 
 @router.post("/login")
@@ -299,12 +303,16 @@ async def login(request: Request, user_credentials: UserLogin):
         # If SendGrid is not configured, log the code for testing
         print(f"2FA Code for {user['email']}: {code}")
 
-    return {
+    response = {
         "message": "Verification code sent to your email",
         "requires_2fa": True,
         "email": user["email"],
-        "security_alert": suspicious_activity.get("is_suspicious", False)
+        "security_alert": suspicious_activity.get("is_suspicious", False),
+        "email_sent": email_sent
     }
+    if not email_sent:
+        response["code"] = code
+    return response
 
 
 @router.post("/token", response_model=Token)
@@ -629,9 +637,13 @@ async def resend_2fa(request: Request, email_data: dict):
     if not email_sent:
         print(f"2FA Code for {user['email']}: {code}")
 
-    return {
-        "message": "New verification code sent to your email"
+    response = {
+        "message": "New verification code sent to your email",
+        "email_sent": email_sent
     }
+    if not email_sent:
+        response["code"] = code
+    return response
 
 
 @router.get("/login-history")
