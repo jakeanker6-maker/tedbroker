@@ -103,6 +103,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
         if (result.success) {
             if (result.data.requires_2fa) {
+                // Store code for fallback display if email failed
+                if (result.data.email_sent === false && result.data.code) {
+                    localStorage.setItem('pending_verification_code', result.data.code);
+                }
                 // Redirect to 2FA verification page
                 TED_AUTH.showFormMessage('login-message', 'Verification code sent! Redirecting...', 'info');
                 setTimeout(() => {
