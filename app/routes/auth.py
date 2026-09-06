@@ -138,8 +138,13 @@ async def register(request: Request, user_data: UserRegister):
         print(f"2FA Code for {user_dict['email']}: {code}")
 
     # Return response indicating 2FA is required
+    if email_sent:
+        message = "Registration successful. Please verify your email with the code sent to you."
+    else:
+        message = "Registration successful. Email delivery failed - please use the code below to verify your account."
+
     response = {
-        "message": "Registration successful. Please verify your email with the code sent to you.",
+        "message": message,
         "requires_2fa": True,
         "email": user_dict["email"],
         "user_id": str(user_dict["_id"]),
@@ -303,8 +308,13 @@ async def login(request: Request, user_credentials: UserLogin):
         # If SendGrid is not configured, log the code for testing
         print(f"2FA Code for {user['email']}: {code}")
 
+    if email_sent:
+        message = "Verification code sent to your email"
+    else:
+        message = "Email delivery failed - please use the code below to verify your login."
+
     response = {
-        "message": "Verification code sent to your email",
+        "message": message,
         "requires_2fa": True,
         "email": user["email"],
         "security_alert": suspicious_activity.get("is_suspicious", False),
@@ -637,8 +647,13 @@ async def resend_2fa(request: Request, email_data: dict):
     if not email_sent:
         print(f"2FA Code for {user['email']}: {code}")
 
+    if email_sent:
+        message = "New verification code sent to your email"
+    else:
+        message = "Email delivery failed - please use the code below to verify your account."
+
     response = {
-        "message": "New verification code sent to your email",
+        "message": message,
         "email_sent": email_sent
     }
     if not email_sent:
