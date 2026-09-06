@@ -1088,6 +1088,7 @@ async function submitNewPlan(event) {
         minimum_investment: parseFloat(document.getElementById('plan-min-investment').value),
         expected_return_percent: parseFloat(document.getElementById('plan-return').value),
         holding_period_months: parseInt(document.getElementById('plan-period').value),
+        current_subscribers: parseInt(document.getElementById('plan-subscribers').value) || 0,
         is_active: document.getElementById('plan-active').checked
     };
 
@@ -1125,6 +1126,7 @@ async function showEditPlanModal(planId) {
         document.getElementById('edit-plan-return').value = plan.expected_return_percent;
         document.getElementById('edit-plan-period').value = plan.holding_period_months;
         document.getElementById('edit-plan-active').checked = plan.is_active;
+        document.getElementById('edit-plan-subscribers').value = plan.current_subscribers || 0;
 
         // Show modal
         const modal = document.getElementById('edit-plan-modal');
@@ -1157,6 +1159,7 @@ async function submitEditedPlan(event) {
         minimum_investment: parseFloat(document.getElementById('edit-plan-min-investment').value),
         expected_return_percent: parseFloat(document.getElementById('edit-plan-return').value),
         holding_period_months: parseInt(document.getElementById('edit-plan-period').value),
+        current_subscribers: parseInt(document.getElementById('edit-plan-subscribers').value) || 0,
         is_active: document.getElementById('edit-plan-active').checked
     };
 
