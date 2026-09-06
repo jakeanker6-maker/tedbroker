@@ -22,7 +22,11 @@ TED_BROKERS_CONTEXT = CONTEXT_FILE.read_text(encoding="utf-8") if CONTEXT_FILE.e
 
 # OpenRouter API configuration
 OPENROUTER_API_URL = "https://openrouter.ai/api/v1/chat/completions"
-OPENROUTER_MODEL = "google/gemma-4-31b-it:free"
+OPENROUTER_MODEL = "minimax/minimax-m3:free"
+OPENROUTER_FALLBACK_MODELS = [
+    "nvidia/nemotron-3-super-120b-a12b:free",
+    "google/gemma-4-31b-it:free",
+]
 
 
 def get_openrouter_api_key():
@@ -420,53 +424,74 @@ async def stream_openrouter_api(messages: list):
     """
     Stream OpenRouter API response as SSE chunks.
     Yields JSON lines with 'token' or 'done' or 'error' keys.
+    Tries the primary model first, then falls back to alternatives on rate-limit errors.
     """
-    try:
-        async with httpx.AsyncClient(timeout=60.0) as client:
-            async with client.stream(
-                "POST",
-                OPENROUTER_API_URL,
-                headers={
-                    "Content-Type": "application/json",
-                    "Authorization": f"Bearer {get_openrouter_api_key()}",
-                    "HTTP-Referer": "https://tedbrokers.com",
-                    "X-Title": "TED Brokers AI Assistant"
-                },
-                json={
-                    "model": OPENROUTER_MODEL,
-                    "messages": messages,
-                    "max_tokens": 1000,
-                    "temperature": 0.7,
-                    "stream": True
-                }
-            ) as response:
-                if response.status_code != 200:
-                    error_body = await response.aread()
-                    yield json.dumps({"error": "I'm having trouble connecting to my knowledge base. Please try again in a moment."}) + "\n"
+    api_key = get_openrouter_api_key()
+    if not api_key:
+        yield json.dumps({"error": "AI service is not configured. Please contact support."}) + "\n"
+        yield json.dumps({"done": True}) + "\n"
+        return
+
+    models_to_try = [OPENROUTER_MODEL] + OPENROUTER_FALLBACK_MODELS
+
+    for model in models_to_try:
+        try:
+            async with httpx.AsyncClient(timeout=60.0) as client:
+                async with client.stream(
+                    "POST",
+                    OPENROUTER_API_URL,
+                    headers={
+                        "Content-Type": "application/json",
+                        "Authorization": f"Bearer {api_key}",
+                        "HTTP-Referer": "https://tedbrokers.com",
+                        "X-Title": "TED Brokers AI Assistant"
+                    },
+                    json={
+                        "model": model,
+                        "messages": messages,
+                        "max_tokens": 1000,
+                        "temperature": 0.7,
+                        "stream": True
+                    }
+                ) as response:
+                    if response.status_code == 429:
+                        # Rate-limited — try next model
+                        continue
+
+                    if response.status_code != 200:
+                        # Non-retryable error — report and stop
+                        yield json.dumps({"error": "I'm having trouble connecting to my knowledge base. Please try again in a moment."}) + "\n"
+                        yield json.dumps({"done": True}) + "\n"
+                        return
+
+                    # Success — stream the response
+                    async for line in response.aiter_lines():
+                        if not line.startswith("data: "):
+                            continue
+                        payload = line[6:]
+                        if payload.strip() == "[DONE]":
+                            yield json.dumps({"done": True}) + "\n"
+                            return
+                        try:
+                            chunk = json.loads(payload)
+                            delta = chunk.get("choices", [{}])[0].get("delta", {})
+                            content = delta.get("content", "")
+                            if content:
+                                yield json.dumps({"token": content}) + "\n"
+                        except json.JSONDecodeError:
+                            continue
+
                     yield json.dumps({"done": True}) + "\n"
                     return
 
-                async for line in response.aiter_lines():
-                    if not line.startswith("data: "):
-                        continue
-                    payload = line[6:]
-                    if payload.strip() == "[DONE]":
-                        yield json.dumps({"done": True}) + "\n"
-                        return
-                    try:
-                        chunk = json.loads(payload)
-                        delta = chunk.get("choices", [{}])[0].get("delta", {})
-                        content = delta.get("content", "")
-                        if content:
-                            yield json.dumps({"token": content}) + "\n"
-                    except json.JSONDecodeError:
-                        continue
+        except httpx.TimeoutException:
+            continue
+        except Exception:
+            continue
 
-                yield json.dumps({"done": True}) + "\n"
-
-    except Exception:
-        yield json.dumps({"error": "I'm experiencing a technical issue. Please try again."}) + "\n"
-        yield json.dumps({"done": True}) + "\n"
+    # All models failed
+    yield json.dumps({"error": "I'm experiencing a technical issue. Please try again."}) + "\n"
+    yield json.dumps({"done": True}) + "\n"
 
 
 @router.post("/ai")

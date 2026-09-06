@@ -18,6 +18,23 @@ To become the world's most trusted and user-friendly copy trading broker, enabli
 - **Options Automation**: Automated options trading strategies
 - **Staking**: Earn rewards by staking cryptocurrencies
 
+### REIT Plans (Real Estate Investment Trusts)
+TED Brokers also offers REIT-based investment plans available under Explore > Investment Plans (Robo Advisor).
+
+A REIT, or Real Estate Investment Trust, is a company that owns, operates, or finances income-producing real estate. Rather than buying property directly, investors can pool their capital into a REIT and gain exposure to a diversified portfolio of real estate assets — such as commercial buildings, residential complexes, data centers, hotels, and warehouses — without the complexities of direct property ownership.
+
+REITs work by collecting rent and income from their property holdings, then distributing the majority of that income back to investors as dividends. By law, REITs are required to distribute at least 90% of their taxable income to shareholders, which makes them a compelling option for those seeking regular income streams.
+
+REITs are widely regarded by many investors as one of the most reliable and dependable investment vehicles available. They offer several key advantages:
+
+- **Consistent Dividend Income** — Because REITs must distribute most of their earnings, they tend to provide steady, predictable cash flow compared to many other asset classes.
+- **Portfolio Diversification** — Real estate often moves independently of stocks and bonds, adding a layer of stability to an investment portfolio.
+- **Liquidity** — Unlike physical real estate, REIT shares can be bought and sold easily, giving investors flexibility to enter or exit positions without lengthy processes.
+- **Transparency and Regulation** — REITs are publicly traded and subject to regulatory oversight, giving investors clear visibility into performance, holdings, and governance.
+- **Inflation Hedge** — Property values and rental income tend to rise with inflation, helping protect the purchasing power of invested capital over time.
+
+Through TED Brokers' Robo Advisor, users can invest in curated REIT portfolios that are managed and rebalanced automatically. Whether you are a conservative investor looking for stable income or seeking growth through diversified real estate exposure, our REIT plans provide an accessible and professionally managed pathway into the real estate market.
+
 ### Copy Trading
 - Browse marketplace of verified traders with detailed performance analytics
 - Real-time execution and instant strategy syncing
