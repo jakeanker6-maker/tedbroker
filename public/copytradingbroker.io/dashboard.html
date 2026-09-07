@@ -7094,14 +7094,6 @@
             });
         }
 
-        // Copy referral link function
-        function copyReferralLink() {
-            const linkText = document.getElementById('referral-link').textContent;
-            navigator.clipboard.writeText(linkText).then(() => {
-                alert(TED_LANG.t('alert.referralCopied', 'Referral link copied to clipboard!'));
-            });
-        }
-
         // Logout function
         function handleLogout() {
             if (confirm(TED_LANG.t('alert.logoutConfirm', 'Are you sure you want to log out?'))) {
