@@ -10,31 +10,31 @@ function signInWithGoogle() {
 
 // Handle token from OAuth redirect
 async function handleOAuthRedirect() {
-    const urlParams = new URLSearchParams(window.location.search);
-    const token = urlParams.get('token');
-    const error = urlParams.get('error');
+    let token = null;
+    let error = null;
+
+    const hash = window.location.hash;
+    if (hash && hash.includes('token=')) {
+        const hashParams = new URLSearchParams(hash.substring(1));
+        token = hashParams.get('token');
+    } else {
+        const urlParams = new URLSearchParams(window.location.search);
+        token = urlParams.get('token');
+        error = urlParams.get('error');
+    }
 
     if (error) {
         if (error === 'oauth_failed') {
             TED_AUTH.showFormMessage('register-message', 'Google sign-up failed. Please try again.', 'error');
         }
-        // Remove error from URL
         window.history.replaceState({}, document.title, window.location.pathname);
     } else if (token) {
-        // Save token
         TED_AUTH.saveToken(token);
-
-        // Fetch user data
         await TED_AUTH.fetchCurrentUser();
-
-        // Remove token from URL
         window.history.replaceState({}, document.title, window.location.pathname);
 
-        // Show success and redirect to dashboard
         TED_AUTH.showFormMessage('register-message', 'Registration successful! Redirecting...', 'success');
-        setTimeout(() => {
-            window.location.href = '/dashboard';
-        }, 1000);
+        setTimeout(() => { window.location.href = '/dashboard'; }, 1000);
     }
 }
 

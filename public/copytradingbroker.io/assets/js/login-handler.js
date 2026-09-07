@@ -10,51 +10,44 @@ function signInWithGoogle() {
 
 // Handle token from OAuth redirect
 async function handleOAuthRedirect() {
-    const urlParams = new URLSearchParams(window.location.search);
-    const token = urlParams.get('token');
-    const error = urlParams.get('error');
+    let token = null;
+    let error = null;
+
+    const hash = window.location.hash;
+    if (hash && hash.includes('token=')) {
+        const hashParams = new URLSearchParams(hash.substring(1));
+        token = hashParams.get('token');
+    } else {
+        const urlParams = new URLSearchParams(window.location.search);
+        token = urlParams.get('token');
+        error = urlParams.get('error');
+    }
 
     if (error) {
         if (error === 'oauth_failed') {
             TED_AUTH.showFormMessage('login-message', 'Google sign-in failed. Please try again.', 'error');
         }
-        // Remove error from URL
         window.history.replaceState({}, document.title, window.location.pathname);
     } else if (token) {
-        // Save token
         TED_AUTH.saveToken(token);
-
-        // Fetch user data
         await TED_AUTH.fetchCurrentUser();
-
-        // Remove token from URL
         window.history.replaceState({}, document.title, window.location.pathname);
 
-        // Check if onboarding is complete
         try {
             const onboardingResponse = await TED_AUTH.apiCall('/api/onboarding/status');
             const onboardingData = await onboardingResponse.json();
 
             if (onboardingData.is_onboarding_complete) {
-                // Onboarding complete, go to dashboard
                 TED_AUTH.showFormMessage('login-message', 'Login successful! Redirecting to dashboard...', 'success');
-                setTimeout(() => {
-                    window.location.href = '/dashboard';
-                }, 1000);
+                setTimeout(() => { window.location.href = '/dashboard'; }, 1000);
             } else {
-                // Onboarding not complete, go to onboarding wizard
                 TED_AUTH.showFormMessage('login-message', 'Login successful! Please complete your profile...', 'success');
-                setTimeout(() => {
-                    window.location.href = '/onboarding';
-                }, 1000);
+                setTimeout(() => { window.location.href = '/onboarding'; }, 1000);
             }
         } catch (error) {
-            // If there's an error checking onboarding status, default to dashboard
             console.error('Error checking onboarding status:', error);
             TED_AUTH.showFormMessage('login-message', 'Login successful! Redirecting...', 'success');
-            setTimeout(() => {
-                window.location.href = '/dashboard';
-            }, 1000);
+            setTimeout(() => { window.location.href = '/dashboard'; }, 1000);
         }
     }
 }

@@ -1161,8 +1161,8 @@ async def google_callback(code: str, request: Request):
                 expires_delta=access_token_expires
             )
 
-            # Redirect to dashboard with token as query parameter
-            redirect_url = f"/dashboard?token={access_token}"
+            # Redirect to dashboard with token in URL fragment (not query param) to prevent server log leakage
+            redirect_url = f"/dashboard#token={access_token}"
             return RedirectResponse(url=redirect_url)
         else:
             # New user - create account
@@ -1241,8 +1241,8 @@ async def google_callback(code: str, request: Request):
                 expires_delta=access_token_expires
             )
 
-            # Redirect to dashboard with token as query parameter
-            redirect_url = f"/dashboard?token={access_token}"
+            # Redirect to dashboard with token in URL fragment (not query param) to prevent server log leakage
+            redirect_url = f"/dashboard#token={access_token}"
             return RedirectResponse(url=redirect_url)
 
     except Exception as e:
