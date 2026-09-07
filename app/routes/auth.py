@@ -143,16 +143,13 @@ async def register(request: Request, user_data: UserRegister):
     else:
         message = "Registration successful. Email delivery failed - please use the code below to verify your account."
 
-    response = {
+    return {
         "message": message,
         "requires_2fa": True,
         "email": user_dict["email"],
         "user_id": str(user_dict["_id"]),
         "email_sent": email_sent
     }
-    if not email_sent:
-        response["code"] = code
-    return response
 
 
 @router.post("/login")
@@ -313,16 +310,13 @@ async def login(request: Request, user_credentials: UserLogin):
     else:
         message = "Email delivery failed - please use the code below to verify your login."
 
-    response = {
+    return {
         "message": message,
         "requires_2fa": True,
         "email": user["email"],
         "security_alert": suspicious_activity.get("is_suspicious", False),
         "email_sent": email_sent
     }
-    if not email_sent:
-        response["code"] = code
-    return response
 
 
 @router.post("/token", response_model=Token)
