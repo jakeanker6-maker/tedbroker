@@ -203,15 +203,6 @@
         // Display email
         document.getElementById('user-email').textContent = userEmail;
 
-        // Check for stored fallback code from registration/login
-        const storedCode = localStorage.getItem('pending_verification_code');
-        if (storedCode) {
-            localStorage.removeItem('pending_verification_code');
-            TED_AUTH.showFormMessage('verify-message',
-                `Email delivery failed. Your verification code is: ${storedCode}`,
-                'info');
-        }
-
         // Timer countdown (10 minutes)
         let timeLeft = 600; // 10 minutes in seconds
 
