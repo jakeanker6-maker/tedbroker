@@ -148,7 +148,12 @@ document.addEventListener('DOMContentLoaded', async function() {
                 }
             }
         } else {
-            TED_AUTH.showFormMessage('login-message', result.error, 'error');
+            // Check if rate limited
+            if (result.error && result.error.toLowerCase().includes('rate limit')) {
+                TED_AUTH.showFormMessage('login-message', 'Too many login attempts. Please wait a moment and try again.', 'error');
+            } else {
+                TED_AUTH.showFormMessage('login-message', result.error, 'error');
+            }
         }
     });
 });

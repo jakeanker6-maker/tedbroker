@@ -147,6 +147,11 @@ const TED_AUTH = {
             const data = await response.json();
 
             if (!response.ok) {
+                // Check for rate limiting
+                const retryAfter = response.headers.get('Retry-After');
+                if (retryAfter) {
+                    throw new Error(`rate limit exceeded. Please wait ${retryAfter} seconds`);
+                }
                 throw new Error(data.detail || 'Login failed');
             }
 
