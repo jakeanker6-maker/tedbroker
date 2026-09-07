@@ -214,6 +214,9 @@
                                                                     data-bs-toggle="password" required>
                                                             <div>
                                                                                                                             </div>
+                                                            <div id="caps-lock-warning" style="color: #ff9800; font-size: 12px; display: none; margin-top: 4px;">
+                                                                <i class="fas fa-exclamation-triangle"></i> Caps Lock is on
+                                                            </div>
 
 
                                                             </div>
@@ -308,6 +311,17 @@
     <script src="/assets/js/chat-widget.js"></script>
     <!-- Language System -->
     <script src="/assets/js/language.js?v=3.0"></script>
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const passwordInput = document.querySelector('input[name="password"]');
+        const capsWarning = document.getElementById('caps-lock-warning');
+        if (passwordInput && capsWarning) {
+            passwordInput.addEventListener('keyup', function(e) {
+                capsWarning.style.display = (e.getModifierState && e.getModifierState('CapsLock')) ? 'block' : 'none';
+            });
+        }
+    });
+    </script>
 </body>
 
 </html>

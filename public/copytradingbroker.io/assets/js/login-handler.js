@@ -90,6 +90,13 @@ document.addEventListener('DOMContentLoaded', async function() {
             return;
         }
 
+        // Validate email format
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) {
+            TED_AUTH.showFormMessage('login-message', 'Please enter a valid email address', 'error');
+            return;
+        }
+
         // Clear previous messages
         TED_AUTH.clearFormMessage('login-message');
 
