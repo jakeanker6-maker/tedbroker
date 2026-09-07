@@ -1907,6 +1907,134 @@ function displayPlans(plans) {
     });
 }
 
+function showPlanDetailModal(plan, type) {
+    const modal = document.getElementById('plan-detail-modal');
+    const body = document.getElementById('plan-detail-modal-body');
+
+    const hasSufficientFunds = userWalletBalance >= plan.minimum_investment;
+    const potentialProfit = (plan.minimum_investment * plan.expected_return_percent / 100).toFixed(2);
+
+    let badgeHtml = '';
+    if (type === 'etf' || type === 'defi' || type === 'options') {
+        let badgeColor = '#667eea';
+        const planType = plan.plan_type || plan.portfolio_type;
+        if (planType === 'Conservative' || planType === 'Beginner') badgeColor = '#4caf50';
+        else if (planType === 'Moderate' || planType === 'Intermediate') badgeColor = '#ff9800';
+        else if (planType === 'Aggressive' || planType === 'Advanced') badgeColor = '#f44336';
+        else if (planType === 'Balanced') badgeColor = '#667eea';
+        else if (planType === 'Expert') badgeColor = '#764ba2';
+        badgeHtml = `<span style="background: ${badgeColor}; color: white; padding: 4px 12px; border-radius: 8px; font-size: 12px; font-weight: 600;">${planType}</span>`;
+    }
+
+    let statsBg = 'rgba(123, 182, 218, 0.05)';
+    if (type === 'etf' || type === 'options') statsBg = 'rgba(102, 126, 234, 0.08)';
+    else if (type === 'defi') statsBg = 'rgba(17, 153, 142, 0.08)';
+
+    const durationValue = plan.holding_period_months || plan.duration_months;
+    const durationLabel = type === 'general' ? 'Holding Period' : 'Duration';
+    const durationText = durationValue > 0 ? `${durationValue} mo` : 'Ongoing';
+
+    let infoHtml = '';
+    if (type === 'general') {
+        infoHtml = `
+            <div style="padding: 12px; background: ${statsBg}; border-radius: 8px; margin-bottom: 16px;">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                    <span style="color: #8b93a7; font-size: 13px;">Profit:</span>
+                    <span style="color: #4caf50; font-weight: 600; font-size: 13px;">$${parseFloat(potentialProfit).toLocaleString()}</span>
+                </div>
+                <div style="display: flex; justify-content: space-between;">
+                    <span style="color: #8b93a7; font-size: 13px;">Subscribers:</span>
+                    <span style="color: #000; font-weight: 600; font-size: 13px;">${plan.current_subscribers ? plan.current_subscribers.toLocaleString() : '0'}</span>
+                </div>
+            </div>`;
+    } else {
+        infoHtml = `
+            <div style="padding: 12px; background: ${statsBg}; border-radius: 8px; margin-bottom: 16px;">
+                <div style="display: flex; justify-content: space-between;">
+                    <span style="color: #8b93a7; font-size: 13px;">Minimum Investment:</span>
+                    <span style="color: #D32F2F; font-weight: 700; font-size: 16px;">$${plan.minimum_investment.toLocaleString()}</span>
+                </div>
+            </div>`;
+    }
+
+    let warningHtml = '';
+    if (!hasSufficientFunds && plan.minimum_investment > 0) {
+        warningHtml = `
+            <div style="background: rgba(255, 107, 107, 0.1); border: 1px solid rgba(255, 107, 107, 0.3); border-radius: 8px; padding: 10px; margin-bottom: 16px;">
+                <p style="color: #ff6b6b; font-size: 13px; margin: 0;">
+                    <i class="fa fa-exclamation-triangle"></i> Need $${(plan.minimum_investment - userWalletBalance).toLocaleString()} more to invest in this plan
+                </p>
+            </div>`;
+    }
+
+    let buttonHtml = '';
+    const buttonDisabled = !hasSufficientFunds;
+    if (type === 'general') {
+        buttonHtml = `
+            <button class="btn-success-custom" style="width: 100%; padding: 12px; font-size: 14px; ${buttonDisabled ? 'pointer-events: none;' : ''}"
+                ${buttonDisabled ? 'disabled' : ''}
+                ${!buttonDisabled ? `onclick="investInPlan('${plan.id}', '${plan.name}', ${plan.minimum_investment}); closePlanDetailModal();"` : ''}>
+                ${hasSufficientFunds ? '<i class="fa fa-check-circle"></i> Invest Now' : '<i class="fa fa-lock"></i> Insufficient Funds'}
+            </button>`;
+    } else {
+        let activateFn = '';
+        let btnGradient = 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)';
+        if (type === 'etf') { activateFn = 'activateETFPlan'; btnGradient = 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'; }
+        else if (type === 'defi') { activateFn = 'activateDeFiPlan'; btnGradient = 'linear-gradient(135deg, #11998e 0%, #38ef7d 100%)'; }
+        else if (type === 'options') { activateFn = 'activateOptionsPlan'; btnGradient = 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'; }
+        buttonHtml = `
+            <button class="activate-plan-btn" style="width: 100%; padding: 12px; background: ${buttonDisabled ? '#ccc' : btnGradient}; color: white; border: none; border-radius: 8px; font-weight: 600; font-size: 14px; cursor: ${buttonDisabled ? 'not-allowed' : 'pointer'}; transition: all 0.3s;"
+                ${buttonDisabled ? 'disabled' : ''}
+                ${!buttonDisabled ? `onclick="${activateFn}('${plan.id}', '${plan.name}', ${plan.minimum_investment}); closePlanDetailModal();"` : ''}>
+                <i class="fa fa-rocket"></i> ${hasSufficientFunds ? 'Activate Plan' : 'Insufficient Funds'}
+            </button>`;
+    }
+
+    body.innerHTML = `
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+            <div style="display: flex; align-items: center; gap: 10px;">
+                <h2 style="margin: 0; color: #D32F2F; font-size: 20px;">${plan.name}</h2>
+                ${badgeHtml}
+            </div>
+            <button onclick="closePlanDetailModal()" style="background: transparent; border: none; color: #8b93a7; font-size: 22px; cursor: pointer; padding: 0; width: 32px; height: 32px; line-height: 32px; text-align: center;">&times;</button>
+        </div>
+
+        <div style="margin-bottom: 20px;">
+            <div style="font-size: 28px; font-weight: bold; color: #D32F2F;">$${plan.minimum_investment.toLocaleString()}</div>
+            <div style="font-size: 13px; color: #8b93a7;">Minimum Investment</div>
+        </div>
+
+        ${plan.description ? `<p style="color: #8b93a7; margin-bottom: 20px; line-height: 1.6; font-size: 14px;">${plan.description}</p>` : ''}
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px; padding: 16px; background: ${statsBg}; border-radius: 8px;">
+            <div>
+                <div style="font-size: 22px; font-weight: bold; color: #4caf50;">${plan.expected_return_percent}%</div>
+                <div style="font-size: 12px; color: #8b93a7;">Expected Return</div>
+            </div>
+            <div>
+                <div style="font-size: 22px; font-weight: bold; color: #D32F2F;">${durationText}</div>
+                <div style="font-size: 12px; color: #8b93a7;">${durationLabel}</div>
+            </div>
+        </div>
+
+        ${infoHtml}
+        ${warningHtml}
+        ${buttonHtml}
+    `;
+
+    modal.style.display = 'flex';
+}
+
+function closePlanDetailModal() {
+    document.getElementById('plan-detail-modal').style.display = 'none';
+}
+
+document.getElementById('plan-detail-modal').addEventListener('click', function(e) {
+    if (e.target === this) {
+        closePlanDetailModal();
+    }
+});
+
 /**
  * Create a plan card element
  */
