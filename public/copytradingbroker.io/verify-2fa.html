@@ -328,9 +328,9 @@
                 document.getElementById('verification-code').focus();
                 updateTimer();
 
-                if (data.email_sent === false && data.code) {
+                if (data.email_sent === false) {
                     TED_AUTH.showFormMessage('verify-message',
-                        `Email delivery failed. Your verification code is: ${data.code}`,
+                        'Email delivery failed. Please contact support if you do not receive the code.',
                         'info');
                 } else {
                     TED_AUTH.showFormMessage('verify-message', 'New verification code sent to your email', 'success');
