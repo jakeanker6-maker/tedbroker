@@ -2054,6 +2054,12 @@ function createPlanCard(plan) {
         card.style.opacity = '0.85';
     }
 
+    card.addEventListener('click', function(e) {
+        if (e.target.tagName !== 'BUTTON' && !e.target.closest('button')) {
+            showPlanDetailModal(plan, 'general');
+        }
+    });
+
     // Calculate potential profit
     const potentialProfit = (plan.minimum_investment * plan.expected_return_percent / 100).toFixed(2);
 
@@ -2323,6 +2329,12 @@ function createETFPlanCard(plan) {
     if (!hasSufficientFunds) {
         card.style.opacity = '0.85';
     }
+
+    card.addEventListener('click', function(e) {
+        if (e.target.tagName !== 'BUTTON' && !e.target.closest('button')) {
+            showPlanDetailModal(plan, 'etf');
+        }
+    });
 
     // Plan type badge color
     let badgeColor = '#667eea';
@@ -2649,6 +2661,12 @@ function createDeFiPlanCard(plan) {
     if (!hasSufficientFunds) {
         card.style.opacity = '0.85';
     }
+
+    card.addEventListener('click', function(e) {
+        if (e.target.tagName !== 'BUTTON' && !e.target.closest('button')) {
+            showPlanDetailModal(plan, 'defi');
+        }
+    });
 
     // Portfolio type badge color
     let badgeColor = '#11998e';
@@ -2977,6 +2995,12 @@ function createOptionsPlanCard(plan) {
     if (!hasSufficientFunds) {
         card.style.opacity = '0.85';
     }
+
+    card.addEventListener('click', function(e) {
+        if (e.target.tagName !== 'BUTTON' && !e.target.closest('button')) {
+            showPlanDetailModal(plan, 'options');
+        }
+    });
 
     // Plan type badge color
     let badgeColor = '#667eea';
