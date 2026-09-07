@@ -288,7 +288,8 @@
                         }, 1500);
                     }
                 } catch (error) {
-                    TED_AUTH.showFormMessage('verify-message', 'Verification successful! Redirecting...', 'success');
+                    console.error('Error checking onboarding status:', error);
+                    TED_AUTH.showFormMessage('verify-message', 'Verification successful! Some features may be temporarily unavailable.', 'info');
                     setTimeout(() => {
                         window.location.href = '/dashboard';
                     }, 1500);

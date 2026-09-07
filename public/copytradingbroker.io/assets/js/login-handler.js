@@ -140,12 +140,11 @@ document.addEventListener('DOMContentLoaded', async function() {
                         }, 1000);
                     }
                 } catch (error) {
-                    // If there's an error checking onboarding status, default to dashboard
                     console.error('Error checking onboarding status:', error);
-                    TED_AUTH.showFormMessage('login-message', 'Login successful! Redirecting...', 'success');
+                    TED_AUTH.showFormMessage('login-message', 'Login successful! Some features may be temporarily unavailable.', 'info');
                     setTimeout(() => {
                         window.location.href = '/dashboard';
-                    }, 1000);
+                    }, 1500);
                 }
             }
         } else {
