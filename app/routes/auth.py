@@ -12,7 +12,8 @@ from google.auth.transport import requests as google_requests
 from app.schemas import (
     UserRegister, UserLogin, Token, UserResponse, PasswordChange,
     ForgotPasswordRequest, VerifyPasswordResetCode, ResetPasswordRequest,
-    PasswordChangeWithVerification, CreatePasswordRequest, VerifyPasswordCreation
+    PasswordChangeWithVerification, CreatePasswordRequest, VerifyPasswordCreation,
+    SetupOAuthPasswordRequest
 )
 from app.auth import (
     get_password_hash,
@@ -1644,3 +1645,45 @@ async def verify_password_creation(
     return {
         "message": "Password has been created successfully. You can now login with either Google or your password."
     }
+
+
+@router.post("/setup-oauth-password")
+async def setup_oauth_password(
+    password_data: SetupOAuthPasswordRequest,
+    current_user: dict = Depends(get_current_user_token)
+):
+    """
+    Directly set password for Google OAuth users without email verification.
+    Used by the dashboard password setup modal.
+    """
+    users = get_collection(USERS_COLLECTION)
+
+    user = get_user_by_id(current_user["user_id"])
+
+    if not user:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="User not found"
+        )
+
+    # Check if user already has a password
+    if user.get("hashed_password"):
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="You already have a password set up. Use 'Change Password' instead."
+        )
+
+    # Hash and save the password
+    hashed_password = get_password_hash(password_data.password)
+    users.update_one(
+        {"_id": user["_id"]},
+        {
+            "$set": {
+                "hashed_password": hashed_password,
+                "has_password": True,
+                "updated_at": datetime.utcnow()
+            }
+        }
+    )
+
+    return {"message": "Password set up successfully"}
