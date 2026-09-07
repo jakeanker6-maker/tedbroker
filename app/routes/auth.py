@@ -349,6 +349,22 @@ async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(
     return Token(access_token=access_token, token_type="bearer")
 
 
+@router.post("/logout")
+async def logout(current_user: dict = Depends(get_current_user_token)):
+    """Logout user by blacklisting their token"""
+    from app.database import TOKEN_BLACKLIST_COLLECTION
+
+    token = current_user.get("token")
+    if token:
+        blacklist = get_collection(TOKEN_BLACKLIST_COLLECTION)
+        blacklist.insert_one({
+            "token": token,
+            "blacklisted_at": datetime.utcnow()
+        })
+
+    return {"message": "Logged out successfully"}
+
+
 @router.get("/me", response_model=UserResponse)
 async def get_current_user(current_user: dict = Depends(get_current_user_token)):
     """Get current authenticated user"""

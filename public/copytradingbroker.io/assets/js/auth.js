@@ -192,7 +192,12 @@ const TED_AUTH = {
     /**
      * Logout user
      */
-    logout() {
+    async logout() {
+        try {
+            await this.apiCall('/api/auth/logout', { method: 'POST' });
+        } catch (e) {
+            // Proceed with local logout even if API call fails
+        }
         this.removeToken();
         window.location.href = '/login';
     },

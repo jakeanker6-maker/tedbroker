@@ -62,6 +62,16 @@ async def get_current_user_token(token: str = Depends(oauth2_scheme)) -> dict:
     if payload is None:
         raise credentials_exception
 
+    # Check if token has been blacklisted (e.g. user logged out)
+    from app.database import get_collection, TOKEN_BLACKLIST_COLLECTION
+    blacklist = get_collection(TOKEN_BLACKLIST_COLLECTION)
+    if blacklist.find_one({"token": token}):
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Token has been revoked",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+
     email: str = payload.get("sub")
     user_id: str = payload.get("user_id")
     role: str = payload.get("role")  # Extract role from token
@@ -69,8 +79,8 @@ async def get_current_user_token(token: str = Depends(oauth2_scheme)) -> dict:
     if email is None or user_id is None:
         raise credentials_exception
 
-    # Return user data including role if present
-    result = {"email": email, "user_id": user_id}
+    # Return user data including role and raw token if present
+    result = {"email": email, "user_id": user_id, "token": token}
     if role:
         result["role"] = role
 
