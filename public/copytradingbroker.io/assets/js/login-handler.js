@@ -17,6 +17,7 @@ async function handleOAuthRedirect() {
     if (hash && hash.includes('token=')) {
         const hashParams = new URLSearchParams(hash.substring(1));
         token = hashParams.get('token');
+        error = hashParams.get('error');
     } else {
         const urlParams = new URLSearchParams(window.location.search);
         token = urlParams.get('token');
