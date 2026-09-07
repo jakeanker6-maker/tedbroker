@@ -1173,6 +1173,8 @@
             flex-direction: column;
             min-height: 380px;
             overflow: hidden;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
         }
 
         .plan-card h3 {
@@ -1218,6 +1220,15 @@
         .plan-card .btn-primary-custom {
             padding: 8px 12px;
             font-size: 12px;
+        }
+
+        .plan-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        [data-theme="dark"] .plan-card:hover {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
         }
 
         .account-info-grid {
