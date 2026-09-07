@@ -53,11 +53,18 @@ async function handleOAuthRedirect() {
     }
 }
 
-document.addEventListener('DOMContentLoaded', function() {
-    // Check for OAuth redirect
-    handleOAuthRedirect();
-    // Redirect if already logged in
-    TED_AUTH.redirectIfAuthenticated();
+document.addEventListener('DOMContentLoaded', async function() {
+    // Check for OAuth redirect first (await to prevent race condition)
+    await handleOAuthRedirect();
+
+    // Only redirect if already logged in AND no token was just processed
+    const hash = window.location.hash;
+    const urlParams = new URLSearchParams(window.location.search);
+    const hasToken = (hash && hash.includes('token=')) || urlParams.get('token');
+
+    if (!hasToken) {
+        TED_AUTH.redirectIfAuthenticated();
+    }
 
     // Get the login form
     const loginForm = document.getElementById('login-form') || document.querySelector('form[action*="login"]');
