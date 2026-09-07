@@ -361,6 +361,8 @@ async def logout(current_user: dict = Depends(get_current_user_token)):
             "token": token,
             "blacklisted_at": datetime.utcnow()
         })
+        blacklist.create_index("token", unique=True)
+        blacklist.create_index("blacklisted_at", expireAfterSeconds=ACCESS_TOKEN_EXPIRE_MINUTES * 60)
 
     return {"message": "Logged out successfully"}
 
@@ -666,8 +668,6 @@ async def resend_2fa(request: Request, email_data: dict):
         "message": message,
         "email_sent": email_sent
     }
-    if not email_sent:
-        response["code"] = code
     return response
 
 
