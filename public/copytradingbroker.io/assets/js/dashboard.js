@@ -562,9 +562,19 @@ function enableSidebarMenus() {
 }
 
 document.addEventListener('DOMContentLoaded', async function() {
-    // Check for OAuth token in URL (from redirect)
-    const urlParams = new URLSearchParams(window.location.search);
-    const token = urlParams.get('token');
+    // Check for OAuth token in URL fragment (from redirect)
+    // Backend uses #token= to prevent server log leakage
+    let token = null;
+    const hash = window.location.hash;
+    if (hash && hash.includes('token=')) {
+        const hashParams = new URLSearchParams(hash.substring(1));
+        token = hashParams.get('token');
+    }
+    // Fallback: check query param for backward compatibility
+    if (!token) {
+        const urlParams = new URLSearchParams(window.location.search);
+        token = urlParams.get('token');
+    }
     let isOAuthLogin = false;
 
     if (token) {
