@@ -371,7 +371,6 @@ async def get_user_details(
         "phone": user.get("phone"),
         "gender": user.get("gender"),
         "country": user.get("country"),
-        "account_types": user.get("account_types", []),
         "wallet_balance": user.get("wallet_balance", 0.0),
         "is_active": user.get("is_active", True),
         "is_verified": user.get("is_verified", False),

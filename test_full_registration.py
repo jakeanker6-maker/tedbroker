@@ -22,13 +22,6 @@ def generate_random_user():
         "phone": f"+1234567{random.randint(1000, 9999)}",
         "gender": random.choice(["Male", "Female", "Others"]),
         "country": random.choice(["United States of America", "Canada", "United Kingdom"]),
-        "account_types": random.sample([
-            "Binary Option Trading",
-            "Forex Trading",
-            "Stock Trading",
-            "CryptoCurrency Investment",
-            "NFT Trading"
-        ], k=random.randint(1, 3))
     }
 
 def test_full_registration():
@@ -46,7 +39,6 @@ def test_full_registration():
     print(f"  Phone: {user_data['phone']}")
     print(f"  Gender: {user_data['gender']}")
     print(f"  Country: {user_data['country']}")
-    print(f"  Account Types: {', '.join(user_data['account_types'])}")
 
     response = requests.post(
         f"{BASE_URL}/api/auth/register",
@@ -63,7 +55,6 @@ def test_full_registration():
         print(f"  Phone: {data.get('phone')}")
         print(f"  Gender: {data.get('gender')}")
         print(f"  Country: {data.get('country')}")
-        print(f"  Account Types: {', '.join(data.get('account_types', []))}")
 
         # Verify all fields are present
         missing_fields = []
@@ -73,8 +64,6 @@ def test_full_registration():
             missing_fields.append('gender')
         if not data.get('country'):
             missing_fields.append('country')
-        if not data.get('account_types'):
-            missing_fields.append('account_types')
 
         if missing_fields:
             print(f"\n⚠️  Warning: Missing fields in response: {', '.join(missing_fields)}")
@@ -121,7 +110,6 @@ def test_login_and_fetch(user_data):
         print(f"  Phone: {data.get('phone')}")
         print(f"  Gender: {data.get('gender')}")
         print(f"  Country: {data.get('country')}")
-        print(f"  Account Types: {', '.join(data.get('account_types', []))}")
         print(f"  Is Active: {data.get('is_active')}")
         print(f"  Is Verified: {data.get('is_verified')}")
 
@@ -136,8 +124,6 @@ def test_login_and_fetch(user_data):
             errors.append(f"Gender mismatch: {data.get('gender')} != {user_data['gender']}")
         if data.get('country') != user_data['country']:
             errors.append(f"Country mismatch: {data.get('country')} != {user_data['country']}")
-        if set(data.get('account_types', [])) != set(user_data['account_types']):
-            errors.append(f"Account types mismatch: {data.get('account_types')} != {user_data['account_types']}")
 
         if errors:
             print("\n✗ Field integrity check failed:")

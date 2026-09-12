@@ -736,13 +736,6 @@ function populateDashboard(userData) {
         document.getElementById('user-country-row').style.display = 'flex';
     }
 
-    // Account types (show only if provided)
-    if (userData.account_types && userData.account_types.length > 0) {
-        const accountTypesText = userData.account_types.join(', ');
-        document.getElementById('user-account-types').textContent = accountTypesText;
-        document.getElementById('user-account-types-row').style.display = 'flex';
-    }
-
     // Account status
     const statusElement = document.getElementById('user-status');
     if (userData.is_active) {

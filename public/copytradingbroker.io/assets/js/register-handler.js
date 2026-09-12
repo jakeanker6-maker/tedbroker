@@ -76,10 +76,6 @@ document.addEventListener('DOMContentLoaded', async function() {
         const password = document.querySelector('input[name="password"]').value;
         const passwordConfirmation = document.querySelector('input[name="password_confirmation"]').value;
 
-        // Get account types (multiple select)
-        const accountSelect = document.querySelector('select[name="account[]"]');
-        const accountTypes = Array.from(accountSelect.selectedOptions).map(option => option.value);
-
         // Validate inputs
         if (!email || !username || !password) {
             TED_AUTH.showFormMessage('register-message', 'Please fill in all required fields', 'error');
@@ -122,7 +118,7 @@ document.addEventListener('DOMContentLoaded', async function() {
             phone: phone || null,
             gender: gender || null,
             country: country || null,
-            account_types: accountTypes.length > 0 ? accountTypes : null
+            account_types: []
         };
 
         // Clear previous messages

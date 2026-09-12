@@ -96,7 +96,6 @@ async def register(request: Request, user_data: UserRegister):
         "phone": user_data.phone,
         "gender": user_data.gender,
         "country": user_data.country,
-        "account_types": user_data.account_types if user_data.account_types else [],
         "wallet_balance": 0.0,  # New users start with zero balance
         "is_active": True,
         "is_verified": False,
@@ -387,7 +386,6 @@ async def get_current_user(current_user: dict = Depends(get_current_user_token))
         phone=user.get("phone"),
         gender=user.get("gender"),
         country=user.get("country"),
-        account_types=user.get("account_types", []),
         wallet_balance=user.get("wallet_balance", 0.0),
         copy_trading_allocation=user.get("copy_trading_allocation", 0.0),
         is_active=user.get("is_active", True),
@@ -502,7 +500,6 @@ async def update_profile(
         phone=updated_user.get("phone"),
         gender=updated_user.get("gender"),
         country=updated_user.get("country"),
-        account_types=updated_user.get("account_types", []),
         wallet_balance=updated_user.get("wallet_balance", 0.0),
         is_active=updated_user.get("is_active", True),
         is_verified=updated_user.get("is_verified", False),
@@ -1201,7 +1198,6 @@ async def google_callback(code: str, request: Request):
                 "phone": None,
                 "gender": None,
                 "country": None,
-                "account_types": [],
                 "wallet_balance": 0.0,
                 "is_active": True,
                 "is_verified": True,  # Google accounts are pre-verified

@@ -14,8 +14,6 @@ class UserRegister(BaseModel):
     phone: Optional[str] = Field(None, max_length=20)
     gender: Optional[str] = Field(None, max_length=20)
     country: Optional[str] = Field(None, max_length=100)
-    account_types: Optional[List[str]] = Field(default=None)
-
     @field_validator('username')
     @classmethod
     def validate_username(cls, v):
@@ -71,7 +69,6 @@ class UserResponse(BaseModel):
     phone: Optional[str] = None
     gender: Optional[str] = None
     country: Optional[str] = None
-    account_types: Optional[List[str]] = None
     wallet_balance: float = 0.0
     copy_trading_allocation: float = 0.0  # Amount allocated for copy trading
     is_active: bool = True
@@ -97,7 +94,6 @@ class UserInDB(BaseModel):
     phone: Optional[str] = None
     gender: Optional[str] = None
     country: Optional[str] = None
-    account_types: Optional[List[str]] = None
     wallet_balance: float = 0.0
     is_active: bool = True
     is_verified: bool = False
