@@ -21,7 +21,8 @@ def defi_plan_helper(plan) -> dict:
         "duration_months": plan["duration_months"],
         "minimum_investment": plan.get("minimum_investment", 0.0),
         "description": plan.get("description"),
-        "is_active": plan.get("is_active", True)
+        "is_active": plan.get("is_active", True),
+        "tags": plan.get("tags", [])
     }
 
 

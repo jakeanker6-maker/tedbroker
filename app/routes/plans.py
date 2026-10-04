@@ -19,7 +19,8 @@ def plan_helper(plan) -> dict:
         "holding_period_months": plan["holding_period_months"],
         "expected_return_percent": plan["expected_return_percent"],
         "current_subscribers": plan["current_subscribers"],
-        "is_active": plan.get("is_active", True)
+        "is_active": plan.get("is_active", True),
+        "tags": plan.get("tags", [])
     }
 
 

@@ -50,3 +50,44 @@ def admin_token(client):
     
     # Cleanup
     admins.delete_many({"username": "testadmin"})
+
+
+@pytest.fixture(scope="session")
+def user_token(client):
+    """Create a regular user in DB and return a valid token"""
+    users = get_collection("users")
+    
+    # Delete any existing test user
+    users.delete_many({"email": "testuser@test.com"})
+    
+    # Create test user
+    user_id = ObjectId()
+    user_dict = {
+        "_id": user_id,
+        "username": "testuser",
+        "email": "testuser@test.com",
+        "hashed_password": get_password_hash("testpassword123"),
+        "full_name": "Test User",
+        "wallet_balance": 10000.0,
+        "is_active": True,
+        "is_verified": True,
+        "access_granted": True,
+        "two_fa_enabled": False,
+        "auth_provider": "local",
+        "created_at": None,
+        "updated_at": None
+    }
+    users.insert_one(user_dict)
+    
+    # Create access token
+    access_token = create_access_token(
+        data={
+            "sub": "testuser",
+            "user_id": str(user_id),
+            "role": "user"
+        }
+    )
+    yield access_token
+    
+    # Cleanup
+    users.delete_many({"email": "testuser@test.com"})
