@@ -1089,7 +1089,8 @@ async function submitNewPlan(event) {
         expected_return_percent: parseFloat(document.getElementById('plan-return').value),
         holding_period_months: parseInt(document.getElementById('plan-period').value),
         current_subscribers: parseInt(document.getElementById('plan-subscribers').value) || 0,
-        is_active: document.getElementById('plan-active').checked
+        is_active: document.getElementById('plan-active').checked,
+        tags: Array.from(document.getElementById('plan-tags').selectedOptions).map(o => o.value)
     };
 
     try {
@@ -1127,6 +1128,15 @@ async function showEditPlanModal(planId) {
         document.getElementById('edit-plan-period').value = plan.holding_period_months;
         document.getElementById('edit-plan-active').checked = plan.is_active;
         document.getElementById('edit-plan-subscribers').value = plan.current_subscribers || 0;
+        
+        // Populate tags
+        const editTagsSelect = document.getElementById('edit-plan-tags');
+        if (editTagsSelect && plan.tags) {
+            plan.tags.forEach(tag => {
+                const option = editTagsSelect.querySelector(`option[value="${tag}"]`);
+                if (option) option.selected = true;
+            });
+        }
 
         // Show modal
         const modal = document.getElementById('edit-plan-modal');
@@ -1160,7 +1170,8 @@ async function submitEditedPlan(event) {
         expected_return_percent: parseFloat(document.getElementById('edit-plan-return').value),
         holding_period_months: parseInt(document.getElementById('edit-plan-period').value),
         current_subscribers: parseInt(document.getElementById('edit-plan-subscribers').value) || 0,
-        is_active: document.getElementById('edit-plan-active').checked
+        is_active: document.getElementById('edit-plan-active').checked,
+        tags: Array.from(document.getElementById('edit-plan-tags').selectedOptions).map(o => o.value)
     };
 
     try {
@@ -1177,6 +1188,10 @@ async function submitEditedPlan(event) {
             const error = await response.json();
             Swal.fire({ title: 'Error!', text: `Error: ${error.detail || 'Failed to update plan'}`, icon: 'error' });
         }
+    } catch (error) {
+        Swal.fire({ title: 'Error!', text: 'Network error. Please try again.', icon: 'error' });
+    }
+}
     } catch (error) {
         Swal.fire({ title: 'Error!', text: 'Network error. Please try again.', icon: 'error' });
         console.error(error);
@@ -1280,7 +1295,8 @@ async function submitNewETFPlan(event) {
         duration_months: parseInt(document.getElementById('etf-plan-duration').value),
         minimum_investment: parseFloat(document.getElementById('etf-plan-min-investment').value),
         description: document.getElementById('etf-plan-description').value || null,
-        is_active: document.getElementById('etf-plan-active').checked
+        is_active: document.getElementById('etf-plan-active').checked,
+        tags: Array.from(document.getElementById('etf-plan-tags').selectedOptions).map(o => o.value)
     };
 
     try {
@@ -1319,6 +1335,15 @@ async function showEditETFPlanModal(planId) {
         document.getElementById('edit-etf-plan-min-investment').value = plan.minimum_investment;
         document.getElementById('edit-etf-plan-description').value = plan.description || '';
         document.getElementById('edit-etf-plan-active').checked = plan.is_active;
+        
+        // Populate tags
+        const editTagsSelect = document.getElementById('edit-etf-plan-tags');
+        if (editTagsSelect && plan.tags) {
+            plan.tags.forEach(tag => {
+                const option = editTagsSelect.querySelector(`option[value="${tag}"]`);
+                if (option) option.selected = true;
+            });
+        }
 
         // Show modal
         const modal = document.getElementById('edit-etf-plan-modal');
@@ -1352,7 +1377,8 @@ async function submitEditedETFPlan(event) {
         duration_months: parseInt(document.getElementById('edit-etf-plan-duration').value),
         minimum_investment: parseFloat(document.getElementById('edit-etf-plan-min-investment').value),
         description: document.getElementById('edit-etf-plan-description').value || null,
-        is_active: document.getElementById('edit-etf-plan-active').checked
+        is_active: document.getElementById('edit-etf-plan-active').checked,
+        tags: Array.from(document.getElementById('edit-etf-plan-tags').selectedOptions).map(o => o.value)
     };
 
     try {
@@ -1468,7 +1494,8 @@ async function submitNewDeFiPlan(event) {
         duration_months: parseInt(document.getElementById('defi-plan-duration').value),
         minimum_investment: parseFloat(document.getElementById('defi-plan-min-investment').value),
         description: document.getElementById('defi-plan-description').value || null,
-        is_active: document.getElementById('defi-plan-active').checked
+        is_active: document.getElementById('defi-plan-active').checked,
+        tags: Array.from(document.getElementById('defi-plan-tags').selectedOptions).map(o => o.value)
     };
 
     try {
@@ -1507,6 +1534,15 @@ async function showEditDeFiPlanModal(planId) {
         document.getElementById('edit-defi-plan-min-investment').value = plan.minimum_investment;
         document.getElementById('edit-defi-plan-description').value = plan.description || '';
         document.getElementById('edit-defi-plan-active').checked = plan.is_active;
+        
+        // Populate tags
+        const editTagsSelect = document.getElementById('edit-defi-plan-tags');
+        if (editTagsSelect && plan.tags) {
+            plan.tags.forEach(tag => {
+                const option = editTagsSelect.querySelector(`option[value="${tag}"]`);
+                if (option) option.selected = true;
+            });
+        }
 
         // Show modal
         const modal = document.getElementById('edit-defi-plan-modal');
@@ -1540,7 +1576,8 @@ async function submitEditedDeFiPlan(event) {
         duration_months: parseInt(document.getElementById('edit-defi-plan-duration').value),
         minimum_investment: parseFloat(document.getElementById('edit-defi-plan-min-investment').value),
         description: document.getElementById('edit-defi-plan-description').value || null,
-        is_active: document.getElementById('edit-defi-plan-active').checked
+        is_active: document.getElementById('edit-defi-plan-active').checked,
+        tags: Array.from(document.getElementById('edit-defi-plan-tags').selectedOptions).map(o => o.value)
     };
 
     try {
@@ -1656,7 +1693,8 @@ async function submitNewOptionsPlan(event) {
         duration_months: parseInt(document.getElementById('options-plan-duration').value),
         minimum_investment: parseFloat(document.getElementById('options-plan-min-investment').value),
         description: document.getElementById('options-plan-description').value || null,
-        is_active: document.getElementById('options-plan-active').checked
+        is_active: document.getElementById('options-plan-active').checked,
+        tags: Array.from(document.getElementById('options-plan-tags').selectedOptions).map(o => o.value)
     };
 
     try {
@@ -1695,6 +1733,15 @@ async function showEditOptionsPlanModal(planId) {
         document.getElementById('edit-options-plan-min-investment').value = plan.minimum_investment;
         document.getElementById('edit-options-plan-description').value = plan.description || '';
         document.getElementById('edit-options-plan-active').checked = plan.is_active;
+        
+        // Populate tags
+        const editTagsSelect = document.getElementById('edit-options-plan-tags');
+        if (editTagsSelect && plan.tags) {
+            plan.tags.forEach(tag => {
+                const option = editTagsSelect.querySelector(`option[value="${tag}"]`);
+                if (option) option.selected = true;
+            });
+        }
 
         // Show modal
         const modal = document.getElementById('edit-options-plan-modal');
@@ -1728,7 +1775,8 @@ async function submitEditedOptionsPlan(event) {
         duration_months: parseInt(document.getElementById('edit-options-plan-duration').value),
         minimum_investment: parseFloat(document.getElementById('edit-options-plan-min-investment').value),
         description: document.getElementById('edit-options-plan-description').value || null,
-        is_active: document.getElementById('edit-options-plan-active').checked
+        is_active: document.getElementById('edit-options-plan-active').checked,
+        tags: Array.from(document.getElementById('edit-options-plan-tags').selectedOptions).map(o => o.value)
     };
 
     try {
