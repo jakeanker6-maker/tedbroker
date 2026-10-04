@@ -5245,6 +5245,17 @@
                 <!-- Active Plans Progress -->
                 <div id="general-active-plans-container" style="margin-bottom: 30px;"></div>
 
+                <!-- General Plans Filter Chips -->
+                <div class="plan-filter-chips flex flex-wrap gap-2 mb-4" data-plan-type="general" style="display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px;">
+                    <button class="filter-chip px-3 py-1 rounded-full text-sm font-medium bg-primary-600 text-white" data-tag="all">All</button>
+                    <button class="filter-chip px-3 py-1 rounded-full text-sm font-medium bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300" data-tag="hot">🔥 Hot</button>
+                    <button class="filter-chip px-3 py-1 rounded-full text-sm font-medium bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300" data-tag="recommended">⭐ Recommended</button>
+                    <button class="filter-chip px-3 py-1 rounded-full text-sm font-medium bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300" data-tag="new">✨ New</button>
+                    <button class="filter-chip px-3 py-1 rounded-full text-sm font-medium bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300" data-tag="popular">📈 Popular</button>
+                    <button class="filter-chip px-3 py-1 rounded-full text-sm font-medium bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300" data-tag="featured">💎 Featured</button>
+                    <button class="filter-chip px-3 py-1 rounded-full text-sm font-medium bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300" data-tag="trending">📊 Trending</button>
+                </div>
+
                 <div class="subscription-grid" id="plans-container">
                     <p style="text-align: center; color: #8b93a7; padding: 40px 0;" data-i18n="status.loading">Loading investment plans...</p>
                 </div>
@@ -5295,6 +5306,17 @@
                     <div class="tradingview-widget-container" id="etf-market-overview">
                         <div class="tradingview-widget-container__widget"></div>
                     </div>
+                </div>
+
+                <!-- ETF Plans Filter Chips -->
+                <div class="plan-filter-chips flex flex-wrap gap-2 mb-4" data-plan-type="etf" style="display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px;">
+                    <button class="filter-chip px-3 py-1 rounded-full text-sm font-medium bg-primary-600 text-white" data-tag="all">All</button>
+                    <button class="filter-chip px-3 py-1 rounded-full text-sm font-medium bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300" data-tag="hot">🔥 Hot</button>
+                    <button class="filter-chip px-3 py-1 rounded-full text-sm font-medium bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300" data-tag="recommended">⭐ Recommended</button>
+                    <button class="filter-chip px-3 py-1 rounded-full text-sm font-medium bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300" data-tag="new">✨ New</button>
+                    <button class="filter-chip px-3 py-1 rounded-full text-sm font-medium bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300" data-tag="popular">📈 Popular</button>
+                    <button class="filter-chip px-3 py-1 rounded-full text-sm font-medium bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300" data-tag="featured">💎 Featured</button>
+                    <button class="filter-chip px-3 py-1 rounded-full text-sm font-medium bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300" data-tag="trending">📊 Trending</button>
                 </div>
 
                 <div class="subscription-grid" id="etf-plans-container">
@@ -5349,6 +5371,17 @@
                     </div>
                 </div>
 
+                <!-- DeFi Plans Filter Chips -->
+                <div class="plan-filter-chips flex flex-wrap gap-2 mb-4" data-plan-type="defi" style="display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px;">
+                    <button class="filter-chip px-3 py-1 rounded-full text-sm font-medium bg-primary-600 text-white" data-tag="all">All</button>
+                    <button class="filter-chip px-3 py-1 rounded-full text-sm font-medium bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300" data-tag="hot">🔥 Hot</button>
+                    <button class="filter-chip px-3 py-1 rounded-full text-sm font-medium bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300" data-tag="recommended">⭐ Recommended</button>
+                    <button class="filter-chip px-3 py-1 rounded-full text-sm font-medium bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300" data-tag="new">✨ New</button>
+                    <button class="filter-chip px-3 py-1 rounded-full text-sm font-medium bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300" data-tag="popular">📈 Popular</button>
+                    <button class="filter-chip px-3 py-1 rounded-full text-sm font-medium bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300" data-tag="featured">💎 Featured</button>
+                    <button class="filter-chip px-3 py-1 rounded-full text-sm font-medium bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300" data-tag="trending">📊 Trending</button>
+                </div>
+
                 <div class="subscription-grid" id="defi-plans-container">
                     <p style="text-align: center; color: #8b93a7; padding: 40px 0;" data-i18n="status.loading">Loading DeFi plans...</p>
                 </div>
@@ -5399,6 +5432,17 @@
                     <div class="tradingview-widget-container" id="options-market-overview">
                         <div class="tradingview-widget-container__widget"></div>
                     </div>
+                </div>
+
+                <!-- Options Plans Filter Chips -->
+                <div class="plan-filter-chips flex flex-wrap gap-2 mb-4" data-plan-type="options" style="display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px;">
+                    <button class="filter-chip px-3 py-1 rounded-full text-sm font-medium bg-primary-600 text-white" data-tag="all">All</button>
+                    <button class="filter-chip px-3 py-1 rounded-full text-sm font-medium bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300" data-tag="hot">🔥 Hot</button>
+                    <button class="filter-chip px-3 py-1 rounded-full text-sm font-medium bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300" data-tag="recommended">⭐ Recommended</button>
+                    <button class="filter-chip px-3 py-1 rounded-full text-sm font-medium bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300" data-tag="new">✨ New</button>
+                    <button class="filter-chip px-3 py-1 rounded-full text-sm font-medium bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300" data-tag="popular">📈 Popular</button>
+                    <button class="filter-chip px-3 py-1 rounded-full text-sm font-medium bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300" data-tag="featured">💎 Featured</button>
+                    <button class="filter-chip px-3 py-1 rounded-full text-sm font-medium bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300" data-tag="trending">📊 Trending</button>
                 </div>
 
                 <div class="subscription-grid" id="options-plans-container">
