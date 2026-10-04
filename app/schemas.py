@@ -5,6 +5,22 @@ from bson import ObjectId
 import re
 
 
+# Valid tags for all plan types
+VALID_PLAN_TAGS = {"hot", "recommended", "new", "popular", "featured", "trending"}
+
+
+def validate_plan_tags(v):
+    """Validator for plan tags - ensures all tags are from valid set"""
+    if v is None:
+        return []
+    if not isinstance(v, list):
+        raise ValueError("tags must be a list")
+    for tag in v:
+        if tag not in VALID_PLAN_TAGS:
+            raise ValueError(f"Invalid tag: {tag}. Valid tags: {VALID_PLAN_TAGS}")
+    return v
+
+
 class UserRegister(BaseModel):
     """Schema for user registration"""
     email: EmailStr
@@ -234,8 +250,11 @@ class InvestmentPlan(BaseModel):
     expected_return_percent: float = Field(..., description="Expected return percentage")
     current_subscribers: int = Field(default=0, ge=0, description="Number of current subscribers")
     is_active: bool = Field(default=True, description="Whether the plan is currently available")
+    tags: List[str] = Field(default_factory=list, description="Plan tags: hot, recommended, new, popular, featured, trending")
     created_at: datetime
     updated_at: datetime
+
+    _validate_tags = field_validator("tags", mode="before")(validate_plan_tags)
 
     class Config:
         from_attributes = True
@@ -251,6 +270,7 @@ class InvestmentPlanResponse(BaseModel):
     expected_return_percent: float
     current_subscribers: int
     is_active: bool
+    tags: List[str] = Field(default_factory=list)
 
     class Config:
         from_attributes = True
@@ -741,8 +761,11 @@ class ETFPlan(BaseModel):
     minimum_investment: float = Field(default=0.0, ge=0, description="Minimum investment amount in USD")
     description: Optional[str] = Field(None, description="Plan description")
     is_active: bool = Field(default=True, description="Whether the plan is currently available")
+    tags: List[str] = Field(default_factory=list, description="Plan tags: hot, recommended, new, popular, featured, trending")
     created_at: datetime
     updated_at: datetime
+
+    _validate_tags = field_validator("tags", mode="before")(validate_plan_tags)
 
     class Config:
         from_attributes = True
@@ -758,6 +781,7 @@ class ETFPlanResponse(BaseModel):
     minimum_investment: float
     description: Optional[str]
     is_active: bool
+    tags: List[str] = Field(default_factory=list)
 
     class Config:
         from_attributes = True
@@ -773,8 +797,11 @@ class DeFiPlan(BaseModel):
     minimum_investment: float = Field(default=0.0, ge=0, description="Minimum investment amount in USD")
     description: Optional[str] = Field(None, description="Plan description")
     is_active: bool = Field(default=True, description="Whether the plan is currently available")
+    tags: List[str] = Field(default_factory=list, description="Plan tags: hot, recommended, new, popular, featured, trending")
     created_at: datetime
     updated_at: datetime
+
+    _validate_tags = field_validator("tags", mode="before")(validate_plan_tags)
 
     class Config:
         from_attributes = True
@@ -790,6 +817,7 @@ class DeFiPlanResponse(BaseModel):
     minimum_investment: float
     description: Optional[str]
     is_active: bool
+    tags: List[str] = Field(default_factory=list)
 
     class Config:
         from_attributes = True
@@ -805,8 +833,11 @@ class OptionsPlan(BaseModel):
     minimum_investment: float = Field(default=0.0, ge=0, description="Minimum investment amount in USD")
     description: Optional[str] = Field(None, description="Plan description")
     is_active: bool = Field(default=True, description="Whether the plan is currently available")
+    tags: List[str] = Field(default_factory=list, description="Plan tags: hot, recommended, new, popular, featured, trending")
     created_at: datetime
     updated_at: datetime
+
+    _validate_tags = field_validator("tags", mode="before")(validate_plan_tags)
 
     class Config:
         from_attributes = True
@@ -822,6 +853,7 @@ class OptionsPlanResponse(BaseModel):
     minimum_investment: float
     description: Optional[str]
     is_active: bool
+    tags: List[str] = Field(default_factory=list)
 
     class Config:
         from_attributes = True
