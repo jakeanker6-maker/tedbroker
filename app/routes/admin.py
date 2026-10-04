@@ -4,6 +4,20 @@ from datetime import timedelta, datetime
 from typing import List, Optional
 from bson import ObjectId
 
+# Valid tags for all plan types
+VALID_PLAN_TAGS = {"hot", "recommended", "new", "popular", "featured", "trending"}
+
+def validate_plan_tags(v):
+    """Validator for plan tags - ensures all tags are from valid set"""
+    if v is None:
+        return []
+    if not isinstance(v, list):
+        raise ValueError("tags must be a list")
+    for tag in v:
+        if tag not in VALID_PLAN_TAGS:
+            raise ValueError(f"Invalid tag: {tag}. Valid tags: {VALID_PLAN_TAGS}")
+    return v
+
 from app.admin_service import admin_service
 from app.auth import create_access_token, get_current_user_token, ACCESS_TOKEN_EXPIRE_MINUTES
 from app.database import get_collection, USERS_COLLECTION, TRADERS_COLLECTION, INVESTMENT_PLANS_COLLECTION, ETF_PLANS_COLLECTION, DEFI_PLANS_COLLECTION, OPTIONS_PLANS_COLLECTION, DEPOSIT_REQUESTS_COLLECTION, TRANSACTIONS_COLLECTION, CRYPTO_WALLETS_COLLECTION, BANK_ACCOUNTS_COLLECTION, USER_BANK_ACCOUNTS_COLLECTION, USER_CRYPTO_ADDRESSES_COLLECTION, WITHDRAWAL_REQUESTS_COLLECTION, CHAT_CONVERSATIONS_COLLECTION, CHAT_MESSAGES_COLLECTION, NOTIFICATIONS_COLLECTION
@@ -61,6 +75,21 @@ class CreatePlan(BaseModel):
     holding_period_months: int = Field(..., gt=0, description="Holding period in months")
     current_subscribers: int = Field(default=0, ge=0, description="Number of current subscribers")
     is_active: bool = Field(default=True, description="Whether the plan is active")
+    tags: List[str] = Field(default_factory=list, description="Plan tags: hot, recommended, new, popular, featured, trending")
+
+    _validate_tags = field_validator("tags", mode="before")(validate_plan_tags)
+
+
+class UpdatePlan(BaseModel):
+    """Schema for updating an investment plan (all fields optional)"""
+    name: Optional[str] = Field(None, min_length=1, max_length=100, description="Plan name")
+    description: Optional[str] = Field(None, description="Plan description")
+    minimum_investment: Optional[float] = Field(None, gt=0, description="Minimum investment amount")
+    expected_return_percent: Optional[float] = Field(None, description="Expected return percentage")
+    holding_period_months: Optional[int] = Field(None, gt=0, description="Holding period in months")
+    current_subscribers: Optional[int] = Field(None, ge=0, description="Number of current subscribers")
+    is_active: Optional[bool] = Field(None, description="Whether the plan is active")
+    tags: Optional[List[str]] = Field(None, description="Plan tags: hot, recommended, new, popular, featured, trending")
 
 
 class CreateCryptoWallet(BaseModel):
@@ -1097,6 +1126,7 @@ async def get_all_plans(
             "holding_period_months": plan["holding_period_months"],
             "current_subscribers": plan.get("current_subscribers", 0),
             "is_active": plan.get("is_active", True),
+            "tags": plan.get("tags", []),
             "created_at": plan["created_at"].isoformat() if plan.get("created_at") else None,
             "updated_at": plan["updated_at"].isoformat() if plan.get("updated_at") else None
         })
@@ -1144,6 +1174,7 @@ async def get_plan_details(
         "holding_period_months": plan["holding_period_months"],
         "current_subscribers": plan.get("current_subscribers", 0),
         "is_active": plan.get("is_active", True),
+        "tags": plan.get("tags", []),
         "created_at": plan["created_at"].isoformat() if plan.get("created_at") else None,
         "updated_at": plan["updated_at"].isoformat() if plan.get("updated_at") else None
     }
@@ -1175,6 +1206,7 @@ async def create_plan(
         "holding_period_months": plan_data.holding_period_months,
         "current_subscribers": plan_data.current_subscribers,
         "is_active": plan_data.is_active,
+        "tags": plan_data.tags,
         "created_at": datetime.utcnow(),
         "updated_at": datetime.utcnow()
     }
@@ -1192,6 +1224,7 @@ async def create_plan(
         "holding_period_months": plan_dict["holding_period_months"],
         "current_subscribers": plan_dict["current_subscribers"],
         "is_active": plan_dict["is_active"],
+        "tags": plan_dict["tags"],
         "created_at": plan_dict["created_at"].isoformat()
     }
 
@@ -1199,7 +1232,7 @@ async def create_plan(
 @router.put("/plans/{plan_id}")
 async def update_plan(
     plan_id: str,
-    plan_data: CreatePlan,
+    plan_data: UpdatePlan,
     current_admin: dict = Depends(get_current_admin)
 ):
     """
@@ -1229,17 +1262,24 @@ async def update_plan(
             detail="Investment plan not found"
         )
 
-    # Update plan document
-    update_dict = {
-        "name": plan_data.name,
-        "description": plan_data.description,
-        "minimum_investment": plan_data.minimum_investment,
-        "expected_return_percent": plan_data.expected_return_percent,
-        "holding_period_months": plan_data.holding_period_months,
-        "current_subscribers": plan_data.current_subscribers,
-        "is_active": plan_data.is_active,
-        "updated_at": datetime.utcnow()
-    }
+# Update plan document - only include non-None fields
+    update_dict = {"updated_at": datetime.utcnow()}
+    if plan_data.name is not None:
+        update_dict["name"] = plan_data.name
+    if plan_data.description is not None:
+        update_dict["description"] = plan_data.description
+    if plan_data.minimum_investment is not None:
+        update_dict["minimum_investment"] = plan_data.minimum_investment
+    if plan_data.expected_return_percent is not None:
+        update_dict["expected_return_percent"] = plan_data.expected_return_percent
+    if plan_data.holding_period_months is not None:
+        update_dict["holding_period_months"] = plan_data.holding_period_months
+    if plan_data.current_subscribers is not None:
+        update_dict["current_subscribers"] = plan_data.current_subscribers
+    if plan_data.is_active is not None:
+        update_dict["is_active"] = plan_data.is_active
+    if plan_data.tags is not None:
+        update_dict["tags"] = plan_data.tags
 
     # Update plan in database
     plans.update_one(
@@ -1259,6 +1299,7 @@ async def update_plan(
         "holding_period_months": updated_plan["holding_period_months"],
         "current_subscribers": updated_plan.get("current_subscribers", 0),
         "is_active": updated_plan["is_active"],
+        "tags": updated_plan.get("tags", []),
         "created_at": updated_plan["created_at"].isoformat() if updated_plan.get("created_at") else None,
         "updated_at": updated_plan["updated_at"].isoformat()
     }
@@ -3069,6 +3110,21 @@ class CreateETFPlan(BaseModel):
     minimum_investment: float = Field(default=0.0, ge=0, description="Minimum investment amount")
     description: Optional[str] = Field(None, description="Plan description")
     is_active: bool = Field(default=True, description="Whether the plan is active")
+    tags: List[str] = Field(default_factory=list, description="Plan tags: hot, recommended, new, popular, featured, trending")
+
+    _validate_tags = field_validator("tags", mode="before")(validate_plan_tags)
+
+
+class UpdateETFPlan(BaseModel):
+    """Schema for updating an ETF plan (all fields optional)"""
+    name: Optional[str] = Field(None, min_length=1, max_length=100, description="ETF plan name")
+    plan_type: Optional[str] = Field(None, description="Plan type (e.g., Conservative, Moderate, Aggressive)")
+    expected_return_percent: Optional[float] = Field(None, description="Expected return percentage")
+    duration_months: Optional[int] = Field(None, gt=0, description="Duration in months")
+    minimum_investment: Optional[float] = Field(None, ge=0, description="Minimum investment amount")
+    description: Optional[str] = Field(None, description="Plan description")
+    is_active: Optional[bool] = Field(None, description="Whether the plan is active")
+    tags: Optional[List[str]] = Field(None, description="Plan tags: hot, recommended, new, popular, featured, trending")
 
 
 @router.get("/etf-plans")
@@ -3097,6 +3153,7 @@ async def get_all_etf_plans(
             "minimum_investment": plan.get("minimum_investment", 0.0),
             "description": plan.get("description"),
             "is_active": plan.get("is_active", True),
+            "tags": plan.get("tags", []),
             "created_at": plan["created_at"].isoformat() if plan.get("created_at") else None,
             "updated_at": plan["updated_at"].isoformat() if plan.get("updated_at") else None
         })
@@ -3144,6 +3201,7 @@ async def get_etf_plan_details(
         "minimum_investment": plan.get("minimum_investment", 0.0),
         "description": plan.get("description"),
         "is_active": plan.get("is_active", True),
+        "tags": plan.get("tags", []),
         "created_at": plan["created_at"].isoformat() if plan.get("created_at") else None,
         "updated_at": plan["updated_at"].isoformat() if plan.get("updated_at") else None
     }
@@ -3175,6 +3233,7 @@ async def create_etf_plan(
         "minimum_investment": plan_data.minimum_investment,
         "description": plan_data.description,
         "is_active": plan_data.is_active,
+        "tags": plan_data.tags,
         "created_at": datetime.utcnow(),
         "updated_at": datetime.utcnow()
     }
@@ -3192,6 +3251,7 @@ async def create_etf_plan(
         "minimum_investment": plan_dict["minimum_investment"],
         "description": plan_dict["description"],
         "is_active": plan_dict["is_active"],
+        "tags": plan_dict["tags"],
         "created_at": plan_dict["created_at"].isoformat()
     }
 
@@ -3199,7 +3259,7 @@ async def create_etf_plan(
 @router.put("/etf-plans/{plan_id}")
 async def update_etf_plan(
     plan_id: str,
-    plan_data: CreateETFPlan,
+    plan_data: UpdateETFPlan,
     current_admin: dict = Depends(get_current_admin)
 ):
     """
@@ -3238,6 +3298,7 @@ async def update_etf_plan(
         "minimum_investment": plan_data.minimum_investment,
         "description": plan_data.description,
         "is_active": plan_data.is_active,
+        "tags": plan_data.tags,
         "updated_at": datetime.utcnow()
     }
 
@@ -3259,6 +3320,7 @@ async def update_etf_plan(
         "minimum_investment": updated_plan.get("minimum_investment", 0.0),
         "description": updated_plan.get("description"),
         "is_active": updated_plan["is_active"],
+        "tags": updated_plan.get("tags", []),
         "created_at": updated_plan["created_at"].isoformat() if updated_plan.get("created_at") else None,
         "updated_at": updated_plan["updated_at"].isoformat()
     }
@@ -3310,6 +3372,21 @@ class CreateDeFiPlan(BaseModel):
     minimum_investment: float = Field(default=0.0, ge=0, description="Minimum investment amount")
     description: Optional[str] = Field(None, description="Plan description")
     is_active: bool = Field(default=True, description="Whether the plan is active")
+    tags: List[str] = Field(default_factory=list, description="Plan tags: hot, recommended, new, popular, featured, trending")
+
+    _validate_tags = field_validator("tags", mode="before")(validate_plan_tags)
+
+
+class UpdateDeFiPlan(BaseModel):
+    """Schema for updating a DeFi plan (all fields optional)"""
+    name: Optional[str] = Field(None, min_length=1, max_length=100, description="DeFi plan name")
+    portfolio_type: Optional[str] = Field(None, description="Portfolio type (e.g., Conservative, Moderate, Aggressive, Balanced)")
+    expected_return_percent: Optional[float] = Field(None, description="Expected return percentage")
+    duration_months: Optional[int] = Field(None, gt=0, description="Duration in months")
+    minimum_investment: Optional[float] = Field(None, ge=0, description="Minimum investment amount")
+    description: Optional[str] = Field(None, description="Plan description")
+    is_active: Optional[bool] = Field(None, description="Whether the plan is active")
+    tags: Optional[List[str]] = Field(None, description="Plan tags: hot, recommended, new, popular, featured, trending")
 
 
 @router.get("/defi-plans")
@@ -3338,6 +3415,7 @@ async def get_all_defi_plans(
             "minimum_investment": plan.get("minimum_investment", 0.0),
             "description": plan.get("description"),
             "is_active": plan.get("is_active", True),
+            "tags": plan.get("tags", []),
             "created_at": plan["created_at"].isoformat() if plan.get("created_at") else None,
             "updated_at": plan["updated_at"].isoformat() if plan.get("updated_at") else None
         })
@@ -3385,6 +3463,7 @@ async def get_defi_plan_details(
         "minimum_investment": plan.get("minimum_investment", 0.0),
         "description": plan.get("description"),
         "is_active": plan.get("is_active", True),
+        "tags": plan.get("tags", []),
         "created_at": plan["created_at"].isoformat() if plan.get("created_at") else None,
         "updated_at": plan["updated_at"].isoformat() if plan.get("updated_at") else None
     }
@@ -3416,6 +3495,7 @@ async def create_defi_plan(
         "minimum_investment": plan_data.minimum_investment,
         "description": plan_data.description,
         "is_active": plan_data.is_active,
+        "tags": plan_data.tags,
         "created_at": datetime.utcnow(),
         "updated_at": datetime.utcnow()
     }
@@ -3433,6 +3513,7 @@ async def create_defi_plan(
         "minimum_investment": plan_dict["minimum_investment"],
         "description": plan_dict["description"],
         "is_active": plan_dict["is_active"],
+        "tags": plan_dict["tags"],
         "created_at": plan_dict["created_at"].isoformat()
     }
 
@@ -3440,7 +3521,7 @@ async def create_defi_plan(
 @router.put("/defi-plans/{plan_id}")
 async def update_defi_plan(
     plan_id: str,
-    plan_data: CreateDeFiPlan,
+    plan_data: UpdateDeFiPlan,
     current_admin: dict = Depends(get_current_admin)
 ):
     """
@@ -3470,17 +3551,24 @@ async def update_defi_plan(
             detail="DeFi plan not found"
         )
 
-    # Update plan document
-    update_dict = {
-        "name": plan_data.name,
-        "portfolio_type": plan_data.portfolio_type,
-        "expected_return_percent": plan_data.expected_return_percent,
-        "duration_months": plan_data.duration_months,
-        "minimum_investment": plan_data.minimum_investment,
-        "description": plan_data.description,
-        "is_active": plan_data.is_active,
-        "updated_at": datetime.utcnow()
-    }
+    # Update plan document - only include non-None fields
+    update_dict = {"updated_at": datetime.utcnow()}
+    if plan_data.name is not None:
+        update_dict["name"] = plan_data.name
+    if plan_data.portfolio_type is not None:
+        update_dict["portfolio_type"] = plan_data.portfolio_type
+    if plan_data.expected_return_percent is not None:
+        update_dict["expected_return_percent"] = plan_data.expected_return_percent
+    if plan_data.duration_months is not None:
+        update_dict["duration_months"] = plan_data.duration_months
+    if plan_data.minimum_investment is not None:
+        update_dict["minimum_investment"] = plan_data.minimum_investment
+    if plan_data.description is not None:
+        update_dict["description"] = plan_data.description
+    if plan_data.is_active is not None:
+        update_dict["is_active"] = plan_data.is_active
+    if plan_data.tags is not None:
+        update_dict["tags"] = plan_data.tags
 
     # Update plan in database
     defi_plans.update_one(
@@ -3500,6 +3588,7 @@ async def update_defi_plan(
         "minimum_investment": updated_plan.get("minimum_investment", 0.0),
         "description": updated_plan.get("description"),
         "is_active": updated_plan["is_active"],
+        "tags": updated_plan.get("tags", []),
         "created_at": updated_plan["created_at"].isoformat() if updated_plan.get("created_at") else None,
         "updated_at": updated_plan["updated_at"].isoformat()
     }
@@ -3551,6 +3640,21 @@ class CreateOptionsPlan(BaseModel):
     minimum_investment: float = Field(default=0.0, ge=0, description="Minimum investment amount")
     description: Optional[str] = Field(None, description="Plan description")
     is_active: bool = Field(default=True, description="Whether the plan is active")
+    tags: List[str] = Field(default_factory=list, description="Plan tags: hot, recommended, new, popular, featured, trending")
+
+    _validate_tags = field_validator("tags", mode="before")(validate_plan_tags)
+
+
+class UpdateOptionsPlan(BaseModel):
+    """Schema for updating an Options plan (all fields optional)"""
+    name: Optional[str] = Field(None, min_length=1, max_length=100, description="Options plan name")
+    plan_type: Optional[str] = Field(None, description="Plan type (e.g., Beginner, Intermediate, Advanced, Expert)")
+    expected_return_percent: Optional[float] = Field(None, description="Expected return percentage")
+    duration_months: Optional[int] = Field(None, ge=0, description="Duration in months (0 for ongoing)")
+    minimum_investment: Optional[float] = Field(None, ge=0, description="Minimum investment amount")
+    description: Optional[str] = Field(None, description="Plan description")
+    is_active: Optional[bool] = Field(None, description="Whether the plan is active")
+    tags: Optional[List[str]] = Field(None, description="Plan tags: hot, recommended, new, popular, featured, trending")
 
 
 @router.get("/options-plans")
@@ -3579,6 +3683,7 @@ async def get_all_options_plans(
             "minimum_investment": plan.get("minimum_investment", 0.0),
             "description": plan.get("description"),
             "is_active": plan.get("is_active", True),
+            "tags": plan.get("tags", []),
             "created_at": plan["created_at"].isoformat() if plan.get("created_at") else None,
             "updated_at": plan["updated_at"].isoformat() if plan.get("updated_at") else None
         })
@@ -3626,6 +3731,7 @@ async def get_options_plan_details(
         "minimum_investment": plan.get("minimum_investment", 0.0),
         "description": plan.get("description"),
         "is_active": plan.get("is_active", True),
+        "tags": plan.get("tags", []),
         "created_at": plan["created_at"].isoformat() if plan.get("created_at") else None,
         "updated_at": plan["updated_at"].isoformat() if plan.get("updated_at") else None
     }
@@ -3657,6 +3763,7 @@ async def create_options_plan(
         "minimum_investment": plan_data.minimum_investment,
         "description": plan_data.description,
         "is_active": plan_data.is_active,
+        "tags": plan_data.tags,
         "created_at": datetime.utcnow(),
         "updated_at": datetime.utcnow()
     }
@@ -3674,6 +3781,7 @@ async def create_options_plan(
         "minimum_investment": plan_dict["minimum_investment"],
         "description": plan_dict["description"],
         "is_active": plan_dict["is_active"],
+        "tags": plan_dict["tags"],
         "created_at": plan_dict["created_at"].isoformat()
     }
 
@@ -3681,7 +3789,7 @@ async def create_options_plan(
 @router.put("/options-plans/{plan_id}")
 async def update_options_plan(
     plan_id: str,
-    plan_data: CreateOptionsPlan,
+    plan_data: UpdateOptionsPlan,
     current_admin: dict = Depends(get_current_admin)
 ):
     """
@@ -3711,17 +3819,24 @@ async def update_options_plan(
             detail="Options plan not found"
         )
 
-    # Update plan document
-    update_dict = {
-        "name": plan_data.name,
-        "plan_type": plan_data.plan_type,
-        "expected_return_percent": plan_data.expected_return_percent,
-        "duration_months": plan_data.duration_months,
-        "minimum_investment": plan_data.minimum_investment,
-        "description": plan_data.description,
-        "is_active": plan_data.is_active,
-        "updated_at": datetime.utcnow()
-    }
+    # Update plan document - only include non-None fields
+    update_dict = {"updated_at": datetime.utcnow()}
+    if plan_data.name is not None:
+        update_dict["name"] = plan_data.name
+    if plan_data.plan_type is not None:
+        update_dict["plan_type"] = plan_data.plan_type
+    if plan_data.description is not None:
+        update_dict["description"] = plan_data.description
+    if plan_data.minimum_investment is not None:
+        update_dict["minimum_investment"] = plan_data.minimum_investment
+    if plan_data.expected_return_percent is not None:
+        update_dict["expected_return_percent"] = plan_data.expected_return_percent
+    if plan_data.duration_months is not None:
+        update_dict["duration_months"] = plan_data.duration_months
+    if plan_data.is_active is not None:
+        update_dict["is_active"] = plan_data.is_active
+    if plan_data.tags is not None:
+        update_dict["tags"] = plan_data.tags
 
     # Update plan in database
     options_plans.update_one(
@@ -3741,6 +3856,7 @@ async def update_options_plan(
         "minimum_investment": updated_plan.get("minimum_investment", 0.0),
         "description": updated_plan.get("description"),
         "is_active": updated_plan["is_active"],
+        "tags": updated_plan.get("tags", []),
         "created_at": updated_plan["created_at"].isoformat() if updated_plan.get("created_at") else None,
         "updated_at": updated_plan["updated_at"].isoformat()
     }
