@@ -305,8 +305,13 @@ async def admin_register_page():
     return read_html_file(SITE_DIR / "admin-register.html")
 
 
-@app.get("/admin/dashboard", response_class=HTMLResponse)
+@app.get("/admin-dashboard.html", response_class=HTMLResponse)
+async def admin_dashboard_html():
+    """Serve the admin dashboard page via admin-dashboard.html"""
+    return read_html_file(SITE_DIR / "admin-dashboard.html")
+
 @app.get("/admin/dashboard.html", response_class=HTMLResponse)
+@app.get("/admin/dashboard", response_class=HTMLResponse)
 async def admin_dashboard_page():
     """Serve the admin dashboard page"""
     return read_html_file(SITE_DIR / "admin-dashboard.html")

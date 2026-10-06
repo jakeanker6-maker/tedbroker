@@ -95,7 +95,7 @@ class AdminChatManager {
             const unreadCount = conv.unread_count || 0;
 
             return `
-                <div class="conversation-item ${isActive ? 'active' : ''}" onclick="adminChatManager.selectConversation('${conv.id}')">
+                <div class="conversation-item ${isActive ? 'active' : ''}" data-action="select-conversation" data-conversation-id="${conv.id}">
                     <div class="conversation-user">
                         ${this.escapeHtml(conv.user_name || conv.user_email)}
                         ${unreadCount > 0 ? `<span class="conversation-unread">${unreadCount}</span>` : ''}

@@ -2749,21 +2749,24 @@ function createDeFiPlanCard(plan) {
 
     // Portfolio type badge color
     let badgeColor = '#11998e';
-    if (plan.portfolio_type === 'Conservative') {
+    const portfolioType = (plan.portfolio_type || '').toLowerCase();
+    if (portfolioType.includes('staking') || portfolioType.includes('conservative')) {
         badgeColor = '#4caf50';
-    } else if (plan.portfolio_type === 'Moderate') {
+    } else if (portfolioType.includes('yield') || portfolioType.includes('moderate') || portfolioType.includes('balanced')) {
         badgeColor = '#ff9800';
-    } else if (plan.portfolio_type === 'Aggressive') {
+    } else if (portfolioType.includes('liquidity') || portfolioType.includes('farming') || portfolioType.includes('aggressive')) {
         badgeColor = '#f44336';
-    } else if (plan.portfolio_type === 'Balanced') {
+    } else if (portfolioType.includes('blue-chip') || portfolioType.includes('income') || portfolioType.includes('stable')) {
         badgeColor = '#667eea';
+    } else if (portfolioType.includes('high-yield') || portfolioType.includes('booster') || portfolioType.includes('premium')) {
+        badgeColor = '#e91e63';
     }
 
 card.innerHTML = `
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
             <h3 style="color: #D32F2F; margin: 0; font-size: 14px;">${plan.name}</h3>
             <span style="background: ${badgeColor}; color: white; padding: 2px 8px; border-radius: 8px; font-size: 10px; font-weight: 600;">
-                ${plan.plan_type}
+                ${plan.portfolio_type || 'DeFi'}
             </span>
         </div>
         <div class="plan-tags" style="margin-bottom: 8px;">${renderTagBadges(plan)}</div>
@@ -3097,7 +3100,7 @@ function createOptionsPlanCard(plan) {
         badgeColor = '#764ba2';
     }
 
-    card.innerHTML = `
+card.innerHTML = `
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
             <h3 style="color: #D32F2F; margin: 0; font-size: 14px;">${plan.name}</h3>
             <span style="background: ${badgeColor}; color: white; padding: 2px 8px; border-radius: 8px; font-size: 10px; font-weight: 600;">

@@ -44,6 +44,388 @@ document.addEventListener('DOMContentLoaded', async () => {
         localStorage.removeItem('admin_token');
         window.location.href = '/admin/login';
     }
+
+
+    // ============================================================================
+    // EVENT LISTENERS - Restore functionality after CSP compliance
+    // ============================================================================
+
+    // Static buttons in HTML (not dynamically generated)
+    // Search Users button
+    const searchUsersBtn = document.querySelector('button[onclick*="searchUsers"]');
+    if (searchUsersBtn) {
+        searchUsersBtn.removeAttribute('onclick');
+        searchUsersBtn.addEventListener('click', searchUsers);
+    }
+
+    // Add Trader button (in HTML)
+    document.querySelectorAll('.btn.btn-primary').forEach(btn => {
+        const text = btn.textContent.trim();
+        if (text.includes('Add Trader')) {
+            btn.addEventListener('click', showAddTraderModal);
+        } else if (text.includes('Add Plan')) {
+            btn.addEventListener('click', showAddPlanModal);
+        } else if (text.includes('Add ETF Plan')) {
+            btn.addEventListener('click', showAddETFPlanModal);
+        } else if (text.includes('Add DeFi Plan')) {
+            btn.addEventListener('click', showAddDeFiPlanModal);
+        } else if (text.includes('Add Options Plan')) {
+            btn.addEventListener('click', showAddOptionsPlanModal);
+        } else if (text.includes('Add Bank Account')) {
+            btn.addEventListener('click', showAddBankAccountModal);
+        } else if (text.includes('Add Crypto Wallet')) {
+            btn.addEventListener('click', showAddCryptoWalletModal);
+        } else if (text.includes('Create Notification')) {
+            btn.addEventListener('click', showCreateNotificationModal);
+        }
+    });
+
+    // Filter buttons in HTML
+    document.querySelectorAll('.btn.btn-primary').forEach(btn => {
+        const text = btn.textContent.trim();
+        if (text.includes('Filter') && btn.closest('#tab-deposits')) {
+            btn.addEventListener('click', filterDepositRequests);
+        } else if (text.includes('Filter') && btn.closest('#tab-withdrawals')) {
+            btn.addEventListener('click', filterWithdrawalRequests);
+        } else if (text.includes('Filter') && btn.closest('#tab-chats')) {
+            btn.addEventListener('click', filterChats);
+        }
+    });
+
+    // Send Admin Message button
+    document.querySelectorAll('.btn.btn-primary').forEach(btn => {
+        if (btn.textContent.trim().includes('Send')) {
+            btn.addEventListener('click', sendAdminMessage);
+        }
+    });
+
+    // Close Conversation button
+    document.querySelectorAll('.btn.btn-success').forEach(btn => {
+        if (btn.textContent.trim().includes('Close')) {
+            btn.addEventListener('click', closeConversation);
+        }
+    });
+
+    // Modal close buttons (Cancel/Close)
+    document.querySelectorAll('.btn.btn-secondary').forEach(btn => {
+        const text = btn.textContent.trim();
+        if (text === 'Cancel' || text === 'Close') {
+            const modal = btn.closest('.modal');
+            if (modal) {
+                const modalId = modal.id;
+                const closeHandlers = {
+                    'addTraderModal': closeAddTraderModal,
+                    'editTraderModal': hideEditTraderModal,
+                    'addPlanModal': hideAddPlanModal,
+                    'editPlanModal': hideEditPlanModal,
+                    'addETFPlanModal': hideAddETFPlanModal,
+                    'editETFPlanModal': hideEditETFPlanModal,
+                    'addDeFiPlanModal': hideAddDeFiPlanModal,
+                    'editDeFiPlanModal': hideEditDeFiPlanModal,
+                    'addOptionsPlanModal': hideAddOptionsPlanModal,
+                    'editOptionsPlanModal': hideEditOptionsPlanModal,
+                    'addCryptoWalletModal': hideAddCryptoWalletModal,
+                    'editCryptoWalletModal': hideEditCryptoWalletModal,
+                    'userDetailsModal': closeUserDetailsModal,
+                    'createNotificationModal': hideCreateNotificationModal,
+                    'addBankAccountModal': hideAddBankAccountModal,
+                    'withdrawalDetailsModal': closeWithdrawalDetailsModal,
+                    'updateBalanceModal': closeUpdateBalanceModal
+                };
+                if (closeHandlers[modalId]) {
+                    btn.addEventListener('click', closeHandlers[modalId]);
+                }
+            }
+        }
+    });
+
+    // User details modal tabs
+    document.querySelectorAll('.user-tab-btn').forEach(btn => {
+        const tab = btn.getAttribute('data-tab');
+        if (tab) {
+            btn.addEventListener('click', function() {
+                switchUserTab(tab);
+            });
+        }
+    });
+
+    // Logout button
+    const logoutMenuItem = document.querySelector('.menu-item[style*="border-top"]');
+    if (logoutMenuItem && logoutMenuItem.textContent.includes('Logout')) {
+        logoutMenuItem.addEventListener('click', logout);
+    }
+
+    // ============================================================================
+    // EVENT DELEGATION FOR DYNAMICALLY GENERATED CONTENT
+    // ============================================================================
+    // This handles buttons in dynamically generated HTML (users, traders, plans tables)
+    // that use data attributes instead of onclick handlers (for CSP compliance)
+
+    function setupDynamicEventDelegation() {
+        // Delegate clicks on dynamically generated buttons
+        document.addEventListener('click', function(e) {
+            const btn = e.target.closest('button[data-action]');
+            if (!btn) return;
+
+            const action = btn.getAttribute('data-action');
+            const userId = btn.getAttribute('data-user-id');
+            const traderId = btn.getAttribute('data-trader-id');
+            const planId = btn.getAttribute('data-plan-id');
+            const requestId = btn.getAttribute('data-request-id');
+            const walletId = btn.getAttribute('data-wallet-id');
+            const accountId = btn.getAttribute('data-account-id');
+            const notificationId = btn.getAttribute('data-notification-id');
+            const conversationId = btn.getAttribute('data-conversation-id');
+            const balance = btn.getAttribute('data-balance');
+
+            switch (action) {
+                // User actions
+                case 'view-user':
+                    if (userId) viewUser(userId);
+                    break;
+                case 'activate-user':
+                    if (userId) activateUser(userId);
+                    break;
+                case 'deactivate-user':
+                    if (userId) deactivateUser(userId);
+                    break;
+                case 'grant-access':
+                    if (userId) grantAccess(userId);
+                    break;
+                case 'revoke-access':
+                    if (userId) revokeAccess(userId);
+                    break;
+                case 'reject-kyc':
+                    if (userId) rejectKYC(userId);
+                    break;
+                case 'update-balance':
+                    if (userId && balance !== null) showUpdateBalanceModal(userId, parseFloat(balance));
+                    break;
+
+                // Trader actions
+                case 'edit-trader':
+                    if (traderId) showEditTraderModal(traderId);
+                    break;
+                case 'delete-trader':
+                    if (traderId) deleteTrader(traderId);
+                    break;
+
+                // Plan actions (Investment Plans)
+                case 'edit-plan':
+                    if (planId) showEditPlanModal(planId);
+                    break;
+                case 'delete-plan':
+                    if (planId) deletePlan(planId);
+                    break;
+
+                // ETF Plan actions
+                case 'edit-etf-plan':
+                    if (planId) showEditETFPlanModal(planId);
+                    break;
+                case 'delete-etf-plan':
+                    if (planId) deleteETFPlan(planId);
+                    break;
+
+                // DeFi Plan actions
+                case 'edit-defi-plan':
+                    if (planId) showEditDeFiPlanModal(planId);
+                    break;
+                case 'delete-defi-plan':
+                    if (planId) deleteDeFiPlan(planId);
+                    break;
+
+                // Options Plan actions
+                case 'edit-options-plan':
+                    if (planId) showEditOptionsPlanModal(planId);
+                    break;
+                case 'delete-options-plan':
+                    if (planId) deleteOptionsPlan(planId);
+                    break;
+
+                // Deposit actions
+                case 'approve-deposit':
+                    if (requestId) approveDeposit(requestId);
+                    break;
+                case 'reject-deposit':
+                    if (requestId) rejectDeposit(requestId);
+                    break;
+
+                // Withdrawal actions (old-style requests)
+                case 'view-withdrawal':
+                    if (requestId) viewWithdrawalDetails(requestId);
+                    break;
+                case 'approve-withdrawal':
+                    if (requestId) approveWithdrawal(requestId);
+                    break;
+                case 'reject-withdrawal':
+                    if (requestId) rejectWithdrawal(requestId);
+                    break;
+
+                // Transaction-based withdrawal actions
+                case 'view-transaction-withdrawal':
+                    if (requestId) viewTransactionWithdrawalDetails(requestId);
+                    break;
+                case 'complete-transaction-withdrawal':
+                    if (requestId) completeTransactionWithdrawal(requestId);
+                    break;
+                case 'reject-transaction-withdrawal':
+                    if (requestId) rejectTransactionWithdrawal(requestId);
+                    break;
+
+                // Crypto wallet actions
+                case 'edit-crypto-wallet':
+                    if (walletId) showEditCryptoWalletModal(walletId);
+                    break;
+                case 'delete-crypto-wallet':
+                    if (walletId) deleteCryptoWallet(walletId);
+                    break;
+
+                // Bank account actions
+                case 'delete-bank-account':
+                    if (accountId) deleteBankAccount(accountId);
+                    break;
+
+                // Notification actions
+                case 'delete-notification':
+                    if (notificationId) deleteNotification(notificationId);
+                    break;
+
+                // Chat actions
+                case 'select-conversation':
+                    if (conversationId && window.adminChatManager) {
+                        adminChatManager.selectConversation(conversationId);
+                    }
+                    break;
+
+                // Empty state buttons (show modals when no data exists)
+                case 'show-add-trader-modal':
+                    showAddTraderModal();
+                    break;
+                case 'show-add-plan-modal':
+                    showAddPlanModal();
+                    break;
+                case 'show-add-etf-plan-modal':
+                    showAddETFPlanModal();
+                    break;
+                case 'show-add-defi-plan-modal':
+                    showAddDeFiPlanModal();
+                    break;
+                case 'show-add-options-plan-modal':
+                    showAddOptionsPlanModal();
+                    break;
+                case 'show-add-bank-account-modal':
+                    showAddBankAccountModal();
+                    break;
+                case 'show-add-crypto-wallet-modal':
+                    showAddCryptoWalletModal();
+                    break;
+                case 'show-create-notification-modal':
+                    showCreateNotificationModal();
+                    break;
+
+                default:
+                    console.warn('Unknown action:', action);
+            }
+        });
+    }
+
+    // Initialize dynamic event delegation
+    setupDynamicEventDelegation();
+
+    // Also handle legacy data-id/data-user-id attributes (from fix_admin_onclick.py)
+    // These don't have data-action but use button text/context to determine action
+    document.addEventListener('click', function(e) {
+        const btn = e.target.closest('button[data-user-id], button[data-trader-id], button[data-plan-id], button[data-request-id], button[data-wallet-id], button[data-account-id], button[data-notification-id]');
+        if (!btn || btn.hasAttribute('data-action')) return; // Skip if already handled by data-action
+
+        // Determine action from button text/content
+        const text = btn.textContent.trim();
+        const userId = btn.getAttribute('data-user-id');
+        const traderId = btn.getAttribute('data-trader-id');
+        const planId = btn.getAttribute('data-plan-id');
+        const requestId = btn.getAttribute('data-request-id');
+        const walletId = btn.getAttribute('data-wallet-id');
+        const accountId = btn.getAttribute('data-account-id');
+        const notificationId = btn.getAttribute('data-notification-id');
+        const balance = btn.getAttribute('data-balance');
+
+        // User buttons (in loadUsers)
+        if (userId) {
+            if (text.includes('Full Details') || text.includes('View')) {
+                viewUser(userId);
+            } else if (text.includes('Reject KYC')) {
+                rejectKYC(userId);
+            } else if (text.includes('Grant Access')) {
+                grantAccess(userId);
+            } else if (text.includes('Revoke Access')) {
+                revokeAccess(userId);
+            } else if (text.includes('Activate')) {
+                activateUser(userId);
+            } else if (text.includes('Deactivate')) {
+                deactivateUser(userId);
+            } else if (text.includes('Update') && balance !== null) {
+                showUpdateBalanceModal(userId, parseFloat(balance));
+            }
+        }
+
+        // Trader buttons (in loadTraders)
+        if (traderId) {
+            if (text.includes('Edit')) {
+                showEditTraderModal(traderId);
+            } else if (text.includes('Delete')) {
+                deleteTrader(traderId);
+            }
+        }
+
+        // Plan buttons (in loadPlans, loadETFPlans, loadDeFiPlans, loadOptionsPlans)
+        if (planId) {
+            if (text.includes('Edit')) {
+                // Determine which plan type based on current tab
+                if (currentTab === 'etf-plans') showEditETFPlanModal(planId);
+                else if (currentTab === 'defi-plans') showEditDeFiPlanModal(planId);
+                else if (currentTab === 'options-plans') showEditOptionsPlanModal(planId);
+                else showEditPlanModal(planId);
+            } else if (text.includes('Delete')) {
+                if (currentTab === 'etf-plans') deleteETFPlan(planId);
+                else if (currentTab === 'defi-plans') deleteDeFiPlan(planId);
+                else if (currentTab === 'options-plans') deleteOptionsPlan(planId);
+                else deletePlan(planId);
+            }
+        }
+
+        // Deposit request buttons
+        if (requestId && currentTab === 'deposits') {
+            if (text.includes('Approve')) approveDeposit(requestId);
+            else if (text.includes('Reject')) rejectDeposit(requestId);
+        }
+
+        // Withdrawal request buttons
+        if (requestId && currentTab === 'withdrawals') {
+            if (text.includes('View')) viewWithdrawalDetails(requestId);
+            else if (text.includes('Approve')) approveWithdrawal(requestId);
+            else if (text.includes('Reject')) rejectWithdrawal(requestId);
+            else if (text.includes('Complete')) completeTransactionWithdrawal(requestId);
+        }
+
+        // Crypto wallet buttons
+        if (walletId && currentTab === 'crypto-wallets') {
+            if (text.includes('Edit')) showEditCryptoWalletModal(walletId);
+            else if (text.includes('Delete')) deleteCryptoWallet(walletId);
+        }
+
+        // Bank account buttons
+        if (accountId && currentTab === 'bank-accounts') {
+            if (text.includes('Delete')) deleteBankAccount(accountId);
+        }
+
+        // Notification buttons
+        if (notificationId && currentTab === 'notifications') {
+            if (text.includes('Delete')) deleteNotification(notificationId);
+        }
+    });
+
+    console.log('✓ All admin dashboard event listeners restored after CSP compliance');
+
 });
 
 // Admin authenticated fetch
@@ -199,27 +581,27 @@ async function loadUsers(search = '') {
                             </p>
                         </div>
                         <div style="display: flex; gap: 8px; flex-wrap: wrap;">
-                            <button class="btn btn-primary" style="padding: 10px 18px;" onclick="viewUser('${user.id}')">
+                            <button class="btn btn-primary" style="padding: 10px 18px;" data-action="view-user" data-user-id="${user.id}">
                                 <i class="fas fa-eye"></i> Full Details
                             </button>
                             ${kyc.kyc_completed || kyc.address_completed || kyc.personal_info_completed ?
-                                `<button class="btn btn-warning" style="padding: 10px 18px;" onclick="rejectKYC('${user.id}')">
+                                `<button class="btn btn-warning" style="padding: 10px 18px;" data-action="reject-kyc" data-user-id="${user.id}">
                                     <i class="fas fa-times-circle"></i> Reject KYC
                                 </button>` : ''
                             }
                             ${user.access_granted ?
-                                `<button class="btn btn-danger" style="padding: 10px 18px;" onclick="revokeAccess('${user.id}')">
+                                `<button class="btn btn-danger" style="padding: 10px 18px;" data-action="revoke-access" data-user-id="${user.id}">
                                     <i class="fas fa-lock"></i> Revoke Access
                                 </button>` :
-                                `<button class="btn btn-success" style="padding: 10px 18px;" onclick="grantAccess('${user.id}')">
+                                `<button class="btn btn-success" style="padding: 10px 18px;" data-action="grant-access" data-user-id="${user.id}">
                                     <i class="fas fa-unlock"></i> Grant Access
                                 </button>`
                             }
                             ${user.is_active ?
-                                `<button class="btn btn-danger" style="padding: 10px 18px;" onclick="deactivateUser('${user.id}')">
+                                `<button class="btn btn-danger" style="padding: 10px 18px;" data-action="deactivate-user" data-user-id="${user.id}">
                                     <i class="fas fa-ban"></i> Deactivate
                                 </button>` :
-                                `<button class="btn btn-success" style="padding: 10px 18px;" onclick="activateUser('${user.id}')">
+                                `<button class="btn btn-success" style="padding: 10px 18px;" data-action="activate-user" data-user-id="${user.id}">
                                     <i class="fas fa-check"></i> Activate
                                 </button>`
                             }
@@ -258,7 +640,7 @@ async function loadUsers(search = '') {
                                         <i class="fas fa-wallet" style="margin-right: 6px; font-size: 16px;"></i>
                                         $${user.wallet_balance.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}
                                     </p>
-                                    <button class="btn btn-sm btn-primary" style="padding: 6px 12px; font-size: 12px;" onclick="showUpdateBalanceModal('${user.id}', ${user.wallet_balance})">
+                                    <button class="btn btn-sm btn-primary" style="padding: 6px 12px; font-size: 12px;" data-action="update-balance" data-user-id="${user.id}" data-balance="${user.wallet_balance}">
                                         <i class="fas fa-edit"></i> Update
                                     </button>
                                 </div>
@@ -830,7 +1212,7 @@ async function loadTraders() {
         const traders = await response.json();
 
         if (traders.length === 0) {
-            container.innerHTML = '<p>No traders found. <button class="btn btn-primary" onclick="showAddTraderModal()">Add First Trader</button></p>';
+            container.innerHTML = '<p>No traders found. <button class="btn btn-primary" data-action="show-add-trader-modal">Add First Trader</button></p>';
             return;
         }
 
@@ -846,8 +1228,8 @@ async function loadTraders() {
                     <p><strong>Minimum Copy Amount:</strong> $${(trader.minimum_copy_amount || 100).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</p>
                     <p><strong>Assets Under Management:</strong> $${(trader.assets_under_management || 0).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})} | <strong>Max Drawdown:</strong> ${trader.max_drawdown || 0}% | <strong>Risk Score:</strong> ${trader.risk_score || 5}/10</p>
                     <div style="display: flex; gap: 10px; margin-top: 15px;">
-                        <button class="btn btn-primary" style="padding: 8px 16px;" onclick="showEditTraderModal('${trader.id}')">Edit</button>
-                        <button class="btn btn-danger" style="padding: 8px 16px;" onclick="deleteTrader('${trader.id}')">Delete</button>
+                        <button class="btn btn-primary" style="padding: 8px 16px;" data-action="edit-trader" data-trader-id="${trader.id}">Edit</button>
+                        <button class="btn btn-danger" style="padding: 8px 16px;" data-action="delete-trader" data-trader-id="${trader.id}">Delete</button>
                     </div>
                 </div>
             `;
@@ -1033,7 +1415,7 @@ async function loadPlans() {
         const plans = await response.json();
 
         if (plans.length === 0) {
-            container.innerHTML = '<p>No plans found. <button class="btn btn-primary" onclick="showAddPlanModal()">Add First Plan</button></p>';
+            container.innerHTML = '<p>No plans found. <button class="btn btn-primary" data-action="show-add-plan-modal">Add First Plan</button></p>';
             return;
         }
 
@@ -1048,8 +1430,8 @@ async function loadPlans() {
                     <p><strong>Subscribers:</strong> ${plan.current_subscribers || 0}</p>
                     <p><span class="badge badge-${plan.is_active ? 'active' : 'inactive'}">${plan.is_active ? 'Active' : 'Inactive'}</span></p>
                     <div style="display: flex; gap: 10px; margin-top: 15px;">
-                        <button class="btn btn-primary" style="padding: 8px 16px;" onclick="showEditPlanModal('${plan.id}')">Edit</button>
-                        <button class="btn btn-danger" style="padding: 8px 16px;" onclick="deletePlan('${plan.id}')">Delete</button>
+                        <button class="btn btn-primary" style="padding: 8px 16px;" data-action="edit-plan" data-plan-id="${plan.id}">Edit</button>
+                        <button class="btn btn-danger" style="padding: 8px 16px;" data-action="delete-plan" data-plan-id="${plan.id}">Delete</button>
                     </div>
                 </div>
             `;
@@ -1190,10 +1572,6 @@ async function submitEditedPlan(event) {
         }
     } catch (error) {
         Swal.fire({ title: 'Error!', text: 'Network error. Please try again.', icon: 'error' });
-    }
-}
-    } catch (error) {
-        Swal.fire({ title: 'Error!', text: 'Network error. Please try again.', icon: 'error' });
         console.error(error);
     }
 }
@@ -1238,7 +1616,7 @@ async function loadETFPlans() {
         const plans = await response.json();
 
         if (plans.length === 0) {
-            container.innerHTML = '<p>No ETF plans found. <button class="btn btn-primary" onclick="showAddETFPlanModal()">Add First ETF Plan</button></p>';
+            container.innerHTML = '<p>No ETF plans found. <button class="btn btn-primary" data-action="show-add-etf-plan-modal">Add First ETF Plan</button></p>';
             return;
         }
 
@@ -1253,8 +1631,8 @@ async function loadETFPlans() {
                     <p><strong>Min Investment:</strong> $${plan.minimum_investment.toLocaleString()}</p>
                     <p><span class="badge badge-${plan.is_active ? 'active' : 'inactive'}">${plan.is_active ? 'Active' : 'Inactive'}</span></p>
                     <div style="display: flex; gap: 10px; margin-top: 15px;">
-                        <button class="btn btn-primary" style="padding: 8px 16px;" onclick="showEditETFPlanModal('${plan.id}')">Edit</button>
-                        <button class="btn btn-danger" style="padding: 8px 16px;" onclick="deleteETFPlan('${plan.id}')">Delete</button>
+                        <button class="btn btn-primary" style="padding: 8px 16px;" data-action="edit-etf-plan" data-plan-id="${plan.id}">Edit</button>
+                        <button class="btn btn-danger" style="padding: 8px 16px;" data-action="delete-etf-plan" data-plan-id="${plan.id}">Delete</button>
                     </div>
                 </div>
             `;
@@ -1437,7 +1815,7 @@ async function loadDeFiPlans() {
         const plans = await response.json();
 
         if (plans.length === 0) {
-            container.innerHTML = '<p>No DeFi plans found. <button class="btn btn-primary" onclick="showAddDeFiPlanModal()">Add First DeFi Plan</button></p>';
+            container.innerHTML = '<p>No DeFi plans found. <button class="btn btn-primary" data-action="show-add-defi-plan-modal">Add First DeFi Plan</button></p>';
             return;
         }
 
@@ -1452,8 +1830,8 @@ async function loadDeFiPlans() {
                     <p><strong>Min Investment:</strong> $${plan.minimum_investment.toLocaleString()}</p>
                     <p><span class="badge badge-${plan.is_active ? 'active' : 'inactive'}">${plan.is_active ? 'Active' : 'Inactive'}</span></p>
                     <div style="display: flex; gap: 10px; margin-top: 15px;">
-                        <button class="btn btn-primary" style="padding: 8px 16px;" onclick="showEditDeFiPlanModal('${plan.id}')">Edit</button>
-                        <button class="btn btn-danger" style="padding: 8px 16px;" onclick="deleteDeFiPlan('${plan.id}')">Delete</button>
+                        <button class="btn btn-primary" style="padding: 8px 16px;" data-action="edit-defi-plan" data-plan-id="${plan.id}">Edit</button>
+                        <button class="btn btn-danger" style="padding: 8px 16px;" data-action="delete-defi-plan" data-plan-id="${plan.id}">Delete</button>
                     </div>
                 </div>
             `;
@@ -1636,7 +2014,7 @@ async function loadOptionsPlans() {
         const plans = await response.json();
 
         if (plans.length === 0) {
-            container.innerHTML = '<p>No Options plans found. <button class="btn btn-primary" onclick="showAddOptionsPlanModal()">Add First Options Plan</button></p>';
+            container.innerHTML = '<p>No Options plans found. <button class="btn btn-primary" data-action="show-add-options-plan-modal">Add First Options Plan</button></p>';
             return;
         }
 
@@ -1651,8 +2029,8 @@ async function loadOptionsPlans() {
                     <p><strong>Min Investment:</strong> $${plan.minimum_investment.toLocaleString()}</p>
                     <p><span class="badge badge-${plan.is_active ? 'active' : 'inactive'}">${plan.is_active ? 'Active' : 'Inactive'}</span></p>
                     <div style="display: flex; gap: 10px; margin-top: 15px;">
-                        <button class="btn btn-primary" style="padding: 8px 16px;" onclick="showEditOptionsPlanModal('${plan.id}')">Edit</button>
-                        <button class="btn btn-danger" style="padding: 8px 16px;" onclick="deleteOptionsPlan('${plan.id}')">Delete</button>
+                        <button class="btn btn-primary" style="padding: 8px 16px;" data-action="edit-options-plan" data-plan-id="${plan.id}">Edit</button>
+                        <button class="btn btn-danger" style="padding: 8px 16px;" data-action="delete-options-plan" data-plan-id="${plan.id}">Delete</button>
                     </div>
                 </div>
             `;
@@ -1887,8 +2265,8 @@ async function loadDepositRequests(statusFilter = '') {
                     <td>
                         ${req.status === 'pending' ? `
                             <div class="action-buttons">
-                                <button class="btn btn-success" style="padding: 5px 10px;" onclick="approveDeposit('${req.id}')">Approve</button>
-                                <button class="btn btn-danger" style="padding: 5px 10px;" onclick="rejectDeposit('${req.id}')">Reject</button>
+                                <button class="btn btn-success" style="padding: 5px 10px;" data-action="approve-deposit" data-request-id="${req.id}">Approve</button>
+                                <button class="btn btn-danger" style="padding: 5px 10px;" data-action="reject-deposit" data-request-id="${req.id}">Reject</button>
                             </div>
                         ` : `<span style="color: #8b93a7;">Reviewed</span>`}
                     </td>
@@ -1985,7 +2363,7 @@ async function loadCryptoWallets() {
         const wallets = await response.json();
 
         if (wallets.length === 0) {
-            container.innerHTML = '<p>No crypto wallets found. <button class="btn btn-primary" onclick="showAddCryptoWalletModal()">Add First Wallet</button></p>';
+            container.innerHTML = '<p>No crypto wallets found. <button class="btn btn-primary" data-action="show-add-crypto-wallet-modal">Add First Wallet</button></p>';
             return;
         }
 
@@ -2014,8 +2392,8 @@ async function loadCryptoWallets() {
                     <td><span class="badge badge-${wallet.is_active ? 'active' : 'inactive'}">${wallet.is_active ? 'Active' : 'Inactive'}</span></td>
                     <td>${date}</td>
                     <td>
-                        <button class="btn btn-primary" style="padding: 5px 10px; margin-right: 5px;" onclick="showEditCryptoWalletModal('${wallet.id}')"><i class="fas fa-edit"></i> Edit</button>
-                        <button class="btn btn-danger" style="padding: 5px 10px;" onclick="deleteCryptoWallet('${wallet.id}')"><i class="fas fa-trash"></i> Delete</button>
+                        <button class="btn btn-primary" style="padding: 5px 10px; margin-right: 5px;" data-action="edit-crypto-wallet" data-wallet-id="${wallet.id}"><i class="fas fa-edit"></i> Edit</button>
+                        <button class="btn btn-danger" style="padding: 5px 10px;" data-action="delete-crypto-wallet" data-wallet-id="${wallet.id}"><i class="fas fa-trash"></i> Delete</button>
                     </td>
                 </tr>
             `;
@@ -2182,7 +2560,7 @@ async function loadBankAccounts() {
         const accounts = await response.json();
 
         if (accounts.length === 0) {
-            container.innerHTML = '<p>No bank accounts found. <button class="btn btn-primary" onclick="showAddBankAccountModal()">Add First Account</button></p>';
+            container.innerHTML = '<p>No bank accounts found. <button class="btn btn-primary" data-action="show-add-bank-account-modal">Add First Account</button></p>';
             return;
         }
 
@@ -2212,7 +2590,7 @@ async function loadBankAccounts() {
                     <td>${account.swift_code || 'N/A'}</td>
                     <td><span class="badge badge-${account.is_active ? 'active' : 'inactive'}">${account.is_active ? 'Active' : 'Inactive'}</span></td>
                     <td>
-                        <button class="btn btn-danger" style="padding: 5px 10px;" onclick="deleteBankAccount('${account.id}')">Delete</button>
+                        <button class="btn btn-danger" style="padding: 5px 10px;" data-action="delete-bank-account" data-account-id="${account.id}">Delete</button>
                     </td>
                 </tr>
             `;
@@ -2316,7 +2694,7 @@ async function loadNotifications() {
         const data = await response.json();
 
         if (data.notifications.length === 0) {
-            container.innerHTML = '<p>No notifications found. <button class="btn btn-primary" onclick="showCreateNotificationModal()">Create First Notification</button></p>';
+            container.innerHTML = '<p>No notifications found. <button class="btn btn-primary" data-action="show-create-notification-modal">Create First Notification</button></p>';
             return;
         }
 
@@ -2351,7 +2729,7 @@ async function loadNotifications() {
                     <td>${notif.target_type === 'all' ? '<strong>All Users</strong>' : 'Specific User'}</td>
                     <td>${date}</td>
                     <td>
-                        <button class="btn btn-danger" style="padding: 5px 10px;" onclick="deleteNotification('${notif.id}')">Delete</button>
+                        <button class="btn btn-danger" style="padding: 5px 10px;" data-action="delete-notification" data-notification-id="${notif.id}">Delete</button>
                     </td>
                 </tr>
             `;
@@ -2426,7 +2804,7 @@ async function searchUsersForNotification() {
             let html = '';
             data.users.forEach(user => {
                 html += `
-                    <div style="padding: 10px; cursor: pointer; border-bottom: 1px solid #e2e8f0; hover: background-color: #f7fafc;" onclick="selectUserForNotification('${user.id}', '${user.username}', '${user.email}')">
+                    <div style="padding: 10px; cursor: pointer; border-bottom: 1px solid #e2e8f0; hover: background-color: #f7fafc;" data-user-id="${user.id}" data-username="${user.username}" data-email="${user.email}">
                         <strong>${user.username}</strong><br>
                         <small style="color: #8b93a7;">${user.email}</small>
                     </div>
@@ -2610,18 +2988,18 @@ async function loadWithdrawalRequests(statusFilter = '') {
             let actionButtons = '';
             if (req.type === 'transaction') {
                 actionButtons = `
-                    <button class="btn btn-secondary" style="padding: 5px 10px;" onclick="viewTransactionWithdrawalDetails('${req.id}')">View</button>
+                    <button class="btn btn-secondary" style="padding: 5px 10px;" data-action="view-transaction-withdrawal" data-request-id="${req.id}">View</button>
                     ${req.status === 'pending' ? `
-                        <button class="btn btn-success" style="padding: 5px 10px;" onclick="completeTransactionWithdrawal('${req.id}')">Complete</button>
-                        <button class="btn btn-danger" style="padding: 5px 10px;" onclick="rejectTransactionWithdrawal('${req.id}')">Reject</button>
+                        <button class="btn btn-success" style="padding: 5px 10px;" data-action="complete-transaction-withdrawal" data-request-id="${req.id}">Complete</button>
+                        <button class="btn btn-danger" style="padding: 5px 10px;" data-action="reject-transaction-withdrawal" data-request-id="${req.id}">Reject</button>
                     ` : ''}
                 `;
             } else {
                 actionButtons = `
-                    <button class="btn btn-secondary" style="padding: 5px 10px;" onclick="viewWithdrawalDetails('${req.id}')">View</button>
+                    <button class="btn btn-secondary" style="padding: 5px 10px;" data-action="view-withdrawal" data-request-id="${req.id}">View</button>
                     ${req.status === 'pending' ? `
-                        <button class="btn btn-success" style="padding: 5px 10px;" onclick="approveWithdrawal('${req.id}')">Approve</button>
-                        <button class="btn btn-danger" style="padding: 5px 10px;" onclick="rejectWithdrawal('${req.id}')">Reject</button>
+                        <button class="btn btn-success" style="padding: 5px 10px;" data-action="approve-withdrawal" data-request-id="${req.id}">Approve</button>
+                        <button class="btn btn-danger" style="padding: 5px 10px;" data-action="reject-withdrawal" data-request-id="${req.id}">Reject</button>
                     ` : ''}
                 `;
             }

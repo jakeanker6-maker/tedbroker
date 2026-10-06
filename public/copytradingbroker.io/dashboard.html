@@ -5246,6 +5246,7 @@
                 <!-- Active Plans Progress -->
                 <div id="general-active-plans-container" style="margin-bottom: 30px;"></div>
 
+
                 <div class="subscription-grid" id="plans-container">
                     <p style="text-align: center; color: #8b93a7; padding: 40px 0;" data-i18n="status.loading">Loading investment plans...</p>
                 </div>
@@ -5273,6 +5274,33 @@
                 <div id="etf-active-plans-container" style="margin-bottom: 30px;"></div>
 
                 <!-- ETF Plans Info Banner -->
+                <div class="dashboard-card" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; margin-bottom: 30px; border: none;">
+                    <div style="display: flex; align-items: center; gap: 20px;">
+                        <div style="font-size: 48px; opacity: 0.9;">
+                            <i class="fa-solid fa-chart-pie"></i>
+                        </div>
+                        <div>
+                            <h3 style="margin: 0 0 8px 0; font-size: 20px;" data-i18n="etf.title">Exchange Traded Funds (ETFs)</h3>
+                            <p style="margin: 0; opacity: 0.95; line-height: 1.6;" data-i18n="etf.subtitle">
+                                Invest in professionally managed ETF portfolios. Choose from Conservative, Moderate, or Aggressive strategies based on your risk tolerance and investment horizon.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TradingView Market Overview Widget -->
+                <div class="dashboard-card" style="margin-bottom: 30px;">
+                    <h3 style="margin: 0 0 20px 0; font-size: 18px; color: var(--text-primary);">
+                        <i class="fa-solid fa-chart-line" style="margin-right: 8px; color: #667eea;"></i>
+                        <span data-i18n="etf.marketOverview">ETF Market Overview</span>
+                    </h3>
+                    <div class="tradingview-widget-container" id="etf-market-overview">
+                        <div class="tradingview-widget-container__widget"></div>
+                    </div>
+                </div>
+
+
+                <div class="subscription-grid" id="etf-plans-container">
                     <p style="text-align: center; color: #8b93a7; padding: 40px 0;" data-i18n="status.loading">Loading ETF plans...</p>
                 </div>
             </div>
@@ -5299,6 +5327,33 @@
                 <div id="defi-active-plans-container" style="margin-bottom: 30px;"></div>
 
                 <!-- DeFi Plans Info Banner -->
+                <div class="dashboard-card" style="background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%); color: white; margin-bottom: 30px; border: none;">
+                    <div style="display: flex; align-items: center; gap: 20px;">
+                        <div style="font-size: 48px; opacity: 0.9;">
+                            <i class="fa-solid fa-coins"></i>
+                        </div>
+                        <div>
+                            <h3 style="margin: 0 0 8px 0; font-size: 20px;" data-i18n="defi.title">Decentralized Finance (DeFi)</h3>
+                            <p style="margin: 0; opacity: 0.95; line-height: 1.6;" data-i18n="defi.subtitle">
+                                Copy trading strategies from professional DeFi traders. Choose from Conservative, Moderate, Aggressive, or Balanced portfolios based on your investment goals and risk appetite.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TradingView Market Overview Widget -->
+                <div class="dashboard-card" style="margin-bottom: 30px;">
+                    <h3 style="margin: 0 0 20px 0; font-size: 18px; color: var(--text-primary);">
+                        <i class="fa-solid fa-chart-line" style="margin-right: 8px; color: #11998e;"></i>
+                        <span data-i18n="defi.marketOverview">Cryptocurrency Market Overview</span>
+                    </h3>
+                    <div class="tradingview-widget-container" id="defi-market-overview">
+                        <div class="tradingview-widget-container__widget"></div>
+                    </div>
+                </div>
+
+
+                <div class="subscription-grid" id="defi-plans-container">
                     <p style="text-align: center; color: #8b93a7; padding: 40px 0;" data-i18n="status.loading">Loading DeFi plans...</p>
                 </div>
             </div>
@@ -5325,6 +5380,33 @@
                 <div id="options-active-plans-container" style="margin-bottom: 30px;"></div>
 
                 <!-- Options Plans Info Banner -->
+                <div class="dashboard-card" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; margin-bottom: 30px; border: none;">
+                    <div style="display: flex; align-items: center; gap: 20px;">
+                        <div style="font-size: 48px; opacity: 0.9;">
+                            <i class="fa-solid fa-file-alt"></i>
+                        </div>
+                        <div>
+                            <h3 style="margin: 0 0 8px 0; font-size: 20px;" data-i18n="options.title">Options Trading Strategies</h3>
+                            <p style="margin: 0; opacity: 0.95; line-height: 1.6;" data-i18n="options.subtitle">
+                                Copy trading strategies from professional options traders. Choose from Beginner, Intermediate, Advanced, or Expert plans based on your experience level and risk tolerance.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TradingView Market Overview Widget -->
+                <div class="dashboard-card" style="margin-bottom: 30px;">
+                    <h3 style="margin: 0 0 20px 0; font-size: 18px; color: var(--text-primary);">
+                        <i class="fa-solid fa-chart-line" style="margin-right: 8px; color: #764ba2;"></i>
+                        <span data-i18n="options.marketOverview">Options Market Overview</span>
+                    </h3>
+                    <div class="tradingview-widget-container" id="options-market-overview">
+                        <div class="tradingview-widget-container__widget"></div>
+                    </div>
+                </div>
+
+
+                <div class="subscription-grid" id="options-plans-container">
                     <p style="text-align: center; color: #8b93a7; padding: 40px 0;" data-i18n="status.loading">Loading Options plans...</p>
                 </div>
             </div>

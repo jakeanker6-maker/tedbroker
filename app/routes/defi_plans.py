@@ -15,11 +15,11 @@ def defi_plan_helper(plan) -> dict:
     """Helper function to format DeFi plan data from database"""
     return {
         "id": str(plan["_id"]),
-        "name": plan["name"],
-        "portfolio_type": plan.get("portfolio_type") or "General",
-        "expected_return_percent": plan["expected_return_percent"],
-        "duration_months": plan["duration_months"],
-        "minimum_investment": plan.get("minimum_investment", 0.0),
+        "name": plan.get("name") or "Untitled Plan",
+        "portfolio_type": plan.get("portfolio_type") or plan.get("plan_type") or "General",
+        "expected_return_percent": plan.get("expected_return_percent") or 0.0,
+        "duration_months": plan.get("duration_months") or 0,
+        "minimum_investment": plan.get("minimum_investment") or 0.0,
         "description": plan.get("description"),
         "is_active": plan.get("is_active", True),
         "tags": plan.get("tags", [])

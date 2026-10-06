@@ -22,9 +22,8 @@ TED_BROKERS_CONTEXT = CONTEXT_FILE.read_text(encoding="utf-8") if CONTEXT_FILE.e
 
 # OpenRouter API configuration
 OPENROUTER_API_URL = "https://openrouter.ai/api/v1/chat/completions"
-OPENROUTER_MODEL = "minimax/minimax-m3:free"
+OPENROUTER_MODEL = "nvidia/nemotron-3-super-120b-a12b:free"
 OPENROUTER_FALLBACK_MODELS = [
-    "nvidia/nemotron-3-super-120b-a12b:free",
     "google/gemma-4-31b-it:free",
 ]
 
