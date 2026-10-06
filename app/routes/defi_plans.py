@@ -16,7 +16,7 @@ def defi_plan_helper(plan) -> dict:
     return {
         "id": str(plan["_id"]),
         "name": plan["name"],
-        "portfolio_type": plan["portfolio_type"],
+        "portfolio_type": plan.get("portfolio_type") or "General",
         "expected_return_percent": plan["expected_return_percent"],
         "duration_months": plan["duration_months"],
         "minimum_investment": plan.get("minimum_investment", 0.0),

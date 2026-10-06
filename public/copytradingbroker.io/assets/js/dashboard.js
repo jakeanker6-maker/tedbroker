@@ -8,37 +8,37 @@ const TAG_CONFIG = {
     hot: {
         icon: `<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0 1 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 1 2.5 2.5z"/></svg>`,
         label: "Hot",
-        color: "bg-gradient-to-r from-red-500 to-orange-500",
+        color: "tag-hot",
         tooltip: "Best deal on the platform in a while — limited time only"
     },
     recommended: {
         icon: `<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>`,
         label: "Recommended",
-        color: "bg-gradient-to-r from-blue-500 to-green-500",
+        color: "tag-recommended",
         tooltip: "Platform's top pick — best option for you"
     },
     new: {
         icon: `<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>`,
         label: "New",
-        color: "bg-gradient-to-r from-purple-500 to-pink-500",
+        color: "tag-new",
         tooltip: "Recently added to the platform"
     },
     popular: {
         icon: `<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="16"/></svg>`,
         label: "Popular",
-        color: "bg-gradient-to-r from-orange-500 to-amber-500",
+        color: "tag-popular",
         tooltip: "Most chosen by other investors"
     },
     featured: {
         icon: `<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>`,
         label: "Featured",
-        color: "bg-gradient-to-r from-yellow-500 to-amber-500",
+        color: "tag-featured",
         tooltip: "Highlighted by the platform"
     },
     trending: {
         icon: `<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>`,
         label: "Trending",
-        color: "bg-gradient-to-r from-cyan-500 to-blue-500",
+        color: "tag-trending",
         tooltip: "Gaining popularity rapidly"
     }
 };
@@ -53,7 +53,7 @@ function renderTagBadges(plan) {
     return plan.tags.map(tag => {
         const config = TAG_CONFIG[tag];
         if (!config) return '';
-        return `<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium text-white ${config.color}" 
+        return `<span class="${config.color}" style="display: inline-flex; align-items: center; gap: 4px; padding: 4px 8px; border-radius: 9999px; font-size: 11px; font-weight: 500; color: white" 
                      title="${config.tooltip}" 
                      role="img" 
                      aria-label="${config.label} — ${config.tooltip}">
@@ -2428,6 +2428,7 @@ function createETFPlanCard(plan) {
                 ${plan.plan_type}
             </span>
         </div>
+        <div class="plan-tags" style="margin-bottom: 8px;">${renderTagBadges(plan)}</div>
 
         ${plan.description ? `<p style="color: #8b93a7; margin-bottom: 10px; line-height: 1.4; font-size: 11px; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical;">${plan.description}</p>` : ''}
 
@@ -4033,8 +4034,8 @@ function skipReferral(event) {
  */
 async function checkAndShowPasswordSetupModal(userData) {
     // Only show for Google OAuth users who registered without password
-    // Check if auth_provider is 'google' and the user is new (created recently)
-    if (userData.auth_provider === 'google') {
+    // Check if auth_provider is 'google' and the user doesn't already have a password
+    if (userData.auth_provider === 'google' && userData.has_password !== true) {
         // Check if user has already set up password using localStorage flag
         const hasSetupPassword = localStorage.getItem('hasSetupOAuthPassword');
 
@@ -4044,6 +4045,9 @@ async function checkAndShowPasswordSetupModal(userData) {
                 showPasswordSetupModal();
             }, 1500);
         }
+    } else if (userData.auth_provider === 'google' && userData.has_password === true) {
+        // User already has a password - mark as completed so modal doesn't show again
+        localStorage.setItem('hasSetupOAuthPassword', 'completed');
     }
 }
 
@@ -4158,12 +4162,26 @@ async function handlePasswordSetup(password) {
     } catch (error) {
         TED_AUTH.closeLoading();
         console.error('Password setup error:', error);
-        Swal.fire({
-            title: 'Error!',
-            text: `Failed to set password: ${error.message}`,
-            icon: 'error',
-            confirmButtonText: 'OK'
-        });
+
+        // Handle specific case where user already has a password
+        if (error.message && error.message.includes('already have a password')) {
+            // Mark as completed so modal doesn't show again
+            localStorage.setItem('hasSetupOAuthPassword', 'completed');
+
+            Swal.fire({
+                title: 'Already Set Up',
+                text: 'You already have a password set up. Use "Change Password" in Security settings if you want to update it.',
+                icon: 'info',
+                confirmButtonText: 'OK'
+            });
+        } else {
+            Swal.fire({
+                title: 'Error!',
+                text: `Failed to set password: ${error.message}`,
+                icon: 'error',
+                confirmButtonText: 'OK'
+            });
+        }
     }
 }
 
@@ -6853,57 +6871,7 @@ function renderActivePlans(plans, containerId, planType) {
 // Call loadActivePlans when dashboard loads
 document.addEventListener('DOMContentLoaded', function() {
     loadActivePlans();
-    
-    // Initialize plan filters
-    initPlanFilters();
 });
-
-/**
- * Initialize plan filter chips
- */
-function initPlanFilters() {
-    document.querySelectorAll('.plan-filter-chips').forEach(container => {
-        const planType = container.dataset.planType;
-        const chips = container.querySelectorAll('.filter-chip');
-        const grid = document.getElementById(`${planType}-plans-container`) || document.getElementById(`${planType}-active-plans-container`);
-        
-        chips.forEach(chip => {
-            chip.addEventListener('click', () => {
-                // Update active state
-                chips.forEach(c => {
-                    c.classList.remove('bg-primary-600', 'text-white');
-                    c.classList.add('bg-gray-100', 'text-gray-700', 'dark:bg-gray-800', 'dark:text-gray-300');
-                });
-                
-                chip.classList.add('bg-primary-600', 'text-white');
-                chip.classList.remove('bg-gray-100', 'text-gray-700', 'dark:bg-gray-800', 'dark:text-gray-300');
-                
-                // Filter cards
-                const tag = chip.dataset.tag;
-                filterPlanGrid(grid, tag);
-            });
-        });
-    });
-}
-
-/**
- * Filter plan grid by tag
- * @param {HTMLElement} grid - The grid element containing plan cards
- * @param {string} tag - The tag to filter by ('all' for all)
- */
-function filterPlanGrid(grid, tag) {
-    if (!grid) return;
-    
-    const cards = grid.querySelectorAll('.plan-card');
-    cards.forEach(card => {
-        if (tag === 'all') {
-            card.style.display = '';
-        } else {
-            const planTags = JSON.parse(card.dataset.tags || '[]');
-            card.style.display = planTags.includes(tag) ? '' : 'none';
-        }
-    });
-}
 
 // Export network functions
 window.loadRecentTrades = loadRecentTrades;
