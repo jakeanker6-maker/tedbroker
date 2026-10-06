@@ -6677,7 +6677,7 @@
                         
                         const rect = item.getBoundingClientRect();
                         console.log('Item rect:', rect);
-                        dropdown.style.top = (rect.bottom + window.scrollY + 1) + 'px';
+                        dropdown.style.top = (rect.bottom + 1) + 'px';
                         dropdown.style.left = (rect.left + rect.width / 2 - dropdown.offsetWidth / 2) + 'px';
                         dropdown.style.minWidth = Math.max(200, rect.width) + 'px';
                         console.log('Dropdown positioned at:', dropdown.style.top, dropdown.style.left, 'width:', dropdown.offsetWidth);
@@ -7515,7 +7515,7 @@
 
         function positionUserDropdown() {
             const profileRect = userProfileBtn.getBoundingClientRect();
-            userDropdown.style.top = (profileRect.bottom + window.scrollY + 8) + 'px';
+            userDropdown.style.top = (profileRect.bottom + 8) + 'px';
             userDropdown.style.left = (profileRect.right - userDropdown.offsetWidth) + 'px';
         }
 
