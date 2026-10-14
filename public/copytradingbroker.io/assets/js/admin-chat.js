@@ -115,34 +115,44 @@ class AdminChatManager {
     async selectConversation(conversationId) {
         this.currentConversationId = conversationId;
 
-        // Update UI
+        // Highlight the selected conversation
         this.renderConversations();
 
-        // Load messages
-        await this.loadMessages(conversationId);
-
-        // Mark as read
-        await this.markAsRead(conversationId);
-
-        // Show chat interface
+        // Open the chat interface immediately so the click feels instant,
+        // rather than waiting on the network round-trips below.
         document.getElementById('chat-placeholder').style.display = 'none';
         document.getElementById('chat-header').style.display = 'block';
         document.getElementById('chat-messages-container').style.display = 'block';
         document.getElementById('chat-input-area').style.display = 'block';
 
-        // Update header
+        // Update header from the conversation we already have in memory
         const conversation = this.conversations.find(c => c.id === conversationId);
         if (conversation) {
             document.getElementById('chat-user-name').textContent = conversation.user_name || 'User';
-            document.getElementById('chat-user-email').textContent = conversation.user_email;
+            document.getElementById('chat-user-email').textContent = conversation.user_email || '';
 
             const statusBadge = document.getElementById('chat-status-badge');
-            statusBadge.textContent = conversation.status.toUpperCase();
+            statusBadge.textContent = (conversation.status || '').toUpperCase();
             statusBadge.className = 'badge ' + (conversation.status === 'active' ? 'badge-active' : 'badge-inactive');
+        }
+
+        // Show a loading state until the messages arrive
+        const messagesContainer = document.getElementById('chat-messages-container');
+        if (messagesContainer) {
+            messagesContainer.innerHTML = `
+                <div style="text-align: center; color: #8b93a7; padding: 40px;">
+                    <i class="fas fa-spinner fa-spin" style="font-size: 32px; opacity: 0.5; margin-bottom: 12px;"></i>
+                    <p>Loading messages...</p>
+                </div>
+            `;
         }
 
         // Start polling for new messages in this conversation
         this.startMessagePolling();
+
+        // Load messages, then mark as read without blocking the UI
+        await this.loadMessages(conversationId);
+        this.markAsRead(conversationId);
     }
 
     async loadMessages(conversationId) {
@@ -341,20 +351,20 @@ class AdminChatManager {
 
 // Global functions for onclick handlers
 function sendAdminMessage() {
-    adminChatManager.sendMessage();
+    window.adminChatManager.sendMessage();
 }
 
 function closeConversation() {
-    adminChatManager.closeConversation();
+    window.adminChatManager.closeConversation();
 }
 
 function filterChats() {
     const status = document.getElementById('chat-status-filter').value;
-    adminChatManager.loadConversations(status);
+    window.adminChatManager.loadConversations(status);
 }
 
 // Initialize when DOM is ready
-const adminChatManager = new AdminChatManager();
+window.adminChatManager = new AdminChatManager();
 
 // Auto-initialize when tab is switched to chats
 document.addEventListener('DOMContentLoaded', () => {
@@ -362,9 +372,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const observer = new MutationObserver(() => {
         const chatsTab = document.getElementById('tab-chats');
         if (chatsTab && chatsTab.classList.contains('active')) {
-            adminChatManager.init();
+            window.adminChatManager.init();
         } else {
-            adminChatManager.stopMessagePolling();
+            window.adminChatManager.stopMessagePolling();
         }
     });
 

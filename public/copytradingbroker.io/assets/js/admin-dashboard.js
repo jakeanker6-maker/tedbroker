@@ -164,7 +164,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     function setupDynamicEventDelegation() {
         // Delegate clicks on dynamically generated buttons
         document.addEventListener('click', function(e) {
-            const btn = e.target.closest('button[data-action]');
+            const btn = e.target.closest('[data-action]');
             if (!btn) return;
 
             const action = btn.getAttribute('data-action');
@@ -293,7 +293,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 // Chat actions
                 case 'select-conversation':
                     if (conversationId && window.adminChatManager) {
-                        adminChatManager.selectConversation(conversationId);
+                        window.adminChatManager.selectConversation(conversationId);
                     }
                     break;
 
@@ -495,8 +495,8 @@ function switchTab(tab) {
     if (tab === 'notifications') loadNotifications();
     if (tab === 'chats') {
         // Initialize chat manager if not already initialized
-        if (typeof adminChatManager !== 'undefined') {
-            adminChatManager.init();
+        if (typeof window.adminChatManager !== 'undefined') {
+            window.adminChatManager.init();
         }
     }
 }
