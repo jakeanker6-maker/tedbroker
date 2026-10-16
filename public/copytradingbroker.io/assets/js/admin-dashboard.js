@@ -290,6 +290,15 @@ document.addEventListener('DOMContentLoaded', async () => {
                     if (notificationId) deleteNotification(notificationId);
                     break;
 
+                // User selection in notification modal
+                case 'select-user-notification':
+                    if (userId) {
+                        const username = btn.getAttribute('data-username');
+                        const email = btn.getAttribute('data-email');
+                        selectUserForNotification(userId, username, email);
+                    }
+                    break;
+
                 // Chat actions
                 case 'select-conversation':
                     if (conversationId && window.adminChatManager) {
@@ -2804,7 +2813,7 @@ async function searchUsersForNotification() {
             let html = '';
             data.users.forEach(user => {
                 html += `
-                    <div style="padding: 10px; cursor: pointer; border-bottom: 1px solid #e2e8f0; hover: background-color: #f7fafc;" data-user-id="${user.id}" data-username="${user.username}" data-email="${user.email}">
+                    <div class="user-search-result-item" data-action="select-user-notification" data-user-id="${user.id}" data-username="${user.username}" data-email="${user.email}">
                         <strong>${user.username}</strong><br>
                         <small style="color: #8b93a7;">${user.email}</small>
                     </div>
