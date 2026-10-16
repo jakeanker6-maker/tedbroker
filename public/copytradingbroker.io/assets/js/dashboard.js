@@ -2023,7 +2023,7 @@ function showPlanDetailModal(plan, type) {
             <div style="padding: 12px; background: ${statsBg}; border-radius: 8px; margin-bottom: 16px;">
                 <div style="display: flex; justify-content: space-between;">
                     <span style="color: #8b93a7; font-size: 13px;">Minimum Investment:</span>
-                    <span style="color: #D32F2F; font-weight: 700; font-size: 16px;">$${plan.minimum_investment.toLocaleString()}</span>
+                    <span style="color: #D32F2F; font-weight: 700; font-size: 16px;">$${(plan.minimum_investment || 0).toLocaleString()}</span>
                 </div>
             </div>`;
     }
@@ -2071,7 +2071,7 @@ function showPlanDetailModal(plan, type) {
         </div>
 
         <div style="margin-bottom: 20px;">
-            <div style="font-size: 28px; font-weight: bold; color: #D32F2F;">$${plan.minimum_investment.toLocaleString()}</div>
+            <div style="font-size: 28px; font-weight: bold; color: #D32F2F;">$${(plan.minimum_investment || 0).toLocaleString()}</div>
             <div style="font-size: 13px; color: #8b93a7;">Minimum Investment</div>
         </div>
 
@@ -2139,7 +2139,7 @@ function createPlanCard(plan) {
         <div class="plan-tags" style="margin-bottom: 8px;">${renderTagBadges(plan)}</div>
 
         <div style="margin: 10px 0;">
-            <div class="plan-min-amount" style="font-size: 24px; font-weight: bold; color: #D32F2F;">$${plan.minimum_investment.toLocaleString()}</div>
+            <div class="plan-min-amount" style="font-size: 24px; font-weight: bold; color: #D32F2F;">$${(plan.minimum_investment || 0).toLocaleString()}</div>
             <div style="font-size: 11px; color: #8b93a7;">Minimum Investment</div>
         </div>
 
@@ -2447,7 +2447,7 @@ function createETFPlanCard(plan) {
             <div class="plan-info" style="padding: 8px; background: rgba(102, 126, 234, 0.08); border-radius: 6px; margin-bottom: 8px;">
                 <div style="display: flex; justify-content: space-between;">
                     <span style="color: #8b93a7; font-size: 11px; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical;">Min:</span>
-                    <span style="color: #D32F2F; font-weight: 700; font-size: 14px;">$${plan.minimum_investment.toLocaleString()}</span>
+                    <span style="color: #D32F2F; font-weight: 700; font-size: 14px;">$${(plan.minimum_investment || 0).toLocaleString()}</span>
                 </div>
             </div>
         ` : ''}
@@ -2788,7 +2788,7 @@ card.innerHTML = `
             <div class="plan-info" style="padding: 8px; background: rgba(17, 153, 142, 0.08); border-radius: 6px; margin-bottom: 8px;">
                 <div style="display: flex; justify-content: space-between;">
                     <span style="color: #8b93a7; font-size: 11px; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical;">Min:</span>
-                    <span style="color: #D32F2F; font-weight: 700; font-size: 14px;">$${plan.minimum_investment.toLocaleString()}</span>
+                    <span style="color: #D32F2F; font-weight: 700; font-size: 14px;">$${(plan.minimum_investment || 0).toLocaleString()}</span>
                 </div>
             </div>
         ` : ''}
@@ -3126,7 +3126,7 @@ card.innerHTML = `
             <div class="plan-info" style="padding: 8px; background: rgba(102, 126, 234, 0.08); border-radius: 6px; margin-bottom: 8px;">
                 <div style="display: flex; justify-content: space-between;">
                     <span style="color: #8b93a7; font-size: 11px; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical;">Min:</span>
-                    <span style="color: #D32F2F; font-weight: 700; font-size: 14px;">$${plan.minimum_investment.toLocaleString()}</span>
+                    <span style="color: #D32F2F; font-weight: 700; font-size: 14px;">$${(plan.minimum_investment || 0).toLocaleString()}</span>
                 </div>
             </div>
         ` : ''}

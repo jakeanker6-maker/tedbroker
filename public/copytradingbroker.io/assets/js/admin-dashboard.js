@@ -1432,10 +1432,10 @@ async function loadPlans() {
         plans.forEach(plan => {
             html += `
                 <div style="border: 1px solid #e2e8f0; padding: 20px; border-radius: 8px;">
-                    <h4>${plan.name}</h4>
-                    <p>${plan.description}</p>
-                    <p><strong>Min Investment:</strong> $${plan.minimum_investment.toLocaleString()}</p>
-                    <p><strong>Return:</strong> ${plan.expected_return_percent}% | <strong>Period:</strong> ${plan.holding_period_months} months</p>
+                    <h4>${plan.name || 'Unnamed Plan'}</h4>
+                    <p>${plan.description || ''}</p>
+                    <p><strong>Min Investment:</strong> $${(plan.minimum_investment || 0).toLocaleString()}</p>
+                    <p><strong>Return:</strong> ${plan.expected_return_percent ?? 'N/A'}% | <strong>Period:</strong> ${plan.holding_period_months ?? 'N/A'} months</p>
                     <p><strong>Subscribers:</strong> ${plan.current_subscribers || 0}</p>
                     <p><span class="badge badge-${plan.is_active ? 'active' : 'inactive'}">${plan.is_active ? 'Active' : 'Inactive'}</span></p>
                     <div style="display: flex; gap: 10px; margin-top: 15px;">
@@ -1633,11 +1633,11 @@ async function loadETFPlans() {
         plans.forEach(plan => {
             html += `
                 <div style="border: 1px solid #e2e8f0; padding: 20px; border-radius: 8px;">
-                    <h4>${plan.name}</h4>
-                    <p><strong>Type:</strong> ${plan.plan_type}</p>
+                    <h4>${plan.name || 'Unnamed Plan'}</h4>
+                    <p><strong>Type:</strong> ${plan.plan_type || 'N/A'}</p>
                     ${plan.description ? `<p>${plan.description}</p>` : ''}
-                    <p><strong>Expected Return:</strong> ${plan.expected_return_percent}% | <strong>Duration:</strong> ${plan.duration_months} months</p>
-                    <p><strong>Min Investment:</strong> $${plan.minimum_investment.toLocaleString()}</p>
+                    <p><strong>Expected Return:</strong> ${plan.expected_return_percent ?? 'N/A'}% | <strong>Duration:</strong> ${plan.duration_months ?? 'N/A'} months</p>
+                    <p><strong>Min Investment:</strong> $${(plan.minimum_investment || 0).toLocaleString()}</p>
                     <p><span class="badge badge-${plan.is_active ? 'active' : 'inactive'}">${plan.is_active ? 'Active' : 'Inactive'}</span></p>
                     <div style="display: flex; gap: 10px; margin-top: 15px;">
                         <button class="btn btn-primary" style="padding: 8px 16px;" data-action="edit-etf-plan" data-plan-id="${plan.id}">Edit</button>
@@ -1832,11 +1832,11 @@ async function loadDeFiPlans() {
         plans.forEach(plan => {
             html += `
                 <div style="border: 1px solid #e2e8f0; padding: 20px; border-radius: 8px;">
-                    <h4>${plan.name}</h4>
-                    <p><strong>Portfolio Type:</strong> ${plan.portfolio_type}</p>
+                    <h4>${plan.name || 'Unnamed Plan'}</h4>
+                    <p><strong>Portfolio Type:</strong> ${plan.portfolio_type || 'N/A'}</p>
                     ${plan.description ? `<p>${plan.description}</p>` : ''}
-                    <p><strong>Expected Return:</strong> ${plan.expected_return_percent}% | <strong>Duration:</strong> ${plan.duration_months} months</p>
-                    <p><strong>Min Investment:</strong> $${plan.minimum_investment.toLocaleString()}</p>
+                    <p><strong>Expected Return:</strong> ${plan.expected_return_percent ?? 'N/A'}% | <strong>Duration:</strong> ${plan.duration_months ?? 'N/A'} months</p>
+                    <p><strong>Min Investment:</strong> $${(plan.minimum_investment || 0).toLocaleString()}</p>
                     <p><span class="badge badge-${plan.is_active ? 'active' : 'inactive'}">${plan.is_active ? 'Active' : 'Inactive'}</span></p>
                     <div style="display: flex; gap: 10px; margin-top: 15px;">
                         <button class="btn btn-primary" style="padding: 8px 16px;" data-action="edit-defi-plan" data-plan-id="${plan.id}">Edit</button>
@@ -2031,11 +2031,11 @@ async function loadOptionsPlans() {
         plans.forEach(plan => {
             html += `
                 <div style="border: 1px solid #e2e8f0; padding: 20px; border-radius: 8px;">
-                    <h4>${plan.name}</h4>
-                    <p><strong>Plan Type:</strong> ${plan.plan_type}</p>
+                    <h4>${plan.name || 'Unnamed Plan'}</h4>
+                    <p><strong>Plan Type:</strong> ${plan.plan_type || 'N/A'}</p>
                     ${plan.description ? `<p>${plan.description}</p>` : ''}
-                    <p><strong>Expected Return:</strong> ${plan.expected_return_percent}% | <strong>Duration:</strong> ${plan.duration_months > 0 ? plan.duration_months + ' months' : 'Ongoing'}</p>
-                    <p><strong>Min Investment:</strong> $${plan.minimum_investment.toLocaleString()}</p>
+                    <p><strong>Expected Return:</strong> ${plan.expected_return_percent ?? 'N/A'}% | <strong>Duration:</strong> ${plan.duration_months > 0 ? plan.duration_months + ' months' : 'Ongoing'}</p>
+                    <p><strong>Min Investment:</strong> $${(plan.minimum_investment || 0).toLocaleString()}</p>
                     <p><span class="badge badge-${plan.is_active ? 'active' : 'inactive'}">${plan.is_active ? 'Active' : 'Inactive'}</span></p>
                     <div style="display: flex; gap: 10px; margin-top: 15px;">
                         <button class="btn btn-primary" style="padding: 8px 16px;" data-action="edit-options-plan" data-plan-id="${plan.id}">Edit</button>
