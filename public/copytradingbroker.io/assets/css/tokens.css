@@ -1,0 +1,175 @@
+/* ------------------------------------------------------------------
+   Primitives
+   ------------------------------------------------------------------ */
+:root {
+  /* Ink (brand navy) */
+  --ink-1000: #040B16;
+  --ink-950: #06101D;
+  --ink-900: #0A1626;
+  --ink-850: #0E1C30;
+  --ink-800: #11223A;
+  --ink-700: #1A2E4A;
+  --ink-600: #22344D;
+  --ink-500: #344B6B;
+  --slate-400: #9AA9BD;
+  --slate-300: #C3CEDB;
+  --slate-200: #E2E8F0;
+
+  /* Paper */
+  --paper-0: #FFFFFF;
+  --paper-50: #F7F8FA;
+  --paper-100: #EEF1F5;
+  --paper-200: #DCE2EA;
+  --paper-300: #C2CCD8;
+  --paper-600: #55657A;
+
+  /* Brand + signal */
+  --red-600: #C41E26;
+  --red-500: #E3262F;
+  --red-400: #FF4A52;
+  --navy-500: #1D4E6F;
+  --navy-300: #5C9CC7;
+  --teal-700: #0A7F75;
+  --teal-500: #0FB5A6;
+  --teal-300: #2EE6D3;
+  --amber-700: #9A5B00;
+  --amber-400: #FFB020;
+  --loss-600: #C42B30;
+  --loss-400: #FF6B70;
+
+  /* Type */
+  --font-display: "Sora", "Noto Sans Arabic", "Noto Sans SC", "Noto Sans Devanagari", "Noto Sans Bengali", ui-sans-serif, system-ui, sans-serif;
+  --font-text: "DM Sans", "Noto Sans Arabic", "Noto Sans SC", "Noto Sans Devanagari", "Noto Sans Bengali", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+
+  --text-display: clamp(2.6rem, 1.4rem + 3.6vw, 4.85rem);
+  --text-numeral: clamp(2.5rem, 1.6rem + 3vw, 4.5rem);
+  --text-h1: clamp(2.25rem, 1.6rem + 2.4vw, 3.5rem);
+  --text-h2: clamp(1.75rem, 1.35rem + 1.5vw, 2.75rem);
+  --text-h3: 1.25rem;
+  --text-lead: clamp(1.0625rem, 1rem + 0.35vw, 1.25rem);
+  --text-body: 1rem;
+  --text-small: 0.875rem;
+  --text-xs: 0.8125rem;
+  --text-label: 0.75rem;
+
+  /* Space (4px base) */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.5rem;
+  --space-6: 2rem;
+  --space-7: 3rem;
+  --space-8: 4rem;
+  --space-9: 6rem;
+  --space-10: 8rem;
+  --section-pad: clamp(4rem, 2rem + 6vw, 8.5rem);
+
+  --gutter: clamp(1rem, 0.5rem + 2vw, 1.5rem);
+  --content-max: 80rem;
+  --rail-w: 15rem;
+  --topbar-h: 4rem;
+
+  /* Shape */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+  --radius-pill: 999px;
+
+  /* Motion */
+  --duration-fast: 160ms;
+  --duration-base: 280ms;
+  --duration-slow: 600ms;
+  --ease-out: cubic-bezier(.2, .8, .2, 1);
+  --ease-in: cubic-bezier(.5, 0, .75, 0);
+
+  --shadow-float: 0 1px 0 rgb(255 255 255 / .04) inset, 0 24px 60px -12px rgb(2 8 18 / .65), 0 8px 20px -8px rgb(2 8 18 / .5);
+}
+
+/* ------------------------------------------------------------------
+   Semantic roles: paper (light) surface is the default.
+   ------------------------------------------------------------------ */
+:root,
+.surface-paper {
+  --color-bg: var(--paper-50);
+  --color-surface: var(--paper-0);
+  --color-surface-2: var(--paper-100);
+  --color-text: var(--ink-900);
+  --color-text-muted: var(--paper-600);
+  --color-border: var(--paper-200);
+  --color-border-strong: var(--paper-300);
+  --color-accent: var(--red-500);
+  --color-accent-hover: var(--red-600);
+  --color-accent-text: var(--red-600);
+  --color-on-accent: #fff;
+  --color-gain: var(--teal-700);
+  --color-loss: var(--loss-600);
+  --color-pending: var(--amber-700);
+  --color-signal: var(--teal-500);
+  --color-link: var(--navy-500);
+  --color-focus: var(--navy-500);
+  --color-outline-num: var(--paper-300);
+  --chart-line: var(--teal-700);  /* 4.6:1 on the light background (teal-500 was 2.4:1) */
+  --chart-grid: rgb(10 22 38 / .07);
+  /* categorical series (allocation donuts): each >= 3:1 on the light background */
+  --chart-cat-1: var(--teal-700); --chart-cat-2: var(--red-600); --chart-cat-3: var(--amber-700);
+  --chart-cat-4: var(--navy-500); --chart-cat-5: var(--paper-600); --chart-cat-6: var(--ink-900);
+  color-scheme: light;
+}
+
+.surface-ink {
+  --color-bg: var(--ink-900);
+  --color-surface: var(--ink-800);
+  --color-surface-2: var(--ink-850);
+  --color-text: #EEF2F7;
+  --color-text-muted: var(--slate-400);
+  --color-border: var(--ink-600);
+  --color-border-strong: var(--ink-500);
+  --color-accent: var(--red-500);
+  --color-accent-hover: var(--red-400);
+  --color-accent-text: var(--red-400);
+  --color-on-accent: #fff;
+  --color-gain: var(--teal-300);
+  --color-loss: var(--loss-400);
+  --color-pending: var(--amber-400);
+  --color-signal: var(--teal-300);
+  --color-link: var(--navy-300);
+  --color-focus: var(--teal-300);
+  --color-outline-num: var(--ink-500);
+  --chart-line: var(--teal-300);
+  --chart-grid: rgb(255 255 255 / .06);
+  --chart-cat-1: var(--teal-300); --chart-cat-2: var(--red-400); --chart-cat-3: var(--amber-400);
+  --chart-cat-4: var(--slate-400); --chart-cat-5: var(--navy-300); --chart-cat-6: var(--slate-200);
+  color-scheme: dark;
+}
+
+/* App (dashboard) follows the manual theme toggle; dark by default. */
+:root[data-theme="light"] .app.surface-ink {
+  --color-bg: var(--paper-50);
+  --color-surface: var(--paper-0);
+  --color-surface-2: var(--paper-100);
+  --color-text: var(--ink-900);
+  --color-text-muted: var(--paper-600);
+  --color-border: var(--paper-200);
+  --color-border-strong: var(--paper-300);
+  --color-accent-text: var(--red-600);
+  --color-gain: var(--teal-700);
+  --color-loss: var(--loss-600);
+  --color-pending: var(--amber-700);
+  --color-signal: var(--teal-500);
+  --color-link: var(--navy-500);
+  --color-focus: var(--navy-500);
+  --color-outline-num: var(--paper-300);
+  --chart-line: var(--teal-700);  /* 4.6:1 on the light background (teal-500 was 2.4:1) */
+  --chart-grid: rgb(10 22 38 / .07);
+  /* categorical series (allocation donuts): each >= 3:1 on the light background */
+  --chart-cat-1: var(--teal-700); --chart-cat-2: var(--red-600); --chart-cat-3: var(--amber-700);
+  --chart-cat-4: var(--navy-500); --chart-cat-5: var(--paper-600); --chart-cat-6: var(--ink-900);
+  color-scheme: light;
+}
+
+@media (prefers-contrast: more) {
+  :root, .surface-paper { --color-border: var(--paper-300); --color-text-muted: #3D4A5C; }
+  .surface-ink { --color-border: var(--ink-500); --color-text-muted: var(--slate-300); }
+}

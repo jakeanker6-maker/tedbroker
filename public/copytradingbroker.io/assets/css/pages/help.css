@@ -1,0 +1,228 @@
+/* Help center — page-only rules. */
+@layer pages {
+  /* ---------- Hero + search ---------- */
+  .help-hero {
+    max-inline-size: 52rem;
+    text-align: center;
+
+    & > * + * { margin-block-start: var(--space-5); }
+  }
+  .help-hero__title { margin-inline: auto; }
+
+  .help-search { margin-block-start: var(--space-7); text-align: start; }
+  .help-search__control {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    border-block-end: 1px solid var(--color-border-strong);
+    transition: border-color var(--duration-fast), box-shadow var(--duration-fast);
+
+    &:hover { border-color: var(--color-text-muted); }
+    &:focus-within { border-color: var(--color-text); box-shadow: 0 1px 0 0 var(--color-text); }
+    &:has(:focus-visible) { border-color: var(--color-focus); box-shadow: 0 1px 0 0 var(--color-focus); }
+  }
+  .help-search__icon { inline-size: 1.5rem; block-size: 1.5rem; flex: none; color: var(--color-text-muted); }
+  .help-search__input {
+    flex: 1;
+    min-inline-size: 0;
+    min-block-size: 4rem;
+    padding-block: var(--space-2);
+    background: transparent;
+    border: 0;
+    font: 400 clamp(1.25rem, 1rem + 1vw, 1.75rem)/1.2 var(--font-display);
+    letter-spacing: -0.015em;
+    color: var(--color-text);
+
+    &::placeholder { color: color-mix(in oklch, var(--color-text-muted) 85%, transparent); }
+    /* The underline on the control is the focus indicator (see :has(:focus-visible) above). */
+    &:focus-visible { outline: none; }
+  }
+  .help-search__submit {
+    flex: none;
+    min-block-size: 2.75rem;
+    padding-inline: var(--space-3);
+    font: 600 var(--text-label)/1 var(--font-mono);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--color-text-muted);
+    transition: color var(--duration-fast);
+
+    &:hover { color: var(--color-text); }
+  }
+  .help-search__status {
+    min-block-size: 1.5em;
+    margin-block-start: var(--space-3);
+    font: 500 var(--text-xs)/1.5 var(--font-mono);
+    color: var(--color-signal);
+  }
+
+  .help-popular {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-1) var(--space-3);
+    margin-block-start: var(--space-3);
+  }
+  .help-popular__list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+
+    & li + li::before { content: "·"; margin-inline: var(--space-2); color: var(--color-text-muted); }
+    & a {
+      display: inline-block;
+      padding-block: var(--space-2);
+      font: 500 var(--text-small)/1.3 var(--font-mono);
+      color: var(--color-text);
+      text-decoration: underline;
+      text-decoration-color: var(--color-border-strong);
+      text-underline-offset: 0.3em;
+      transition: color var(--duration-fast), text-decoration-color var(--duration-fast);
+    }
+    & a:hover { color: var(--color-signal); text-decoration-color: currentColor; }
+  }
+
+  /* ---------- Body: sticky TOC + FAQ groups ---------- */
+  .help-layout {
+    display: grid;
+    gap: var(--space-7) clamp(2rem, 1rem + 4vw, 5rem);
+    grid-template-columns: minmax(0, 1fr);
+  }
+  @media (width >= 60rem) {
+    .help-layout { grid-template-columns: minmax(14rem, 3fr) minmax(0, 9fr); }
+    .help-aside__inner { position: sticky; inset-block-start: calc(var(--topbar-h) + var(--space-6)); }
+  }
+  .help-aside__title {
+    margin-block-start: var(--space-3);
+    font: 700 clamp(1.375rem, 1.2rem + 0.6vw, 1.75rem)/1.15 var(--font-display);
+    letter-spacing: -0.025em;
+  }
+
+  .help-toc__list {
+    margin-block-start: var(--space-5);
+    border-inline-start: 1px solid var(--color-border);
+
+    & a {
+      display: flex;
+      align-items: center;
+      min-block-size: 2.75rem;
+      margin-inline-start: -1px;
+      padding-inline-start: var(--space-4);
+      border-inline-start: 2px solid transparent;
+      color: var(--color-text-muted);
+      font-weight: 500;
+      text-decoration: none;
+      transition: color var(--duration-fast), border-color var(--duration-fast);
+    }
+    & a:hover { color: var(--color-text); }
+    & a[aria-current="true"] { color: var(--color-text); font-weight: 600; border-inline-start-color: var(--color-accent); }
+  }
+
+  .help-faq { display: grid; gap: clamp(3rem, 2rem + 2vw, 4.5rem); align-content: start; }
+  .help-group__title {
+    display: flex;
+    align-items: baseline;
+    gap: var(--space-3);
+    margin-block-end: var(--space-4);
+    font-size: clamp(1.375rem, 1.2rem + 0.7vw, 1.875rem);
+    scroll-margin-block-start: var(--space-9);
+  }
+  .help-group { scroll-margin-block-start: var(--space-9); }
+  .help-group__num {
+    font: 500 var(--text-small)/1 var(--font-mono);
+    letter-spacing: 0.08em;
+    color: var(--color-accent-text);
+  }
+  .help-faq mark {
+    background: color-mix(in oklch, var(--color-signal) 28%, transparent);
+    color: inherit;
+    border-radius: 2px;
+  }
+  .help-empty {
+    justify-items: start;
+    padding-inline: 0;
+    text-align: start;
+    border-block: 1px solid var(--color-border);
+  }
+
+  /* ---------- Contact (ink) ---------- */
+  .help-contact__head { margin-block-end: var(--space-7); }
+  .help-contact__split { --split-cols: minmax(0, 5fr) minmax(0, 6fr); }
+
+  .help-channels { border-block-start: 1px solid var(--color-border); }
+  .help-channel {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: var(--space-4);
+    padding-block: var(--space-5);
+    border-block-end: 1px solid var(--color-border);
+  }
+  .help-channel__icon { inline-size: 1.5rem; block-size: 1.5rem; color: var(--color-text); margin-block-start: 0.15rem; }
+  .help-channel__body {
+    display: grid;
+    gap: var(--space-2);
+    justify-items: start;
+
+    & > p:not(.help-channel__value) { color: var(--color-text-muted); }
+  }
+  .help-channel__title {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-2) var(--space-4);
+    inline-size: 100%;
+    font-size: var(--text-h3);
+  }
+  .help-channel__value {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-2) var(--space-4);
+    font: 500 1.0625rem/1.4 var(--font-mono);
+
+    & a { color: var(--color-text); text-decoration-color: var(--color-border-strong); }
+    & a:hover { text-decoration-color: currentColor; }
+  }
+  .help-address {
+    display: grid;
+    gap: var(--space-2);
+    margin-block-start: var(--space-6);
+
+    & address { font-style: normal; }
+  }
+
+  .help-form { display: grid; gap: var(--space-6); align-content: start; }
+  .help-form__title { font-size: clamp(1.375rem, 1.2rem + 0.6vw, 1.75rem); }
+  .help-form__title + .help-form__note { margin-block-start: calc(-1 * var(--space-4)); }
+  .help-form__note { font-size: var(--text-small); color: var(--color-text-muted); }
+  .help-form__row {
+    display: grid;
+    gap: var(--space-6);
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 14rem), 1fr));
+  }
+  .help-form__textarea {
+    min-block-size: 8rem;
+    padding-block: var(--space-3);
+    line-height: 1.5;
+    resize: vertical;
+  }
+  @supports (field-sizing: content) {
+    .help-form__textarea { field-sizing: content; }
+  }
+  .help-form__foot { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-4) var(--space-5); }
+
+  /* Inline errors after the user has interacted (no JS needed). */
+  .help-form .field:has(:user-invalid) .field__control {
+    border-color: var(--color-loss);
+    box-shadow: 0 1px 0 0 var(--color-loss);
+  }
+  .help-form .field:has(:user-invalid) .field__error { display: flex; }
+
+  @media (forced-colors: active) {
+    .help-search__control:focus-within { border-block-end-width: 3px; }
+    .help-toc__list a[aria-current="true"] { border-inline-start-color: Highlight; }
+  }
+}

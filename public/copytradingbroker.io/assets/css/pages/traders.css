@@ -1,0 +1,233 @@
+/* For traders — page-only rules. */
+@layer pages {
+  /* Same display size as Home's section titles (home.css defines its own copy). */
+  .h-xl { font-size: clamp(2.25rem, 1.6rem + 2.6vw, 3.75rem); font-weight: 800; letter-spacing: -0.035em; }
+
+  /* =================================================================
+     Hero: network dotfield with plain-text overlays (no containers)
+     ================================================================= */
+  .traders-hero__stat {
+    position: absolute; z-index: 1;
+    display: grid; gap: var(--space-1);
+    padding-block-start: var(--space-3);
+    border-block-start: 1px solid color-mix(in oklch, var(--color-signal) 40%, transparent);
+    text-shadow: 0 0 1rem var(--color-bg);
+  }
+  .traders-hero__stat--top { inset-block-start: 6%; inset-inline-start: 0; }
+  .traders-hero__stat--bottom { inset-block-end: 6%; inset-inline-end: 0; justify-items: end; text-align: end; }
+  .traders-hero__value {
+    font: 500 clamp(1.25rem, 1rem + 1vw, 1.75rem)/1.15 var(--font-mono);
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -0.02em;
+    color: var(--color-signal);
+  }
+  .traders-hero__meta {
+    display: inline-flex; align-items: center; gap: var(--space-2);
+    font: 500 var(--text-xs)/1.2 var(--font-mono);
+    color: var(--color-signal);
+  }
+
+  /* =================================================================
+     Earnings calculator: editable sentence + sliders
+     ================================================================= */
+  .traders-calc { display: grid; gap: var(--space-5); margin-block-start: var(--space-5); }
+  .traders-calc__sentence {
+    font: 600 clamp(1.75rem, 1.1rem + 2.8vw, 3.5rem)/1.2 var(--font-display);
+    letter-spacing: -0.03em;
+    max-inline-size: 28ch;
+    text-wrap: balance;
+  }
+  .traders-calc__val {
+    font-family: var(--font-mono);
+    font-weight: 500;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -0.04em;
+    color: var(--color-accent-text);
+    text-decoration: underline 2px;
+    text-underline-offset: 0.15em;
+    white-space: nowrap;
+  }
+  .traders-calc__total { display: flex; flex-wrap: wrap; align-items: baseline; gap: var(--space-2) var(--space-4); }
+  .traders-calc__num {
+    font: 500 clamp(3.5rem, 2rem + 6vw, 7.5rem)/1 var(--font-mono);
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -0.05em;
+    color: var(--color-accent-text);
+  }
+  .traders-calc__per { font: 600 clamp(1.25rem, 1rem + 1vw, 2rem)/1 var(--font-display); color: var(--color-text-muted); }
+  .traders-calc__breakdown { font: 500 var(--text-small)/1.4 var(--font-mono); color: var(--color-text-muted); }
+
+  .traders-calc__sliders { display: grid; grid-template-columns: minmax(0, 1fr); margin-block-start: var(--space-5); border-block-start: 1px solid var(--color-border); }
+  .traders-calc__field { display: grid; gap: var(--space-2); padding-block: var(--space-5); border-block-end: 1px solid var(--color-border); }
+  .traders-calc__row { display: flex; justify-content: space-between; align-items: baseline; gap: var(--space-3); }
+  .traders-calc__readout { font: 600 var(--text-small)/1.2 var(--font-mono); font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .traders-calc__foot { max-inline-size: 52rem; }
+  @media (width >= 48rem) {
+    .traders-calc__sliders { grid-template-columns: repeat(3, minmax(0, 1fr)); border-block-end: 1px solid var(--color-border); }
+    .traders-calc__field { padding-inline: var(--space-5); border-block-end: 0; }
+    .traders-calc__field:first-child { padding-inline-start: 0; }
+    .traders-calc__field:last-child { padding-inline-end: 0; }
+    .traders-calc__field + .traders-calc__field { border-inline-start: 1px solid var(--color-border); }
+  }
+
+  /* Hairline range with red fill + thumb. --fill is set by traders-calc.js. */
+  .traders-range {
+    --_track: var(--color-border-strong);
+    -webkit-appearance: none; appearance: none;
+    inline-size: 100%; block-size: 2.75rem; margin: 0;
+    background: transparent; cursor: pointer;
+  }
+  .traders-range::-webkit-slider-runnable-track {
+    block-size: 2px;
+    background: linear-gradient(to right, var(--color-accent) var(--fill, 50%), var(--_track) var(--fill, 50%));
+  }
+  .traders-range:dir(rtl)::-webkit-slider-runnable-track {
+    background: linear-gradient(to left, var(--color-accent) var(--fill, 50%), var(--_track) var(--fill, 50%));
+  }
+  .traders-range::-webkit-slider-thumb {
+    -webkit-appearance: none; appearance: none;
+    inline-size: 1.25rem; block-size: 1.25rem; margin-block-start: calc(-0.625rem + 1px);
+    border-radius: 50%; border: 3px solid var(--color-bg);
+    background: var(--color-accent);
+    box-shadow: 0 0 0 1px var(--color-accent);
+    transition: scale var(--duration-fast) var(--ease-out), box-shadow var(--duration-fast) var(--ease-out);
+  }
+  .traders-range::-moz-range-track { block-size: 2px; background: var(--_track); }
+  .traders-range::-moz-range-progress { block-size: 2px; background: var(--color-accent); }
+  .traders-range::-moz-range-thumb {
+    inline-size: 0.875rem; block-size: 0.875rem;
+    border-radius: 50%; border: 3px solid var(--color-bg);
+    background: var(--color-accent);
+    box-shadow: 0 0 0 1px var(--color-accent);
+  }
+  @media (hover: hover) {
+    .traders-range:hover::-webkit-slider-thumb { box-shadow: 0 0 0 1px var(--color-accent), 0 0 0 6px color-mix(in oklch, var(--color-accent) 18%, transparent); }
+  }
+  .traders-range:active::-webkit-slider-thumb { scale: 1.15; }
+  .traders-range:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 2px; }
+  .traders-range:disabled { opacity: .5; cursor: not-allowed; }
+
+  /* =================================================================
+     Earnings system rows: index · body · right-aligned example figure
+     ================================================================= */
+  .traders-system { padding-block-start: 0; }
+  .traders-system > .container { padding-block-start: clamp(3rem, 2rem + 3vw, 5rem); border-block-start: 1px solid var(--color-border); }
+  .traders-rows__fig { grid-column: 2; display: grid; gap: var(--space-1); align-content: center; }
+  .traders-rows__value {
+    font: 500 clamp(1.75rem, 1.3rem + 1.6vw, 2.75rem)/1 var(--font-mono);
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -0.03em;
+    transition: color var(--duration-base);
+  }
+  .traders-rows__unit { font: 600 var(--text-label)/1.3 var(--font-mono); letter-spacing: .12em; text-transform: uppercase; color: var(--color-text-muted); }
+  .traders-rows .num-row:hover .traders-rows__value { color: var(--color-accent-text); }
+  @media (width >= 48rem) {
+    .traders-rows .num-row { grid-template-columns: clamp(4rem, 3rem + 3vw, 6.5rem) minmax(0, 1fr) minmax(10rem, auto); }
+    .traders-rows__fig { grid-column: auto; justify-items: end; text-align: end; }
+  }
+
+  /* =================================================================
+     Who qualifies: hairline checklist
+     ================================================================= */
+  .traders-checks { border-block-start: 1px solid var(--color-border); }
+  .traders-check {
+    display: grid; grid-template-columns: auto minmax(0, 1fr); gap: var(--space-4);
+    padding-block: var(--space-5);
+    border-block-end: 1px solid var(--color-border);
+  }
+  .traders-check__icon { inline-size: 1.5rem; block-size: 1.5rem; margin-block-start: 0.125rem; color: var(--color-signal); }
+  .traders-check__title { font-size: clamp(1.125rem, 1rem + .5vw, 1.375rem); }
+  .traders-check__text { margin-block-start: var(--space-2); color: var(--color-text-muted); max-inline-size: 36rem; }
+
+  /* =================================================================
+     Tools strip: scroll-snap region of borderless visuals
+     ================================================================= */
+  .traders-tools-section { border-block-start: 1px solid var(--color-border); }
+  .traders-tools__arrow { display: inline-block; }
+  .traders-tools__arrow:dir(rtl) { scale: -1 1; }
+
+  .traders-tools {
+    overflow-x: auto;
+    overscroll-behavior-inline: contain;
+    scroll-snap-type: inline mandatory;
+    padding-block-end: var(--space-5);
+    scrollbar-color: var(--color-border-strong) transparent;
+  }
+  .traders-tools:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 4px; }
+  .traders-tools__list { display: grid; grid-auto-flow: column; grid-auto-columns: min(85%, 24rem); }
+  .traders-tool { scroll-snap-align: start; padding-inline-end: var(--space-6); }
+  .traders-tool + .traders-tool { padding-inline-start: var(--space-6); border-inline-start: 1px solid var(--color-border); }
+  .traders-tool figure { display: grid; gap: var(--space-5); }
+
+  .traders-tool__visual {
+    position: relative; isolation: isolate;
+    display: grid; align-content: space-between; gap: var(--space-4);
+    min-block-size: 18rem;
+    padding-block: var(--space-4);
+    border-block-start: 1px solid color-mix(in oklch, var(--color-signal) 35%, transparent);
+  }
+  .traders-tool__visual::before {
+    content: ""; position: absolute; inset: 0; z-index: -1;
+    background-image: radial-gradient(color-mix(in oklch, var(--color-text) 10%, transparent) 1px, transparent 1.5px);
+    background-size: 14px 14px;
+    mask-image: radial-gradient(ellipse at 50% 40%, var(--color-text) 10%, transparent 70%);
+  }
+  .traders-tool__head { display: flex; justify-content: space-between; align-items: center; gap: var(--space-3); }
+  .traders-tool__foot {
+    display: flex; flex-wrap: wrap; gap: var(--space-2) var(--space-4);
+    padding-block-start: var(--space-3);
+    border-block-start: 1px solid var(--color-border);
+    font: 500 var(--text-xs)/1.3 var(--font-mono);
+    color: var(--color-text-muted);
+  }
+  .traders-tool__title { font-size: var(--text-h3); }
+  .traders-tool__caption p { margin-block-start: var(--space-2); font-size: var(--text-small); color: var(--color-text-muted); }
+
+  /* Mini subscriber ledger */
+  .traders-mini { font-size: var(--text-xs); }
+  .traders-mini :is(th, td), .traders-mini :is(th, td):first-child { padding: var(--space-2) var(--space-3) var(--space-2) 0; white-space: nowrap; }
+  .traders-mini :is(th, td):last-child { padding-inline-end: 0; }
+  .traders-mini td:first-child { font-family: var(--font-mono); }
+  .traders-mini .muted { margin-inline-start: var(--space-1); font-family: var(--font-text); }
+
+  /* Semicircle risk gauge */
+  .traders-gauge { display: grid; justify-items: center; }
+  .traders-gauge__svg { inline-size: min(100%, 15rem); overflow: visible; }
+  .traders-gauge__svg path { fill: none; stroke-width: 10; stroke-linecap: butt; }
+  .traders-gauge__track { stroke: var(--color-border); }
+  .traders-gauge__limit { stroke: var(--color-accent); stroke-dasharray: 4 100; stroke-dashoffset: -96; }
+  .traders-gauge__value {
+    stroke: var(--color-signal);
+    stroke-dasharray: 100 100;
+    stroke-dashoffset: var(--off, 100);
+    filter: drop-shadow(0 0 6px color-mix(in oklch, var(--color-signal) 60%, transparent));
+    transition: stroke-dashoffset 1.2s var(--ease-out) .2s;
+  }
+  .js .traders-tool:not(.is-visible) .traders-gauge__value { stroke-dashoffset: 100; }
+  .traders-gauge__svg .traders-gauge__ticks { stroke: var(--color-bg); stroke-width: 12; stroke-dasharray: 0.6 9.4; }
+  .traders-gauge__readout { display: grid; justify-items: center; margin-block-start: -2.75rem; text-align: center; }
+  .traders-gauge__num { font: 500 2rem/1 var(--font-mono); font-variant-numeric: tabular-nums; letter-spacing: -0.03em; }
+  .traders-gauge__label { margin-block-start: var(--space-1); font: 600 var(--text-label)/1.3 var(--font-mono); letter-spacing: .12em; text-transform: uppercase; color: var(--color-text-muted); }
+
+  /* Profile preview */
+  .traders-profile { display: grid; gap: var(--space-4); }
+  .traders-profile__stats {
+    display: grid; grid-template-columns: repeat(3, auto); justify-content: space-between; gap: var(--space-3);
+    padding-block: var(--space-3);
+    border-block: 1px solid var(--color-border);
+  }
+  .traders-profile__stats dt { font: 600 var(--text-label)/1.3 var(--font-mono); letter-spacing: .12em; text-transform: uppercase; color: var(--color-text-muted); }
+  .traders-profile__stats dd { margin: var(--space-1) 0 0; font-size: var(--text-small); }
+  .traders-profile .riskbar__track { inline-size: 3.5rem; }
+  .traders-profile .riskbar__track::after { background-size: 3.5rem 100%; }
+
+  /* =================================================================
+     Forced colours
+     ================================================================= */
+  @media (forced-colors: active) {
+    .traders-range { appearance: auto; }
+    .traders-gauge__value { stroke: Highlight; }
+    .traders-gauge__track, .traders-gauge__ticks { stroke: CanvasText; }
+    .traders-calc__val, .traders-calc__num { color: LinkText; }
+  }
+}

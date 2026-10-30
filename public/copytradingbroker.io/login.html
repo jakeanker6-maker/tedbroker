@@ -1,331 +1,104 @@
-<!DOCTYPE html>
-<html lang="en">
-
-
-<meta http-equiv="content-type" content="text/html;charset=UTF-8" />
-<meta http-equiv="content-type" content="text/html;charset=UTF-8" />
-
+<!doctype html>
+<html lang="en" dir="ltr">
 <head>
-   <meta name="csrf-token" content="M3XMFmO1P72RsP9UzSPWrMgCcJt9CFMThtEHyGMu">
-    <meta charset="utf-8">
-    <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
-    <meta name="description" content="TED Brokers- Login to Dashboard">
-    <meta name="author" content="TED Brokers- Login to Dashboard">
-    <meta name="keywords" content="TED Brokers- Login to Dashboard">
-    <title>Login account | TED Brokers</title>
-    <!-- Favicon -->
-    <link rel="icon" href="assets/images/logoIcon/tedbrokers-fav.ico" type="image/x-icon" />
-
-    <!-- Title -->
-    <title>TED Brokers- Login to Dashboard</title>
-
-    <!-- Bootstrap css-->
-    <link id="style" href="assets/templates/copytradingbroker/auth/main/assets/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
-
-    <!-- Icons css-->
-    <link href="assets/templates/copytradingbroker/auth/main/assets/web-fonts/icons.css" rel="stylesheet" />
-    <link href="assets/templates/copytradingbroker/auth/main/assets/web-fonts/font-awesome/font-awesome.min.css" rel="stylesheet">
-    <link href="assets/templates/copytradingbroker/auth/main/assets/web-fonts/plugin.css" rel="stylesheet" />
-
-    <!-- Style css-->
-    <link href="assets/templates/copytradingbroker/auth/main/assets/css/style.css" rel="stylesheet">
-    <link href="assets/templates/copytradingbroker/auth/main/assets/css/plugins.css" rel="stylesheet">
-    <script src="assets/templates/copytradingbroker/auth/plugins/sweetalert/js/sweetalert.min.js"></script>
-    <script src="assets/templates/copytradingbroker/auth/plugins/sweetalerts/promise-polyfill.js"></script>
-    <link href="assets/templates/copytradingbroker/auth/plugins/sweetalerts/sweetalert.css" rel="stylesheet" type="text/css" />
-    <script src="https://unpkg.com/sweetalert2@7.8.2/dist/sweetalert2.all.js"></script>
-
-	<link rel="stylesheet" href="assets/css/custom-theme.css" />
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Sign in — TED Brokers</title>
+  <meta name="description" content="Sign in to your TED Brokers account to trade US stocks, ETFs, options and cryptocurrencies.">
+  <meta name="theme-color" content="#0A1626">
+  <link rel="icon" href="assets/img/favicon.ico">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=JetBrains+Mono:wght@400;500;600&family=Sora:wght@300;600;700;800&display=swap">
+  <link rel="stylesheet" href="assets/css/main.css">
+  <link rel="stylesheet" href="assets/css/pages/auth.css">
+  <script>document.documentElement.classList.add('js');try{var t=localStorage.getItem('ted:theme');if(t==='system')t=matchMedia('(prefers-color-scheme: light)').matches?'light':'dark';if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
+  <script type="module" src="assets/js/main.js"></script>
+  <script type="module" src="assets/js/live/google.js"></script>
 </head>
+<body>
+  <a class="skip-link" href="#signin-title">Skip to sign in</a>
 
-<body class="main-body leftmenu ltr light-theme" data-bs-theme="light" style="background-image: url('assets/images/logoIcon/tedbrokers-logo.jpg'); background-repeat: no-repeat; background-position: center 20px; background-size: 150px; background-attachment: fixed;">
-    <style>
-    div#google_translate_element div.goog-te-gadget-simple a.goog-te-menu-value span:nth-of-type(1),
-    div#google_translate_element div.goog-te-gadget-simple a.goog-te-menu-value span:nth-of-type(2),
-    div#google_translate_element div.goog-te-gadget-simple a.goog-te-menu-value span:nth-of-type(3) {
-        display: none;
-    }
+  <main class="auth" id="main">
+    <!-- ============ Visual ============ -->
+    <section class="auth__visual surface-ink" aria-label="Activity across TED Brokers">
+      <div class="mesh" aria-hidden="true"><span></span></div>
+      <canvas class="dotfield" data-component="dotfield" data-mode="field" data-density=".5" aria-hidden="true"></canvas>
 
-    div#google_translate_element div.goog-te-gadget-simple {
-        margin: 0px;
-        padding: 10px;
-        display: inline-block;
-        background-color:#0080db00;
-        border: 1px solid #0080db00;
-    }
+      <div class="auth-visual__top">
+        <a class="wordmark" href="index.html" aria-label="TED Brokers home">
+          <span class="wordmark__ted">TED</span><span class="wordmark__brokers">Br<svg class="wordmark__o" viewBox="0 0 20 20" aria-hidden="true"><g fill="currentColor"><circle cx="10" cy="2" r="1.6"/><circle cx="15.2" cy="4.1" r="1.4" opacity=".8"/><circle cx="17.9" cy="9.4" r="1.6"/><circle cx="16.3" cy="14.8" r="1.4" opacity=".8"/><circle cx="11.2" cy="17.9" r="1.6"/><circle cx="5.6" cy="16.4" r="1.4" opacity=".7"/><circle cx="2.2" cy="11.6" r="1.6"/><circle cx="3" cy="6" r="1.4" opacity=".8"/><circle cx="6.6" cy="2.9" r="1.1" opacity=".6"/><circle cx="10" cy="10" r="1.9"/><circle cx="13.3" cy="9.2" r="1" opacity=".7"/><circle cx="7.4" cy="12" r="1" opacity=".7"/></g></svg>kers</span>
+        </a>
+        <span class="overline overline--signal"><span class="live-dot" aria-hidden="true"></span>Markets live</span>
+      </div>
 
-    div#google_translate_element div.goog-te-gadget-simple a.goog-te-menu-value {
-        color: #2D3748;
-    }
+      <div class="auth-visual__body">
+        <p class="overline">Market activity <span class="muted">· illustrative</span></p>
+        <div class="chart auth-pulse" role="img" data-component="chart"
+             data-series="walk:48,seed=27,drift=.8,start=100,end=134.8" data-decimals="1"
+             aria-label="Illustrative line chart."></div>
+      </div>
 
-    div#google_translate_element div.goog-te-gadget-simple a.goog-te-menu-value::after {
-        content: "Translate Site";
-        padding-right: 5px;
-    }
+      <div class="auth-visual__foot">
+        <p class="auth-headline">Sign in to trade stocks, ETFs, options and crypto.</p>
+        <p class="auth-subline">Live charts and order tools · Cash and margin accounts · Monthly statements</p>
+      </div>
+    </section>
 
-    div#google_translate_element div.goog-te-gadget-simple img:nth-of-type(1) {
-        display: none;
-    }
-    
-    .btn-primary {
-    background: #D32F2F; /* Bybit Gold */
-    color: #fff; /* Dark Text */
-    border: 2px solid #D32F2F;
-    font-weight: bold;
-    padding: 12px 24px;
-    border-radius: 2px; /* Soft edges */
-    transition: all 0.3s ease-in-out;
-}
-.btn-outline-danger{
-     
-  
-    font-weight: bold;
-    padding: 8px 16px;
-    border-radius: 2px; /* Soft edges */
-    transition: all 0.3s ease-in-out;
-}
+    <!-- ============ Form ============ -->
+    <section class="auth__form surface-paper" aria-labelledby="signin-title">
+      <div class="auth__top">
+        <p><span class="muted">New here?</span> <a href="register.html">Create an account →</a></p>
+      </div>
 
-.btn-primary:hover {
-    background: #FFD700; /* Brighter Gold */
-    border-color: #FFD700;
-    box-shadow: 0 4px 10px rgba(240, 185, 11, 0.3);
-    transform: translateY(-2px); /* Slight lift effect */
-}
-
-.btn-primary:disabled {
-    opacity: 0.7;
-    cursor: not-allowed;
-    transform: none;
-}
-
-.btn-spinner {
-    display: inline-block;
-    width: 16px;
-    height: 16px;
-    border: 2px solid rgba(255,255,255,0.3);
-    border-top-color: #fff;
-    border-radius: 50%;
-    animation: btn-spin 0.6s linear infinite;
-    vertical-align: middle;
-    margin-right: 6px;
-}
-
-@keyframes btn-spin {
-    to { transform: rotate(360deg); }
-}
-
-.form-message {
-    padding: 10px 14px;
-    border-radius: 4px;
-    margin-bottom: 16px;
-    font-size: 14px;
-    display: none;
-}
-
-.form-message.success {
-    display: block;
-    background: #d4edda;
-    color: #155724;
-    border: 1px solid #c3e6cb;
-}
-
-.form-message.error {
-    display: block;
-    background: #f8d7da;
-    color: #721c24;
-    border: 1px solid #f5c6cb;
-}
-
-.form-message.info {
-    display: block;
-    background: #d1ecf1;
-    color: #0c5460;
-    border: 1px solid #bee5eb;
-}
-    </style>
-
-    <script type="text/javascript">
-    function googleTranslateElementInit() {
-        new google.translate.TranslateElement({
-            pageLanguage: 'en',
-            layout: google.translate.TranslateElement.InlineLayout.SIMPLE
-        }, 'google_translate_element');
-    }
-    </script>
-    <script type="text/javascript"
-        src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
-
-    <!-- Loader -->
-    
-    <!-- End Loader -->
-
-    <!-- Page -->
-    <div class="page main-signin-wrapper">
-
-
-
-
-        
-
-
-        <!-- Row -->
-        <div class="row signpages text-center">
-            <div class="col-md-12">
-                <div class="card border-0">
-
-
-
-
-                    
-
-                    <div class="row row-sm">
-                        <div class="col-lg-8 col-xl-8 col-xs-8 col-sm-12 login_form rounded-start-11">
-
-                            <div class="container-fluid">
-                                <div class="row row-sm">
-                                    <div class="card-body mt-2 mb-2">
-                                        <h2 class="text-start mb-2" data-i18n="login.title">Sign In</h2>
-                                        <p class="mb-4 text-muted tx-13 ms-0 text-start" data-i18n="login.subtitle">Sign in to start trading
-                                            crypto, forex and stocks.</p>
-                                        <div id="login-message" class="form-message"></div>
-                                        <div class="panel desc-tabs border-0 p-0">
-
-
-
-
-                                            <form method="POST" action="#" id="login-form">
-                                                <input type="hidden" name="_token" value="M3XMFmO1P72RsP9UzSPWrMgCcJt9CFMThtEHyGMu">                                                 <div class="panel-body tabs-menu-body mt-2">
-                                                    <div class="tab-content">
-                                                        <div class="tab-pane active" id="tab01">
-                                                            <div class="form-group text-start">
-                                                                <label class="tx-medium" data-i18n="login.emailLabel">Email or Username</label>
-                                                                <input class="form-control" name="email" value=""
-                                                                    placeholder="Email or Username" data-i18n-placeholder="login.emailPlaceholder" type="text"
-                                                                   required>
-
-                                                                   <div>
-                                                                                                                                       </div>
-                                                            </div>
-                                                            <div class="form-group text-start">
-                                                                <label class="tx-medium" data-i18n="login.passwordLabel">Password</label>
-                                                                <input class="form-control border-end-0"
-                                                                    placeholder="Enter your password" data-i18n-placeholder="login.passwordPlaceholder" name="password"
-                                                                    type="password"
-                                                                    data-bs-toggle="password" required>
-                                                            <div>
-                                                                                                                            </div>
-                                                            <div id="caps-lock-warning" style="color: #ff9800; font-size: 12px; display: none; margin-top: 4px;">
-                                                                <i class="fas fa-exclamation-triangle"></i> Caps Lock is on
-                                                            </div>
-                                                            <p style="color: #8b93a7; font-size: 11px; margin-top: 4px;">
-                                                                <i class="fas fa-info-circle"></i> Password must be at least 8 characters with uppercase, lowercase, and a number
-                                                            </p>
-
-
-                                                            </div>
-                                                            <button type="submit" name="login" id="login-btn"
-                                                                class="btn btn-primary btn-block" data-i18n="login.btnSignIn">Sign In</button>
-
-                                                            <!-- Divider -->
-                                                            <div class="text-center my-3">
-                                                                <span style="color: #8b93a7;" data-i18n="login.or">or</span>
-                                                            </div>
-
-                                                            <!-- Google Sign-In Button -->
-                                                            <button type="button" onclick="signInWithGoogle()"
-                                                                class="btn btn-outline-secondary btn-block"
-                                                                style="display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%; padding: 12px;">
-                                                                <svg width="18" height="18" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg">
-                                                                    <path fill="#4285F4" d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.717v2.258h2.908c1.702-1.567 2.684-3.874 2.684-6.615z"/>
-                                                                    <path fill="#34A853" d="M9 18c2.43 0 4.467-.806 5.956-2.184l-2.908-2.258c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332C2.438 15.983 5.482 18 9 18z"/>
-                                                                    <path fill="#FBBC05" d="M3.964 10.707c-.18-.54-.282-1.117-.282-1.707s.102-1.167.282-1.707V4.961H.957C.348 6.175 0 7.55 0 9s.348 2.825.957 4.039l3.007-2.332z"/>
-                                                                    <path fill="#EA4335" d="M9 3.582c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0 5.482 0 2.438 2.017.957 4.961L3.964 7.29C4.672 5.163 6.656 3.582 9 3.582z"/>
-                                                                </svg>
-                                                                <span data-i18n="login.googleSignIn">Sign in with Google</span>
-                                                            </button>
-
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                        </div>
-                                        </form>
-                                        <div class="text-start mt-4 ms-0 mb-3">
-                                            <div class="mb-1"><a href="forgot-password" data-i18n="login.forgotPassword">Forgot password?</a></div>
-                                            <div><span data-i18n="login.noAccount">Don't have an account?</span> <a href="register" data-i18n="login.registerHere">Register Here</a></div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                </div>
-
-
-            </div>
+      <div class="auth__panel">
+        <div class="auth-head">
+          <p class="overline">Welcome back</p>
+          <h1 id="signin-title" tabindex="-1">Sign in</h1>
         </div>
-        <!-- End Row -->
 
+        <form class="auth-form" data-auth="login" method="post" action="/login" novalidate>
+          <div class="field">
+            <label class="field__label" for="login-id">Email</label>
+            <div class="field__control">
+              <input class="field__input" id="login-id" name="email" type="email" autocomplete="email" autocapitalize="none" spellcheck="false" required
+                     data-msg-required="Enter your email address." data-msg-email="Enter a valid email address, like name@example.com.">
+            </div>
+            <p class="field__error" id="login-id-error"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7.5v5.5M12 16.5h.01"/></svg><span data-error-msg></span></p>
+          </div>
 
+          <div class="field">
+            <label class="field__label" for="pw">Password</label>
+            <div class="field__control">
+              <input class="field__input" id="pw" name="password" type="password" autocomplete="current-password" required
+                     data-msg-required="Enter your password.">
+              <button class="icon-btn" type="button" data-component="password" aria-controls="pw" aria-pressed="false" aria-label="Show password">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>
+              </button>
+            </div>
+            <p class="field__error" id="pw-error"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7.5v5.5M12 16.5h.01"/></svg><span data-error-msg></span></p>
+          </div>
 
+          <p class="auth-row"><a href="help.html">Forgot password?</a></p>
 
+          <button class="btn btn--lg btn--block" type="submit">Sign in <svg class="btn__arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+        </form>
 
+        <p class="divider-text">or</p>
 
+        <button class="btn btn--lg btn--block btn--outline auth-google" type="button" data-google-signin>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#4285F4" d="M23.5 12.3c0-.8-.1-1.6-.2-2.3H12v4.4h6.5a5.6 5.6 0 0 1-2.4 3.6v3h3.9c2.2-2.1 3.5-5.1 3.5-8.7z"/><path fill="#34A853" d="M12 24c3.2 0 6-1.1 7.9-2.9l-3.9-3c-1.1.7-2.4 1.1-4 1.1-3.1 0-5.7-2.1-6.6-4.9h-4v3.1A12 12 0 0 0 12 24z"/><path fill="#FBBC05" d="M5.4 14.3a7.2 7.2 0 0 1 0-4.6V6.6h-4a12 12 0 0 0 0 10.8z"/><path fill="#EA4335" d="M12 4.8c1.8 0 3.3.6 4.6 1.8l3.4-3.4A12 12 0 0 0 1.4 6.6l4 3.1C6.3 6.9 8.9 4.8 12 4.8z"/></svg>
+          Continue with Google
+        </button>
+        <p class="field__error verify-error" id="google-status" role="alert" hidden></p>
 
-
-    </div>
-    <!-- End Page -->
-
-    <!-- Jquery js-->
-    <script src="assets/templates/copytradingbroker/auth/main/assets/plugins/jquery/jquery.min.js"></script>
-
-    <!-- Bootstrap js-->
-    <script src="assets/templates/copytradingbroker/auth/main/assets/plugins/bootstrap/js/popper.min.js"></script>
-    <script src="assets/templates/copytradingbroker/auth/main/assets/plugins/bootstrap/js/bootstrap.min.js"></script>
-
-    <!-- Bootstrap Show Password js-->
-    <script src="assets/templates/copytradingbroker/auth/main/assets/js/bootstrap-show-password.min.js"></script>
-
-    <!-- generate-otp js -->
-    <script src="assets/templates/copytradingbroker/auth/main/assets/js/generate-otp.js"></script>
-
-    <!-- Perfect-scrollbar js -->
-    <script src="assets/templates/copytradingbroker/auth/main/assets/plugins/perfect-scrollbar/perfect-scrollbar.min.js"></script>
-
-    <!-- Select2 js-->
-    <script src="assets/templates/copytradingbroker/auth/main/assets/plugins/select2/js/select2.min.js"></script>
-
-    <!-- Color Theme js -->
-    <script src="assets/templates/copytradingbroker/auth/main/assets/js/themeColors.js"></script>
-
-    <!-- swither styles js -->
-    <script src="assets/templates/copytradingbroker/auth/main/assets/js/swither-styles.js"></script>
-
-    <!-- Custom js -->
-    <script src="assets/templates/copytradingbroker/auth/main/assets/js/custom.js"></script>
-    <!-- Smartsupp Live Chat script -->
-
-
-    <!-- TED Brokers Authentication Scripts -->
-    <script src="assets/js/auth.js"></script>
-    <script src="assets/js/login-handler.js"></script>
-
-    <!-- Chat Support Widget -->
-    <script src="/assets/js/chat-events.js"></script>
-    <script src="/assets/js/chat-widget.js"></script>
-    <!-- Language System -->
-    <script src="/assets/js/language.js?v=3.0"></script>
-    <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const passwordInput = document.querySelector('input[name="password"]');
-        const capsWarning = document.getElementById('caps-lock-warning');
-        if (passwordInput && capsWarning) {
-            passwordInput.addEventListener('keyup', function(e) {
-                capsWarning.style.display = (e.getModifierState && e.getModifierState('CapsLock')) ? 'block' : 'none';
-            });
-        }
-    });
-    </script>
+        <div class="auth__foot">
+          <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><rect x="5" y="10.5" width="14" height="10" rx="1.5"/><path d="M8 10.5V7.5a4 4 0 0 1 8 0v3"/></svg>Protected by two-factor authentication</span>
+          <a href="legal/risk_closure.html">Risk disclosure</a>
+        </div>
+      </div>
+    </section>
+  </main>
+  <script type="module" src="assets/js/live/login.js?v=2"></script>
 </body>
-
 </html>
-

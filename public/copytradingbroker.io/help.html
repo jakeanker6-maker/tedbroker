@@ -1,967 +1,305 @@
-<!DOCTYPE html>
-<html lang="en" data-bs-theme="light">
-
-
-<!-- Mirrored from copytradingbroker.io/help by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 13 Oct 2025 14:42:04 GMT -->
-<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<!doctype html>
+<html lang="en" dir="ltr">
 <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-    <title>Help Center | TED Brokers</title>
-    <meta name="description" content="TED Brokers Help Center — find answers about account management, deposits, withdrawals, copy trading, investment plans, referrals, KYC, and more.">
-
-    <meta name="keywords" content="TED Brokers, help, support, copy trading help, account help, deposit help, withdrawal help, investment plans, KYC">
-
-    <link rel="shortcut icon" href="assets/images/logoIcon/tedbrokers-fav.ico" type="image/x-icon">
-
-    <link rel="apple-touch-icon" href="assets/images/logoIcon/tedbrokers-fav.ico">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black">
-    <meta name="apple-mobile-web-app-title" content="TED Brokers">
-
-    <meta itemprop="name" content="TED Brokers">
-    <meta itemprop="description" content="TED Brokers Help Center — find answers about account management, deposits, withdrawals, copy trading, investment plans, referrals, KYC, and more.">
-    <meta itemprop="image" content="assets/images/logoIcon/tedbrokers-fav.ico">
-
-    <meta property="og:type" content="website">
-    <meta property="og:title" content="TED Brokers – Help Center">
-    <meta property="og:description" content="Find answers to all your questions about TED Brokers platform features and services.">
-    <meta property="og:image" content="assets/images/logoIcon/tedbrokers-fav.ico"/>
-    <meta property="og:image:type" content="image/png"/>
-    <meta property="og:image:width" content="1200" />
-    <meta property="og:image:height" content="630" />
-    <meta property="og:url" content="https://copytradingbroker.com/help">
-
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="TED Brokers – Help Center">
-    <meta name="twitter:description" content="Find answers to all your questions about TED Brokers platform features and services.">
-    <meta name="twitter:image" content="assets/images/logoIcon/tedbrokers-fav.ico">
-
-    <link rel="stylesheet" href="assets/templates/copytradingbroker/frontend/css/plugins.css" />
-    <link rel="stylesheet" href="assets/templates/copytradingbroker/frontend/css/style.css" />
-
-    <link rel="stylesheet" href="assets/wa/plugin/czm-chat-support">
-
-    <script type="text/javascript">
-        function googleTranslateElementInit() {
-            new google.translate.TranslateElement({
-                pageLanguage: 'en'
-            }, 'google_translate_element');
-        }
-    </script>
-
-    <script type="text/javascript" src="../translate.google.com/translate_a/elementa0d8.js?cb=googleTranslateElementInit">
-    </script>
-
-    <link rel="stylesheet"
-        href="assets/templates/copytradingbroker/color2c1f.css?color=&amp;secondary_color=">
-    <link rel="stylesheet" href="assets/css/custom-theme.css" />
-
-    <style>
-        /* Help Center styles */
-        .help-card {
-            cursor: pointer;
-            transition: transform 0.2s, box-shadow 0.2s;
-            border: 1px solid #e0e0e0;
-            border-radius: 12px;
-            padding: 24px 16px;
-            text-align: center;
-            background: #fff;
-            height: 100%;
-        }
-        .help-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 8px 24px rgba(0,0,0,0.12);
-        }
-        .help-card i {
-            font-size: 2rem;
-            color: #D32F2F;
-            margin-bottom: 12px;
-        }
-        .help-card h6 {
-            font-size: 0.9rem;
-            margin-bottom: 0;
-            color: #333;
-        }
-        .help-sidebar {
-            position: sticky;
-            top: 100px;
-        }
-        .help-sidebar .nav-link {
-            color: #555;
-            padding: 8px 16px;
-            border-radius: 8px;
-            font-size: 0.9rem;
-            transition: all 0.2s;
-        }
-        .help-sidebar .nav-link:hover,
-        .help-sidebar .nav-link.active {
-            color: #D32F2F;
-            background: rgba(211, 47, 47, 0.08);
-        }
-        .help-sidebar .nav-link.active {
-            font-weight: 600;
-        }
-        .help-section {
-            scroll-margin-top: 100px;
-        }
-        .help-section h2 {
-            font-size: 1.5rem;
-            margin-bottom: 1rem;
-        }
-        .help-section h2 i {
-            color: #D32F2F;
-            margin-right: 10px;
-        }
-        .accordion-button:not(.collapsed) {
-            background-color: rgba(211, 47, 47, 0.06);
-            color: #D32F2F;
-        }
-        .accordion-button:focus {
-            box-shadow: none;
-            border-color: rgba(211, 47, 47, 0.3);
-        }
-        .accordion-button:not(.collapsed)::after {
-            filter: brightness(0) saturate(100%) invert(24%) sepia(74%) saturate(2706%) hue-rotate(348deg) brightness(88%) contrast(92%);
-        }
-        .search-box {
-            max-width: 500px;
-            margin: 0 auto;
-        }
-        .search-box input {
-            border-radius: 50px;
-            padding: 12px 24px;
-            border: 2px solid rgba(255,255,255,0.3);
-            background: rgba(255,255,255,0.15);
-            color: #fff;
-            font-size: 1rem;
-            width: 100%;
-        }
-        .search-box input::placeholder {
-            color: rgba(255,255,255,0.7);
-        }
-        .search-box input:focus {
-            outline: none;
-            border-color: rgba(255,255,255,0.6);
-            background: rgba(255,255,255,0.25);
-        }
-        .search-box .input-group-text {
-            background: transparent;
-            border: none;
-            color: rgba(255,255,255,0.7);
-        }
-        .no-results {
-            display: none;
-            text-align: center;
-            padding: 40px;
-            color: #888;
-        }
-        @media (max-width: 991.98px) {
-            .help-sidebar {
-                display: none;
-            }
-        }
-    </style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Help center — TED Brokers</title>
+  <meta name="description" content="Help center for TED Brokers: answers about the trading platform, funding, withdrawals, account verification, optional copy trading and security, plus support by live chat, email and phone.">
+  <meta name="theme-color" content="#0A1626">
+  <link rel="icon" href="assets/img/favicon.ico">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=JetBrains+Mono:wght@400;500;600&family=Sora:wght@300;600;700;800&display=swap">
+  <link rel="stylesheet" href="assets/css/main.css">
+  <link rel="stylesheet" href="assets/css/pages/help.css">
+  <script>document.documentElement.classList.add('js');try{var t=localStorage.getItem('ted:theme');if(t==='system')t=matchMedia('(prefers-color-scheme: light)').matches?'light':'dark';if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
+  <script type="module" src="assets/js/main.js"></script>
 </head>
-
 <body>
-    <div class="wrapper d-flex flex-column justify-between">
-        <!-- Navbar -->
-        <nav class="navbar navbar-expand-lg fixed-top bg-white" data-bs-theme="light">
-            <div class="container">
-                <a class="navbar-brand" href="index">
-                    <img src="assets/images/logoIcon/tedbrokers-logo.jpg" alt="TED Brokers" width="200" style="" />
-                </a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent"
-                    aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
-                    <div class="navbar-toggler-icon">
-                        <span></span>
-                        <span></span>
-                        <span></span>
-                    </div>
-                </button>
-                <div class="collapse navbar-collapse" id="navbarContent">
-                    <div class="navbar-content-inner ms-lg-auto d-flex flex-column flex-lg-row align-lg-center gap-4 gap-lg-10 p-2 p-lg-0">
-                        <ul class="navbar-nav gap-lg-2 gap-xl-5">
-                            <li class="nav-item ">
-                                <a class="nav-link" href="index" data-i18n="nav.home">Home</a>
-                            </li>
-                            <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false" data-i18n="nav.company">Company</a>
-                                <ul class="dropdown-menu">
-                                    <li><a class="dropdown-item" href="about-us" data-i18n="nav.about">About Us</a></li>
-                                    <li><a class="dropdown-item" href="faqs" data-i18n="nav.faq">FAQs</a></li>
-                                    <li><a class="dropdown-item" href="contact-us" data-i18n="nav.contact">Contact Us</a></li>
-                                </ul>
-                            </li>
-                            <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false" data-i18n="resources">Resources</a>
-                                <ul class="dropdown-menu">
-                                    <li><a class="dropdown-item" href="investors" data-i18n="investors">Investors</a></li>
-                                    <li><a class="dropdown-item" href="traders" data-i18n="nav.traders">Traders</a></li>
-                                    <li><a class="dropdown-item" href="how_it_works" data-i18n="howItWorks">How it Works</a></li>
-                                </ul>
-                            </li>
-                            <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false" data-i18n="legal">Legal</a>
-                                <ul class="dropdown-menu">
-                                    <li><a class="dropdown-item" href="legal/privacy_policy" data-i18n="nav.privacyPolicy">Privacy Policy</a></li>
-                                    <li><a class="dropdown-item" href="legal/terms_conditions" data-i18n="nav.termsConditions">Terms & Conditions</a></li>
-                                    <li><a class="dropdown-item" href="legal/aml_policy" data-i18n="nav.amlPolicy">AML Policy</a></li>
-                                    <li><a class="dropdown-item" href="legal/risk_closure" data-i18n="nav.riskClosure">Risk Closure</a></li>
-                                </ul>
-                            </li>
-                            <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false" data-i18n="account">Account</a>
-                                <ul class="dropdown-menu">
-                                    <li><a class="dropdown-item" href="register" data-i18n="nav.register">Sign Up</a></li>
-                                    <li><a class="dropdown-item" href="login" data-i18n="nav.login">Sign In</a></li>
-                                </ul>
-                            </li>
-                        </ul>
-                        <div class="d-flex align-items-center gap-3">
-                            <a href="register" class="btn btn-outline-primary-dark" data-i18n="btn.getStarted">Get started</a>
-                            <div class="dropdown">
-                                <button class="btn btn-outline-primary-dark dropdown-toggle d-flex align-items-center gap-2" type="button" id="languageDropdown" data-bs-toggle="dropdown" aria-expanded="false" style="min-width: 120px;">
-                                    <span id="current-lang-flag">🇺🇸</span>
-                                    <span id="current-lang-code">EN</span>
-                                </button>
-                                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="languageDropdown">
-                                    <li><a class="dropdown-item d-flex align-items-center gap-2" href="#" onclick="changeLanguage('en'); return false;"><span>🇺🇸</span> <span>English</span></a></li>
-                                    <li><a class="dropdown-item d-flex align-items-center gap-2" href="#" onclick="changeLanguage('zh'); return false;"><span>🇨🇳</span> <span>中文 (Chinese)</span></a></li>
-                                    <li><a class="dropdown-item d-flex align-items-center gap-2" href="#" onclick="changeLanguage('hi'); return false;"><span>🇮🇳</span> <span>हिन्दी (Hindi)</span></a></li>
-                                    <li><a class="dropdown-item d-flex align-items-center gap-2" href="#" onclick="changeLanguage('es'); return false;"><span>🇪🇸</span> <span>Español (Spanish)</span></a></li>
-                                    <li><a class="dropdown-item d-flex align-items-center gap-2" href="#" onclick="changeLanguage('fr'); return false;"><span>🇫🇷</span> <span>Français (French)</span></a></li>
-                                    <li><a class="dropdown-item d-flex align-items-center gap-2" href="#" onclick="changeLanguage('ar'); return false;"><span>🇸🇦</span> <span>العربية (Arabic)</span></a></li>
-                                    <li><a class="dropdown-item d-flex align-items-center gap-2" href="#" onclick="changeLanguage('bn'); return false;"><span>🇧🇩</span> <span>বাংলা (Bengali)</span></a></li>
-                                    <li><a class="dropdown-item d-flex align-items-center gap-2" href="#" onclick="changeLanguage('ru'); return false;"><span>🇷🇺</span> <span>Русский (Russian)</span></a></li>
-                                    <li><a class="dropdown-item d-flex align-items-center gap-2" href="#" onclick="changeLanguage('pt'); return false;"><span>🇵🇹</span> <span>Português (Portuguese)</span></a></li>
-                                    <li><a class="dropdown-item d-flex align-items-center gap-2" href="#" onclick="changeLanguage('de'); return false;"><span>🇩🇪</span> <span>Deutsch (German)</span></a></li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </nav>
+  <a class="skip-link" href="#main">Skip to content</a>
 
-        <main class="flex-grow-1">
-            <!-- Hero Section -->
-            <section class="py-10 py-lg-15 bg-primary-dark" data-aos="fade-up-sm" data-aos-delay="50">
-                <div class="container">
-                    <div class="text-center">
-                        <h1 class="mb-3 text-white" data-i18n="help.pageTitle">Help Center</h1>
-                        <p class="mb-4 text-white-50 fs-5" data-i18n="help.subtitle">Find answers to all your questions about TED Brokers</p>
-                        <div class="search-box">
-                            <div class="input-group">
-                                <span class="input-group-text"><i class="fas fa-search"></i></span>
-                                <input type="text" id="helpSearch" class="form-control" placeholder="Search for help..." data-i18n="help.searchPlaceholder" aria-label="Search help articles" onkeyup="filterHelp(event)">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Category Cards -->
-            <section class="py-8 bg-white">
-                <div class="container">
-                    <div class="row g-4" id="helpCategoryCards">
-                        <div class="col-6 col-md-4 col-lg" data-target="section-getting-started">
-                            <div class="help-card" onclick="scrollToSection('section-getting-started')" role="button" tabindex="0">
-                                <i class="fas fa-rocket"></i>
-                                <h6 data-i18n="help.card.gettingStarted">Getting Started</h6>
-                            </div>
-                        </div>
-                        <div class="col-6 col-md-4 col-lg" data-target="section-account">
-                            <div class="help-card" onclick="scrollToSection('section-account')" role="button" tabindex="0">
-                                <i class="fas fa-user-cog"></i>
-                                <h6 data-i18n="help.card.account">Account</h6>
-                            </div>
-                        </div>
-                        <div class="col-6 col-md-4 col-lg" data-target="section-wallet">
-                            <div class="help-card" onclick="scrollToSection('section-wallet')" role="button" tabindex="0">
-                                <i class="fas fa-wallet"></i>
-                                <h6 data-i18n="help.card.wallet">Wallet & Deposits</h6>
-                            </div>
-                        </div>
-                        <div class="col-6 col-md-4 col-lg" data-target="section-withdrawals">
-                            <div class="help-card" onclick="scrollToSection('section-withdrawals')" role="button" tabindex="0">
-                                <i class="fas fa-money-bill-transfer"></i>
-                                <h6 data-i18n="help.card.withdrawals">Withdrawals</h6>
-                            </div>
-                        </div>
-                        <div class="col-6 col-md-4 col-lg" data-target="section-trading">
-                            <div class="help-card" onclick="scrollToSection('section-trading')" role="button" tabindex="0">
-                                <i class="fas fa-copy"></i>
-                                <h6 data-i18n="help.card.trading">Copy Trading</h6>
-                            </div>
-                        </div>
-                        <div class="col-6 col-md-4 col-lg" data-target="section-investments">
-                            <div class="help-card" onclick="scrollToSection('section-investments')" role="button" tabindex="0">
-                                <i class="fas fa-chart-line"></i>
-                                <h6 data-i18n="help.card.investments">Investments</h6>
-                            </div>
-                        </div>
-                        <div class="col-6 col-md-4 col-lg" data-target="section-referrals">
-                            <div class="help-card" onclick="scrollToSection('section-referrals')" role="button" tabindex="0">
-                                <i class="fas fa-share-nodes"></i>
-                                <h6 data-i18n="help.card.referrals">Referrals</h6>
-                            </div>
-                        </div>
-                        <div class="col-6 col-md-4 col-lg" data-target="section-kyc">
-                            <div class="help-card" onclick="scrollToSection('section-kyc')" role="button" tabindex="0">
-                                <i class="fas fa-id-card"></i>
-                                <h6 data-i18n="help.card.kyc">KYC</h6>
-                            </div>
-                        </div>
-                        <div class="col-6 col-md-4 col-lg" data-target="section-support">
-                            <div class="help-card" onclick="scrollToSection('section-support')" role="button" tabindex="0">
-                                <i class="fas fa-headset"></i>
-                                <h6 data-i18n="help.card.support">Support</h6>
-                            </div>
-                        </div>
-                        <div class="col-6 col-md-4 col-lg" data-target="section-security">
-                            <div class="help-card" onclick="scrollToSection('section-security')" role="button" tabindex="0">
-                                <i class="fas fa-shield-halved"></i>
-                                <h6 data-i18n="help.card.security">Security</h6>
-                            </div>
-                        </div>
-                        <div class="col-6 col-md-4 col-lg" data-target="section-dashboard">
-                            <div class="help-card" onclick="scrollToSection('section-dashboard')" role="button" tabindex="0">
-                                <i class="fas fa-gauge-high"></i>
-                                <h6 data-i18n="help.card.dashboard">Dashboard</h6>
-                            </div>
-                        </div>
-                        <div class="col-6 col-md-4 col-lg" data-target="section-ai-assistant">
-                            <div class="help-card" onclick="scrollToSection('section-ai-assistant')" role="button" tabindex="0">
-                                <i class="fas fa-robot"></i>
-                                <h6 data-i18n="help.card.aiAssistant">AI Assistant</h6>
-                            </div>
-                        </div>
-                        <div class="col-6 col-md-4 col-lg" data-target="section-portfolio-explore">
-                            <div class="help-card" onclick="scrollToSection('section-portfolio-explore')" role="button" tabindex="0">
-                                <i class="fas fa-compass"></i>
-                                <h6 data-i18n="help.card.portfolio">Portfolio &amp; Explore</h6>
-                            </div>
-                        </div>
-                        <div class="col-6 col-md-4 col-lg" data-target="section-network">
-                            <div class="help-card" onclick="scrollToSection('section-network')" role="button" tabindex="0">
-                                <i class="fas fa-network-wired"></i>
-                                <h6 data-i18n="help.card.network">Network &amp; Social</h6>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Content Section -->
-            <section class="py-8 bg-light">
-                <div class="container">
-                    <div class="row">
-                        <!-- Sidebar (desktop) -->
-                        <div class="col-lg-3">
-                            <div class="help-sidebar" id="helpSidebar">
-                                <nav class="nav flex-column" id="helpScrollspy">
-                                    <a class="nav-link active" href="#section-getting-started" data-i18n="help.sidebar.gettingStarted">Getting Started</a>
-                                    <a class="nav-link" href="#section-account" data-i18n="help.sidebar.account">Account Management</a>
-                                    <a class="nav-link" href="#section-wallet" data-i18n="help.sidebar.wallet">Wallet & Deposits</a>
-                                    <a class="nav-link" href="#section-withdrawals" data-i18n="help.sidebar.withdrawals">Withdrawals</a>
-                                    <a class="nav-link" href="#section-trading" data-i18n="help.sidebar.trading">Copy Trading</a>
-                                    <a class="nav-link" href="#section-investments" data-i18n="help.sidebar.investments">Investment Plans</a>
-                                    <a class="nav-link" href="#section-referrals" data-i18n="help.sidebar.referrals">Referral Program</a>
-                                    <a class="nav-link" href="#section-kyc" data-i18n="help.sidebar.kyc">KYC & Verification</a>
-                                    <a class="nav-link" href="#section-support" data-i18n="help.sidebar.support">Support & Chat</a>
-                                    <a class="nav-link" href="#section-security" data-i18n="help.sidebar.security">Security</a>
-                                    <a class="nav-link" href="#section-dashboard" data-i18n="help.sidebar.dashboard">Dashboard Overview</a>
-                                    <a class="nav-link" href="#section-ai-assistant" data-i18n="help.sidebar.aiAssistant">AI Assistant</a>
-                                    <a class="nav-link" href="#section-portfolio-explore" data-i18n="help.sidebar.portfolio">Portfolio &amp; Explore</a>
-                                    <a class="nav-link" href="#section-network" data-i18n="help.sidebar.network">Network &amp; Social</a>
-                                </nav>
-                            </div>
-                        </div>
-
-                        <!-- Main Content -->
-                        <div class="col-lg-9">
-                            <div id="helpContent">
-                                <!-- Content sections will be populated by JS -->
-                            </div>
-                            <div class="no-results" id="noResults">
-                                <i class="fas fa-search fa-3x mb-3 text-muted"></i>
-                                <h5>No results found</h5>
-                                <p class="text-muted">Try a different search term</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-        </main>
-
-        <!-- Footer -->
-        <footer class="footer py-8 bg-dark text-white">
-            <div class="container">
-                <div class="row">
-                    <div class="col-md-3 mb-4">
-                        <h5 class="mb-3">TED Brokers</h5>
-                        <p data-i18n="footer.tagline">Your trusted partner in copy trading. We connect investors with top-performing traders to help you achieve your financial goals.</p>
-                    </div>
-                    <div class="col-md-3 mb-4">
-                        <h6 class="mb-3" data-i18n="footer.contactUs">Contact Us</h6>
-                        <ul class="list-unstyled">
-                            <li class="mb-2">
-                                <i class="fas fa-map-marker-alt me-2"></i>
-                                <span data-i18n="contactUs.address">330 Hudson Street, 12th Floor<br>New York, NY 10013</span>
-                            </li>
-                            <li class="mb-2">
-                                <i class="fas fa-phone me-2"></i>
-                                <a href="tel:+13322208968" class="text-white-50" data-i18n="contactUs.phone">+1 (332) 220-8968</a>
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="col-md-2 mb-4">
-                        <h6 class="mb-3" data-i18n="footer.company">Company</h6>
-                        <ul class="list-unstyled">
-                            <li><a href="about-us" class="text-white-50" data-i18n="nav.about">About Us</a></li>
-                            <li><a href="contact-us" class="text-white-50" data-i18n="footer.contact">Contact</a></li>
-                            <li><a href="faqs" class="text-white-50" data-i18n="nav.faq">FAQs</a></li>
-                        </ul>
-                    </div>
-                    <div class="col-md-2 mb-4">
-                        <h6 class="mb-3" data-i18n="footer.resources">Resources</h6>
-                        <ul class="list-unstyled">
-                            <li><a href="investors" class="text-white-50" data-i18n="nav.investors">Investors</a></li>
-                            <li><a href="traders" class="text-white-50" data-i18n="nav.traders">Traders</a></li>
-                            <li><a href="how_it_works" class="text-white-50" data-i18n="nav.howItWorks">How It Works</a></li>
-                        </ul>
-                    </div>
-                    <div class="col-md-2 mb-4">
-                        <h6 class="mb-3" data-i18n="footer.legal">Legal</h6>
-                        <ul class="list-unstyled">
-                            <li><a href="legal/privacy_policy" class="text-white-50" data-i18n="nav.privacyPolicy">Privacy Policy</a></li>
-                            <li><a href="legal/terms_conditions" class="text-white-50" data-i18n="nav.termsConditions">Terms & Conditions</a></li>
-                            <li><a href="legal/aml_policy" class="text-white-50" data-i18n="nav.amlPolicy">AML Policy</a></li>
-                            <li><a href="legal/risk_closure" class="text-white-50" data-i18n="footer.riskDisclosure">Risk Disclosure</a></li>
-                        </ul>
-                    </div>
-                </div>
-                <hr class="my-4 bg-white-50" />
-                <div class="row">
-                    <div class="col-md-12 text-center">
-                        <p class="mb-0" data-i18n="footer.copyright">&copy; 2025 TED Brokers. All rights reserved.</p>
-                    </div>
-                </div>
-            </div>
-        </footer>
-    </div>
-
-    <script src="assets/templates/copytradingbroker/frontend/js/plugins.js"></script>
-    <script src="assets/templates/copytradingbroker/frontend/js/main.js"></script>
-
-    <div id="zzzz"></div>
-
-    <div class="gtranslate_wrapper"></div>
-    <script>
-        window.gtranslateSettings = {
-            default_language: "en",
-            alt_flags:{"en":"usa"},
-            wrapper_selector: ".gtranslate_wrapper",
-            flag_style: "3d",
-        };
-    </script>
-    <script src="../cdn.gtranslate.net/widgets/latest/float.js" defer></script>
-
-    <script>
-// Help content data
-const helpSections = [
-    {
-        id: 'section-getting-started',
-        title: 'Getting Started',
-        icon: 'fa-rocket',
-        items: [
-            {
-                q: 'What is TED Brokers?',
-                a: '<p>TED Brokers is a copy trading platform that allows users to mirror the trades of experienced and successful traders in real-time. It\'s an excellent way for beginners to participate in financial markets without needing deep trading knowledge. All trading is conducted transparently, and users can view trader performance metrics before selecting someone to follow. Our platform supports a variety of financial instruments including forex, cryptocurrencies, indices, and commodities.</p>'
-            },
-            {
-                q: 'How do I create an account?',
-                a: '<p>Creating an account is quick and straightforward. Click the "Get started" button on the homepage or navigate to the Sign Up page. Enter your full name, email address, username, and a strong password. After submitting, you\'ll receive a verification code via email — enter this code to activate your account. Once verified, you can log in and start exploring the platform.</p>'
-            },
-            {
-                q: 'How do I log in?',
-                a: '<p>Visit the Sign In page and enter your registered email/username and password. If you have two-factor authentication (2FA) enabled, you\'ll be prompted to enter a verification code sent to your email after entering your credentials. You can also use Google OAuth for a faster login experience.</p>'
-            },
-            {
-                q: 'What is Google OAuth and how do I use it?',
-                a: '<p>Google OAuth lets you sign in using your Google account instead of creating a separate password. On the login page, click "Sign in with Google" and authorize TED Brokers to access your basic account information. After your first Google login, you\'ll be prompted to create a password for your TED Brokers account for future non-OAuth access.</p>'
-            },
-            {
-                q: 'I didn\'t receive my verification email — what now?',
-                a: '<p>First, check your spam or junk folder. If it\'s not there, ensure you entered the correct email address. You can request a new verification code by clicking "Resend code" on the verification page. If the problem persists, contact our support team through the in-app chat or the Contact Us page.</p>'
-            },
-            {
-                q: 'How does 2FA work during login?',
-                a: '<p>Two-factor authentication (2FA) adds an extra layer of security to your account. When enabled, after entering your password correctly, a one-time verification code is sent to your registered email address. You must enter this code to complete the login. This ensures that even if someone has your password, they cannot access your account without access to your email.</p>'
-            }
-        ]
-    },
-    {
-        id: 'section-account',
-        title: 'Account Management',
-        icon: 'fa-user-cog',
-        items: [
-            {
-                q: 'How do I update my profile?',
-                a: '<p>Log in to your dashboard and navigate to your profile settings. From there you can update your name, phone number, gender, country, and other personal details. Click "Save" to apply your changes. Some information may require reverification for security purposes.</p>'
-            },
-            {
-                q: 'How do I change my password?',
-                a: '<p>Go to your account security settings from the dashboard. Enter your current password, then your new password (twice for confirmation). Your new password should be at least 8 characters with a mix of letters, numbers, and symbols. For enhanced security, a verification code may be sent to your email to confirm the change.</p>'
-            },
-            {
-                q: 'How do I change my email address?',
-                a: '<p>To change your email, go to your account settings and select "Update Email". Enter your new email address. A verification code will be sent to your current email to authorize the change, followed by a verification code to your new email to confirm ownership. Both steps must be completed to update your email.</p>'
-            },
-            {
-                q: 'How do I delete my account?',
-                a: '<p>Account deletion is available from your account settings. Please note that this action is irreversible — all your data, investments, and transaction history will be permanently removed. Ensure you have withdrawn any remaining funds before initiating deletion. You may need to verify your identity via email 2FA to complete the process.</p>'
-            },
-            {
-                q: 'Viewing my login history',
-                a: '<p>Your login history is accessible from the security section of your dashboard. It displays recent login attempts including date, time, IP address, device/browser information, and approximate location. This helps you monitor for any unauthorized access attempts. If you notice suspicious activity, change your password immediately and contact support.</p>'
-            }
-        ]
-    },
-    {
-        id: 'section-wallet',
-        title: 'Wallet & Deposits',
-        icon: 'fa-wallet',
-        items: [
-            {
-                q: 'How do I check my wallet balance?',
-                a: '<p>Your wallet balance is displayed prominently on your dashboard after logging in. It shows your available balance (funds ready for trading or withdrawal) and may also show any pending deposits or amounts allocated to active investments. Transaction history is available in the wallet section for detailed tracking.</p>'
-            },
-            {
-                q: 'How do I make a deposit?',
-                a: '<p>From your dashboard, navigate to the Deposit section. Choose your preferred payment method: <strong>Bank Transfer</strong> — transfer funds to the provided bank account details; <strong>Cryptocurrency</strong> — send crypto to the displayed wallet address (scan the QR code for accuracy); <strong>PayPal</strong> — follow the PayPal payment link. Enter the amount and submit. Your deposit will be processed once confirmed by our finance team.</p>'
-            },
-            {
-                q: 'What are the minimum and maximum deposit amounts?',
-                a: '<p>Minimum deposit amounts vary by payment method and are displayed on the deposit page. Generally, the minimum deposit starts from as low as $50 for crypto and bank transfers. Maximum limits may apply per transaction for security purposes. Contact support if you need to arrange a large deposit.</p>'
-            },
-            {
-                q: 'How long do deposits take to process?',
-                a: '<p>Cryptocurrency deposits are typically credited after 1-3 network confirmations (usually within 30-60 minutes). Bank transfers may take 1-3 business days depending on your bank. PayPal deposits are processed within 24 hours. Once received and verified by our finance team, the funds are credited to your trading wallet.</p>'
-            },
-            {
-                q: 'Viewing my transaction history',
-                a: '<p>Your complete transaction history is available in the wallet section of your dashboard. You can filter by transaction type (deposit, withdrawal, investment, referral bonus), date range, and status (pending, completed, rejected). Each entry shows the amount, date, method, and current status.</p>'
-            }
-        ]
-    },
-    {
-        id: 'section-withdrawals',
-        title: 'Withdrawals',
-        icon: 'fa-money-bill-transfer',
-        items: [
-            {
-                q: 'How do I add a bank account for withdrawal?',
-                a: '<p>Go to the Withdrawal section and select "Bank Accounts". Click "Add Bank Account" and enter your bank details: account holder name, bank name, account number, routing number (for US banks), SWIFT/BIC code (for international), and the bank\'s address. You can add multiple bank accounts and designate one as primary. All bank details are stored securely.</p>'
-            },
-            {
-                q: 'How do I add a crypto address for withdrawal?',
-                a: '<p>In the Withdrawal section, select "Crypto Addresses". Click "Add Address" and choose the cryptocurrency (e.g., BTC, USDT, ETH). Paste the wallet address carefully — crypto transactions are irreversible. Double-check the address before saving. You can store multiple addresses and set a primary one for faster withdrawals.</p>'
-            },
-            {
-                q: 'How do I request a withdrawal?',
-                a: '<p>Navigate to the Withdrawal section, select your withdrawal method (bank account or crypto address), enter the amount you wish to withdraw (must not exceed your available balance), and submit your request. For security, a 2-step verification process will be triggered — a code will be sent to your email. Enter this code to confirm and finalize the withdrawal request.</p>'
-            },
-            {
-                q: 'What is the 2-step verification for withdrawals?',
-                a: '<p>The 2-step verification adds an extra layer of protection to your withdrawals. After submitting a withdrawal request, a one-time verification code is sent to your registered email address. You must enter this code on the verification page to confirm the withdrawal. This ensures that even if someone gains access to your account, they cannot withdraw funds without email access.</p>'
-            },
-            {
-                q: 'How long do withdrawals take?',
-                a: '<p>Withdrawal requests are reviewed and processed by our finance team typically within 24 hours. Once approved, bank transfers may take 1-3 business days to appear in your account depending on your bank. Cryptocurrency withdrawals are processed within 24 hours and depend on network confirmation times. Processing times may vary during weekends and public holidays.</p>'
-            }
-        ]
-    },
-    {
-        id: 'section-trading',
-        title: 'Copy Trading',
-        icon: 'fa-copy',
-        items: [
-            {
-                q: 'What is copy trading?',
-                a: '<p>Copy trading allows you to automatically mirror the trades of experienced traders (called Expert Traders) in real-time. When the trader you\'re following opens or closes a trade, the same action is replicated in your account proportionally based on your investment size. This allows beginners to benefit from the expertise of seasoned traders without needing to analyze markets themselves.</p>'
-            },
-            {
-                q: 'How do I select an expert trader?',
-                a: '<p>Browse the Traders section from your dashboard to view a list of available Expert Traders. Each trader displays key performance metrics including win rate, total returns, number of copiers, risk score, and drawdown percentage. Review these metrics carefully, then click "Select" or "Follow" on the trader you wish to copy. You can follow multiple traders simultaneously to diversify your strategy.</p>'
-            },
-            {
-                q: 'How do I unselect a trader?',
-                a: '<p>Go to your selected traders list from your dashboard. Find the trader you want to stop copying and click "Unselect" or "Stop Copying". Any existing copied positions may be closed based on your account settings. You can always reselect a trader later if you change your mind.</p>'
-            },
-            {
-                q: 'Understanding trader metrics',
-                a: '<p><strong>Win Rate</strong> — percentage of profitable trades out of total trades. <strong>YTD Return</strong> — year-to-date percentage return on investment. <strong>Risk Score</strong> — a rating (typically 1-10) indicating the trader\'s risk level. <strong>Drawdown</strong> — the maximum decline from peak value, showing potential downside risk. <strong>Copiers</strong> — number of users currently following this trader. Higher copier counts generally indicate more trust but aren\'t a guarantee of future performance.</p>'
-            },
-            {
-                q: 'How are trades generated?',
-                a: '<p>Trades on Expert Traders are generated through our automated trading simulation system, which creates realistic trade signals based on market conditions and the trader\'s strategy profile. Each trader has a unique strategy with defined parameters for entry, exit, risk management, and asset selection. This simulation creates a dynamic trading environment for copiers to experience real-market-like performance.</p>'
-            }
-        ]
-    },
-    {
-        id: 'section-investments',
-        title: 'Investment Plans',
-        icon: 'fa-chart-line',
-        items: [
-            {
-                q: 'What investment plans are available?',
-                a: '<p>TED Brokers offers four categories of investment plans: <strong>General Investment Plans</strong> — standard plans with fixed minimum investments, holding periods, and expected returns. <strong>ETF Plans</strong> — diversified exchange-traded fund portfolios categorized as conservative, moderate, or aggressive. <strong>DeFi Plans</strong> — decentralized finance portfolios with various risk-return profiles. <strong>Options Plans</strong> — options trading strategies for beginner to expert levels.</p>'
-            },
-            {
-                q: 'How do I invest in a plan?',
-                a: '<p>Navigate to the Plans or Investments section from your dashboard. Browse available plans, review their details (minimum investment, duration, expected returns, risk level), and select one that matches your goals. Click "Invest" or "Activate", enter the amount you wish to invest (must meet the minimum requirement), and confirm. The investment amount is deducted from your wallet balance.</p>'
-            },
-            {
-                q: 'How do I track my portfolio performance?',
-                a: '<p>Your investment portfolio is accessible from the Portfolio section of your dashboard. It shows all active investments with key metrics: amount invested, current value, profit/loss (P&L), percentage return, time remaining, and a visual progress bar. You can view individual investment details by clicking on any entry for a more detailed breakdown.</p>'
-            }
-        ]
-    },
-    {
-        id: 'section-referrals',
-        title: 'Referral Program',
-        icon: 'fa-share-nodes',
-        items: [
-            {
-                q: 'How does the referral program work?',
-                a: '<p>Our referral program rewards you for inviting friends and family to join TED Brokers. When someone signs up using your unique referral link or code and meets the program conditions (e.g., makes a minimum deposit), both you and your referral receive a bonus. There\'s no limit to how many people you can refer.</p>'
-            },
-            {
-                q: 'How do I get my referral link?',
-                a: '<p>Your unique referral link is available in the Referral section of your dashboard. Copy your referral link or share your referral code directly. You can share it via social media, email, or messaging apps. When someone registers using your link or enters your code during signup, they are linked to your referral account.</p>'
-            },
-            {
-                q: 'How do I submit a referral code?',
-                a: '<p>During the registration process, you\'ll be given the option to enter a referral code. You can also submit a referral code later from your account settings. Enter the code exactly as provided by the person who referred you, and the referral bonus will be credited once the conditions are met.</p>'
-            },
-            {
-                q: 'What are the referral bonuses?',
-                a: '<p>Referral bonuses vary based on current promotions and program configuration. Check the Referral section in your dashboard for specific bonus amounts and conditions. Bonuses are typically credited to your wallet after the referred user completes qualifying actions such as account verification and minimum deposit.</p>'
-            }
-        ]
-    },
-    {
-        id: 'section-kyc',
-        title: 'KYC & Verification',
-        icon: 'fa-id-card',
-        items: [
-            {
-                q: 'What is KYC and why is it required?',
-                a: '<p>KYC (Know Your Customer) is a standard verification process required by financial regulations worldwide. It helps prevent fraud, money laundering, and other illegal activities. To use TED Brokers\' full features including deposits, withdrawals, and copy trading, you must complete the KYC process by verifying your identity and address.</p>'
-            },
-            {
-                q: 'How do I complete the onboarding wizard?',
-                a: '<p>After your first login, you\'ll be guided through the onboarding wizard. It has three steps: <strong>Personal Information</strong> — enter your full name, date of birth, nationality, and phone number. <strong>Address</strong> — provide your residential address details. <strong>Document Upload</strong> — upload a clear photo or scan of your government-issued ID (passport, driver\'s license, or national ID card) and a recent utility bill or bank statement as proof of address.</p>'
-            },
-            {
-                q: 'What documents do I need to upload?',
-                a: '<p>You need to provide: (1) A valid government-issued photo ID — passport, driver\'s license, or national identity card. (2) A proof of address document — utility bill (electricity, water, gas), bank statement, or government-issued document showing your name and address, dated within the last 3 months. All documents should be clear, legible, and in color.</p>'
-            },
-            {
-                q: 'Investment questionnaire — what is it?',
-                a: '<p>As part of the onboarding process, you\'ll be asked to complete a short investment questionnaire. This helps us assess your trading experience, risk tolerance, investment goals, income source, and employment status. Your answers help us recommend suitable investment products and ensure compliance with financial regulations.</p>'
-            },
-            {
-                q: 'How long does KYC verification take?',
-                a: '<p>KYC verification is typically processed within 1-2 business days after you submit all required documents. You\'ll receive an email notification once your verification is approved or if additional documents are needed. You can check your verification status at any time from your dashboard\'s onboarding section.</p>'
-            }
-        ]
-    },
-    {
-        id: 'section-support',
-        title: 'Support & Chat',
-        icon: 'fa-headset',
-        items: [
-            {
-                q: 'How do I contact support?',
-                a: '<p>You can reach our support team through multiple channels: (1) <strong>In-app chat</strong> — use the chat widget available on every page to message our support agents directly. (2) <strong>Contact Us page</strong> — fill out the contact form with your name, email, and message. (3) <strong>Email</strong> — send your inquiry to our support email address. Our team aims to respond within 24 hours during business days.</p>'
-            },
-            {
-                q: 'How does the in-app chat work?',
-                a: '<p>The chat widget is located at the bottom of your screen. Click it to open a conversation with our support team. Your messages are linked to your account, so agents can see your account details to assist you faster. You\'ll receive real-time replies when agents are online, and messages are saved for your reference.</p>'
-            },
-            {
-                q: 'Checking my message history',
-                a: '<p>Your chat history is preserved in the conversation thread. When you reopen the chat widget, your previous messages and agent replies are displayed. If you\'ve closed a conversation, you can start a new one while the old conversation remains archived for reference.</p>'
-            },
-            {
-                q: 'Response times and availability',
-                a: '<p>Our support team is available during business hours (Monday to Friday, 9 AM — 6 PM EST). Response times are typically within a few hours during business hours. For urgent issues, the in-app chat provides the fastest response. Messages sent outside business hours will be addressed on the next business day.</p>'
-            }
-        ]
-    },
-    {
-        id: 'section-security',
-        title: 'Security',
-        icon: 'fa-shield-halved',
-        items: [
-            {
-                q: 'How does 2FA protect my account?',
-                a: '<p>Two-factor authentication (2FA) adds an essential security layer. Even if your password is compromised, an attacker cannot access your account without the verification code sent to your email. 2FA is required for sensitive actions including login from new devices, withdrawal requests, password changes, and email updates. We recommend keeping 2FA enabled at all times.</p>'
-            },
-            {
-                q: 'How are my withdrawals secured?',
-                a: '<p>Withdrawals are protected by a 2-step verification process. After submitting a withdrawal request, you must enter a one-time code sent to your registered email before the withdrawal is processed. Additionally, our finance team reviews all withdrawal requests manually to verify their legitimacy before approval.</p>'
-            },
-            {
-                q: 'Suspicious activity detection',
-                a: '<p>Our platform monitors login attempts and account activity for suspicious patterns. If we detect a login from a new device, unfamiliar IP address, or different geographic location, a security alert is triggered. You\'ll receive an email notification about the new login, and additional verification may be required. Check your login history regularly from the security section of your dashboard.</p>'
-            },
-            {
-                q: 'Tips for keeping my account safe',
-                a: '<p><strong>Use a strong password</strong> — at least 12 characters with mixed case, numbers, and symbols. Never reuse passwords across sites. <strong>Keep 2FA enabled</strong> — always maintain two-factor authentication. <strong>Monitor login history</strong> — check regularly for unauthorized access. <strong>Never share credentials</strong> — TED Brokers will never ask for your password. <strong>Log out after use</strong> — especially on shared devices. <strong>Keep your email secure</strong> — your registered email is the key to account recovery.</p>'
-            }
-        ]
-    },
-    {
-        id: 'section-dashboard',
-        title: 'Dashboard Overview',
-        icon: 'fa-gauge-high',
-        items: [
-            {
-                q: 'What is the Dashboard?',
-                a: '<p>The Dashboard is your central hub after logging into TED Brokers. It provides a comprehensive overview of your account, market data, and quick access to all platform features. The dashboard displays a welcome message with your name, stat boxes showing key metrics, quick action buttons, a real-time market chart, your active investments, and recent activity.</p>'
-            },
-            {
-                q: 'Understanding the Stat Boxes',
-                a: '<p>The dashboard displays four key metric boxes at the top:<br><br><strong>Portfolio Value</strong> — The total current value of all your investments and copied trading positions.<br><strong>Active Copies</strong> — The number of Expert Traders you are currently copying.<br><strong>Total Return</strong> — Your overall percentage return on all investments.<br><strong>Wallet Balance</strong> — Your available funds ready for trading or withdrawal. Click "Manage Wallet" to go directly to the Wallet section.</p>'
-            },
-            {
-                q: 'What are Quick Actions?',
-                a: '<p>Quick Actions provide one-click access to common tasks:<br><br><strong>Start Robo Advisor</strong> — Navigate directly to Investment Plans to browse and invest in automated strategies.<br><strong>Deposit Funds</strong> — Open the deposit modal to add funds via bank transfer, cryptocurrency, or PayPal.<br><strong>Browse Traders</strong> — View available Expert Traders and their performance metrics to find traders to copy.</p>'
-            },
-            {
-                q: 'How does the Market Overview Chart work?',
-                a: '<p>The Market Overview Chart is powered by TradingView and displays real-time market data. You can interact with the chart to view different timeframes, add technical indicators (such as SMA), and change the trading symbol. The chart updates automatically to show current market conditions, helping you make informed decisions about your investments.</p>'
-            },
-            {
-                q: 'What is Recent Activity?',
-                a: '<p>The Recent Activity section displays your latest trading actions, including copy trades executed, deposits made, withdrawals processed, and investment changes. This helps you track what has happened with your account. When there is no activity, a message will indicate that you can start copy trading to see activity here.</p>'
-            },
-            {
-                q: 'How do Notifications work?',
-                a: '<p>Notifications appear at the top of the dashboard to alert you about important account events. There are four types:<br><br><strong>Info (blue)</strong> — General information about your account or platform updates.<br><strong>Success (green)</strong> — Confirmation of completed actions like successful deposits.<br><strong>Warning (orange)</strong> — Attention needed, such as pending verifications.<br><strong>Error (red)</strong> — Issues requiring immediate action, like failed transactions.<br><br>Each notification can be dismissed by clicking the X button.</p>'
-            }
-        ]
-    },
-    {
-        id: 'section-ai-assistant',
-        title: 'AI Assistant (TED AI)',
-        icon: 'fa-robot',
-        items: [
-            {
-                q: 'What is TED AI?',
-                a: '<p>TED AI is an AI-powered chat assistant built into the TED Brokers dashboard. Located in the left panel, it provides instant platform guidance, account help, and trading tips. TED AI is available 24/7 and can answer questions about features, help you navigate the platform, and provide general trading education.</p>'
-            },
-            {
-                q: 'How do I access TED AI?',
-                a: '<p>TED AI is located in the left panel of the dashboard. On desktop, the panel is always visible. To expand or collapse it, click the chevron toggle button at the top of the panel. On mobile devices, the panel is hidden by default — tap the menu icon to access it. Type your message in the input field at the bottom of the panel and press Enter or click the send button.</p>'
-            },
-            {
-                q: 'What can TED AI help with?',
-                a: '<p>TED AI can assist with:<br><br><strong>Platform Navigation</strong> — Explaining where to find features and how to use them.<br><strong>Account Setup</strong> — Guidance on profile configuration, security settings, and verification.<br><strong>Investment Guidance</strong> — Helping you understand different investment plans and strategies.<br><strong>Troubleshooting</strong> — Solving common issues with deposits, withdrawals, or account access.<br><strong>Trading Education</strong> — General explanations of copy trading, market concepts, and risk management.</p>'
-            },
-            {
-                q: 'What are the conversation features?',
-                a: '<p>TED AI provides a seamless chat experience:<br><br><strong>Color-coded Messages</strong> — Your messages appear in red, AI responses in dark gray for easy distinction.<br><strong>Typing Indicator</strong> — Animated dots show when TED AI is processing your request.<br><strong>Session History</strong> — Your conversation is maintained during the session, so you can scroll back through previous messages.<br><strong>Real-time Responses</strong> — Get instant answers without leaving the dashboard.</p>'
-            },
-            {
-                q: 'Tips for using TED AI effectively',
-                a: '<p>For the best experience with TED AI:<br><br><strong>Be Specific</strong> — Ask direct questions like "How do I deposit funds?" rather than vague queries.<br><strong>Follow Up</strong> — If an answer needs clarification, ask follow-up questions.<br><strong>Quick Guidance</strong> — Use TED AI for platform navigation and feature explanations.<br><strong>Account Issues</strong> — For sensitive account matters, also contact human support via the chat widget for additional security.<br><strong>Learning</strong> — Ask TED AI to explain trading concepts you encounter on the platform.</p>'
-            }
-        ]
-    },
-    {
-        id: 'section-portfolio-explore',
-        title: 'Portfolio & Explore',
-        icon: 'fa-compass',
-        items: [
-            {
-                q: 'What is the Portfolio section?',
-                a: '<p>The Portfolio section allows you to track all your investments in one place. Access it via the Portfolio menu in the sidebar. It contains three subsections: Automated Calls (AI-driven trading), Active Copies (traders you\'re copying), and Performance (analytics and returns). This gives you a complete view of your investment activity.</p>'
-            },
-            {
-                q: 'What are Automated Calls?',
-                a: '<p>Automated Calls is an AI-driven trading feature that generates trade signals based on market conditions. You can view and manage your automated trade signals, track their performance, and adjust your strategy. This feature helps you participate in markets without manual trading.</p>'
-            },
-            {
-                q: 'How do I view Active Copies?',
-                a: '<p>The Active Copies section shows all the Expert Traders you are currently copying. For each trader, you can see individual copy performance, including profit/loss and return percentage. You can stop copying a trader directly from this section by clicking the "Stop Copying" button.</p>'
-            },
-            {
-                q: 'How does Performance Analytics work?',
-                a: '<p>Performance Analytics tracks your profit/loss (P&L) across all investments. You can view historical performance charts showing returns over time, analyze returns by different time periods (daily, weekly, monthly), and identify which investments are performing best. This helps you make data-driven decisions about your portfolio.</p>'
-            },
-            {
-                q: 'What is the Robo Advisor?',
-                a: '<p>The Robo Advisor (Investment Plans) section displays General Investment Plans available on the platform. Browse plans to view details including minimum investment amount, holding duration, expected returns, and risk level. You can invest directly from this section by selecting a plan and entering your investment amount. Active plan progress is shown with visual indicators tracking your returns.</p>'
-            },
-            {
-                q: 'What is ETF Automation?',
-                a: '<p>ETF Automation offers Exchange Traded Fund portfolios for diversified investing. Choose from three strategy types based on your risk tolerance:<br><br><strong>Conservative</strong> — Lower risk, steady returns<br><strong>Moderate</strong> — Balanced risk and growth<br><strong>Aggressive</strong> — Higher risk, higher potential returns<br><br>The section includes a TradingView market overview widget showing real-time ETF data.</p>'
-            },
-            {
-                q: 'What is DeFi Automation?',
-                a: '<p>DeFi Automation provides Decentralized Finance copy trading strategies. You can copy trades from professional DeFi traders with various risk profiles:<br><br><strong>Conservative</strong> — Lower risk DeFi strategies<br><strong>Moderate</strong> — Balanced DeFi approach<br><strong>Aggressive</strong> — Higher risk, higher reward<br><strong>Balanced</strong> — Mix of strategies<br><br>A cryptocurrency market overview shows current crypto prices and trends.</p>'
-            },
-            {
-                q: 'What is Options Automation?',
-                a: '<p>Options Automation offers options trading strategies for different skill levels. Whether you\'re a beginner or expert, you can find suitable options plans. Browse available strategies, view their risk-return profiles, and invest in options that match your goals and experience level.</p>'
-            },
-            {
-                q: 'What is Staking?',
-                a: '<p>Staking allows you to earn rewards by locking up your assets for a period of time. View available staking plans with their Annual Percentage Yield (APY) rates. Track your staking rewards as they accumulate. Staking is a way to earn passive income on assets you plan to hold long-term.</p>'
-            }
-        ]
-    },
-    {
-        id: 'section-network',
-        title: 'Network & Social',
-        icon: 'fa-network-wired',
-        items: [
-            {
-                q: 'How do I browse Traders?',
-                a: '<p>The Traders section displays all available Expert Traders on the platform. For each trader, you can view key performance metrics including Win Rate (percentage of profitable trades), YTD Return (year-to-date returns), Risk Score (1-10 risk rating), and number of Copiers. Click on a trader to view their full profile, strategy description, and recent trades. Select "Copy" to start mirroring their trades.</p>'
-            },
-            {
-                q: 'What are Recent Trades?',
-                a: '<p>The Recent Trades section shows the latest trading activity across the platform. You can see what other traders are doing in real-time, including which assets they\'re trading, their position sizes, and whether they\'re going long or short. This helps you identify market trends and discover new trading opportunities.</p>'
-            },
-            {
-                q: 'What are Posts?',
-                a: '<p>Posts are community updates shared by Expert Traders and the TED Brokers team. Traders can share market insights, trading strategies, and commentary on current market conditions. This social feature helps you stay informed about market trends and learn from experienced traders\' perspectives.</p>'
-            },
-            {
-                q: 'How do I use Search?',
-                a: '<p>The Search bar is located in the top app bar. Click on it and type to find features, pages, and content quickly. Results appear in a dropdown as you type. You can search for specific features like "deposit", "traders", or "settings" to navigate directly to the relevant section. This saves time when looking for specific functionality.</p>'
-            },
-            {
-                q: 'How do I enable Dark Mode?',
-                a: '<p>Dark Mode reduces eye strain and provides a sleek alternative interface. To toggle Dark Mode, click the sun/moon icon in the app bar. Your preference is saved automatically and will be remembered for future sessions. The dark theme changes the dashboard background, cards, and text colors while maintaining readability.</p>'
-            },
-            {
-                q: 'How do I change the language?',
-                a: '<p>TED Brokers supports 10 languages. To switch languages, click the flag icon in the app bar to open the language selector. Choose from:<br><br>English, Chinese (中文), Hindi (हिन्दी), Spanish (Español), French (Français), Arabic (العربية), Bengali (বাংলা), Russian (Русский), Portuguese (Português), German (Deutsch)<br><br>Your language preference is saved and applies across the entire platform.</p>'
-            }
-        ]
-    }
-];
-
-// Render help content
-function renderHelpContent() {
-    const container = document.getElementById('helpContent');
-    container.innerHTML = helpSections.map(section => `
-        <div class="help-section mb-6" id="${section.id}">
-            <h2 class="mb-4"><i class="fas ${section.icon}"></i> ${section.title}</h2>
-            <div class="accordion" id="accordion-${section.id}">
-                ${section.items.map((item, idx) => `
-                    <div class="accordion-item help-item">
-                        <h2 class="accordion-header" id="heading-${section.id}-${idx}">
-                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-${section.id}-${idx}" aria-expanded="false" aria-controls="collapse-${section.id}-${idx}">
-                                ${item.q}
-                            </button>
-                        </h2>
-                        <div id="collapse-${section.id}-${idx}" class="accordion-collapse collapse" aria-labelledby="heading-${section.id}-${idx}" data-bs-parent="#accordion-${section.id}">
-                            <div class="accordion-body">
-                                ${item.a}
-                            </div>
-                        </div>
-                    </div>
-                `).join('')}
-            </div>
+  <!-- ============ Header ============ -->
+  <header class="site-header surface-ink">
+    <div class="container site-header__bar">
+      <a class="wordmark" href="index.html" aria-label="TED Brokers home">
+        <span class="wordmark__ted">TED</span><span class="wordmark__brokers">Br<svg class="wordmark__o" viewBox="0 0 20 20" aria-hidden="true"><g fill="currentColor"><circle cx="10" cy="2" r="1.6"/><circle cx="15.2" cy="4.1" r="1.4" opacity=".8"/><circle cx="17.9" cy="9.4" r="1.6"/><circle cx="16.3" cy="14.8" r="1.4" opacity=".8"/><circle cx="11.2" cy="17.9" r="1.6"/><circle cx="5.6" cy="16.4" r="1.4" opacity=".7"/><circle cx="2.2" cy="11.6" r="1.6"/><circle cx="3" cy="6" r="1.4" opacity=".8"/><circle cx="6.6" cy="2.9" r="1.1" opacity=".6"/><circle cx="10" cy="10" r="1.9"/><circle cx="13.3" cy="9.2" r="1" opacity=".7"/><circle cx="7.4" cy="12" r="1" opacity=".7"/></g></svg>kers</span>
+      </a>
+      <button class="icon-btn nav-toggle" type="button" data-nav-toggle aria-expanded="false" aria-controls="site-nav" aria-label="Menu">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h10"/></svg>
+      </button>
+      <nav class="site-nav" id="site-nav" aria-label="Main">
+        <ul class="site-nav__links" role="list">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="how_it_works.html">Trading platform</a></li>
+          <li><a href="traders.html">Copy trading</a></li>
+          <li><a href="about-us.html">Company</a></li>
+          <li><a href="help.html" aria-current="page">Help</a></li>
+        </ul>
+        <div class="site-nav__actions">
+          <a class="site-nav__signin" href="login.html">Sign in</a>
+          <a class="btn btn--sm" href="register.html">Get started
+            <svg class="btn__arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </a>
         </div>
-    `).join('');
-}
+      </nav>
+    </div>
+  </header>
 
-// Scroll to section helper
-function scrollToSection(id) {
-    const el = document.getElementById(id);
-    if (el) {
-        el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
-}
+  <main id="main">
+    <!-- ============ Hero + search ============ -->
+    <section class="hero hero--compact surface-ink section" aria-labelledby="hero-title">
+      <div class="mesh" aria-hidden="true"><span></span></div>
+      <div class="grid-lines" aria-hidden="true"></div>
+      <div class="container help-hero">
+        <p class="overline overline--signal" data-reveal><span class="live-dot"></span> Help center</p>
+        <h1 class="page-hero__title help-hero__title" id="hero-title" data-reveal style="--i:1">How can we help?</h1>
 
-// Search filter
-function filterHelp(e) {
-    const query = e.target.value.toLowerCase().trim();
-    const items = document.querySelectorAll('.help-item');
-    const sections = document.querySelectorAll('.help-section');
-    let anyVisible = false;
+        <form class="help-search" role="search" action="help.html#faq" method="get" data-component="help-search" data-target="faq-list" data-reveal style="--i:2">
+          <label class="sr-only" for="help-q">Search help articles</label>
+          <div class="help-search__control">
+            <svg class="help-search__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+            <input class="help-search__input" id="help-q" name="q" type="search" placeholder="Search deposits, orders, statements, 2FA…" autocomplete="off" spellcheck="false" enterkeyhint="search" aria-describedby="help-q-status">
+            <button class="help-search__submit" type="submit">Search</button>
+          </div>
+          <p class="help-search__status" id="help-q-status" role="status" aria-live="polite" data-search-status></p>
+          <div class="help-popular">
+            <span class="overline" id="popular-label">Popular</span>
+            <ul class="help-popular__list" role="list" aria-labelledby="popular-label">
+              <li><a href="help.html?q=Fund+wallet#faq" data-search-term="Fund wallet">Fund wallet</a></li>
+              <li><a href="help.html?q=Withdraw+funds#faq" data-search-term="Withdraw funds">Withdraw funds</a></li>
+              <li><a href="help.html?q=Order+types#faq" data-search-term="Order types">Order types</a></li>
+              <li><a href="help.html?q=Enable+2FA#faq" data-search-term="Enable 2FA">Enable 2FA</a></li>
+            </ul>
+          </div>
+        </form>
+      </div>
+    </section>
 
-    items.forEach(item => {
-        const text = item.textContent.toLowerCase();
-        const match = !query || text.includes(query);
-        item.style.display = match ? '' : 'none';
-        if (match) anyVisible = true;
-    });
+    <!-- ============ FAQ ============ -->
+    <section class="section surface-paper" id="faq" aria-label="Frequently asked questions">
+      <div class="container help-layout">
+        <div class="help-aside">
+          <div class="help-aside__inner">
+            <p class="overline overline--accent">Knowledge base</p>
+            <p class="help-aside__title">Frequently asked questions</p>
+            <nav class="help-toc" data-component="help-toc" aria-label="Help topics">
+              <ul class="help-toc__list" role="list">
+                <li><a href="#faq-general">General</a></li>
+                <li><a href="#faq-account">Account &amp; verification</a></li>
+                <li><a href="#faq-funding">Funding &amp; withdrawals</a></li>
+                <li><a href="#faq-copy">Optional copy trading</a></li>
+                <li><a href="#faq-security">Security</a></li>
+              </ul>
+            </nav>
+          </div>
+        </div>
 
-    sections.forEach(section => {
-        const visibleItems = section.querySelectorAll('.help-item:not([style*="display: none"])');
-        section.style.display = visibleItems.length > 0 ? '' : 'none';
-    });
+        <div class="help-faq" id="faq-list">
+          <section class="help-group" id="faq-general" aria-labelledby="faq-general-title" data-faq-group>
+            <h2 class="help-group__title" id="faq-general-title"><span class="help-group__num" aria-hidden="true">01</span> General</h2>
+            <div class="accordion">
+              <details data-keywords="what is how does it work platform stocks etfs options crypto">
+                <summary><span data-q>What is TED Brokers?</span></summary>
+                <div class="accordion__body"><p>TED Brokers is an online trading platform for US-listed stocks, ETFs, options and cryptocurrencies. It includes live charts, watchlists, a screener, order tools, margin accounts, a portfolio view and monthly statements. Copy trading is available as an optional feature.</p></div>
+              </details>
+              <details data-keywords="markets instruments stocks etfs options crypto symbols cryptocurrencies">
+                <summary><span data-q>Which markets can I trade?</span></summary>
+                <div class="accordion__body"><p>US-listed stocks and ETFs (more than 10,000 symbols), options on stocks and ETFs, and 30 cryptocurrencies quoted in USD, including BTC, ETH, SOL, XRP, DOGE, ADA, LINK and AVAX.</p></div>
+              </details>
+              <details data-keywords="language languages translate arabic spanish chinese">
+                <summary><span data-q>Which languages is the platform available in?</span></summary>
+                <div class="accordion__body"><p>The platform is available in 10 languages: English, Spanish, German, French, Portuguese, Arabic, Chinese, Bengali, Hindi and Russian.</p></div>
+              </details>
+            </div>
+          </section>
 
-    document.getElementById('noResults').style.display = anyVisible ? 'none' : 'block';
-}
+          <section class="help-group" id="faq-account" aria-labelledby="faq-account-title" data-faq-group>
+            <h2 class="help-group__title" id="faq-account-title"><span class="help-group__num" aria-hidden="true">02</span> Account &amp; verification</h2>
+            <div class="accordion">
+              <details data-keywords="kyc documents id passport proof of address verify identity">
+                <summary><span data-q>What documents do I need to verify my account?</span></summary>
+                <div class="accordion__body"><p>A valid government-issued photo ID (passport, national ID card or driving licence) and a proof of address dated within the last three months, such as a utility bill or bank statement.</p></div>
+              </details>
+              <details data-keywords="kyc verification review pending documents email missing">
+                <summary><span data-q>What happens after I submit my documents?</span></summary>
+                <div class="accordion__body"><p>We review your documents. If we need a clearer photo or another document, we will email you and state exactly what is missing.</p></div>
+              </details>
+            </div>
+          </section>
 
-// Scrollspy for sidebar
-function updateScrollspy() {
-    const sections = document.querySelectorAll('.help-section');
-    const links = document.querySelectorAll('#helpScrollspy .nav-link');
-    let currentId = '';
+          <section class="help-group" id="faq-funding" aria-labelledby="faq-funding-title" data-faq-group>
+            <h2 class="help-group__title" id="faq-funding-title"><span class="help-group__num" aria-hidden="true">03</span> Funding &amp; withdrawals</h2>
+            <div class="accordion">
+              <details data-keywords="deposit fund wallet bank transfer cryptocurrency approved">
+                <summary><span data-q>How do I fund my wallet?</span></summary>
+                <div class="accordion__body"><p>You can fund your wallet by bank transfer or cryptocurrency. Request the deposit in your wallet. The balance is credited once the deposit has been approved.</p></div>
+              </details>
+              <details data-keywords="withdrawal withdraw cash out confirmation code approval">
+                <summary><span data-q>How do I withdraw funds?</span></summary>
+                <div class="accordion__body"><p>Request a withdrawal in your wallet. Withdrawals need a confirmation code and approval before they are processed.</p></div>
+              </details>
+              <details data-keywords="fees cost charges commission options crypto stocks">
+                <summary><span data-q>What does it cost to trade?</span></summary>
+                <div class="accordion__body"><p>US stocks and ETFs have a $0 commission; regulatory pass-through fees apply to sales. Options are $0.65 per contract. Cryptocurrency trades are charged 0.50% per trade.</p></div>
+              </details>
+            </div>
+          </section>
 
-    sections.forEach(section => {
-        const top = section.getBoundingClientRect().top;
-        if (top <= 150) {
-            currentId = section.id;
-        }
-    });
+          <section class="help-group" id="faq-copy" aria-labelledby="faq-copy-title" data-faq-group>
+            <h2 class="help-group__title" id="faq-copy-title"><span class="help-group__num" aria-hidden="true">04</span> Optional copy trading</h2>
+            <div class="accordion">
+              <details data-keywords="copy trading what is strategy profile allocate mirror">
+                <summary><span data-q>What is copy trading?</span></summary>
+                <div class="accordion__body"><p>Copy trading is an optional feature. You choose a strategy profile and allocate cash, and your account mirrors the profile's trades in proportion to your allocation. Copy trades run on the same order system as your own orders.</p></div>
+              </details>
+              <details data-keywords="stop copying pause cancel unfollow resume">
+                <summary><span data-q>How do I pause or stop copying?</span></summary>
+                <div class="accordion__body"><p>You can pause and resume a copy at any time. To stop copying, open Copy trading in your dashboard and choose Stop copying. Copied positions are closed at market price and the cash is returned to your account.</p></div>
+              </details>
+              <details data-keywords="copy stop-loss stop loss drawdown limit risk controls">
+                <summary><span data-q>What is a copy stop-loss?</span></summary>
+                <div class="accordion__body"><p>A drawdown limit that you choose for a copy. If the copy falls by that amount, copying stops and the copied positions are closed.</p></div>
+              </details>
+              <details data-keywords="lose money risk loss capital">
+                <summary><span data-q>Can I lose money with copy trading?</span></summary>
+                <div class="accordion__body"><p>Yes. Copied trades carry market risk, and you could lose some or all of the cash you allocate. Past performance is not a reliable indicator of future results. Only allocate money you can afford to lose.</p></div>
+              </details>
+            </div>
+          </section>
 
-    links.forEach(link => {
-        link.classList.remove('active');
-        if (link.getAttribute('href') === '#' + currentId) {
-            link.classList.add('active');
-        }
-    });
-}
+          <section class="help-group" id="faq-security" aria-labelledby="faq-security-title" data-faq-group>
+            <h2 class="help-group__title" id="faq-security-title"><span class="help-group__num" aria-hidden="true">05</span> Security</h2>
+            <div class="accordion">
+              <details data-keywords="enable 2fa two-factor authentication authenticator app security code">
+                <summary><span data-q>How do I enable two-factor authentication (2FA)?</span></summary>
+                <div class="accordion__body"><p>Go to Settings, then Security, and choose Enable 2FA. Scan the QR code with an authenticator app such as Google Authenticator or Authy, then enter the 6-digit code to confirm.</p></div>
+              </details>
+              <details data-keywords="hacked compromised password suspicious login 2fa">
+                <summary><span data-q>What should I do if I think my account is compromised?</span></summary>
+                <div class="accordion__body"><p>Change your password straight away, make sure 2FA is on, and contact support by live chat or phone so we can secure your account and review recent activity with you.</p></div>
+              </details>
+            </div>
+          </section>
 
-// Init
-document.addEventListener('DOMContentLoaded', function() {
-    renderHelpContent();
-    window.addEventListener('scroll', updateScrollspy);
-    updateScrollspy();
+          <div class="empty help-empty" data-search-empty hidden>
+            <p class="empty__title">No answers match “<span data-search-empty-query></span>”.</p>
+            <p>Try a different word, or <a href="#contact">contact support below</a>.</p>
+            <button class="text-btn" type="button" data-search-clear>Clear search</button>
+          </div>
+        </div>
+      </div>
+    </section>
 
-    // Smooth scroll for sidebar links
-    document.querySelectorAll('#helpScrollspy .nav-link').forEach(link => {
-        link.addEventListener('click', function(e) {
-            e.preventDefault();
-            const target = document.querySelector(this.getAttribute('href'));
-            if (target) {
-                target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            }
-        });
-    });
-});
-</script>
+    <!-- ============ Contact ============ -->
+    <section class="section surface-ink help-contact" id="contact" aria-labelledby="contact-title">
+      <div class="container">
+        <div class="stack help-contact__head" style="--stack-gap: var(--space-4)">
+          <p class="overline overline--accent">Support</p>
+          <h2 id="contact-title">Still need help?</h2>
+          <p class="lead">Contact our support team by live chat, email or phone. The platform is available in 10 languages.</p>
+        </div>
 
-    <script src="/assets/js/chat-events.js"></script>
-    <script src="/assets/js/chat-widget.js"></script>
-    <script src="/assets/js/language.js?v=3.0"></script>
+        <div class="split help-contact__split">
+          <div>
+            <ul class="help-channels" role="list">
+              <li class="help-channel">
+                <svg class="help-channel__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20.5l1.4-5A8 8 0 1 1 21 12z"/></svg>
+                <div class="help-channel__body">
+                  <h3 class="help-channel__title">Live chat <span class="tag tag--gain">Signed-in users</span></h3>
+                  <p>Chat with a support agent from inside your account.</p>
+                  <a class="link-arrow link-arrow--signal" href="login.html">Sign in to chat
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+                </div>
+              </li>
+              <li class="help-channel">
+                <svg class="help-channel__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3.5 6.5l8.5 6 8.5-6"/></svg>
+                <div class="help-channel__body">
+                  <h3 class="help-channel__title">Email</h3>
+                  <p>For account questions, verification and anything that needs documents.</p>
+                  <p class="help-channel__value">
+                    <a href="mailto:support@tedbrokers.com">support@tedbrokers.com</a>
+                    <button class="text-btn text-btn--muted" type="button" data-copy="support@tedbrokers.com" data-copy-message="Email address copied">Copy<span class="sr-only"> email address</span></button>
+                  </p>
+                </div>
+              </li>
+              <li class="help-channel">
+                <svg class="help-channel__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2z"/></svg>
+                <div class="help-channel__body">
+                  <h3 class="help-channel__title">Phone</h3>
+                  <p>Urgent issues such as a locked account or a suspicious login.</p>
+                  <p class="help-channel__value"><a href="tel:+13322208968">+1 (332) 220-8968</a></p>
+                </div>
+              </li>
+            </ul>
+            <div class="help-address">
+              <p class="overline">Head office</p>
+              <address>330 Hudson Street, 12th Floor, New York, NY 10013</address>
+            </div>
+          </div>
+
+          <form class="help-form" action="mailto:support@tedbrokers.com" method="post" enctype="text/plain" aria-labelledby="form-title">
+            <h3 class="help-form__title" id="form-title">Send us a message</h3>
+            <p class="help-form__note">All fields are required.</p>
+            <div class="help-form__row">
+              <div class="field">
+                <label class="field__label" for="c-name">Name <span aria-hidden="true">*</span></label>
+                <div class="field__control"><input class="field__input" id="c-name" name="name" type="text" autocomplete="name" required></div>
+                <p class="field__error" id="c-name-error"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v6M12 16.5v.5"/></svg>Enter your name.</p>
+              </div>
+              <div class="field">
+                <label class="field__label" for="c-email">Email <span aria-hidden="true">*</span></label>
+                <div class="field__control"><input class="field__input" id="c-email" name="email" type="email" autocomplete="email" required></div>
+                <p class="field__error" id="c-email-error"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v6M12 16.5v.5"/></svg>Enter a valid email address, like name@example.com.</p>
+              </div>
+            </div>
+            <div class="field">
+              <label class="field__label" for="c-subject">Subject <span aria-hidden="true">*</span></label>
+              <div class="field__control">
+                <select class="field__select" id="c-subject" name="subject" required>
+                  <option value="">Choose a topic</option>
+                  <option value="funding">Deposits &amp; withdrawals</option>
+                  <option value="copy-trading">Copy trading (optional feature)</option>
+                  <option value="security">Account &amp; security</option>
+                  <option value="other">Other</option>
+                </select>
+              </div>
+              <p class="field__error" id="c-subject-error"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v6M12 16.5v.5"/></svg>Choose a topic.</p>
+            </div>
+            <div class="field">
+              <label class="field__label" for="c-message">Message <span aria-hidden="true">*</span></label>
+              <div class="field__control"><textarea class="field__input help-form__textarea" id="c-message" name="message" rows="5" required minlength="10" placeholder="Tell us what you need help with. Don't include your password or verification codes."></textarea></div>
+              <p class="field__error" id="c-message-error"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v6M12 16.5v.5"/></svg>Write a message of at least 10 characters.</p>
+            </div>
+            <div class="help-form__foot">
+              <button class="btn btn--lg" type="submit">Send message
+                <svg class="btn__arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+              </button>
+              <p class="help-form__note">We will reply by email.</p>
+            </div>
+          </form>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ============ Footer ============ -->
+  <footer class="site-footer surface-ink">
+    <div class="container">
+      <div class="site-footer__top">
+        <div class="site-footer__brand">
+          <a class="wordmark" href="index.html" aria-label="TED Brokers home"><span class="wordmark__ted">TED</span><span class="wordmark__brokers">Brokers</span></a>
+          <p>Professional trading across US stocks, ETFs, options and crypto, with market data, advanced order tools and portfolio reporting.</p>
+          <address class="site-footer__contact">330 Hudson Street, 12th Floor<br>New York, NY 10013<br><a href="tel:+13322208968">+1 (332) 220-8968</a></address>
+        </div>
+        <nav aria-labelledby="f-company"><h2 id="f-company">Company</h2><ul role="list"><li><a href="about-us.html">About us</a></li><li><a href="help.html#contact">Contact</a></li><li><a href="faqs.html">FAQs</a></li></ul></nav>
+        <nav aria-labelledby="f-resources"><h2 id="f-resources">Resources</h2><ul role="list"><li><a href="how_it_works.html">Trading platform</a></li><li><a href="traders.html">Copy trading</a></li><li><a href="mobile-app.html">Mobile app</a></li><li><a href="help.html">Help center</a></li></ul></nav>
+        <nav aria-labelledby="f-legal"><h2 id="f-legal">Legal</h2><ul role="list"><li><a href="privacy-policy.html">Privacy policy</a></li><li><a href="legal/terms_conditions.html">Terms &amp; conditions</a></li><li><a href="legal/aml_policy.html">AML / KYC policy</a></li><li><a href="legal/risk_closure.html">Risk disclosure</a></li></ul></nav>
+      </div>
+      <p class="fineprint site-footer__risk"><strong>Risk warning:</strong> Trading stocks, ETFs, options and cryptocurrencies carries a high level of risk and may not be suitable for all investors. You could lose some or all of your capital. Copy trading does not constitute investment advice. Past performance of any trader is not a reliable indicator of future results.</p>
+      <div class="site-footer__bottom">
+        <span>© 2026 TED Brokers</span>
+      </div>
+    </div>
+  </footer>
 </body>
-
-<!-- Mirrored from copytradingbroker.io/help by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 13 Oct 2025 14:42:04 GMT -->
 </html>

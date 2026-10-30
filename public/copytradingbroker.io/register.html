@@ -1,639 +1,209 @@
-<!DOCTYPE html>
-<html lang="en">
-
-
-<meta http-equiv="content-type" content="text/html;charset=UTF-8" />
-<meta http-equiv="content-type" content="text/html;charset=UTF-8" />
-
+<!doctype html>
+<html lang="en" dir="ltr">
 <head>
-   <meta name="csrf-token" content="M3XMFmO1P72RsP9UzSPWrMgCcJt9CFMThtEHyGMu">
-    <meta charset="utf-8">
-    <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
-    <meta name="description" content="TED Brokers- Login to Dashboard">
-    <meta name="author" content="TED Brokers- Login to Dashboard">
-    <meta name="keywords" content="TED Brokers- Login to Dashboard">
-    <title>Sign up | TED Brokers</title>
-    <!-- Favicon -->
-    <link rel="icon" href="assets/images/logoIcon/tedbrokers-fav.ico" type="image/x-icon" />
-
-    <!-- Title -->
-    <title>TED Brokers- Login to Dashboard</title>
-
-    <!-- Bootstrap css-->
-    <link id="style" href="assets/templates/copytradingbroker/auth/main/assets/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
-
-    <!-- Icons css-->
-    <link href="assets/templates/copytradingbroker/auth/main/assets/web-fonts/icons.css" rel="stylesheet" />
-    <link href="assets/templates/copytradingbroker/auth/main/assets/web-fonts/font-awesome/font-awesome.min.css" rel="stylesheet">
-    <link href="assets/templates/copytradingbroker/auth/main/assets/web-fonts/plugin.css" rel="stylesheet" />
-
-    <!-- Style css-->
-    <link href="assets/templates/copytradingbroker/auth/main/assets/css/style.css" rel="stylesheet">
-    <link href="assets/templates/copytradingbroker/auth/main/assets/css/plugins.css" rel="stylesheet">
-    <script src="assets/templates/copytradingbroker/auth/plugins/sweetalert/js/sweetalert.min.js"></script>
-    <script src="assets/templates/copytradingbroker/auth/plugins/sweetalerts/promise-polyfill.js"></script>
-    <link href="assets/templates/copytradingbroker/auth/plugins/sweetalerts/sweetalert.css" rel="stylesheet" type="text/css" />
-    <script src="https://unpkg.com/sweetalert2@7.8.2/dist/sweetalert2.all.js"></script>
-
-	<link rel="stylesheet" href="assets/css/custom-theme.css" />
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Sign up — TED Brokers</title>
+  <meta name="description" content="Create a TED Brokers account to trade US stocks, ETFs, options and cryptocurrencies with live charts, order tools and portfolio reporting.">
+  <meta name="theme-color" content="#0A1626">
+  <link rel="icon" href="assets/img/favicon.ico">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=JetBrains+Mono:wght@400;500;600&family=Sora:wght@300;600;700;800&display=swap">
+  <link rel="stylesheet" href="assets/css/main.css">
+  <link rel="stylesheet" href="assets/css/pages/auth.css">
+  <script>document.documentElement.classList.add('js');try{var t=localStorage.getItem('ted:theme');if(t==='system')t=matchMedia('(prefers-color-scheme: light)').matches?'light':'dark';if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
+  <script type="module" src="assets/js/main.js"></script>
+  <script type="module" src="assets/js/live/google.js"></script>
+  <script type="module" src="assets/js/live/register.js"></script>
 </head>
-
-<body class="main-body leftmenu ltr light-theme" data-bs-theme="light" style="background-image: url('assets/images/logoIcon/tedbrokers-logo.jpg'); background-repeat: no-repeat; background-position: center 20px; background-size: 150px; background-attachment: fixed;">
-    <style>
-    div#google_translate_element div.goog-te-gadget-simple a.goog-te-menu-value span:nth-of-type(1),
-    div#google_translate_element div.goog-te-gadget-simple a.goog-te-menu-value span:nth-of-type(2),
-    div#google_translate_element div.goog-te-gadget-simple a.goog-te-menu-value span:nth-of-type(3) {
-        display: none;
-    }
-
-    div#google_translate_element div.goog-te-gadget-simple {
-        margin: 0px;
-        padding: 10px;
-        display: inline-block;
-        background-color:#0080db00;
-        border: 1px solid #0080db00;
-    }
-
-    div#google_translate_element div.goog-te-gadget-simple a.goog-te-menu-value {
-        color: #2D3748;
-    }
-
-    div#google_translate_element div.goog-te-gadget-simple a.goog-te-menu-value::after {
-        content: "Translate Site";
-        padding-right: 5px;
-    }
-
-    div#google_translate_element div.goog-te-gadget-simple img:nth-of-type(1) {
-        display: none;
-    }
-    
-    .btn-primary {
-    background: #D32F2F; /* Bybit Gold */
-    color: #fff; /* Dark Text */
-    border: 2px solid #D32F2F;
-    font-weight: bold;
-    padding: 12px 24px;
-    border-radius: 2px; /* Soft edges */
-    transition: all 0.3s ease-in-out;
-}
-.btn-outline-danger{
-     
-  
-    font-weight: bold;
-    padding: 8px 16px;
-    border-radius: 2px; /* Soft edges */
-    transition: all 0.3s ease-in-out;
-}
-
-.btn-primary:hover {
-    background: #FFD700; /* Brighter Gold */
-    border-color: #FFD700;
-    box-shadow: 0 4px 10px rgba(240, 185, 11, 0.3);
-    transform: translateY(-2px); /* Slight lift effect */
-}
-
-.btn-primary:disabled {
-    opacity: 0.7;
-    cursor: not-allowed;
-    transform: none;
-}
-
-.btn-spinner {
-    display: inline-block;
-    width: 16px;
-    height: 16px;
-    border: 2px solid rgba(255,255,255,0.3);
-    border-top-color: #fff;
-    border-radius: 50%;
-    animation: btn-spin 0.6s linear infinite;
-    vertical-align: middle;
-    margin-right: 6px;
-}
-
-@keyframes btn-spin {
-    to { transform: rotate(360deg); }
-}
-
-.form-message {
-    padding: 10px 14px;
-    border-radius: 4px;
-    margin-bottom: 16px;
-    font-size: 14px;
-    display: none;
-}
-
-.form-message.success {
-    display: block;
-    background: #d4edda;
-    color: #155724;
-    border: 1px solid #c3e6cb;
-}
-
-.form-message.error {
-    display: block;
-    background: #f8d7da;
-    color: #721c24;
-    border: 1px solid #f5c6cb;
-}
-
-.form-message.info {
-    display: block;
-    background: #d1ecf1;
-    color: #0c5460;
-    border: 1px solid #bee5eb;
-}
-    </style>
-
-    <script type="text/javascript">
-    function googleTranslateElementInit() {
-        new google.translate.TranslateElement({
-            pageLanguage: 'en',
-            layout: google.translate.TranslateElement.InlineLayout.SIMPLE
-        }, 'google_translate_element');
-    }
-    </script>
-    <script type="text/javascript"
-        src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
-
-    <!-- Loader -->
-    
-    <!-- End Loader -->
-
-    <!-- Page -->
-    <div class="page main-signin-wrapper">
-
-
-
-
-        
-
-
-
-
-	<!-- Row -->
-	<div class="row signpages text-center">
-		<div class="col-md-12">
-			<div class="card border-0">
-				<div class="row row-sm">
-					<div class="col-lg-12 col-xl-12 col-xs-12 col-sm-12 login_form rounded-start-11">
-						<div class="container-fluid">
-							<div class="row row-sm ">
-								<div class="col-md-12 col-lg-12 px-lg-12 px-xl-12 d-flex flex-column py-6">
-									<div class="card-body mt-2 mb-2">
-										<h2 class="text-start mb-2" data-i18n="register.title">Sign Up for Free</h2>
-										<p class="mb-4 text-muted tx-13 ms-0 text-start" data-i18n="register.subtitle">It's Free to Sign up and only
-											takes a minute.</p>
-										<div id="register-message" class="form-message"></div>
-
-										<center>
-
-
-
-										</center>
-
-										<form method="POST" action="#" id="register-form">
-											<input type="hidden" name="_token" value="M3XMFmO1P72RsP9UzSPWrMgCcJt9CFMThtEHyGMu">											<div class="form-group text-start">
-												<div class="row"> <!-- Add row for horizontal alignment -->
-													<div class="col-lg-6">
-														<div class="mb-4">
-															<label class="tx-medium" data-i18n="register.fullNameLabel">Full Name</label>
-															<input class="form-control" placeholder="Enter your Name" data-i18n-placeholder="register.fullNamePlaceholder" type="text" name="name" required=""
-																value="">
-
-														</div>
-													</div>
-
-													<div class="col-lg-6">
-														<div class="mb-4">
-															<label class="tx-medium" data-i18n="register.usernameLabel">Username</label>
-															<input class="form-control" placeholder="Enter Preferred Username" data-i18n-placeholder="register.usernamePlaceholder" type="text" name="username"
-																value=""required="">
-
-														</div>
-																											</div>
-												</div>
-											</div>
-
-
-
-
-
-
-											<div class="form-group text-start">
-												<div class="row"> <!-- Add row for horizontal alignment -->
-													<div class="col-lg-6">
-														<div class="mb-4">
-															<label class="tx-medium" data-i18n="register.emailLabel">Email</label>
-															<input class="form-control" placeholder="Enter your email" data-i18n-placeholder="register.emailPlaceholder" type="email" autocomplete="username"
-																name="email" value="" required="">
-
-														</div>
-																											</div>
-													<div class="col-lg-6">
-														<div class="mb-4">
-															<div class="form-group text-start">
-																<label class="tx-medium" data-i18n="register.phoneLabel">Phone</label>
-																<input class="form-control" placeholder="Enter your phone" data-i18n-placeholder="register.phonePlaceholder" type="text" maxlength="13" name="phone"
-																	value="" required="">
-
-															</div>
-																													</div>
-													</div>
-
-
-
-													<div class="form-group text-start">
-														<div class="row"> <!-- Add row for horizontal alignment -->
-															<div class="col-lg-6">
-																<div class="mb-4">
-																	<label class="tx-medium" data-i18n="register.genderLabel">Gender</label>
-																	<select class="form-control select2-no-search" value="" name="gender"
-																		required="">
-																		<option label="Select Gender" data-i18n="register.genderPlaceholder">
-																		</option>
-																		<option value="Female" data-i18n="register.female">Female</option>
-																		<option value="Male" data-i18n="register.male">Male</option>
-																		<option value="Others" data-i18n="register.others">Others</option>
-																	</select>
-																	<span class="alert-danger" style="float:right;"></span>
-																</div>
-															</div>
-
-
-
-															<div class="col-lg-6">
-																<div class="mb-4">
-																	<label class="tx-medium" data-i18n="register.countryLabel">Country</label>
-																	<select class="form-control select2" name="country" value=""required="">
-																		<option value="Afganistan">Afghanistan</option>
-<option value="Albania">Albania</option>
-<option value="Algeria">Algeria</option>
-<option value="American Samoa">American Samoa</option>
-<option value="Andorra">Andorra</option>
-<option value="Angola">Angola</option>
-<option value="Anguilla">Anguilla</option>
-<option value="Antigua &amp; Barbuda">Antigua &amp; Barbuda</option>
-<option value="Argentina">Argentina</option>
-<option value="Armenia">Armenia</option>
-<option value="Aruba">Aruba</option>
-<option value="Australia">Australia</option>
-<option value="Austria">Austria</option>
-<option value="Azerbaijan">Azerbaijan</option>
-<option value="Bahamas">Bahamas</option>
-<option value="Bahrain">Bahrain</option>
-<option value="Bangladesh">Bangladesh</option>
-<option value="Barbados">Barbados</option>
-<option value="Belarus">Belarus</option>
-<option value="Belgium">Belgium</option>
-<option value="Belize">Belize</option>
-<option value="Benin">Benin</option>
-<option value="Bermuda">Bermuda</option>
-<option value="Bhutan">Bhutan</option>
-<option value="Bolivia">Bolivia</option>
-<option value="Bonaire">Bonaire</option>
-<option value="Bosnia &amp; Herzegovina">Bosnia &amp; Herzegovina</option>
-<option value="Botswana">Botswana</option>
-<option value="Brazil">Brazil</option>
-<option value="British Indian Ocean Ter">British Indian Ocean Ter</option>
-<option value="Brunei">Brunei</option>
-<option value="Bulgaria">Bulgaria</option>
-<option value="Burkina Faso">Burkina Faso</option>
-<option value="Burundi">Burundi</option>
-<option value="Cambodia">Cambodia</option>
-<option value="Cameroon">Cameroon</option>
-<option value="Canada">Canada</option>
-<option value="Canary Islands">Canary Islands</option>
-<option value="Cape Verde">Cape Verde</option>
-<option value="Cayman Islands">Cayman Islands</option>
-<option value="Central African Republic">Central African Republic</option>
-<option value="Chad">Chad</option>
-<option value="Channel Islands">Channel Islands</option>
-<option value="Chile">Chile</option>
-<option value="China">China</option>
-<option value="Christmas Island">Christmas Island</option>
-<option value="Cocos Island">Cocos Island</option>
-<option value="Colombia">Colombia</option>
-<option value="Comoros">Comoros</option>
-<option value="Congo">Congo</option>
-<option value="Cook Islands">Cook Islands</option>
-<option value="Costa Rica">Costa Rica</option>
-<option value="Cote DIvoire">Cote D'Ivoire</option>
-<option value="Croatia">Croatia</option>
-<option value="Cuba">Cuba</option>
-<option value="Curaco">Curacao</option>
-<option value="Cyprus">Cyprus</option>
-<option value="Czech Republic">Czech Republic</option>
-<option value="Denmark">Denmark</option>
-<option value="Djibouti">Djibouti</option>
-<option value="Dominica">Dominica</option>
-<option value="Dominican Republic">Dominican Republic</option>
-<option value="East Timor">East Timor</option>
-<option value="Ecuador">Ecuador</option>
-<option value="Egypt">Egypt</option>
-<option value="El Salvador">El Salvador</option>
-<option value="Equatorial Guinea">Equatorial Guinea</option>
-<option value="Eritrea">Eritrea</option>
-<option value="Estonia">Estonia</option>
-<option value="Ethiopia">Ethiopia</option>
-<option value="Falkland Islands">Falkland Islands</option>
-<option value="Faroe Islands">Faroe Islands</option>
-<option value="Fiji">Fiji</option>
-<option value="Finland">Finland</option>
-<option value="France">France</option>
-<option value="French Guiana">French Guiana</option>
-<option value="French Polynesia">French Polynesia</option>
-<option value="French Southern Ter">French Southern Ter</option>
-<option value="Gabon">Gabon</option>
-<option value="Gambia">Gambia</option>
-<option value="Georgia">Georgia</option>
-<option value="Germany">Germany</option>
-<option value="Ghana">Ghana</option>
-<option value="Gibraltar">Gibraltar</option>
-<option value="Great Britain">Great Britain</option>
-<option value="Greece">Greece</option>
-<option value="Greenland">Greenland</option>
-<option value="Grenada">Grenada</option>
-<option value="Guadeloupe">Guadeloupe</option>
-<option value="Guam">Guam</option>
-<option value="Guatemala">Guatemala</option>
-<option value="Guinea">Guinea</option>
-<option value="Guyana">Guyana</option>
-<option value="Haiti">Haiti</option>
-<option value="Hawaii">Hawaii</option>
-<option value="Honduras">Honduras</option>
-<option value="Hong Kong">Hong Kong</option>
-<option value="Hungary">Hungary</option>
-<option value="Iceland">Iceland</option>
-<option value="India">India</option>
-<option value="Indonesia">Indonesia</option>
-<option value="Iran">Iran</option>
-<option value="Iraq">Iraq</option>
-<option value="Ireland">Ireland</option>
-<option value="Isle of Man">Isle of Man</option>
-<option value="Israel">Israel</option>
-<option value="Italy">Italy</option>
-<option value="Jamaica">Jamaica</option>
-<option value="Japan">Japan</option>
-<option value="Jordan">Jordan</option>
-<option value="Kazakhstan">Kazakhstan</option>
-<option value="Kenya">Kenya</option>
-<option value="Kiribati">Kiribati</option>
-<option value="Korea North">Korea North</option>
-<option value="Korea Sout">Korea South</option>
-<option value="Kuwait">Kuwait</option>
-<option value="Kyrgyzstan">Kyrgyzstan</option>
-<option value="Laos">Laos</option>
-<option value="Latvia">Latvia</option>
-<option value="Lebanon">Lebanon</option>
-<option value="Lesotho">Lesotho</option>
-<option value="Liberia">Liberia</option>
-<option value="Libya">Libya</option>
-<option value="Liechtenstein">Liechtenstein</option>
-<option value="Lithuania">Lithuania</option>
-<option value="Luxembourg">Luxembourg</option>
-<option value="Macau">Macau</option>
-<option value="Macedonia">Macedonia</option>
-<option value="Madagascar">Madagascar</option>
-<option value="Malaysia">Malaysia</option>
-<option value="Malawi">Malawi</option>
-<option value="Maldives">Maldives</option>
-<option value="Mali">Mali</option>
-<option value="Malta">Malta</option>
-<option value="Marshall Islands">Marshall Islands</option>
-<option value="Martinique">Martinique</option>
-<option value="Mauritania">Mauritania</option>
-<option value="Mauritius">Mauritius</option>
-<option value="Mayotte">Mayotte</option>
-<option value="Mexico">Mexico</option>
-<option value="Midway Islands">Midway Islands</option>
-<option value="Moldova">Moldova</option>
-<option value="Monaco">Monaco</option>
-<option value="Mongolia">Mongolia</option>
-<option value="Montserrat">Montserrat</option>
-<option value="Morocco">Morocco</option>
-<option value="Mozambique">Mozambique</option>
-<option value="Myanmar">Myanmar</option>
-<option value="Nambia">Nambia</option>
-<option value="Nauru">Nauru</option>
-<option value="Nepal">Nepal</option>
-<option value="Netherland Antilles">Netherland Antilles</option>
-<option value="Netherlands">Netherlands (Holland, Europe)</option>
-<option value="Nevis">Nevis</option>
-<option value="New Caledonia">New Caledonia</option>
-<option value="New Zealand">New Zealand</option>
-<option value="Nicaragua">Nicaragua</option>
-<option value="Niger">Niger</option>
-<option value="Nigeria">Nigeria</option>
-<option value="Niue">Niue</option>
-<option value="Norfolk Island">Norfolk Island</option>
-<option value="Norway">Norway</option>
-<option value="Oman">Oman</option>
-<option value="Pakistan">Pakistan</option>
-<option value="Palau Island">Palau Island</option>
-<option value="Palestine">Palestine</option>
-<option value="Panama">Panama</option>
-<option value="Papua New Guinea">Papua New Guinea</option>
-<option value="Paraguay">Paraguay</option>
-<option value="Peru">Peru</option>
-<option value="Phillipines">Philippines</option>
-<option value="Pitcairn Island">Pitcairn Island</option>
-<option value="Poland">Poland</option>
-<option value="Portugal">Portugal</option>
-<option value="Puerto Rico">Puerto Rico</option>
-<option value="Qatar">Qatar</option>
-<option value="Republic of Montenegro">Republic of Montenegro</option>
-<option value="Republic of Serbia">Republic of Serbia</option>
-<option value="Reunion">Reunion</option>
-<option value="Romania">Romania</option>
-<option value="Russia">Russia</option>
-<option value="Rwanda">Rwanda</option>
-<option value="St Barthelemy">St Barthelemy</option>
-<option value="St Eustatius">St Eustatius</option>
-<option value="St Helena">St Helena</option>
-<option value="St Kitts-Nevis">St Kitts-Nevis</option>
-<option value="St Lucia">St Lucia</option>
-<option value="St Maarten">St Maarten</option>
-<option value="St Pierre &amp; Miquelon">St Pierre &amp; Miquelon</option>
-<option value="St Vincent &amp; Grenadines">St Vincent &amp; Grenadines</option>
-<option value="Saipan">Saipan</option>
-<option value="Samoa">Samoa</option>
-<option value="Samoa American">Samoa American</option>
-<option value="San Marino">San Marino</option>
-<option value="Sao Tome &amp; Principe">Sao Tome &amp; Principe</option>
-<option value="Saudi Arabia">Saudi Arabia</option>
-<option value="Senegal">Senegal</option>
-<option value="Serbia">Serbia</option>
-<option value="Seychelles">Seychelles</option>
-<option value="Sierra Leone">Sierra Leone</option>
-<option value="Singapore">Singapore</option>
-<option value="Slovakia">Slovakia</option>
-<option value="Slovenia">Slovenia</option>
-<option value="Solomon Islands">Solomon Islands</option>
-<option value="Somalia">Somalia</option>
-<option value="South Africa">South Africa</option>
-<option value="Spain">Spain</option>
-<option value="Sri Lanka">Sri Lanka</option>
-<option value="Sudan">Sudan</option>
-<option value="Suriname">Suriname</option>
-<option value="Swaziland">Swaziland</option>
-<option value="Sweden">Sweden</option>
-<option value="Switzerland">Switzerland</option>
-<option value="Syria">Syria</option>
-<option value="Tahiti">Tahiti</option>
-<option value="Taiwan">Taiwan</option>
-<option value="Tajikistan">Tajikistan</option>
-<option value="Tanzania">Tanzania</option>
-<option value="Thailand">Thailand</option>
-<option value="Togo">Togo</option>
-<option value="Tokelau">Tokelau</option>
-<option value="Tonga">Tonga</option>
-<option value="Trinidad &amp; Tobago">Trinidad &amp; Tobago</option>
-<option value="Tunisia">Tunisia</option>
-<option value="Turkey">Turkey</option>
-<option value="Turkmenistan">Turkmenistan</option>
-<option value="Turks &amp; Caicos Is">Turks &amp; Caicos Is</option>
-<option value="Tuvalu">Tuvalu</option>
-<option value="Uganda">Uganda</option>
-<option value="Ukraine">Ukraine</option>
-<option value="United Arab Erimates">United Arab Emirates</option>
-<option value="United Kingdom">United Kingdom</option>
-<option value="United States of America">United States of America</option>
-<option value="Uraguay">Uruguay</option>
-<option value="Uzbekistan">Uzbekistan</option>
-<option value="Vanuatu">Vanuatu</option>
-<option value="Vatican City State">Vatican City State</option>
-<option value="Venezuela">Venezuela</option>
-<option value="Vietnam">Vietnam</option>
-<option value="Virgin Islands (Brit)">Virgin Islands (Brit)</option>
-<option value="Virgin Islands (USA)">Virgin Islands (USA)</option>
-<option value="Wake Island">Wake Island</option>
-<option value="Wallis &amp; Futana Is">Wallis &amp; Futana Is</option>
-<option value="Yemen">Yemen</option>
-<option value="Zaire">Zaire</option>
-<option value="Zambia">Zambia</option>
-<option value="Zimbabwe">Zimbabwe</option>
-																	</select>
-
-																</div>
-															</div>
-
-
-														</div>
-
-													</div>
-
-													<div class="form-group text-start">
-														<div class="row"> <!-- Add row for horizontal alignment -->
-															<div class="col-lg-6">
-																<div class="mb-4">
-																	<label class="tx-medium" data-i18n="register.passwordLabel">Password</label>
-																	<input class="form-control border-end-0" placeholder="Enter your password" data-i18n-placeholder="register.passwordPlaceholder" autocomplete="new-password"
-																		type="password" data-bs-toggle="password" name="password" required="">
-
-																</div>
-																															</div>
-
-															<div class="col-lg-6">
-																<div class="mb-4">
-																	<label class="tx-medium" data-i18n="register.confirmPasswordLabel">Confirm Password</label>
-																	<input class="form-control border-end-0" placeholder="Confirm Password" data-i18n-placeholder="register.confirmPasswordPlaceholder" type="password"
-																		data-bs-toggle="password" name="password_confirmation" required="">
-
-																</div>
-
-															</div>
-
-														</div>
-
-													</div>
-
-
-
-
-
-													<button type="submit" name="submit" id="register-btn" class="btn btn-primary btn-block" data-i18n="register.btnRegister">Register</button>
-
-													<!-- Divider -->
-													<div class="text-center my-3">
-														<span style="color: #8b93a7;" data-i18n="register.or">or</span>
-													</div>
-
-													<!-- Google Sign-In Button -->
-													<button type="button" onclick="signInWithGoogle()"
-														class="btn btn-outline-secondary btn-block"
-														style="display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%; padding: 12px;">
-														<svg width="18" height="18" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg">
-															<path fill="#4285F4" d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.717v2.258h2.908c1.702-1.567 2.684-3.874 2.684-6.615z"/>
-															<path fill="#34A853" d="M9 18c2.43 0 4.467-.806 5.956-2.184l-2.908-2.258c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332C2.438 15.983 5.482 18 9 18z"/>
-															<path fill="#FBBC05" d="M3.964 10.707c-.18-.54-.282-1.117-.282-1.707s.102-1.167.282-1.707V4.961H.957C.348 6.175 0 7.55 0 9s.348 2.825.957 4.039l3.007-2.332z"/>
-															<path fill="#EA4335" d="M9 3.582c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0 5.482 0 2.438 2.017.957 4.961L3.964 7.29C4.672 5.163 6.656 3.582 9 3.582z"/>
-														</svg>
-														<span data-i18n="register.googleSignUp">Sign up with Google</span>
-													</button>
-
-										</form>
-										<div class="text-start mt-4 ms-0 mb-3">
-											<p class="mb-0"><span data-i18n="register.haveAccount">Already have an account?</span> <a href="login" data-i18n="register.signIn">Sign In</a></p>
-										</div>
-
-									</div>
-								</div>
-							</div>
-						</div>
-
-					</div>
-				</div>
-			</div>
-		</div>
-		<!-- End Row -->
-
-
-	
-
-
-    </div>
-    <!-- End Page -->
-
-    <!-- Jquery js-->
-    <script src="assets/templates/copytradingbroker/auth/main/assets/plugins/jquery/jquery.min.js"></script>
-
-    <!-- Bootstrap js-->
-    <script src="assets/templates/copytradingbroker/auth/main/assets/plugins/bootstrap/js/popper.min.js"></script>
-    <script src="assets/templates/copytradingbroker/auth/main/assets/plugins/bootstrap/js/bootstrap.min.js"></script>
-
-    <!-- Bootstrap Show Password js-->
-    <script src="assets/templates/copytradingbroker/auth/main/assets/js/bootstrap-show-password.min.js"></script>
-
-    <!-- generate-otp js -->
-    <script src="assets/templates/copytradingbroker/auth/main/assets/js/generate-otp.js"></script>
-
-    <!-- Perfect-scrollbar js -->
-    <script src="assets/templates/copytradingbroker/auth/main/assets/plugins/perfect-scrollbar/perfect-scrollbar.min.js"></script>
-
-    <!-- Select2 js-->
-    <script src="assets/templates/copytradingbroker/auth/main/assets/plugins/select2/js/select2.min.js"></script>
-
-    <!-- Color Theme js -->
-    <script src="assets/templates/copytradingbroker/auth/main/assets/js/themeColors.js"></script>
-
-    <!-- swither styles js -->
-    <script src="assets/templates/copytradingbroker/auth/main/assets/js/swither-styles.js"></script>
-
-    <!-- Custom js -->
-    <script src="assets/templates/copytradingbroker/auth/main/assets/js/custom.js"></script>
-    <!-- Smartsupp Live Chat script -->
-
-
-    <!-- TED Brokers Authentication Scripts -->
-    <script src="assets/js/auth.js"></script>
-    <script src="assets/js/register-handler.js"></script>
-
-    <!-- Chat Support Widget -->
-    <script src="/assets/js/chat-events.js"></script>
-    <script src="/assets/js/chat-widget.js"></script>
-    <!-- Language System -->
-    <script src="/assets/js/language.js?v=3.0"></script>
+<body>
+  <a class="skip-link" href="#signup-title">Skip to sign up</a>
+
+  <main class="auth" id="main" style="--auth-cols: 40fr 60fr">
+    <!-- ============ Visual ============ -->
+    <section class="auth__visual surface-ink" aria-labelledby="steps-title">
+      <div class="mesh" aria-hidden="true"><span></span></div>
+      <canvas class="dotfield" data-component="dotfield" data-mode="field" data-density=".5" aria-hidden="true"></canvas>
+
+      <div class="auth-visual__top">
+        <a class="wordmark" href="index.html" aria-label="TED Brokers home">
+          <span class="wordmark__ted">TED</span><span class="wordmark__brokers">Br<svg class="wordmark__o" viewBox="0 0 20 20" aria-hidden="true"><g fill="currentColor"><circle cx="10" cy="2" r="1.6"/><circle cx="15.2" cy="4.1" r="1.4" opacity=".8"/><circle cx="17.9" cy="9.4" r="1.6"/><circle cx="16.3" cy="14.8" r="1.4" opacity=".8"/><circle cx="11.2" cy="17.9" r="1.6"/><circle cx="5.6" cy="16.4" r="1.4" opacity=".7"/><circle cx="2.2" cy="11.6" r="1.6"/><circle cx="3" cy="6" r="1.4" opacity=".8"/><circle cx="6.6" cy="2.9" r="1.1" opacity=".6"/><circle cx="10" cy="10" r="1.9"/><circle cx="13.3" cy="9.2" r="1" opacity=".7"/><circle cx="7.4" cy="12" r="1" opacity=".7"/></g></svg>kers</span>
+        </a>
+      </div>
+
+      <div class="auth-visual__body">
+        <h2 class="auth-headline" id="steps-title">Open an account in three steps.</h2>
+        <ol class="auth-steps mt-4" role="list">
+          <li class="auth-steps__item" aria-current="step">
+            <span class="auth-steps__num">01</span><span class="auth-steps__title">Create account</span>
+            <span class="auth-steps__text">Your details and a secure password.</span>
+          </li>
+          <li class="auth-steps__item">
+            <span class="auth-steps__num">02</span><span class="auth-steps__title">Verify identity</span>
+            <span class="auth-steps__text">Confirm who you are with a photo ID.</span>
+          </li>
+          <li class="auth-steps__item">
+            <span class="auth-steps__num">03</span><span class="auth-steps__title">Fund &amp; trade</span>
+            <span class="auth-steps__text">Fund your wallet by bank transfer or crypto, then place your first order.</span>
+          </li>
+        </ol>
+      </div>
+
+      <dl class="auth-stats">
+        <div><dt>US-listed symbols</dt><dd>10,000+</dd></div>
+        <div><dt>Cryptocurrencies</dt><dd>30</dd></div>
+        <div><dt>Languages</dt><dd>10</dd></div>
+      </dl>
+    </section>
+
+    <!-- ============ Form ============ -->
+    <section class="auth__form surface-paper" aria-labelledby="signup-title">
+      <div class="auth__top">
+        <p><span class="muted">Already have an account?</span> <a href="login.html">Sign in →</a></p>
+      </div>
+
+      <div class="auth__panel auth__panel--wide">
+        <div class="auth-head">
+          <p class="overline">Step 1 of 3</p>
+          <h1 id="signup-title" tabindex="-1">Create your account</h1>
+          <p class="lead">Identity verification is required before you can fund your wallet or trade.</p>
+        </div>
+
+        <form class="auth-form" data-auth="register" action="/register" method="post" novalidate>
+          <div class="auth-grid">
+            <div class="field">
+              <label class="field__label" for="fullname">Full name</label>
+              <div class="field__control"><input class="field__input" id="fullname" name="full_name" autocomplete="name" required data-msg-required="Enter your full name."></div>
+              <p class="field__error" id="fullname-error"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7.5v5.5M12 16.5h.01"/></svg><span data-error-msg></span></p>
+            </div>
+
+            <div class="field">
+              <label class="field__label" for="username">Username</label>
+              <div class="field__control"><input class="field__input" id="username" name="username" autocomplete="username" autocapitalize="none" spellcheck="false" required minlength="3" pattern="[A-Za-z0-9_\-]+" maxlength="50"
+                     data-msg-required="Choose a username." data-msg-short="Use at least 3 characters." data-msg-pattern="Use letters, numbers, hyphens or underscores only."></div>
+              <p class="field__error" id="username-error"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7.5v5.5M12 16.5h.01"/></svg><span data-error-msg></span></p>
+            </div>
+
+            <div class="field">
+              <label class="field__label" for="email">Email</label>
+              <div class="field__control"><input class="field__input" id="email" name="email" type="email" autocomplete="email" autocapitalize="none" spellcheck="false" required data-msg-required="Enter your email address."></div>
+              <p class="field__error" id="email-error"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7.5v5.5M12 16.5h.01"/></svg><span data-error-msg></span></p>
+            </div>
+
+            <div class="field auth-phone">
+              <label class="field__label" for="phone">Phone</label>
+              <div class="field__control">
+                <span class="auth-phone__cc">
+                  <label class="sr-only" for="phone-cc">Country code</label>
+                  <select class="field__select" id="phone-cc" name="phone_code" autocomplete="tel-country-code">
+                    <option value="+1">+1</option>
+                    <option value="+44">+44</option>
+                    <option value="+234">+234</option>
+                    <option value="+971">+971</option>
+                    <option value="+91">+91</option>
+                    <option value="+86">+86</option>
+                    <option value="+49">+49</option>
+                    <option value="+55">+55</option>
+                  </select>
+                </span>
+                <input class="field__input" id="phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" required pattern="[0-9 \(\)\-]{6,}"
+                       data-msg-required="Enter your phone number." data-msg-pattern="Enter a valid phone number, digits only.">
+              </div>
+              <p class="field__error" id="phone-error"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7.5v5.5M12 16.5h.01"/></svg><span data-error-msg></span></p>
+            </div>
+
+            <div class="field">
+              <label class="field__label" for="gender">Gender</label>
+              <div class="field__control">
+                <select class="field__select" id="gender" name="gender">
+                  <option value="">Prefer not to say</option>
+                  <option value="female">Female</option>
+                  <option value="male">Male</option>
+                  <option value="other">Other</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="field">
+              <label class="field__label" for="country">Country</label>
+              <div class="field__control">
+                <select class="field__select" id="country" name="country" autocomplete="country" required data-msg-required="Select your country of residence.">
+                  <option value="">Select country</option>
+                  <option value="AE">United Arab Emirates</option>
+                  <option value="AU">Australia</option>
+                  <option value="BR">Brazil</option>
+                  <option value="CA">Canada</option>
+                  <option value="CN">China</option>
+                  <option value="DE">Germany</option>
+                  <option value="GH">Ghana</option>
+                  <option value="IN">India</option>
+                  <option value="KE">Kenya</option>
+                  <option value="NG">Nigeria</option>
+                  <option value="GB">United Kingdom</option>
+                  <option value="US">United States</option>
+                </select>
+              </div>
+              <p class="field__error" id="country-error"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7.5v5.5M12 16.5h.01"/></svg><span data-error-msg></span></p>
+            </div>
+
+            <div class="field">
+              <label class="field__label" for="pw">Password</label>
+              <div class="field__control">
+                <input class="field__input" id="pw" name="password" type="password" autocomplete="new-password" required minlength="8" data-meter="pw-meter" aria-describedby="pw-help"
+                       data-msg-required="Create a password." data-msg-short="Use at least 8 characters.">
+                <button class="icon-btn" type="button" data-component="password" aria-controls="pw" aria-pressed="false" aria-label="Show password">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>
+                </button>
+              </div>
+              <p class="field__error" id="pw-error"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7.5v5.5M12 16.5h.01"/></svg><span data-error-msg></span></p>
+              <div class="auth-meter">
+                <div class="meter" id="pw-meter" data-label="pw-strength" aria-hidden="true"><span></span><span></span><span></span><span></span></div>
+                <p class="field__help" id="pw-help">8+ characters, mixing letters, numbers and symbols. <span class="auth-meter__label" id="pw-strength" aria-live="polite"></span></p>
+              </div>
+            </div>
+
+            <div class="field">
+              <label class="field__label" for="pw2">Confirm password</label>
+              <div class="field__control">
+                <input class="field__input" id="pw2" name="password_confirm" type="password" autocomplete="new-password" required data-match="pw"
+                       data-msg-required="Repeat your password." data-msg-match="Passwords don’t match.">
+                <button class="icon-btn" type="button" data-component="password" aria-controls="pw2" aria-pressed="false" aria-label="Show password">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>
+                </button>
+              </div>
+              <p class="field__error" id="pw2-error"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7.5v5.5M12 16.5h.01"/></svg><span data-error-msg></span></p>
+            </div>
+
+            <div class="field">
+              <label class="field__label" for="ref">Referral code <span class="muted">(optional)</span></label>
+              <div class="field__control"><input class="field__input" id="ref" name="referral_code" autocomplete="off" autocapitalize="characters" spellcheck="false" data-component="ref-prefill"></div>
+            </div>
+
+            <div class="field auth-grid__full auth-check">
+              <label class="check">
+                <input type="checkbox" name="terms" id="terms" required data-msg-required="Please accept the terms to create your account.">
+                <span>I agree to the <a href="legal/terms_conditions.html">Terms &amp; Conditions</a>, <a href="privacy-policy.html">Privacy Policy</a> and <a href="legal/risk_closure.html">Risk Disclosure</a>.</span>
+              </label>
+              <p class="field__error" id="terms-error"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7.5v5.5M12 16.5h.01"/></svg><span data-error-msg></span></p>
+            </div>
+          </div>
+
+          <p class="field__error verify-error" id="register-error" role="alert" hidden></p>
+          <button class="btn btn--lg btn--block" type="submit">Create account <svg class="btn__arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+        </form>
+
+        <p class="divider-text">or</p>
+
+        <button class="btn btn--lg btn--block btn--outline auth-google" type="button" data-google-signin>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#4285F4" d="M23.5 12.3c0-.8-.1-1.6-.2-2.3H12v4.4h6.5a5.6 5.6 0 0 1-2.4 3.6v3h3.9c2.2-2.1 3.5-5.1 3.5-8.7z"/><path fill="#34A853" d="M12 24c3.2 0 6-1.1 7.9-2.9l-3.9-3c-1.1.7-2.4 1.1-4 1.1-3.1 0-5.7-2.1-6.6-4.9h-4v3.1A12 12 0 0 0 12 24z"/><path fill="#FBBC05" d="M5.4 14.3a7.2 7.2 0 0 1 0-4.6V6.6h-4a12 12 0 0 0 0 10.8z"/><path fill="#EA4335" d="M12 4.8c1.8 0 3.3.6 4.6 1.8l3.4-3.4A12 12 0 0 0 1.4 6.6l4 3.1C6.3 6.9 8.9 4.8 12 4.8z"/></svg>
+          Sign up with Google
+        </button>
+        <p class="field__error verify-error" id="google-status" role="alert" hidden></p>
+
+        <p class="fineprint">Trading involves risk. You could lose some or all of your capital.</p>
+      </div>
+    </section>
+  </main>
 </body>
-
 </html>
-

@@ -187,6 +187,13 @@ async def traders():
     return read_html_file(SITE_DIR / "traders.html")
 
 
+@app.get("/mobile-app", response_class=HTMLResponse)
+@app.get("/mobile-app.html", response_class=HTMLResponse)
+async def mobile_app():
+    """Serve the mobile app page"""
+    return read_html_file(SITE_DIR / "mobile-app.html")
+
+
 @app.get("/how_it_works", response_class=HTMLResponse)
 @app.get("/how_it_works.html", response_class=HTMLResponse)
 async def how_it_works():
