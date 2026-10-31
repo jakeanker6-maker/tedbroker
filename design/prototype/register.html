@@ -1,0 +1,208 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Sign up — TED Brokers</title>
+  <meta name="description" content="Create a free TED Brokers account and start copying traders across crypto, forex and stocks.">
+  <meta name="theme-color" content="#0A1626">
+  <link rel="icon" href="assets/img/favicon.ico">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=JetBrains+Mono:wght@400;500;600&family=Sora:wght@300;600;700;800&display=swap">
+  <link rel="stylesheet" href="assets/css/main.css">
+  <link rel="stylesheet" href="assets/css/pages/auth.css">
+  <script>document.documentElement.classList.add('js');try{var t=localStorage.getItem('ted:theme');if(t==='system')t=matchMedia('(prefers-color-scheme: light)').matches?'light':'dark';if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
+  <script type="module" src="assets/js/main.js"></script>
+</head>
+<body>
+  <a class="skip-link" href="#signup-title">Skip to sign up</a>
+
+  <main class="auth" id="main" style="--auth-cols: 40fr 60fr">
+    <!-- ============ Visual ============ -->
+    <section class="auth__visual surface-ink" aria-labelledby="steps-title">
+      <div class="mesh" aria-hidden="true"><span></span></div>
+      <canvas class="dotfield" data-component="dotfield" data-mode="field" data-density=".5" aria-hidden="true"></canvas>
+
+      <div class="auth-visual__top">
+        <a class="wordmark" href="index.html" aria-label="TED Brokers home">
+          <span class="wordmark__ted">TED</span><span class="wordmark__brokers">Br<svg class="wordmark__o" viewBox="0 0 20 20" aria-hidden="true"><g fill="currentColor"><circle cx="10" cy="2" r="1.6"/><circle cx="15.2" cy="4.1" r="1.4" opacity=".8"/><circle cx="17.9" cy="9.4" r="1.6"/><circle cx="16.3" cy="14.8" r="1.4" opacity=".8"/><circle cx="11.2" cy="17.9" r="1.6"/><circle cx="5.6" cy="16.4" r="1.4" opacity=".7"/><circle cx="2.2" cy="11.6" r="1.6"/><circle cx="3" cy="6" r="1.4" opacity=".8"/><circle cx="6.6" cy="2.9" r="1.1" opacity=".6"/><circle cx="10" cy="10" r="1.9"/><circle cx="13.3" cy="9.2" r="1" opacity=".7"/><circle cx="7.4" cy="12" r="1" opacity=".7"/></g></svg>kers</span>
+        </a>
+      </div>
+
+      <div class="auth-visual__body">
+        <h2 class="auth-headline" id="steps-title">Start copying in three steps.</h2>
+        <ol class="auth-steps mt-4" role="list">
+          <li class="auth-steps__item" aria-current="step">
+            <span class="auth-steps__num">01</span><span class="auth-steps__title">Create account</span>
+            <span class="auth-steps__text">Your details and a secure password.</span>
+          </li>
+          <li class="auth-steps__item">
+            <span class="auth-steps__num">02</span><span class="auth-steps__title">Verify identity</span>
+            <span class="auth-steps__text">Confirm who you are with a photo ID.</span>
+          </li>
+          <li class="auth-steps__item">
+            <span class="auth-steps__num">03</span><span class="auth-steps__title">Fund &amp; copy</span>
+            <span class="auth-steps__text">Deposit, pick a trader, set your limits.</span>
+          </li>
+        </ol>
+      </div>
+
+      <dl class="auth-stats">
+        <div><dt>Min. deposit</dt><dd>$50</dd></div>
+        <div><dt>Traders</dt><dd>340+</dd></div>
+        <div><dt>Languages</dt><dd>10</dd></div>
+      </dl>
+    </section>
+
+    <!-- ============ Form ============ -->
+    <section class="auth__form surface-paper" aria-labelledby="signup-title">
+      <div class="auth__top">
+        <button class="lang-select" type="button" aria-label="Language: English">EN
+          <svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M2 3.5l3 3 3-3"/></svg>
+        </button>
+        <p><span class="muted">Already have an account?</span> <a href="login.html">Sign in →</a></p>
+      </div>
+
+      <div class="auth__panel auth__panel--wide">
+        <div class="auth-head">
+          <p class="overline">Step 1 of 3</p>
+          <h1 id="signup-title" tabindex="-1">Sign up for free</h1>
+          <p class="lead">Takes about two minutes.</p>
+        </div>
+
+        <form class="auth-form" data-component="auth-form" data-redirect="app/index.html" action="app/index.html" novalidate>
+          <div class="auth-grid">
+            <div class="field">
+              <label class="field__label" for="fullname">Full name</label>
+              <div class="field__control"><input class="field__input" id="fullname" name="full_name" autocomplete="name" required data-msg-required="Enter your full name."></div>
+              <p class="field__error" id="fullname-error"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7.5v5.5M12 16.5h.01"/></svg><span data-error-msg></span></p>
+            </div>
+
+            <div class="field">
+              <label class="field__label" for="username">Username</label>
+              <div class="field__control"><input class="field__input" id="username" name="username" autocomplete="username" autocapitalize="none" spellcheck="false" required minlength="3" pattern="[A-Za-z0-9_.]+"
+                     data-msg-required="Choose a username." data-msg-short="Use at least 3 characters." data-msg-pattern="Use letters, numbers, dots or underscores only."></div>
+              <p class="field__error" id="username-error"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7.5v5.5M12 16.5h.01"/></svg><span data-error-msg></span></p>
+            </div>
+
+            <div class="field">
+              <label class="field__label" for="email">Email</label>
+              <div class="field__control"><input class="field__input" id="email" name="email" type="email" autocomplete="email" autocapitalize="none" spellcheck="false" required data-msg-required="Enter your email address."></div>
+              <p class="field__error" id="email-error"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7.5v5.5M12 16.5h.01"/></svg><span data-error-msg></span></p>
+            </div>
+
+            <div class="field auth-phone">
+              <label class="field__label" for="phone">Phone</label>
+              <div class="field__control">
+                <span class="auth-phone__cc">
+                  <label class="sr-only" for="phone-cc">Country code</label>
+                  <select class="field__select" id="phone-cc" name="phone_code" autocomplete="tel-country-code">
+                    <option value="+1">+1</option>
+                    <option value="+44">+44</option>
+                    <option value="+234">+234</option>
+                    <option value="+971">+971</option>
+                    <option value="+91">+91</option>
+                    <option value="+86">+86</option>
+                    <option value="+49">+49</option>
+                    <option value="+55">+55</option>
+                  </select>
+                </span>
+                <input class="field__input" id="phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" required pattern="[0-9 \(\)\-]{6,}"
+                       data-msg-required="Enter your phone number." data-msg-pattern="Enter a valid phone number, digits only.">
+              </div>
+              <p class="field__error" id="phone-error"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7.5v5.5M12 16.5h.01"/></svg><span data-error-msg></span></p>
+            </div>
+
+            <div class="field">
+              <label class="field__label" for="gender">Gender</label>
+              <div class="field__control">
+                <select class="field__select" id="gender" name="gender">
+                  <option value="">Prefer not to say</option>
+                  <option value="female">Female</option>
+                  <option value="male">Male</option>
+                  <option value="other">Other</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="field">
+              <label class="field__label" for="country">Country</label>
+              <div class="field__control">
+                <select class="field__select" id="country" name="country" autocomplete="country" required data-msg-required="Select your country of residence.">
+                  <option value="">Select country</option>
+                  <option value="AE">United Arab Emirates</option>
+                  <option value="AU">Australia</option>
+                  <option value="BR">Brazil</option>
+                  <option value="CA">Canada</option>
+                  <option value="CN">China</option>
+                  <option value="DE">Germany</option>
+                  <option value="GH">Ghana</option>
+                  <option value="IN">India</option>
+                  <option value="KE">Kenya</option>
+                  <option value="NG">Nigeria</option>
+                  <option value="GB">United Kingdom</option>
+                  <option value="US">United States</option>
+                </select>
+              </div>
+              <p class="field__error" id="country-error"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7.5v5.5M12 16.5h.01"/></svg><span data-error-msg></span></p>
+            </div>
+
+            <div class="field">
+              <label class="field__label" for="pw">Password</label>
+              <div class="field__control">
+                <input class="field__input" id="pw" name="password" type="password" autocomplete="new-password" required minlength="8" data-meter="pw-meter" aria-describedby="pw-help"
+                       data-msg-required="Create a password." data-msg-short="Use at least 8 characters.">
+                <button class="icon-btn" type="button" data-component="password" aria-controls="pw" aria-pressed="false" aria-label="Show password">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>
+                </button>
+              </div>
+              <p class="field__error" id="pw-error"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7.5v5.5M12 16.5h.01"/></svg><span data-error-msg></span></p>
+              <div class="auth-meter">
+                <div class="meter" id="pw-meter" data-label="pw-strength" aria-hidden="true"><span></span><span></span><span></span><span></span></div>
+                <p class="field__help" id="pw-help">8+ characters, mixing letters, numbers and symbols. <span class="auth-meter__label" id="pw-strength" aria-live="polite"></span></p>
+              </div>
+            </div>
+
+            <div class="field">
+              <label class="field__label" for="pw2">Confirm password</label>
+              <div class="field__control">
+                <input class="field__input" id="pw2" name="password_confirm" type="password" autocomplete="new-password" required data-match="pw"
+                       data-msg-required="Repeat your password." data-msg-match="Passwords don’t match.">
+                <button class="icon-btn" type="button" data-component="password" aria-controls="pw2" aria-pressed="false" aria-label="Show password">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>
+                </button>
+              </div>
+              <p class="field__error" id="pw2-error"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7.5v5.5M12 16.5h.01"/></svg><span data-error-msg></span></p>
+            </div>
+
+            <div class="field">
+              <label class="field__label" for="ref">Referral code <span class="muted">(optional)</span></label>
+              <div class="field__control"><input class="field__input" id="ref" name="referral_code" autocomplete="off" autocapitalize="characters" spellcheck="false" data-component="ref-prefill"></div>
+            </div>
+
+            <div class="field auth-grid__full auth-check">
+              <label class="check">
+                <input type="checkbox" name="terms" id="terms" required data-msg-required="Please accept the terms to create your account.">
+                <span>I agree to the <a href="help.html">Terms &amp; Conditions</a>, <a href="help.html">Privacy Policy</a> and <a href="help.html">Risk Disclosure</a>.</span>
+              </label>
+              <p class="field__error" id="terms-error"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7.5v5.5M12 16.5h.01"/></svg><span data-error-msg></span></p>
+            </div>
+          </div>
+
+          <button class="btn btn--lg btn--block" type="submit">Create account <svg class="btn__arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+        </form>
+
+        <p class="divider-text">or</p>
+
+        <button class="btn btn--lg btn--block btn--outline auth-google" type="button">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#4285F4" d="M23.5 12.3c0-.8-.1-1.6-.2-2.3H12v4.4h6.5a5.6 5.6 0 0 1-2.4 3.6v3h3.9c2.2-2.1 3.5-5.1 3.5-8.7z"/><path fill="#34A853" d="M12 24c3.2 0 6-1.1 7.9-2.9l-3.9-3c-1.1.7-2.4 1.1-4 1.1-3.1 0-5.7-2.1-6.6-4.9h-4v3.1A12 12 0 0 0 12 24z"/><path fill="#FBBC05" d="M5.4 14.3a7.2 7.2 0 0 1 0-4.6V6.6h-4a12 12 0 0 0 0 10.8z"/><path fill="#EA4335" d="M12 4.8c1.8 0 3.3.6 4.6 1.8l3.4-3.4A12 12 0 0 0 1.4 6.6l4 3.1C6.3 6.9 8.9 4.8 12 4.8z"/></svg>
+          Sign up with Google
+        </button>
+
+        <p class="fineprint">Trading involves risk. You could lose some or all of your capital.</p>
+      </div>
+    </section>
+  </main>
+</body>
+</html>

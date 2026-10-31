@@ -1,0 +1,49 @@
+html { scroll-behavior: smooth; scroll-padding-block-start: 6rem; }
+
+body {
+  font: 400 var(--text-body)/1.55 var(--font-text);
+  background: var(--color-bg);
+  color: var(--color-text);
+}
+
+:where(h1, h2, h3, h4) {
+  font-family: var(--font-display);
+  font-weight: 700;
+  line-height: 1.08;
+  letter-spacing: -0.025em;
+  text-wrap: balance;
+}
+:where(h1) { font-size: var(--text-h1); font-weight: 800; letter-spacing: -0.035em; }
+:where(h2) { font-size: var(--text-h2); }
+:where(h3) { font-size: var(--text-h3); letter-spacing: -0.01em; line-height: 1.25; }
+:where(p) { text-wrap: pretty; }
+
+:where(a) {
+  color: var(--color-link);
+  text-underline-offset: 0.2em;
+  text-decoration-thickness: 1px;
+}
+:where(a:hover) { text-decoration-thickness: 2px; }
+
+:where(a, button, input, select, textarea, summary, [tabindex]):focus-visible {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+::selection { background: color-mix(in oklch, var(--red-500) 30%, transparent); }
+
+:where(code, kbd, samp) { font-family: var(--font-mono); font-size: 0.92em; }
+
+:where(table) { inline-size: 100%; font-variant-numeric: tabular-nums; }
+
+input[type="checkbox"], input[type="radio"], input[type="range"] { accent-color: var(--color-accent); }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+  }
+}

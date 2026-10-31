@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>TED Brokers — Investment Plans (Robo Advisor)</title>
+<!-- Google Fonts & Material Symbols -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300..700;1,9..40,300..700&amp;family=JetBrains+Mono:wght@300;400;500;600;700&amp;family=Public+Sans:wght@400;500;600;700&amp;family=Sora:wght@400;600;700;800&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@100..900&amp;family=Public+Sans:wght@100..900&amp;family=Sora:wght@100..900&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "tertiary-fixed-dim": "#51dbcb",
+            "on-tertiary-container": "#fafffd",
+            "surface-container-low": "#101c2c",
+            "surface-tint": "#ffb3ad",
+            "secondary": "#9fcbf2",
+            "on-error-container": "#ffdad6",
+            "inverse-primary": "#c0001c",
+            "error": "#ffb4ab",
+            "primary-container": "#e3262f",
+            "tertiary": "#51dbcb",
+            "on-tertiary-fixed-variant": "#005049",
+            "on-secondary-fixed-variant": "#184b6b",
+            "surface-container-highest": "#2a3547",
+            "surface-dim": "#081424",
+            "on-primary-fixed": "#410004",
+            "surface-container-high": "#1f2a3b",
+            "tertiary-fixed": "#72f8e7",
+            "on-tertiary-fixed": "#00201d",
+            "on-primary-fixed-variant": "#930013",
+            "tertiary-container": "#008479",
+            "on-secondary-fixed": "#001e30",
+            "surface-bright": "#2e3a4b",
+            "inverse-surface": "#d7e3fa",
+            "primary-fixed": "#ffdad7",
+            "on-error": "#690005",
+            "error-container": "#93000a",
+            "on-primary": "#68000a",
+            "primary": "#ffb3ad",
+            "secondary-container": "#1c4d6e",
+            "on-secondary-container": "#91bde3",
+            "on-secondary": "#003450",
+            "surface-variant": "#2a3547",
+            "primary-fixed-dim": "#ffb3ad",
+            "secondary-fixed-dim": "#9fcbf2",
+            "surface": "#081424",
+            "surface-container": "#152030",
+            "surface-container-lowest": "#030e1e",
+            "secondary-fixed": "#cbe6ff",
+            "on-surface": "#d7e3fa",
+            "outline": "#ad8885",
+            "on-tertiary": "#003732",
+            "inverse-on-surface": "#263142",
+            "background": "#081424",
+            "on-background": "#d7e3fa",
+            "on-surface-variant": "#e6bdb9",
+            "outline-variant": "#5d3f3d",
+            "on-primary-container": "#fffeff"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "space-xl": "2rem",
+            "space-md": "1rem",
+            "margin": "1.5rem",
+            "space-sm": "0.5rem",
+            "gutter": "1rem",
+            "space-xs": "0.25rem",
+            "space-lg": "1.5rem"
+          },
+          "fontFamily": {
+            "display-lg": ["Sora"],
+            "headline-md": ["Sora"],
+            "headline-lg": ["Sora"],
+            "data-mono": ["JetBrains Mono"],
+            "body-md": ["DM Sans"],
+            "label-md": ["Public Sans"],
+            "body-lg": ["DM Sans"]
+          },
+          "fontSize": {
+            "display-lg": ["72px", { "lineHeight": "80px", "letterSpacing": "-0.035em", "fontWeight": "700" }],
+            "headline-md": ["28px", { "lineHeight": "36px", "letterSpacing": "-0.015em", "fontWeight": "600" }],
+            "headline-lg": ["36px", { "lineHeight": "44px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+            "data-mono": ["14px", { "lineHeight": "20px", "fontWeight": "500" }],
+            "body-md": ["15px", { "lineHeight": "22px", "fontWeight": "400" }],
+            "label-md": ["12px", { "lineHeight": "16px", "letterSpacing": "0.12em", "fontWeight": "600" }],
+            "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }]
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      display: inline-block;
+      vertical-align: middle;
+      line-height: 1;
+    }
+    /* Subtle grid pattern */
+    .risk-grid-line {
+      stroke: rgba(255, 255, 255, 0.05);
+      stroke-dasharray: 4 4;
+    }
+  </style>
+</head>
+<body class="bg-background text-on-surface antialiased min-h-screen flex flex-col font-body-md select-none overflow-x-hidden">
+<!-- ================= TOP GLOBAL TICKER & UTILITY BAR ================= -->
+<!-- ================= SHELL: SIDEBAR + MAIN WORKSPACE ================= -->
+<div class="flex-1 flex w-full relative">
+<!-- LEFT SIDEBAR (240px Fixed, Ink-2 #11223A) -->
+<aside class="w-60 shrink-0 bg-[#11223A] border-r border-white/[0.07] flex flex-col justify-between min-h-screen sticky top-0 self-start py-5">
+<div class="flex flex-col gap-6 px-3">
+<!-- Wordmark -->
+<div class="px-3 pt-1 pb-2">
+<span class="font-headline-md text-xl font-bold tracking-tight text-white flex items-center gap-1.5 font-display-lg">
+<span class="text-[#E3262F]">TED</span> <span>Brokers</span>
+</span>
+</div>
+<!-- Main Navigation Items -->
+<div class="flex flex-col gap-1">
+<a class="flex items-center gap-3 px-3 py-2 text-xs font-body-md text-slate-400 hover:text-white hover:bg-white/[0.03] transition-colors" href="#">
+<span class="material-symbols-outlined text-lg">dashboard</span>
+<span>Overview</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-xs font-body-md text-slate-400 hover:text-white hover:bg-white/[0.03] transition-colors" href="#">
+<span class="material-symbols-outlined text-lg">account_balance_wallet</span>
+<span>Wallet</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-xs font-body-md text-slate-400 hover:text-white hover:bg-white/[0.03] transition-colors" href="#">
+<span class="material-symbols-outlined text-lg">pie_chart</span>
+<span>Portfolio</span>
+</a>
+<a class="flex items-center justify-between px-3 py-2 text-xs font-body-md text-slate-400 hover:text-white hover:bg-white/[0.03] transition-colors" href="#">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-lg">group</span>
+<span>Copy traders</span>
+</div>
+<span class="text-[10px] font-data-mono text-tertiary">3 LIVE</span>
+</a>
+<!-- Investment plans active group -->
+<div class="flex flex-col mt-2">
+<a class="flex items-center gap-3 border-l-2 border-[#E3262F] text-white font-medium bg-white/[0.04] px-3 py-2 text-xs transition-colors" href="#">
+<span class="material-symbols-outlined text-lg text-primary-container">trending_up</span>
+<span>Investment plans</span>
+</a>
+<div class="flex flex-col pl-4 mt-1 border-l border-white/[0.05] ml-3 gap-0.5">
+<a class="flex items-center gap-2.5 px-3 py-1.5 text-xs font-body-md text-tertiary font-medium" href="#">
+<span class="material-symbols-outlined text-base">smart_toy</span>
+<span>Robo Advisor</span>
+</a>
+<a class="flex items-center gap-2.5 px-3 py-1.5 text-xs font-body-md text-slate-400 hover:text-white transition-colors" href="#">
+<span class="material-symbols-outlined text-base">layers</span>
+<span>ETF automation</span>
+</a>
+<a class="flex items-center gap-2.5 px-3 py-1.5 text-xs font-body-md text-slate-400 hover:text-white transition-colors" href="#">
+<span class="material-symbols-outlined text-base">token</span>
+<span>DeFi</span>
+</a>
+<a class="flex items-center gap-2.5 px-3 py-1.5 text-xs font-body-md text-slate-400 hover:text-white transition-colors" href="#">
+<span class="material-symbols-outlined text-base">tune</span>
+<span>Options</span>
+</a>
+<a class="flex items-center justify-between px-3 py-1.5 text-xs font-body-md text-slate-500" href="#">
+<div class="flex items-center gap-2.5">
+<span class="material-symbols-outlined text-base">currency_exchange</span>
+<span>Staking</span>
+</div>
+<span class="text-[9px] font-data-mono text-slate-600">soon</span>
+</a>
+</div>
+</div>
+<a class="flex items-center gap-3 px-3 py-2 text-xs font-body-md text-slate-400 hover:text-white hover:bg-white/[0.03] transition-colors mt-2" href="#">
+<span class="material-symbols-outlined text-lg">hub</span>
+<span>Network feed</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-xs font-body-md text-slate-400 hover:text-white hover:bg-white/[0.03] transition-colors" href="#">
+<span class="material-symbols-outlined text-lg">loyalty</span>
+<span>Referrals</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-xs font-body-md text-slate-400 hover:text-white hover:bg-white/[0.03] transition-colors" href="#">
+<span class="material-symbols-outlined text-lg">terminal</span>
+<span>News</span>
+</a>
+</div>
+</div>
+<!-- Bottom rail -->
+<div class="px-3 pt-3 border-t border-white/[0.07] flex flex-col gap-2">
+<div class="flex items-center justify-between px-2 text-slate-400 hover:text-white text-xs mb-1">
+<a class="flex items-center gap-2 hover:underline" href="#">
+<span class="material-symbols-outlined text-base">help</span>
+<span>Help center</span>
+</a>
+<a class="hover:text-white" href="#" title="Settings">
+<span class="material-symbols-outlined text-base">settings</span>
+</a>
+</div>
+<div class="flex items-center gap-3 px-2 py-2">
+<div class="w-8 h-8 rounded-full bg-slate-700 flex items-center justify-center font-bold text-xs text-white">DO</div>
+<div class="flex flex-col min-w-0">
+<span class="text-xs font-semibold text-white truncate">Daniel Okafor</span>
+<span class="text-[10px] font-data-mono text-tertiary">● Verified</span>
+</div>
+</div>
+</div>
+</aside>
+<!-- ================= MAIN CONTENT CANVAS ================= -->
+<main class="flex-1 bg-[#0A1626] flex flex-col min-w-0 px-8 py-6"><!-- Top Bar to the right of rail -->
+<div class="-mx-8 -mt-6 mb-6 flex flex-col border-b border-white/[0.07] bg-surface-container-lowest sticky top-0 z-30">
+<div class="px-8 py-space-sm flex items-center justify-between gap-6">
+<!-- Search -->
+<div class="relative flex items-center flex-1 max-w-md">
+<span class="material-symbols-outlined absolute left-3 text-slate-500 text-sm">search</span>
+<input class="bg-surface-container-low text-xs font-data-mono text-slate-200 placeholder-slate-500 pl-9 pr-14 py-2 border border-white/[0.08] focus:border-tertiary focus:outline-none w-full transition-colors" placeholder="Search traders, plans, markets" type="text"/>
+<span class="absolute right-2.5 px-1.5 py-0.5 text-[10px] font-data-mono text-slate-400 bg-white/[0.05] border border-white/10">⌘K</span>
+</div>
+<!-- Right cluster -->
+<div class="flex items-center gap-4 shrink-0">
+<button class="flex items-center gap-1 text-slate-300 hover:text-white text-xs font-data-mono transition-colors">
+<span class="material-symbols-outlined text-base">language</span>
+<span>EN</span>
+<span class="material-symbols-outlined text-xs">arrow_drop_down</span>
+</button>
+<button class="text-slate-400 hover:text-white transition-colors" title="Theme toggle">
+<span class="material-symbols-outlined text-base">dark_mode</span>
+</button>
+<button class="relative text-slate-400 hover:text-white transition-colors">
+<span class="material-symbols-outlined text-base">notifications</span>
+<span class="absolute top-0 right-0 w-2 h-2 rounded-full bg-primary-container"></span>
+</button>
+<button class="inline-flex items-center gap-1.5 text-xs font-data-mono px-3 py-1.5 border border-tertiary/40 text-tertiary hover:bg-tertiary/10 transition-colors whitespace-nowrap">
+<span class="material-symbols-outlined text-sm text-tertiary">auto_awesome</span>
+<span>TED AI</span>
+</button>
+<button class="bg-[#E3262F] hover:bg-[#ff3b44] text-white font-label-md text-xs uppercase tracking-wider px-4 py-1.5 transition-colors inline-flex items-center font-semibold whitespace-nowrap">
+<span>+ DEPOSIT</span>
+</button>
+</div>
+</div>
+<!-- Thin mono ticker strip -->
+<div class="px-8 py-1.5 border-t border-white/[0.05] flex items-center justify-between text-xs font-data-mono overflow-x-auto whitespace-nowrap bg-black/20">
+<div class="flex items-center gap-6 text-slate-300">
+<span class="flex items-center gap-1.5"><span class="text-slate-500 font-semibold">EUR/USD</span> <span>1.0842</span> <span class="text-tertiary">▲ +0.21%</span></span>
+<span class="text-white/10">|</span>
+<span class="flex items-center gap-1.5"><span class="text-slate-500 font-semibold">BTC/USD</span> <span>67,412.00</span> <span class="text-tertiary">▲ +1.84%</span></span>
+<span class="text-white/10">|</span>
+<span class="flex items-center gap-1.5"><span class="text-slate-500 font-semibold">ETH/USD</span> <span>3,540.80</span> <span class="text-tertiary">▲ +2.11%</span></span>
+<span class="text-white/10">|</span>
+<span class="flex items-center gap-1.5"><span class="text-slate-500 font-semibold">AAPL</span> <span>228.14</span> <span class="text-primary-container">▼ -0.42%</span></span>
+<span class="text-white/10">|</span>
+<span class="flex items-center gap-1.5"><span class="text-slate-500 font-semibold">XAU/USD</span> <span>2,384.10</span> <span class="text-tertiary">▲ +0.65%</span></span>
+</div>
+<div class="flex items-center gap-4 text-slate-400 pl-6">
+<span class="inline-flex items-center gap-1 text-[11px]"><span class="w-1.5 h-1.5 rounded-full bg-tertiary animate-pulse"></span> ALL SYSTEMS NOMINAL</span>
+</div>
+</div>
+</div>
+<!-- 1. HEADER ROW -->
+<div class="flex flex-col md:flex-row md:items-end justify-between border-b border-white/[0.08] pb-4 gap-4">
+<div>
+<h1 class="font-headline-lg text-headline-lg font-bold text-white tracking-tight">Investment plans</h1>
+<!-- Navigation Tabs -->
+<div class="flex items-center gap-8 mt-5">
+<button class="border-b-2 border-[#E3262F] pb-2 text-white font-semibold text-sm transition-colors">
+              Robo Advisor
+            </button>
+<button class="pb-2 text-slate-400 hover:text-white font-medium text-sm transition-colors">
+              ETF automation
+            </button>
+<button class="pb-2 text-slate-400 hover:text-white font-medium text-sm transition-colors">
+              DeFi
+            </button>
+<button class="pb-2 text-slate-400 hover:text-white font-medium text-sm transition-colors">
+              Options
+            </button>
+<button class="pb-2 text-slate-500 font-medium text-sm transition-colors cursor-not-allowed flex items-center gap-1.5">
+<span>Staking</span>
+<span class="text-[10px] font-data-mono text-slate-600 uppercase">soon</span>
+</button>
+</div>
+</div>
+<!-- Right Side Header Utility: Balance -->
+<div class="flex items-center pb-2">
+<div class="flex items-center">
+<span class="font-data-mono text-xs uppercase text-slate-400">Available</span>
+<span class="font-data-mono text-base font-bold text-white ml-2">$6,420.00</span>
+</div>
+<a class="text-[#2EE6D3] hover:underline text-xs font-data-mono font-medium ml-4" href="#">Add funds →</a>
+</div>
+</div>
+<!-- 2. RISK VS EXPECTED RETURN VISUAL PLANE (Seamless, NO card container) -->
+<section class="py-6 border-b border-white/[0.08]">
+<div class="flex items-center justify-between mb-4">
+<span class="font-data-mono text-xs uppercase tracking-widest text-slate-400">
+            STRATEGY RISK MAPPING // AUDITED 12-MO PERFORMANCE
+          </span>
+<div class="flex items-center gap-4 text-xs font-data-mono text-slate-400">
+<span class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-tertiary"></span> Target Yield</span>
+<span class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-primary-container"></span> Volatility Outlier</span>
+<span class="text-slate-500">Bubble Area = Copier Volume</span>
+</div>
+</div>
+<!-- Coordinate Matrix Canvas (SVG) -->
+<div class="w-full h-72 relative bg-surface-container-lowest/50 border border-white/[0.04]">
+<svg class="w-full h-full" preserveaspectratio="none" viewbox="0 0 1000 280">
+<!-- Grid Lines Horizontal -->
+<line class="risk-grid-line" x1="60" x2="980" y1="30" y2="30"></line>
+<line class="risk-grid-line" x1="60" x2="980" y1="85" y2="85"></line>
+<line class="risk-grid-line" x1="60" x2="980" y1="140" y2="140"></line>
+<line class="risk-grid-line" x1="60" x2="980" y1="195" y2="195"></line>
+<line class="risk-grid-line" x1="60" x2="980" y1="240" y2="240"></line>
+<!-- Grid Lines Vertical -->
+<line class="risk-grid-line" x1="180" x2="180" y1="20" y2="240"></line>
+<line class="risk-grid-line" x1="380" x2="380" y1="20" y2="240"></line>
+<line class="risk-grid-line" x1="580" x2="580" y1="20" y2="240"></line>
+<line class="risk-grid-line" x1="780" x2="780" y1="20" y2="240"></line>
+<!-- Axis Labels Y (Yield) -->
+<text fill="#64748b" font-family="JetBrains Mono" font-size="11" x="20" y="35">45%</text>
+<text fill="#64748b" font-family="JetBrains Mono" font-size="11" x="20" y="90">35%</text>
+<text fill="#64748b" font-family="JetBrains Mono" font-size="11" x="20" y="145">25%</text>
+<text fill="#64748b" font-family="JetBrains Mono" font-size="11" x="20" y="200">15%</text>
+<text fill="#64748b" font-family="JetBrains Mono" font-size="11" x="20" y="244">5%</text>
+<!-- Axis Labels X (Risk) -->
+<text fill="#64748b" font-family="JetBrains Mono" font-size="11" x="70" y="265">LOW RISK (VOL &lt; 4%)</text>
+<text fill="#64748b" font-family="JetBrains Mono" font-size="11" x="480" y="265">MODERATE (VOL 10-15%)</text>
+<text fill="#64748b" font-family="JetBrains Mono" font-size="11" x="820" y="265">HIGH RISK (VOL &gt; 28%)</text>
+<!-- Efficient Frontier Subtle Glow Curve -->
+<path d="M 120 235 Q 350 200 520 150 T 880 40" fill="none" stroke="rgba(46,230,211,0.2)" stroke-dasharray="6 4" stroke-width="1.5"></path>
+<!-- Point: Conservative (low risk, 6.8% return) -->
+<g class="cursor-pointer group">
+<circle cx="140" cy="230" fill="#2EE6D3" fill-opacity="0.15" r="14" stroke="#2EE6D3" stroke-width="1"></circle>
+<circle cx="140" cy="230" fill="#2EE6D3" r="4"></circle>
+<text fill="#94a3b8" font-family="JetBrains Mono" font-size="10" text-anchor="middle" x="140" y="210">Conservative 6.8%</text>
+</g>
+<!-- Point: Starter (low-mid risk, 8.5% return) -->
+<g class="cursor-pointer group">
+<circle cx="230" cy="220" fill="#2EE6D3" fill-opacity="0.2" r="18" stroke="#2EE6D3" stroke-width="1"></circle>
+<circle cx="230" cy="220" fill="#2EE6D3" r="5"></circle>
+<text fill="#cbd5e1" font-family="JetBrains Mono" font-size="10" text-anchor="middle" x="230" y="196">Starter 8.5%</text>
+</g>
+<!-- Point: Growth (Mid risk, 15.2% return, ACTIVE STATE WITH GLOWING CROSSHAIRS) -->
+<g class="cursor-pointer">
+<!-- Glow Aura -->
+<circle cx="480" cy="180" fill="#2EE6D3" fill-opacity="0.12" r="28"></circle>
+<circle cx="480" cy="180" fill="#2EE6D3" fill-opacity="0.3" r="16" stroke="#2EE6D3" stroke-width="2"></circle>
+<circle cx="480" cy="180" fill="#ffffff" r="5"></circle>
+<!-- Crosshair Lines -->
+<line opacity="0.6" stroke="#2EE6D3" stroke-dasharray="2 2" stroke-width="1" x1="480" x2="480" y1="20" y2="240"></line>
+<line opacity="0.6" stroke="#2EE6D3" stroke-dasharray="2 2" stroke-width="1" x1="60" x2="980" y1="180" y2="180"></line>
+<!-- Tooltip Box -->
+<rect fill="#081424" height="42" rx="0" stroke="#2EE6D3" stroke-width="1" width="280" x="420" y="105"></rect>
+<text fill="#ffffff" font-family="JetBrains Mono" font-size="11" font-weight="600" x="430" y="123">Growth • $2,000 min • 15.2% target</text>
+<text fill="#2EE6D3" font-family="JetBrains Mono" font-size="10" x="430" y="138">2,874 copiers • Sharpe 2.4 • Drawdown -4.2%</text>
+</g>
+<!-- Point: Premium (mid-high risk, 24.7% return) -->
+<g class="cursor-pointer group">
+<circle cx="680" cy="130" fill="#FFB020" fill-opacity="0.25" r="12" stroke="#FFB020" stroke-width="1.5"></circle>
+<circle cx="680" cy="130" fill="#FFB020" r="4"></circle>
+<text fill="#FFB020" font-family="JetBrains Mono" font-size="10" text-anchor="middle" x="680" y="112">Premium 24.7%</text>
+</g>
+<!-- Point: Elite (high return 35.3%, lower risk hedge) -->
+<g class="cursor-pointer group">
+<circle cx="620" cy="80" fill="#9fcbf2" fill-opacity="0.3" r="9" stroke="#9fcbf2" stroke-width="1.5"></circle>
+<circle cx="620" cy="80" fill="#ffffff" r="4"></circle>
+<text fill="#cbd5e1" font-family="JetBrains Mono" font-size="10" text-anchor="middle" x="620" y="64">Elite 35.3% (Market Neutral)</text>
+</g>
+<!-- Point: Crypto Accelerator (high risk, 42.5% return, glowing red dot) -->
+<g class="cursor-pointer group">
+<circle cx="890" cy="45" fill="#E3262F" fill-opacity="0.2" r="14" stroke="#E3262F" stroke-width="1.5"></circle>
+<circle cx="890" cy="45" fill="#E3262F" r="4.5"></circle>
+<text fill="#E3262F" font-family="JetBrains Mono" font-size="10" font-weight="600" text-anchor="middle" x="890" y="28">Crypto Accelerator 42.5%</text>
+</g>
+</svg>
+</div>
+</section>
+<!-- 3. PLANS LEDGER -->
+<section class="w-full mt-4 flex flex-col">
+<!-- Ledger Header -->
+<div class="grid grid-cols-12 px-4 py-3 border-b border-white/[0.08] text-xs font-data-mono text-slate-400 uppercase tracking-wider">
+<div class="col-span-5">PLAN &amp; STRATEGY</div>
+<div class="col-span-2 text-right">MINIMUM</div>
+<div class="col-span-2 text-right">EXPECTED RETURN</div>
+<div class="col-span-1 text-right">HOLDING</div>
+<div class="col-span-1 text-right">COPIERS</div>
+<div class="col-span-1 text-right">ACTION</div>
+</div>
+<!-- ROW A: Starter -->
+<div class="grid grid-cols-12 px-4 py-5 border-b border-white/[0.08] hover:bg-white/[0.02] transition-colors items-center">
+<div class="col-span-5 pr-4">
+<h3 class="font-headline-md text-xl font-bold text-white tracking-tight">Starter</h3>
+<p class="text-xs text-slate-400 mt-1">Systematic index-weight rebalancing across mega-cap global equities.</p>
+</div>
+<div class="col-span-2 text-right font-data-mono text-sm text-slate-200">
+            $500
+          </div>
+<div class="col-span-2 text-right font-data-mono text-sm font-semibold text-tertiary">
+            8.5%
+          </div>
+<div class="col-span-1 text-right font-data-mono text-xs text-slate-400">
+            3 mo
+          </div>
+<div class="col-span-1 text-right font-data-mono text-xs text-slate-400">
+            4,210
+          </div>
+<div class="col-span-1 text-right">
+<button class="text-[#E3262F] hover:text-[#ff4d56] font-semibold text-sm transition-colors">Invest →</button>
+</div>
+</div>
+<!-- ROW B: Growth (Inline Expanded State Lead) -->
+<div class="grid grid-cols-12 px-4 pt-5 pb-4 border-b border-transparent bg-white/[0.02] items-center">
+<div class="col-span-5 pr-4">
+<span class="text-tertiary text-xs font-data-mono font-semibold tracking-wider block mb-1">● RECOMMENDED</span>
+<h3 class="font-headline-md text-xl font-bold text-white tracking-tight">Growth</h3>
+<p class="text-xs text-slate-400 mt-1">Algorithmic momentum balancing equity beta, corporate debt, and commodities.</p>
+</div>
+<div class="col-span-2 text-right font-data-mono text-sm text-white font-medium">
+            $2,000
+          </div>
+<div class="col-span-2 text-right font-data-mono text-sm font-semibold text-tertiary">
+            15.2%
+          </div>
+<div class="col-span-1 text-right font-data-mono text-xs text-slate-300">
+            6 mo
+          </div>
+<div class="col-span-1 text-right font-data-mono text-xs text-slate-300">
+            2,874
+          </div>
+<div class="col-span-1 text-right">
+<span class="text-xs font-data-mono text-tertiary font-semibold">Expanded ▴</span>
+</div>
+</div>
+<!-- 4. GROWTH ROW INLINE EXPANDED DRAWER (Ink-2 #11223A with red 2px inline-start bar) -->
+<div class="w-full bg-[#11223A] border-l-2 border-[#E3262F] border-b border-white/[0.08] p-6 mb-1">
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+<!-- Column 1: Allocation Breakdown -->
+<div class="lg:col-span-4 flex flex-col">
+<span class="font-data-mono text-xs text-slate-400 uppercase tracking-wider mb-4">PORTFOLIO WEIGHT REPLICATION</span>
+<div class="flex items-center gap-6">
+<!-- Donut Chart SVG -->
+<div class="relative w-32 h-32 shrink-0">
+<svg class="w-full h-full -rotate-90" viewbox="0 0 40 40">
+<!-- Segment 1: US Equities 40% (stroke-dasharray 40 60, offset 0) -->
+<circle cx="20" cy="20" fill="transparent" r="15.91549430918954" stroke="#2EE6D3" stroke-dasharray="40 60" stroke-dashoffset="0" stroke-width="4.5"></circle>
+<!-- Segment 2: Bonds 25% (offset -40) -->
+<circle cx="20" cy="20" fill="transparent" r="15.91549430918954" stroke="#cbd5e1" stroke-dasharray="25 75" stroke-dashoffset="-40" stroke-width="4.5"></circle>
+<!-- Segment 3: REITs 20% (offset -65) -->
+<circle cx="20" cy="20" fill="transparent" r="15.91549430918954" stroke="#818cf8" stroke-dasharray="20 80" stroke-dashoffset="-65" stroke-width="4.5"></circle>
+<!-- Segment 4: Gold 15% (offset -85) -->
+<circle cx="20" cy="20" fill="transparent" r="15.91549430918954" stroke="#FFB020" stroke-dasharray="15 85" stroke-dashoffset="-85" stroke-width="4.5"></circle>
+</svg>
+<div class="absolute inset-0 flex flex-col items-center justify-center">
+<span class="font-data-mono text-xs text-slate-400">TOTAL</span>
+<span class="font-data-mono text-sm font-bold text-white">100%</span>
+</div>
+</div>
+<!-- Legend List -->
+<div class="flex flex-col gap-2 font-data-mono text-xs flex-1">
+<div class="flex items-center justify-between border-b border-white/[0.04] pb-1">
+<span class="flex items-center gap-2 text-slate-300">
+<span class="w-2 h-2 rounded-full bg-[#2EE6D3]"></span> US Equities
+                    </span>
+<span class="text-white font-semibold">40%</span>
+</div>
+<div class="flex items-center justify-between border-b border-white/[0.04] pb-1">
+<span class="flex items-center gap-2 text-slate-300">
+<span class="w-2 h-2 rounded-full bg-slate-300"></span> Sovereign Bonds
+                    </span>
+<span class="text-white font-semibold">25%</span>
+</div>
+<div class="flex items-center justify-between border-b border-white/[0.04] pb-1">
+<span class="flex items-center gap-2 text-slate-300">
+<span class="w-2 h-2 rounded-full bg-indigo-400"></span> Global REITs
+                    </span>
+<span class="text-white font-semibold">20%</span>
+</div>
+<div class="flex items-center justify-between">
+<span class="flex items-center gap-2 text-slate-300">
+<span class="w-2 h-2 rounded-full bg-[#FFB020]"></span> Physical Gold
+                    </span>
+<span class="text-white font-semibold">15%</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Column 2: Projected Growth Simulation Chart -->
+<div class="lg:col-span-5 flex flex-col border-l border-r border-white/[0.07] px-6">
+<span class="font-data-mono text-xs text-slate-400 uppercase tracking-wider mb-2">
+                PROJECTED REPLICATION (6-MO HORIZON ON $2,000 ALLOCATION)
+              </span>
+<!-- Mini Area Simulation Chart SVG -->
+<div class="w-full h-32 relative">
+<svg class="w-full h-full" preserveaspectratio="none" viewbox="0 0 320 120">
+<defs>
+<lineargradient id="areaGradient" x1="0" x2="0" y1="0" y2="1">
+<stop offset="0%" stop-color="#2EE6D3" stop-opacity="0.35"></stop>
+<stop offset="100%" stop-color="#2EE6D3" stop-opacity="0.0"></stop>
+</lineargradient>
+</defs>
+<!-- Baseline Grid -->
+<line stroke="rgba(255,255,255,0.08)" stroke-width="1" x1="0" x2="320" y1="110" y2="110"></line>
+<line stroke="rgba(255,255,255,0.05)" stroke-dasharray="3 3" x1="0" x2="320" y1="55" y2="55"></line>
+<!-- Confidence Interval Envelope -->
+<polygon fill="#2EE6D3" fill-opacity="0.1" points="0,95 40,88 80,75 140,65 200,45 260,35 320,15 320,40 260,60 200,75 140,85 80,95 40,102 0,105"></polygon>
+<!-- Area Path -->
+<path d="M 0,100 Q 80,85 160,60 T 320,25 L 320,110 L 0,110 Z" fill="url(#areaGradient)"></path>
+<!-- Line Stroke -->
+<path d="M 0,100 Q 80,85 160,60 T 320,25" fill="none" stroke="#2EE6D3" stroke-width="2"></path>
+<!-- Target Anchor Dot -->
+<circle cx="320" cy="25" fill="#ffffff" r="4" stroke="#2EE6D3" stroke-width="2"></circle>
+</svg>
+<div class="flex justify-between text-[10px] font-data-mono text-slate-500 mt-1">
+<span>Day 0 ($2,000)</span>
+<span>Month 3 ($2,074)</span>
+<span class="text-tertiary">Month 6 ($2,152)</span>
+</div>
+</div>
+<!-- Metrics Row -->
+<div class="grid grid-cols-3 gap-3 pt-3 border-t border-white/[0.05] mt-3 text-xs font-data-mono">
+<div>
+<span class="text-slate-500 text-[10px] block">Median Yield</span>
+<span class="text-tertiary font-bold">+$152.00</span>
+</div>
+<div>
+<span class="text-slate-500 text-[10px] block">Sharpe Ratio</span>
+<span class="text-white font-bold">2.41</span>
+</div>
+<div>
+<span class="text-slate-500 text-[10px] block">Historical Max DD</span>
+<span class="text-slate-300 font-bold">-4.2%</span>
+</div>
+</div>
+</div>
+<!-- Column 3: Allocation Execution Panel -->
+<div class="lg:col-span-3 flex flex-col justify-between">
+<div>
+<label class="font-data-mono text-xs text-slate-400 uppercase tracking-wider block mb-2">ALLOCATION AMOUNT (USD)</label>
+<div class="relative mb-4">
+<input class="w-full font-data-mono text-2xl font-bold text-white border-b border-white/20 pb-1 focus:border-[#E3262F] bg-transparent outline-none transition-colors" type="text" value="$2,000"/>
+<span class="text-[10px] font-data-mono text-slate-500 absolute right-0 bottom-2">MIN $2,000</span>
+</div>
+<!-- Ledger mini rows -->
+<div class="flex flex-col gap-2 font-data-mono text-xs text-slate-300 mb-5">
+<div class="flex justify-between">
+<span class="text-slate-500">Expected payout:</span>
+<span class="text-white font-semibold">$2,120 – $2,185</span>
+</div>
+<div class="flex justify-between">
+<span class="text-slate-500">Protocol fee:</span>
+<span class="text-white">0.5% p.a.</span>
+</div>
+<div class="flex justify-between">
+<span class="text-slate-500">Lock-up period:</span>
+<span class="text-white">6 months</span>
+</div>
+<div class="flex justify-between">
+<span class="text-slate-500">Settlement:</span>
+<span class="text-white">Bi-weekly automated</span>
+</div>
+</div>
+</div>
+<!-- Confirm Invest Action -->
+<button class="w-full bg-[#E3262F] hover:bg-[#ff3b44] text-white font-medium py-3 px-6 rounded transition-colors text-sm flex items-center justify-center gap-2">
+<span>Invest $2,000</span>
+<span class="material-symbols-outlined text-sm">arrow_forward</span>
+</button>
+</div>
+</div>
+</div>
+<!-- ROW C: Premium -->
+<div class="grid grid-cols-12 px-4 py-5 border-b border-white/[0.08] hover:bg-white/[0.02] transition-colors items-center">
+<div class="col-span-5 pr-4">
+<span class="text-[#FFB020] text-xs font-data-mono font-semibold tracking-wider block mb-1">● POPULAR</span>
+<h3 class="font-headline-md text-xl font-bold text-white tracking-tight">Premium</h3>
+<p class="text-xs text-slate-400 mt-1">Cross-asset volatility harvesting with dynamic automated hedging.</p>
+</div>
+<div class="col-span-2 text-right font-data-mono text-sm text-slate-200">
+            $5,000
+          </div>
+<div class="col-span-2 text-right font-data-mono text-sm font-semibold text-tertiary">
+            24.7%
+          </div>
+<div class="col-span-1 text-right font-data-mono text-xs text-slate-400">
+            12 mo
+          </div>
+<div class="col-span-1 text-right font-data-mono text-xs text-slate-400">
+            1,206
+          </div>
+<div class="col-span-1 text-right">
+<button class="text-[#E3262F] hover:text-[#ff4d56] font-semibold text-sm transition-colors">Invest →</button>
+</div>
+</div>
+<!-- ROW D: Elite (Insufficient Funds State Inline!) -->
+<div class="grid grid-cols-12 px-4 py-5 border-b border-white/[0.08] hover:bg-white/[0.02] transition-colors items-center">
+<div class="col-span-5 pr-4">
+<h3 class="font-headline-md text-xl font-bold text-white tracking-tight">Elite</h3>
+<p class="text-xs text-slate-400 mt-1">Institutional quant market-neutral pairs trading with zero market beta.</p>
+</div>
+<div class="col-span-2 text-right font-data-mono text-sm text-slate-200">
+            $10,000
+          </div>
+<div class="col-span-2 text-right font-data-mono text-sm font-semibold text-tertiary">
+            35.3%
+          </div>
+<div class="col-span-1 text-right font-data-mono text-xs text-slate-400">
+            12 mo
+          </div>
+<div class="col-span-1 text-right font-data-mono text-xs text-slate-400">
+            388
+          </div>
+<div class="col-span-1 text-right">
+<div class="flex flex-col items-end">
+<span class="text-slate-500 font-data-mono text-xs">Need $3,580 more</span>
+<a class="text-[#FFB020] hover:underline text-xs font-data-mono font-medium mt-0.5" href="#">Add funds →</a>
+</div>
+</div>
+</div>
+<!-- ROW E: Conservative -->
+<div class="grid grid-cols-12 px-4 py-5 border-b border-white/[0.08] hover:bg-white/[0.02] transition-colors items-center">
+<div class="col-span-5 pr-4">
+<h3 class="font-headline-md text-xl font-bold text-white tracking-tight">Conservative</h3>
+<p class="text-xs text-slate-400 mt-1">Capital preservation engine focused on short-duration sovereign paper.</p>
+</div>
+<div class="col-span-2 text-right font-data-mono text-sm text-slate-200">
+            $1,000
+          </div>
+<div class="col-span-2 text-right font-data-mono text-sm font-semibold text-tertiary">
+            6.8%
+          </div>
+<div class="col-span-1 text-right font-data-mono text-xs text-slate-400">
+            6 mo
+          </div>
+<div class="col-span-1 text-right font-data-mono text-xs text-slate-400">
+            3,019
+          </div>
+<div class="col-span-1 text-right">
+<button class="text-[#E3262F] hover:text-[#ff4d56] font-semibold text-sm transition-colors">Invest →</button>
+</div>
+</div>
+<!-- ROW F: Crypto Accelerator -->
+<div class="grid grid-cols-12 px-4 py-5 border-b border-white/[0.08] hover:bg-white/[0.02] transition-colors items-center">
+<div class="col-span-5 pr-4">
+<span class="text-[#E3262F] text-xs font-data-mono font-semibold tracking-wider block mb-1">● HIGH RISK</span>
+<h3 class="font-headline-md text-xl font-bold text-white tracking-tight">Crypto Accelerator</h3>
+<p class="text-xs text-slate-400 mt-1">Delta-hedged liquidity provision and quantitative trend execution on top L1/L2 assets.</p>
+</div>
+<div class="col-span-2 text-right font-data-mono text-sm text-slate-200">
+            $3,000
+          </div>
+<div class="col-span-2 text-right font-data-mono text-sm font-semibold text-tertiary">
+            42.5%
+          </div>
+<div class="col-span-1 text-right font-data-mono text-xs text-slate-400">
+            6 mo
+          </div>
+<div class="col-span-1 text-right font-data-mono text-xs text-slate-400">
+            951
+          </div>
+<div class="col-span-1 text-right">
+<button class="text-[#E3262F] hover:text-[#ff4d56] font-semibold text-sm transition-colors">Invest →</button>
+</div>
+</div>
+</section>
+<!-- 5. BOTTOM REGULATORY DISCLAIMER NOTE -->
+<footer class="pt-8 pb-6 text-xs font-data-mono text-slate-500 border-t border-white/[0.05] mt-6 flex flex-col gap-2">
+<p>Trading involves risk. Past performance is not indicative of future results.</p>
+<div class="flex items-center justify-between text-[11px] text-slate-600 pt-2">
+<span>© 2024 TED Brokers Financial Ltd. All rights reserved. High Risk Investment Notice: FX, CFDs, and copy-trading derivatives involve substantial risk of loss.</span>
+<div class="flex items-center gap-4">
+<a class="hover:text-slate-400" href="#">Execution Policy</a>
+<a class="hover:text-slate-400" href="#">Risk Disclosure</a>
+<a class="hover:text-slate-400" href="#">Terms of Service</a>
+</div>
+</div>
+</footer>
+</main>
+</div>
+</body></html>

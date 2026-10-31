@@ -1,0 +1,715 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>TED Brokers — Portfolio &amp; Performance</title>
+<!-- Material Symbols Outlined font -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Fonts: Sora, DM Sans, JetBrains Mono, Public Sans -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&amp;family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&amp;family=Public+Sans:ital,wght@0,100..900;1,100..900&amp;family=Sora:wght@100..800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS CDN -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Tailwind Configuration matching Design System -->
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "on-surface": "#d7e3fa",
+            "on-error-container": "#ffdad6",
+            "tertiary-fixed": "#72f8e7",
+            "on-tertiary-fixed-variant": "#005049",
+            "on-tertiary": "#003732",
+            "on-secondary-container": "#91bde3",
+            "on-primary-container": "#fffeff",
+            "secondary-fixed": "#cbe6ff",
+            "outline-variant": "#5d3f3d",
+            "on-background": "#d7e3fa",
+            "on-surface-variant": "#e6bdb9",
+            "surface": "#081424",
+            "on-secondary": "#003450",
+            "surface-container-lowest": "#030e1e",
+            "on-primary-fixed-variant": "#930013",
+            "tertiary": "#51dbcb",
+            "surface-variant": "#2a3547",
+            "primary-fixed": "#ffdad7",
+            "secondary": "#9fcbf2",
+            "background": "#081424",
+            "on-tertiary-fixed": "#00201d",
+            "inverse-on-surface": "#263142",
+            "tertiary-container": "#008479",
+            "surface-dim": "#081424",
+            "secondary-container": "#1c4d6e",
+            "primary-container": "#e3262f",
+            "on-error": "#690005",
+            "error-container": "#93000a",
+            "surface-tint": "#ffb3ad",
+            "on-secondary-fixed": "#001e30",
+            "surface-container-highest": "#2a3547",
+            "primary-fixed-dim": "#ffb3ad",
+            "outline": "#ad8885",
+            "inverse-surface": "#d7e3fa",
+            "inverse-primary": "#c0001c",
+            "surface-container-low": "#101c2c",
+            "primary": "#ffb3ad",
+            "surface-container": "#152030",
+            "secondary-fixed-dim": "#9fcbf2",
+            "on-secondary-fixed-variant": "#184b6b",
+            "on-primary-fixed": "#410004",
+            "tertiary-fixed-dim": "#51dbcb",
+            "on-tertiary-container": "#fafffd",
+            "on-primary": "#68000a",
+            "surface-bright": "#2e3a4b",
+            "surface-container-high": "#1f2a3b",
+            "error": "#ffb4ab",
+            /* Strict Brand Anchors from prompt */
+            "ted-red": "#E3262F",
+            "ted-teal": "#2EE6D3",
+            "ted-crimson": "#E5484D",
+            "ink-base": "#0A1626",
+            "ink-sidebar": "#11223A",
+            "hairline": "#1B2B42"
+          },
+          borderRadius: {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          spacing: {
+            "space-sm": "0.5rem",
+            "space-xs": "0.25rem",
+            "space-xl": "2rem",
+            "margin": "1.5rem",
+            "gutter": "1rem",
+            "space-md": "1rem",
+            "space-lg": "1.5rem"
+          },
+          fontFamily: {
+            "data-mono": ["JetBrains Mono", "monospace"],
+            "headline-md": ["Sora", "sans-serif"],
+            "headline-lg": ["Sora", "sans-serif"],
+            "display-lg": ["Sora", "sans-serif"],
+            "body-lg": ["DM Sans", "sans-serif"],
+            "label-md": ["Public Sans", "sans-serif"],
+            "body-md": ["DM Sans", "sans-serif"]
+          },
+          fontSize: {
+            "data-mono": ["14px", { lineHeight: "20px", fontWeight: "500" }],
+            "headline-md": ["28px", { lineHeight: "36px", letterSpacing: "-0.015em", fontWeight: "600" }],
+            "headline-lg": ["36px", { lineHeight: "44px", letterSpacing: "-0.02em", fontWeight: "700" }],
+            "display-lg": ["72px", { lineHeight: "80px", letterSpacing: "-0.035em", fontWeight: "700" }],
+            "body-lg": ["18px", { lineHeight: "28px", fontWeight: "400" }],
+            "label-md": ["12px", { lineHeight: "16px", letterSpacing: "0.12em", fontWeight: "600" }],
+            "body-md": ["15px", { lineHeight: "22px", fontWeight: "400" }]
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-family: 'Material Symbols Outlined';
+      font-weight: normal;
+      font-style: normal;
+      font-size: 20px;
+      line-height: 1;
+      display: inline-block;
+      white-space: nowrap;
+      word-wrap: normal;
+      direction: ltr;
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+      -moz-osx-font-smoothing: grayscale;
+      font-feature-settings: 'liga';
+    }
+    /* Hairline Ledger Row hover state with 2px inline-start TED Red bar */
+    .ledger-row {
+      position: relative;
+      transition: background-color 150ms ease;
+    }
+    .ledger-row::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background-color: transparent;
+      transition: background-color 150ms ease;
+    }
+    .ledger-row:hover {
+      background-color: rgba(255, 255, 255, 0.02);
+    }
+    .ledger-row:hover::before {
+      background-color: #E3262F;
+    }
+    /* Custom scrollbar */
+    ::-webkit-scrollbar {
+      width: 4px;
+      height: 4px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #0A1626;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #1B2B42;
+    }
+  </style>
+</head>
+<body class="bg-background text-on-surface antialiased selection:bg-ted-red selection:text-white min-h-screen flex flex-col font-body-md text-body-md overflow-x-hidden">
+<!-- TOP LIVE TICKER RIBBON (Full-bleed open hairline bar) -->
+<div class="w-full bg-[#08121f] border-b border-[#1B2B42] text-xs font-data-mono text-on-surface-variant flex items-center justify-between px-6 py-1.5 overflow-x-auto select-none">
+<div class="flex items-center space-x-8 whitespace-nowrap">
+<div class="flex items-center space-x-2">
+<span class="text-on-surface font-semibold">EUR/USD</span>
+<span class="text-on-surface">1.0842</span>
+<span class="text-[#2EE6D3]">▲ +0.21%</span>
+</div>
+<div class="w-px h-3 bg-[#1B2B42]"></div>
+<div class="flex items-center space-x-2">
+<span class="text-on-surface font-semibold">BTC/USD</span>
+<span class="text-on-surface">67,412.00</span>
+<span class="text-[#2EE6D3]">▲ +1.84%</span>
+</div>
+<div class="w-px h-3 bg-[#1B2B42]"></div>
+<div class="flex items-center space-x-2">
+<span class="text-on-surface font-semibold">ETH/USD</span>
+<span class="text-on-surface">3,540.80</span>
+<span class="text-[#2EE6D3]">▲ +2.11%</span>
+</div>
+<div class="w-px h-3 bg-[#1B2B42]"></div>
+<div class="flex items-center space-x-2">
+<span class="text-on-surface font-semibold">AAPL</span>
+<span class="text-on-surface">228.14</span>
+<span class="text-[#E5484D]">▼ -0.42%</span>
+</div>
+<div class="w-px h-3 bg-[#1B2B42]"></div>
+<div class="flex items-center space-x-2">
+<span class="text-on-surface font-semibold">XAU/USD</span>
+<span class="text-on-surface">2,384.10</span>
+<span class="text-[#2EE6D3]">▲ +0.35%</span>
+</div>
+</div>
+<div class="hidden xl:flex items-center space-x-3 text-[11px] font-label-md tracking-wider text-secondary">
+<span class="inline-block w-1.5 h-1.5 rounded-full bg-[#2EE6D3] animate-pulse"></span>
+<span>NY OPEN • ECN LOW LATENCY 2.4ms</span>
+</div>
+</div>
+<!-- APPLICATION WORKSPACE (Sidebar Rail + Main Content Canvas) -->
+<div class="flex flex-1 w-full min-h-[calc(100vh-29px)]">
+<!-- LEFT SIDEBAR RAIL (240px wide, #11223A, Hairline Separator) -->
+<aside class="w-[240px] shrink-0 bg-[#11223A] border-r border-[#1B2B42] flex flex-col justify-between select-none">
+<div class="flex flex-col">
+<!-- Logo Header -->
+<div class="h-16 px-6 flex items-center border-b border-[#1B2B42]">
+<a class="flex items-center space-x-2.5" href="#">
+<span class="w-2.5 h-2.5 rounded-full bg-[#E3262F] inline-block shadow-[0_0_8px_#E3262F]"></span>
+<span class="font-headline-md text-headline-md tracking-tight font-bold text-on-surface text-lg">TED Brokers</span>
+</a>
+</div>
+<!-- Quick Search Inline Input -->
+<!-- Navigation Links -->
+<nav class="py-3 flex flex-col font-label-md text-label-md tracking-wider"><a class="px-6 py-3 flex items-center justify-between text-on-surface-variant hover:text-on-surface transition-colors" href="#"><div class="flex items-center space-x-3"><span class="material-symbols-outlined text-[18px]">dashboard</span><span>Overview</span></div></a><a class="px-6 py-3 flex items-center justify-between bg-[rgba(227,38,47,0.06)] text-white border-l-2 border-[#E3262F]" href="#"><div class="flex items-center space-x-3"><span class="material-symbols-outlined text-[18px] text-[#E3262F]" style="font-variation-settings: 'FILL' 1;">pie_chart</span><span class="font-bold text-white">Portfolio</span></div><span class="text-[10px] font-data-mono text-[#2EE6D3]">LIVE</span></a><a class="px-6 py-3 flex items-center justify-between text-on-surface-variant hover:text-on-surface transition-colors" href="#"><div class="flex items-center space-x-3"><span class="material-symbols-outlined text-[18px]">account_balance_wallet</span><span>Wallet</span></div></a><a class="px-6 py-3 flex items-center justify-between text-on-surface-variant hover:text-on-surface transition-colors" href="#"><div class="flex items-center space-x-3"><span class="material-symbols-outlined text-[18px]">groups</span><span>Copy traders</span></div><span class="w-1.5 h-1.5 rounded-full bg-[#2EE6D3]"></span></a><a class="px-6 py-3 flex items-center justify-between text-on-surface-variant hover:text-on-surface transition-colors" href="#"><div class="flex items-center space-x-3"><span class="material-symbols-outlined text-[18px]">trending_up</span><span>Investment plans</span></div></a><a class="px-6 py-3 flex items-center justify-between text-on-surface-variant hover:text-on-surface transition-colors" href="#"><div class="flex items-center space-x-3"><span class="material-symbols-outlined text-[18px]">rss_feed</span><span>Network feed</span></div></a><a class="px-6 py-3 flex items-center justify-between text-on-surface-variant hover:text-on-surface transition-colors" href="#"><div class="flex items-center space-x-3"><span class="material-symbols-outlined text-[18px]">share</span><span>Referrals</span></div></a><a class="px-6 py-3 flex items-center justify-between text-on-surface-variant hover:text-on-surface transition-colors" href="#"><div class="flex items-center space-x-3"><span class="material-symbols-outlined text-[18px]">terminal</span><span>News &amp; Terminal</span></div></a></nav>
+</div>
+<!-- Rail Footer Section -->
+<div class="border-t border-[#1B2B42] flex flex-col">
+<a class="px-6 py-2.5 flex items-center space-x-3 text-xs font-label-md text-on-surface-variant hover:text-on-surface" href="#">
+<span class="material-symbols-outlined text-[18px]">help</span>
+<span>Help center</span>
+</a>
+<a class="px-6 py-2.5 flex items-center space-x-3 text-xs font-label-md text-on-surface-variant hover:text-on-surface" href="#">
+<span class="material-symbols-outlined text-[18px]">settings</span>
+<span>Settings</span>
+</a>
+<!-- Daniel Okafor Profile Account Row -->
+<div class="px-5 py-3 mt-1 border-t border-[#1B2B42] flex items-center justify-between bg-[#0C192C]">
+<div class="flex items-center space-x-3">
+<div class="w-8 h-8 rounded bg-[#1C4D6E] flex items-center justify-center font-headline-md text-xs font-bold text-white border border-[#2EE6D3]/30">
+              DO
+            </div>
+<div class="flex flex-col">
+<span class="text-xs font-medium text-on-surface leading-tight">Daniel Okafor</span>
+<span class="text-[10px] font-data-mono text-secondary">Verified Tier 3</span>
+</div>
+</div>
+<span class="material-symbols-outlined text-sm text-outline">unfold_more</span>
+</div>
+</div>
+</aside>
+<!-- RIGHT MAIN CONTENT WORKSPACE -->
+<main class="flex-1 flex flex-col bg-[#0A1626] overflow-x-hidden">
+<!-- TOP DASHBOARD BAR (Hairline border-b, minimal interactive cluster) -->
+<header class="h-16 px-8 flex items-center justify-between border-b border-[#1B2B42] bg-[#0A1626]">
+<!-- Global Search Bar with Hotkey -->
+<div class="w-96 flex items-center">
+<div class="flex items-center w-full px-3 py-2 bg-[#08121f] border border-[#1B2B42] rounded-md text-xs text-on-surface-variant">
+<span class="material-symbols-outlined text-base mr-2 text-outline">search</span>
+<input class="bg-transparent border-none outline-none p-0 text-xs w-full text-on-surface placeholder:text-outline focus:ring-0" placeholder="Search markets, copy traders, plans..." type="text"/>
+<kbd class="font-data-mono text-[10px] text-outline ml-2 px-1 py-0.5 border border-[#1B2B42] rounded">⌘K</kbd>
+</div>
+</div>
+<!-- Trailing Utility Actions -->
+<div class="flex items-center space-x-5">
+<!-- Language Selector -->
+<button class="flex items-center space-x-1 text-xs font-data-mono text-on-surface-variant hover:text-on-surface transition-colors py-1 px-2 border border-transparent hover:border-[#1B2B42] rounded">
+<span class="material-symbols-outlined text-[16px]">language</span>
+<span>EN</span>
+<span class="material-symbols-outlined text-[14px]">expand_more</span>
+</button>
+<!-- Dark Mode Toggle -->
+<button class="text-on-surface-variant hover:text-on-surface p-1 transition-colors" title="Toggle theme">
+<span class="material-symbols-outlined text-[18px]">dark_mode</span>
+</button>
+<!-- Notifications Bell -->
+<button class="relative text-on-surface-variant hover:text-on-surface p-1 transition-colors">
+<span class="material-symbols-outlined text-[20px]">notifications</span>
+<span class="absolute top-1 right-1 w-2 h-2 rounded-full bg-[#E3262F]"></span>
+</button>
+<div class="w-px h-5 bg-[#1B2B42]"></div>
+<!-- Outline "TED AI" Terminal Button -->
+<button class="h-9 px-3.5 border border-[#1B2B42] hover:border-[#2EE6D3]/60 text-xs font-data-mono uppercase tracking-wider text-on-surface flex items-center space-x-2 rounded transition-colors group">
+<span class="w-2 h-2 rounded-full bg-[#2EE6D3] group-hover:shadow-[0_0_6px_#2EE6D3]"></span>
+<span>TED AI Terminal</span>
+</button>
+<!-- Solid Red "Deposit" Button (48px standard scaled to 38px in header bar with arrow glyph) -->
+<button class="h-9 px-4 bg-[#E3262F] hover:bg-[#E3262F]/90 text-white font-label-md text-xs uppercase tracking-wider font-semibold rounded flex items-center space-x-2 transition-all shadow-[0_0_12px_rgba(227,38,47,0.3)]">
+<span>Deposit</span>
+<span class="material-symbols-outlined text-sm font-bold">arrow_forward</span>
+</button>
+</div>
+</header>
+<!-- MAIN PAGE CANVAS -->
+<div class="flex-1 flex flex-col">
+<!-- 1. HEADER BAR: Title, Underline Tabs & Date Selector -->
+<div class="px-8 pt-8 pb-0 border-b border-[#1B2B42] flex flex-col md:flex-row md:items-end justify-between gap-4">
+<div class="flex flex-col space-y-4">
+<div class="flex items-center space-x-3">
+<h1 class="font-headline-lg text-headline-lg tracking-tight font-bold text-on-surface text-3xl">Portfolio</h1>
+</div>
+<!-- Underline Minimalist Tabs -->
+<div class="flex space-x-8 text-sm font-label-md">
+<a class="pb-3 border-b-2 border-[#E3262F] text-white font-semibold flex items-center space-x-2" href="#">
+<span>Investments</span>
+<span class="font-data-mono text-xs text-secondary">(5 active)</span>
+</a>
+<a class="pb-3 border-b-2 border-transparent text-on-surface-variant hover:text-on-surface transition-colors flex items-center space-x-2" href="#">
+<span>Active copies</span>
+<span class="font-data-mono text-xs text-outline">3</span>
+</a>
+<a class="pb-3 border-b-2 border-transparent text-on-surface-variant hover:text-on-surface transition-colors" href="#">
+<span>Performance</span>
+</a>
+</div>
+</div>
+<!-- Date Range Selector -->
+<div class="pb-3 flex items-center space-x-4">
+<span class="text-xs font-label-md uppercase tracking-wider text-outline">Timeframe:</span>
+<button class="flex items-center space-x-2 text-xs font-data-mono text-on-surface hover:text-[#2EE6D3] pb-0.5 border-b border-dashed border-[#1B2B42] transition-colors">
+<span>Last 12 months</span>
+<span class="material-symbols-outlined text-xs">arrow_drop_down</span>
+</button>
+<button class="p-1 text-on-surface-variant hover:text-on-surface border border-[#1B2B42] rounded" title="Download Statement">
+<span class="material-symbols-outlined text-sm">download</span>
+</button>
+</div>
+</div>
+<!-- 2. STATS STRIP: 5 Open Columns demarcated strictly by 1px vertical hairlines -->
+<div class="grid grid-cols-1 md:grid-cols-5 border-b border-[#1B2B42] divide-y md:divide-y-0 md:divide-x divide-[#1B2B42]">
+<!-- Column 1 -->
+<div class="px-8 py-5 flex flex-col justify-center">
+<span class="font-label-md text-xs uppercase tracking-widest text-outline mb-1">TOTAL INVESTED</span>
+<div class="font-data-mono text-2xl font-semibold text-on-surface tracking-tight">$40,000.00</div>
+<span class="text-[11px] font-data-mono text-secondary mt-1">Allocated across 5 assets</span>
+</div>
+<!-- Column 2 -->
+<div class="px-8 py-5 flex flex-col justify-center">
+<span class="font-label-md text-xs uppercase tracking-widest text-outline mb-1">CURRENT VALUE</span>
+<div class="font-data-mono text-2xl font-semibold text-on-surface tracking-tight">$48,216.40</div>
+<span class="text-[11px] font-data-mono text-secondary mt-1">Unrealized marked-to-market</span>
+</div>
+<!-- Column 3 -->
+<div class="px-8 py-5 flex flex-col justify-center">
+<span class="font-label-md text-xs uppercase tracking-widest text-outline mb-1">TOTAL P/L</span>
+<div class="font-data-mono text-2xl font-semibold text-[#2EE6D3] tracking-tight flex items-baseline space-x-1">
+<span>▲</span>
+<span>+$8,216.40</span>
+</div>
+<span class="text-[11px] font-data-mono text-[#2EE6D3]/80 mt-1">+$412.30 today (24h)</span>
+</div>
+<!-- Column 4 -->
+<div class="px-8 py-5 flex flex-col justify-center">
+<span class="font-label-md text-xs uppercase tracking-widest text-outline mb-1">RETURN RATE</span>
+<div class="font-data-mono text-2xl font-semibold text-[#2EE6D3] tracking-tight">+20.5%</div>
+<span class="text-[11px] font-data-mono text-secondary mt-1">Alpha vs S&amp;P: +8.1%</span>
+</div>
+<!-- Column 5 -->
+<div class="px-8 py-5 flex flex-col justify-center">
+<span class="font-label-md text-xs uppercase tracking-widest text-outline mb-1">WIN RATE</span>
+<div class="font-data-mono text-2xl font-semibold text-on-surface tracking-tight">71%</div>
+<span class="text-[11px] font-data-mono text-outline mt-1">312 trades closed</span>
+</div>
+</div>
+<!-- 3. BIG PERFORMANCE CHART REGION -->
+<section class="border-b border-[#1B2B42] flex flex-col">
+<!-- Chart Header & Inline Legend -->
+<div class="px-8 py-4 flex flex-col sm:flex-row sm:items-center justify-between border-b border-[#1B2B42]/50 gap-2">
+<div class="flex items-center space-x-4">
+<span class="font-label-md text-xs uppercase tracking-wider text-outline font-semibold">CUMULATIVE PERFORMANCE YTD</span>
+<div class="flex items-center space-x-6 text-xs font-data-mono">
+<div class="flex items-center space-x-2">
+<span class="w-2.5 h-2.5 rounded-full bg-[#2EE6D3]"></span>
+<span class="text-on-surface font-medium">Your portfolio</span>
+<span class="text-[#2EE6D3] font-bold">(+20.5%)</span>
+</div>
+<div class="flex items-center space-x-2">
+<span class="w-4 h-0.5 border-t border-dashed border-[#9fcbf2]"></span>
+<span class="text-secondary">Benchmark: S&amp;P 500</span>
+<span class="text-secondary font-medium">(+12.4%)</span>
+</div>
+</div>
+</div>
+<!-- Resolution Toggles -->
+<div class="flex items-center space-x-1 font-data-mono text-xs">
+<button class="px-2 py-1 text-outline hover:text-on-surface">1M</button>
+<button class="px-2 py-1 text-outline hover:text-on-surface">3M</button>
+<button class="px-2 py-1 text-outline hover:text-on-surface">6M</button>
+<button class="px-2.5 py-1 text-white bg-[#1C4D6E]/50 border border-[#1B2B42] rounded">1Y</button>
+<button class="px-2 py-1 text-outline hover:text-on-surface">ALL</button>
+</div>
+</div>
+<!-- Responsive Dual Line Chart (SVG Native Hairline Vector) -->
+<div class="relative w-full h-[280px] px-8 pt-4 pb-2 bg-[#0A1626] overflow-hidden select-none">
+<svg class="w-full h-full overflow-visible" preserveaspectratio="none" viewbox="0 0 1000 240">
+<defs>
+<!-- Teal portfolio gradient -->
+<lineargradient id="tealGrad" x1="0%" x2="0%" y1="0%" y2="100%">
+<stop offset="0%" stop-color="#2EE6D3" stop-opacity="0.18"></stop>
+<stop offset="100%" stop-color="#2EE6D3" stop-opacity="0.0"></stop>
+</lineargradient>
+<!-- Hairline chart grid line -->
+<pattern height="48" id="grid" patternunits="userSpaceOnUse" width="100">
+<line opacity="0.6" stroke="#1B2B42" stroke-dasharray="3,3" stroke-width="0.8" x1="0" x2="100" y1="48" y2="48"></line>
+</pattern>
+</defs>
+<!-- Background Grid Lines -->
+<rect fill="url(#grid)" height="240" width="1000"></rect>
+<!-- Benchmark S&P 500: Dashed Line (thin slate/navy) -->
+<path d="M 0,195 Q 120,185 240,165 T 500,140 T 750,115 T 900,90 L 1000,75" fill="none" opacity="0.75" stroke="#9fcbf2" stroke-dasharray="4,4" stroke-width="1.5"></path>
+<!-- Portfolio Gradient Area Fill -->
+<path d="M 0,210 Q 100,180 200,150 T 400,120 T 600,85 T 800,50 L 920,32 L 1000,20 L 1000,240 L 0,240 Z" fill="url(#tealGrad)"></path>
+<!-- Portfolio Line: Luminous Teal #2EE6D3 stroke -->
+<path d="M 0,210 Q 100,180 200,150 T 400,120 T 600,85 T 800,50 L 920,32 L 1000,20" fill="none" stroke="#2EE6D3" stroke-width="2.2"></path>
+<!-- Active Crosshair Line (Fixed visible inspection point at x=920) -->
+<line opacity="0.8" stroke="#2EE6D3" stroke-dasharray="2,2" stroke-width="1" x1="920" x2="920" y1="0" y2="240"></line>
+<!-- Points -->
+<circle cx="920" cy="32" fill="#0A1626" r="4.5" stroke="#2EE6D3" stroke-width="2"></circle>
+<circle cx="920" cy="85" fill="#0A1626" r="3.5" stroke="#9fcbf2" stroke-width="1.5"></circle>
+</svg>
+<!-- Crosshair Tooltip (Visible inspected state) -->
+<div class="absolute top-6 right-28 pointer-events-none bg-[#11223A] border border-[#1B2B42] p-3 rounded font-data-mono text-xs shadow-xl z-10 flex flex-col space-y-1.5">
+<div class="text-[11px] text-outline font-label-md uppercase tracking-wider">OCT 24, 2026 • CURRENT PEAK</div>
+<div class="flex items-center justify-between space-x-4">
+<span class="text-[#2EE6D3] flex items-center space-x-1.5">
+<span class="w-1.5 h-1.5 rounded-full bg-[#2EE6D3]"></span>
+<span>Portfolio:</span>
+</span>
+<span class="font-bold text-white">$48,216.40</span>
+</div>
+<div class="flex items-center justify-between space-x-4 border-t border-[#1B2B42] pt-1">
+<span class="text-secondary flex items-center space-x-1.5">
+<span class="w-1.5 h-1.5 rounded-full bg-[#9fcbf2]"></span>
+<span>S&amp;P 500:</span>
+</span>
+<span class="text-on-surface">$44,960.00</span>
+</div>
+</div>
+</div>
+<!-- Monthly Returns Heat-Strip (12 thin open vertical bars Nov to Oct) -->
+<div class="px-8 py-4 border-t border-[#1B2B42] bg-[#08121f]">
+<div class="flex items-center justify-between mb-2">
+<span class="text-[11px] font-label-md uppercase tracking-widest text-outline">MONTHLY ALPHA DISTRIBUTION (%)</span>
+<span class="text-[11px] font-data-mono text-[#2EE6D3]">10 POSITIVE / 2 NEGATIVE MONTHS</span>
+</div>
+<div class="grid grid-cols-12 gap-1.5"><div class="flex flex-col items-center group"><div class="w-full h-10 flex items-end border-b border-[#1B2B42]"><div class="w-full bg-[#2EE6D3]/60 h-[52%]"></div></div><span class="text-[10px] font-label-md uppercase text-outline mt-1.5">Nov</span><span class="text-[10px] font-data-mono text-[#2EE6D3]">+2.1%</span></div><div class="flex flex-col items-center group"><div class="w-full h-10 flex items-end border-b border-[#1B2B42]"><div class="w-full bg-[#2EE6D3]/50 h-[45%]"></div></div><span class="text-[10px] font-label-md uppercase text-outline mt-1.5">Dec</span><span class="text-[10px] font-data-mono text-[#2EE6D3]">+1.8%</span></div><div class="flex flex-col items-center group"><div class="w-full h-10 flex items-end border-b border-[#1B2B42]"><div class="w-full bg-[#2EE6D3]/80 h-[75%]"></div></div><span class="text-[10px] font-label-md uppercase text-outline mt-1.5">Jan</span><span class="text-[10px] font-data-mono text-[#2EE6D3]">+3.0%</span></div><div class="flex flex-col items-center group"><div class="w-full h-10 flex items-end border-b border-[#1B2B42]"><div class="w-full bg-[#2EE6D3]/30 h-[22%]"></div></div><span class="text-[10px] font-label-md uppercase text-outline mt-1.5">Feb</span><span class="text-[10px] font-data-mono text-[#2EE6D3]">+0.9%</span></div><div class="flex flex-col items-center group"><div class="w-full h-10 flex items-start border-b border-[#1B2B42]"><div class="w-full bg-[#E5484D]/80 h-[30%]"></div></div><span class="text-[10px] font-label-md uppercase text-outline mt-1.5">Mar</span><span class="text-[10px] font-data-mono text-[#E5484D]">-1.2%</span></div><div class="flex flex-col items-center group"><div class="w-full h-10 flex items-end border-b border-[#1B2B42]"><div class="w-full bg-[#2EE6D3]/65 h-[60%]"></div></div><span class="text-[10px] font-label-md uppercase text-outline mt-1.5">Apr</span><span class="text-[10px] font-data-mono text-[#2EE6D3]">+2.4%</span></div><div class="flex flex-col items-center group"><div class="w-full h-10 flex items-end border-b border-[#1B2B42]"><div class="w-full bg-[#2EE6D3]/35 h-[28%]"></div></div><span class="text-[10px] font-label-md uppercase text-outline mt-1.5">May</span><span class="text-[10px] font-data-mono text-[#2EE6D3]">+1.1%</span></div><div class="flex flex-col items-center group"><div class="w-full h-10 flex items-end border-b border-[#1B2B42]"><div class="w-full bg-[#2EE6D3] h-[95%]"></div></div><span class="text-[10px] font-label-md uppercase text-outline mt-1.5">Jun</span><span class="text-[10px] font-data-mono text-[#2EE6D3]">+3.8%</span></div><div class="flex flex-col items-center group"><div class="w-full h-10 flex items-end border-b border-[#1B2B42]"><div class="w-full bg-[#2EE6D3]/25 h-[15%]"></div></div><span class="text-[10px] font-label-md uppercase text-outline mt-1.5">Jul</span><span class="text-[10px] font-data-mono text-[#2EE6D3]">+0.5%</span></div><div class="flex flex-col items-center group"><div class="w-full h-10 flex items-start border-b border-[#1B2B42]"><div class="w-full bg-[#E5484D]/60 h-[20%]"></div></div><span class="text-[10px] font-label-md uppercase text-outline mt-1.5">Aug</span><span class="text-[10px] font-data-mono text-[#E5484D]">-0.8%</span></div><div class="flex flex-col items-center group"><div class="w-full h-10 flex items-end border-b border-[#1B2B42]"><div class="w-full bg-[#2EE6D3]/60 h-[55%]"></div></div><span class="text-[10px] font-label-md uppercase text-outline mt-1.5">Sep</span><span class="text-[10px] font-data-mono text-[#2EE6D3]">+2.2%</span></div><div class="flex flex-col items-center group"><div class="w-full h-10 flex items-end border-b border-[#1B2B42]"><div class="w-full bg-[#2EE6D3]/90 h-[85%]"></div></div><span class="text-[10px] font-label-md uppercase text-outline mt-1.5">Oct</span><span class="text-[10px] font-data-mono text-[#2EE6D3]">+3.4%</span></div></div>
+</div>
+</section>
+<!-- 4. TWO COLUMNS SPLIT BY VERTICAL 1PX HAIRLINE -->
+<div class="grid grid-cols-1 lg:grid-cols-12 divide-y lg:divide-y-0 lg:divide-x divide-[#1B2B42] flex-1">
+<!-- LEFT COLUMN: "Your investments" ledger table (7 Columns Wide) -->
+<div class="lg:col-span-7 flex flex-col">
+<div class="px-8 py-4 border-b border-[#1B2B42] flex items-center justify-between">
+<div>
+<h2 class="font-headline-md text-base font-semibold text-white tracking-tight">Your investments</h2>
+<span class="text-xs text-outline font-body-md">Allocated automated strategies &amp; copy masters</span>
+</div>
+<div class="flex items-center space-x-2"><button class="text-xs font-data-mono text-secondary hover:text-white pb-0.5 border-b border-[#1B2B42] hover:border-[#2EE6D3]/60 transition-colors">Filter</button><span class="text-outline text-xs">/</span><button class="text-xs font-data-mono text-secondary hover:text-white pb-0.5 border-b border-[#1B2B42] hover:border-[#2EE6D3]/60 transition-colors">Sort: P/L</button></div>
+</div>
+<!-- Ledger Table Container -->
+<div class="divide-y divide-[#1B2B42]"><!-- Row 1: Elena Vasquez -->
+<div class="ledger-row px-8 py-4 flex flex-col md:flex-row md:items-center justify-between gap-3 text-xs">
+<div class="flex items-center space-x-3 min-w-[200px]">
+<div class="w-7 h-7 rounded bg-[#1C4D6E] flex items-center justify-center font-bold text-white text-xs">EV</div>
+<div>
+<div class="font-medium text-white">Copy: Elena Vasquez</div>
+<div class="text-[11px] font-label-md uppercase tracking-wider text-secondary">TYPE: FOREX</div>
+</div>
+</div>
+<div class="grid grid-cols-3 gap-6 font-data-mono">
+<div>
+<div class="text-[10px] text-outline uppercase">INVESTED</div>
+<div class="text-on-surface">$10,000.00</div>
+</div>
+<div>
+<div class="text-[10px] text-outline uppercase">CURRENT</div>
+<div class="text-on-surface font-semibold">$12,410.00</div>
+</div>
+<div>
+<div class="text-[10px] text-outline uppercase">P/L</div>
+<div class="text-[#2EE6D3] font-bold whitespace-nowrap">▲ +$2,410.00 (+24.1%)</div>
+</div>
+</div>
+<div class="flex items-center justify-between md:justify-end space-x-4">
+<span class="text-[11px] font-data-mono text-outline whitespace-nowrap">14 Jan 2026</span>
+<a class="text-secondary hover:text-white flex items-center font-medium whitespace-nowrap" href="#">Details →</a>
+</div>
+</div>
+<!-- Row 2: Growth Plan -->
+<div class="ledger-row px-8 py-4 flex flex-col md:flex-row md:items-center justify-between gap-3 text-xs">
+<div class="flex items-center space-x-3 min-w-[200px]">
+<div class="w-7 h-7 rounded bg-[#008479] flex items-center justify-center font-bold text-white text-xs">GP</div>
+<div>
+<div class="font-medium text-white">Plan: Growth</div>
+<div class="text-[11px] font-label-md uppercase tracking-wider text-secondary">TYPE: BALANCED ETF</div>
+</div>
+</div>
+<div class="grid grid-cols-3 gap-6 font-data-mono">
+<div>
+<div class="text-[10px] text-outline uppercase">INVESTED</div>
+<div class="text-on-surface">$12,000.00</div>
+</div>
+<div>
+<div class="text-[10px] text-outline uppercase">CURRENT</div>
+<div class="text-on-surface font-semibold">$14,120.00</div>
+</div>
+<div>
+<div class="text-[10px] text-outline uppercase">P/L</div>
+<div class="text-[#2EE6D3] font-bold whitespace-nowrap">▲ +$2,120.00 (+17.6%)</div>
+</div>
+</div>
+<div class="flex items-center justify-between md:justify-end space-x-4">
+<span class="text-[11px] font-data-mono text-outline whitespace-nowrap">02 Feb 2026</span>
+<a class="text-secondary hover:text-white flex items-center font-medium whitespace-nowrap" href="#">Details →</a>
+</div>
+</div>
+<!-- Row 3: Marcus Chen -->
+<div class="ledger-row px-8 py-4 flex flex-col md:flex-row md:items-center justify-between gap-3 text-xs">
+<div class="flex items-center space-x-3 min-w-[200px]">
+<div class="w-7 h-7 rounded bg-[#93000a] flex items-center justify-center font-bold text-white text-xs">MC</div>
+<div>
+<div class="font-medium text-white">Copy: Marcus Chen</div>
+<div class="text-[11px] font-label-md uppercase tracking-wider text-secondary">TYPE: CRYPTO</div>
+</div>
+</div>
+<div class="grid grid-cols-3 gap-6 font-data-mono">
+<div>
+<div class="text-[10px] text-outline uppercase">INVESTED</div>
+<div class="text-on-surface">$8,000.00</div>
+</div>
+<div>
+<div class="text-[10px] text-outline uppercase">CURRENT</div>
+<div class="text-on-surface font-semibold">$10,186.40</div>
+</div>
+<div>
+<div class="text-[10px] text-outline uppercase">P/L</div>
+<div class="text-[#2EE6D3] font-bold whitespace-nowrap">▲ +$2,186.40 (+27.3%)</div>
+</div>
+</div>
+<div class="flex items-center justify-between md:justify-end space-x-4">
+<span class="text-[11px] font-data-mono text-outline whitespace-nowrap">22 Mar 2026</span>
+<a class="text-secondary hover:text-white flex items-center font-medium whitespace-nowrap" href="#">Details →</a>
+</div>
+</div>
+<!-- Row 4: Premium Plan -->
+<div class="ledger-row px-8 py-4 flex flex-col md:flex-row md:items-center justify-between gap-3 text-xs">
+<div class="flex items-center space-x-3 min-w-[200px]">
+<div class="w-7 h-7 rounded bg-[#1f2a3b] flex items-center justify-center font-bold text-white text-xs border border-[#1B2B42]">PP</div>
+<div>
+<div class="font-medium text-white">Plan: Premium</div>
+<div class="text-[11px] font-label-md uppercase tracking-wider text-secondary">TYPE: QUANT MACRO</div>
+</div>
+</div>
+<div class="grid grid-cols-3 gap-6 font-data-mono">
+<div>
+<div class="text-[10px] text-outline uppercase">INVESTED</div>
+<div class="text-on-surface">$5,000.00</div>
+</div>
+<div>
+<div class="text-[10px] text-outline uppercase">CURRENT</div>
+<div class="text-on-surface font-semibold">$5,650.00</div>
+</div>
+<div>
+<div class="text-[10px] text-outline uppercase">P/L</div>
+<div class="text-[#2EE6D3] font-bold whitespace-nowrap">▲ +$650.00 (+13.0%)</div>
+</div>
+</div>
+<div class="flex items-center justify-between md:justify-end space-x-4">
+<span class="text-[11px] font-data-mono text-outline whitespace-nowrap">10 May 2026</span>
+<a class="text-secondary hover:text-white flex items-center font-medium whitespace-nowrap" href="#">Details →</a>
+</div>
+</div>
+<!-- Row 5: Aisha Rahman -->
+<div class="ledger-row px-8 py-4 flex flex-col md:flex-row md:items-center justify-between gap-3 text-xs">
+<div class="flex items-center space-x-3 min-w-[200px]">
+<div class="w-7 h-7 rounded bg-[#184b6b] flex items-center justify-center font-bold text-white text-xs">AR</div>
+<div>
+<div class="font-medium text-white">Copy: Aisha Rahman</div>
+<div class="text-[11px] font-label-md uppercase tracking-wider text-secondary">TYPE: US EQUITIES</div>
+</div>
+</div>
+<div class="grid grid-cols-3 gap-6 font-data-mono">
+<div>
+<div class="text-[10px] text-outline uppercase">INVESTED</div>
+<div class="text-on-surface">$5,000.00</div>
+</div>
+<div>
+<div class="text-[10px] text-outline uppercase">CURRENT</div>
+<div class="text-on-surface font-semibold">$5,850.00</div>
+</div>
+<div>
+<div class="text-[10px] text-outline uppercase">P/L</div>
+<div class="text-[#2EE6D3] font-bold whitespace-nowrap">▲ +$850.00 (+17.0%)</div>
+</div>
+</div>
+<div class="flex items-center justify-between md:justify-end space-x-4">
+<span class="text-[11px] font-data-mono text-outline whitespace-nowrap">18 Jun 2026</span>
+<a class="text-secondary hover:text-white flex items-center font-medium whitespace-nowrap" href="#">Details →</a>
+</div>
+</div></div>
+<!-- Ledger Footer action strip -->
+<div class="p-4 border-t border-[#1B2B42] mt-auto flex items-center justify-between bg-[#08121f]">
+<span class="text-xs font-data-mono text-outline">5 of 5 allocations shown</span>
+<button class="text-xs font-label-md uppercase tracking-wider text-[#2EE6D3] hover:underline flex items-center space-x-1">
+<span>Explore new traders to copy</span>
+<span class="material-symbols-outlined text-sm">arrow_forward</span>
+</button>
+</div>
+</div>
+<!-- RIGHT COLUMN: "Performance breakdown" (5 Columns Wide) -->
+<div class="lg:col-span-5 flex flex-col">
+<div class="px-8 py-4 border-b border-[#1B2B42] flex items-center justify-between">
+<div>
+<h2 class="font-headline-md text-base font-semibold text-white tracking-tight">Performance breakdown</h2>
+<span class="text-xs text-outline font-body-md">Allocation weights &amp; risk metrics</span>
+</div>
+<span class="text-[11px] font-data-mono text-secondary">UPDATED 1m AGO</span>
+</div>
+<div class="p-8 flex flex-col space-y-7">
+<!-- Asset Class Breakdown -->
+<div class="flex flex-col space-y-4">
+<div class="flex items-center justify-between">
+<span class="text-xs font-label-md uppercase tracking-wider text-outline font-semibold">ASSET CLASS WEIGHTING</span>
+<span class="text-xs font-data-mono text-on-surface">100% EXPOSURE</span>
+</div>
+<!-- Forex Bar -->
+<div class="flex flex-col space-y-1.5">
+<div class="flex justify-between text-xs font-data-mono">
+<span class="text-on-surface">Forex</span>
+<div class="space-x-2">
+<span class="text-white font-semibold">38%</span>
+<span class="text-[#2EE6D3]">(+$3,240.00)</span>
+</div>
+</div>
+<div class="w-full h-1.5 bg-[#08121f] border border-[#1B2B42] overflow-hidden">
+<div class="h-full bg-[#2EE6D3]" style="width: 38%;"></div>
+</div>
+</div>
+<!-- Crypto Bar -->
+<div class="flex flex-col space-y-1.5">
+<div class="flex justify-between text-xs font-data-mono">
+<span class="text-on-surface">Crypto</span>
+<div class="space-x-2">
+<span class="text-white font-semibold">28%</span>
+<span class="text-[#2EE6D3]">(+$2,810.00)</span>
+</div>
+</div>
+<div class="w-full h-1.5 bg-[#08121f] border border-[#1B2B42] overflow-hidden">
+<div class="h-full bg-[#2EE6D3]" style="width: 28%;"></div>
+</div>
+</div>
+<!-- US Equities Bar -->
+<div class="flex flex-col space-y-1.5">
+<div class="flex justify-between text-xs font-data-mono">
+<span class="text-on-surface">US Equities</span>
+<div class="space-x-2">
+<span class="text-white font-semibold">22%</span>
+<span class="text-[#2EE6D3]">(+$1,450.00)</span>
+</div>
+</div>
+<div class="w-full h-1.5 bg-[#08121f] border border-[#1B2B42] overflow-hidden">
+<div class="h-full bg-[#2EE6D3]" style="width: 22%;"></div>
+</div>
+</div>
+<!-- Commodities Bar -->
+<div class="flex flex-col space-y-1.5">
+<div class="flex justify-between text-xs font-data-mono">
+<span class="text-on-surface">Commodities</span>
+<div class="space-x-2">
+<span class="text-white font-semibold">12%</span>
+<span class="text-[#2EE6D3]">(+$716.40)</span>
+</div>
+</div>
+<div class="w-full h-1.5 bg-[#08121f] border border-[#1B2B42] overflow-hidden">
+<div class="h-full bg-[#2EE6D3]" style="width: 12%;"></div>
+</div>
+</div>
+</div>
+<!-- Ruled Structural Split -->
+<div class="w-full h-px bg-[#1B2B42]"></div>
+<!-- Risk Analytics Section -->
+<div class="flex flex-col space-y-5">
+<div class="flex items-center justify-between">
+<span class="text-xs font-label-md uppercase tracking-wider text-outline font-semibold">RISK ANALYTICS</span>
+<span class="text-xs font-data-mono text-[#2EE6D3]">● STABLE PROFILE</span>
+</div>
+<!-- Semicircle SVG Gauge & Gauge Label -->
+<div class="flex items-center space-x-6">
+<div class="relative w-28 h-16 flex items-end justify-center overflow-hidden">
+<!-- Gauge SVG -->
+<svg class="w-28 h-14" viewbox="0 0 100 50">
+<!-- Background track -->
+<path d="M 10 50 A 40 40 0 0 1 90 50" fill="none" stroke="#1B2B42" stroke-linecap="round" stroke-width="8"></path>
+<!-- Progress track (5.2 / 10 -> ~52% arc) -->
+<path d="M 10 50 A 40 40 0 0 1 55 10.5" fill="none" stroke="#2EE6D3" stroke-linecap="round" stroke-width="8"></path>
+</svg>
+<span class="absolute bottom-0 font-data-mono text-lg font-bold text-white leading-none">5.2</span>
+</div>
+<div class="flex flex-col">
+<span class="font-headline-md text-sm font-semibold text-white">Portfolio risk 5.2 / 10</span>
+<span class="text-xs font-label-md uppercase tracking-wider text-[#2EE6D3] mt-0.5">● Moderate Risk Profile</span>
+<span class="text-[11px] font-body-md text-outline mt-1">VaR 95% Daily: $380.00</span>
+</div>
+</div>
+<!-- 4 Key Ratios Matrix (demarcated by micro hairlines) -->
+<div class="grid grid-cols-2 border-t border-b border-[#1B2B42] divide-x divide-[#1B2B42] mt-2"><div class="divide-y divide-[#1B2B42]"><div class="py-3 pr-4 flex flex-col justify-center"><div class="text-[10px] font-label-md uppercase tracking-wider text-outline">MAX DRAWDOWN</div><div class="font-data-mono text-lg font-semibold text-[#E5484D] mt-0.5">−9.4%</div><span class="text-[10px] font-data-mono text-outline">Peak-to-trough (Mar)</span></div><div class="py-3 pr-4 flex flex-col justify-center"><div class="text-[10px] font-label-md uppercase tracking-wider text-outline">SORTINO RATIO</div><div class="font-data-mono text-lg font-semibold text-white mt-0.5">2.88</div><span class="text-[10px] font-data-mono text-outline">Downside adjusted</span></div></div><div class="divide-y divide-[#1B2B42]"><div class="py-3 pl-4 flex flex-col justify-center"><div class="text-[10px] font-label-md uppercase tracking-wider text-outline">SHARPE RATIO</div><div class="font-data-mono text-lg font-semibold text-white mt-0.5">2.14</div><span class="text-[10px] font-data-mono text-[#2EE6D3]">Top 8% percentile</span></div><div class="py-3 pl-4 flex flex-col justify-center"><div class="text-[10px] font-label-md uppercase tracking-wider text-outline">PORTFOLIO BETA</div><div class="font-data-mono text-lg font-semibold text-white mt-0.5">0.72</div><span class="text-[10px] font-data-mono text-secondary">Low correlation S&amp;P</span></div></div></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- 5. FOOTER NOTE & LEGAL DISCLAIMER -->
+<footer class="mt-auto px-8 py-5 border-t border-[#1B2B42] bg-[#08121f] flex flex-col md:flex-row md:items-center justify-between text-xs text-outline font-body-md gap-3">
+<p class="leading-relaxed max-w-4xl">Trading involves risk. Past performance is not indicative of future results.</p>
+<div class="flex items-center space-x-6 text-xs font-data-mono text-on-surface-variant whitespace-nowrap">
+<span>SERVER TIME: 16:42:09 UTC</span>
+<span>BUILD: v4.8.2-PROD</span>
+</div>
+</footer>
+</main>
+</div>
+</body></html>

@@ -1,0 +1,308 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Help center — TED Brokers</title>
+  <meta name="description" content="Answers about deposits, withdrawals, copy trading, account verification and security, plus live chat, email and phone support from TED Brokers.">
+  <meta name="theme-color" content="#0A1626">
+  <link rel="icon" href="assets/img/favicon.ico">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=JetBrains+Mono:wght@400;500;600&family=Sora:wght@300;600;700;800&display=swap">
+  <link rel="stylesheet" href="assets/css/main.css">
+  <link rel="stylesheet" href="assets/css/pages/help.css">
+  <script>document.documentElement.classList.add('js');try{var t=localStorage.getItem('ted:theme');if(t==='system')t=matchMedia('(prefers-color-scheme: light)').matches?'light':'dark';if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
+  <script type="module" src="assets/js/main.js"></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <!-- ============ Header ============ -->
+  <header class="site-header surface-ink">
+    <div class="container site-header__bar">
+      <a class="wordmark" href="index.html" aria-label="TED Brokers home">
+        <span class="wordmark__ted">TED</span><span class="wordmark__brokers">Br<svg class="wordmark__o" viewBox="0 0 20 20" aria-hidden="true"><g fill="currentColor"><circle cx="10" cy="2" r="1.6"/><circle cx="15.2" cy="4.1" r="1.4" opacity=".8"/><circle cx="17.9" cy="9.4" r="1.6"/><circle cx="16.3" cy="14.8" r="1.4" opacity=".8"/><circle cx="11.2" cy="17.9" r="1.6"/><circle cx="5.6" cy="16.4" r="1.4" opacity=".7"/><circle cx="2.2" cy="11.6" r="1.6"/><circle cx="3" cy="6" r="1.4" opacity=".8"/><circle cx="6.6" cy="2.9" r="1.1" opacity=".6"/><circle cx="10" cy="10" r="1.9"/><circle cx="13.3" cy="9.2" r="1" opacity=".7"/><circle cx="7.4" cy="12" r="1" opacity=".7"/></g></svg>kers</span>
+      </a>
+      <button class="icon-btn nav-toggle" type="button" data-nav-toggle aria-expanded="false" aria-controls="site-nav" aria-label="Menu">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h10"/></svg>
+      </button>
+      <nav class="site-nav" id="site-nav" aria-label="Main">
+        <ul class="site-nav__links" role="list">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="how-it-works.html">How it works</a></li>
+          <li><a href="traders.html">For traders</a></li>
+          <li><a href="about.html">Company</a></li>
+          <li><a href="help.html" aria-current="page">Help</a></li>
+        </ul>
+        <div class="site-nav__actions">
+          <button class="lang-select" type="button" aria-label="Language: English">EN
+            <svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M2 3.5l3 3 3-3"/></svg>
+          </button>
+          <a class="site-nav__signin" href="login.html">Sign in</a>
+          <a class="btn btn--sm" href="register.html">Get started
+            <svg class="btn__arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </a>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <!-- ============ Hero + search ============ -->
+    <section class="hero hero--compact surface-ink section" aria-labelledby="hero-title">
+      <div class="mesh" aria-hidden="true"><span></span></div>
+      <div class="grid-lines" aria-hidden="true"></div>
+      <div class="container help-hero">
+        <p class="overline overline--signal" data-reveal><span class="live-dot"></span> Help center</p>
+        <h1 class="page-hero__title help-hero__title" id="hero-title" data-reveal style="--i:1">How can we help?</h1>
+
+        <form class="help-search" role="search" action="help.html#faq" method="get" data-component="help-search" data-target="faq-list" data-reveal style="--i:2">
+          <label class="sr-only" for="help-q">Search help articles</label>
+          <div class="help-search__control">
+            <svg class="help-search__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+            <input class="help-search__input" id="help-q" name="q" type="search" placeholder="Search deposits, copy trading, 2FA…" autocomplete="off" spellcheck="false" enterkeyhint="search" aria-describedby="help-q-status">
+            <button class="help-search__submit" type="submit">Search</button>
+          </div>
+          <p class="help-search__status" id="help-q-status" role="status" aria-live="polite" data-search-status></p>
+          <div class="help-popular">
+            <span class="overline" id="popular-label">Popular</span>
+            <ul class="help-popular__list" role="list" aria-labelledby="popular-label">
+              <li><a href="help.html?q=Minimum+deposit#faq" data-search-term="Minimum deposit">Minimum deposit</a></li>
+              <li><a href="help.html?q=Withdrawal+time#faq" data-search-term="Withdrawal time">Withdrawal time</a></li>
+              <li><a href="help.html?q=Stop+copying#faq" data-search-term="Stop copying">Stop copying</a></li>
+              <li><a href="help.html?q=Enable+2FA#faq" data-search-term="Enable 2FA">Enable 2FA</a></li>
+            </ul>
+          </div>
+        </form>
+      </div>
+    </section>
+
+    <!-- ============ FAQ ============ -->
+    <!-- Copy note: answers are draft prototype copy; timings and fees to be confirmed by operations/legal. -->
+    <section class="section surface-paper" id="faq" aria-label="Frequently asked questions">
+      <div class="container help-layout">
+        <div class="help-aside">
+          <div class="help-aside__inner">
+            <p class="overline overline--accent">Knowledge base</p>
+            <p class="help-aside__title">Frequently asked questions</p>
+            <nav class="help-toc" data-component="help-toc" aria-label="Help topics">
+              <ul class="help-toc__list" role="list">
+                <li><a href="#faq-general">General</a></li>
+                <li><a href="#faq-account">Account &amp; verification</a></li>
+                <li><a href="#faq-funding">Funding &amp; withdrawals</a></li>
+                <li><a href="#faq-copy">Copy trading &amp; risk</a></li>
+                <li><a href="#faq-security">Security</a></li>
+              </ul>
+            </nav>
+          </div>
+        </div>
+
+        <div class="help-faq" id="faq-list">
+          <section class="help-group" id="faq-general" aria-labelledby="faq-general-title" data-faq-group>
+            <h2 class="help-group__title" id="faq-general-title"><span class="help-group__num" aria-hidden="true">01</span> General</h2>
+            <div class="accordion">
+              <details data-keywords="what is how does it work mirror follow">
+                <summary><span data-q>What is copy trading?</span></summary>
+                <div class="accordion__body"><p>Copy trading lets you automatically mirror the positions of a trader you choose. When they open or close a trade, the same trade is placed in your account in proportion to the amount you allocate to them.</p></div>
+              </details>
+              <details data-keywords="traders verified track record choose pick risk score">
+                <summary><span data-q>Who are the traders I can copy?</span></summary>
+                <div class="accordion__body"><p>Traders listed on TED Brokers have a track record on the platform. Each profile shows past returns, maximum drawdown, win rate and a 1–10 risk score, so you can compare them before you copy. Past performance is not a reliable indicator of future results.</p></div>
+              </details>
+              <details data-keywords="language languages translate arabic spanish chinese">
+                <summary><span data-q>Which languages is support available in?</span></summary>
+                <div class="accordion__body"><p>The site and our support team work in 10 languages, including English, Spanish, German, French, Portuguese, Arabic and Chinese.</p></div>
+              </details>
+            </div>
+          </section>
+
+          <section class="help-group" id="faq-account" aria-labelledby="faq-account-title" data-faq-group>
+            <h2 class="help-group__title" id="faq-account-title"><span class="help-group__num" aria-hidden="true">02</span> Account &amp; verification</h2>
+            <div class="accordion">
+              <details data-keywords="kyc documents id passport proof of address verify identity">
+                <summary><span data-q>What documents do I need to verify my account?</span></summary>
+                <div class="accordion__body"><p>A valid government-issued photo ID (passport, national ID card or driving licence) and a proof of address dated within the last three months, such as a utility bill or bank statement.</p></div>
+              </details>
+              <details data-keywords="kyc verification time how long review pending">
+                <summary><span data-q>How long does verification take?</span></summary>
+                <div class="accordion__body"><p>Most applications are reviewed within one business day. If we need a clearer photo or another document, we'll email you with exactly what's missing.</p></div>
+              </details>
+            </div>
+          </section>
+
+          <section class="help-group" id="faq-funding" aria-labelledby="faq-funding-title" data-faq-group>
+            <h2 class="help-group__title" id="faq-funding-title"><span class="help-group__num" aria-hidden="true">03</span> Funding &amp; withdrawals</h2>
+            <div class="accordion">
+              <details data-keywords="minimum deposit fund wallet bank crypto paypal btc eth usdt">
+                <summary><span data-q>What is the minimum deposit?</span></summary>
+                <div class="accordion__body"><p>The minimum deposit is $50. You can fund your wallet by bank transfer, crypto (BTC, ETH or USDT) or PayPal.</p></div>
+              </details>
+              <details data-keywords="withdrawal time how long payout cash out bank crypto">
+                <summary><span data-q>How long do withdrawals take?</span></summary>
+                <div class="accordion__body"><p>Bank transfers usually settle in 1–3 business days; crypto withdrawals typically within 24 hours after review.</p></div>
+              </details>
+              <details data-keywords="fees cost charges commission deposit withdrawal">
+                <summary><span data-q>Are there fees for deposits or withdrawals?</span></summary>
+                <div class="accordion__body"><p>Any fee for a deposit or withdrawal is shown before you confirm it, together with the amount you'll receive, so there are no surprises afterwards.</p></div>
+              </details>
+            </div>
+          </section>
+
+          <section class="help-group" id="faq-copy" aria-labelledby="faq-copy-title" data-faq-group>
+            <h2 class="help-group__title" id="faq-copy-title"><span class="help-group__num" aria-hidden="true">04</span> Copy trading &amp; risk</h2>
+            <div class="accordion">
+              <details data-keywords="stop copying pause cancel unfollow">
+                <summary><span data-q>How do I stop copying a trader?</span></summary>
+                <div class="accordion__body"><p>You can stop copying at any time. Open the trader from Copy traders in your dashboard and choose Stop copying. You can also pause a copy if you only want to stop new trades for a while.</p></div>
+              </details>
+              <details data-keywords="copy stop-loss stop loss drawdown limit risk controls">
+                <summary><span data-q>What is a copy stop-loss?</span></summary>
+                <div class="accordion__body"><p>A limit you set for each trader you copy. If your copy of that trader falls by the amount you choose, copying stops automatically and the copied positions are closed.</p></div>
+              </details>
+              <details data-keywords="lose money risk loss safe guarantee">
+                <summary><span data-q>Can I lose money copy trading?</span></summary>
+                <div class="accordion__body"><p>Yes. Copied trades carry the same risk as the trader's own trades, and past performance is not a reliable indicator of future results. Only invest money you can afford to lose, and use a copy stop-loss to cap your downside.</p></div>
+              </details>
+            </div>
+          </section>
+
+          <section class="help-group" id="faq-security" aria-labelledby="faq-security-title" data-faq-group>
+            <h2 class="help-group__title" id="faq-security-title"><span class="help-group__num" aria-hidden="true">05</span> Security</h2>
+            <div class="accordion">
+              <details data-keywords="enable 2fa two-factor authentication authenticator app security code">
+                <summary><span data-q>How do I enable two-factor authentication (2FA)?</span></summary>
+                <div class="accordion__body"><p>Go to Settings, then Security, and choose Enable 2FA. Scan the QR code with an authenticator app such as Google Authenticator or Authy, then enter the 6-digit code to confirm.</p></div>
+              </details>
+              <details data-keywords="hacked compromised password suspicious login 2fa">
+                <summary><span data-q>What should I do if I think my account is compromised?</span></summary>
+                <div class="accordion__body"><p>Change your password straight away, make sure 2FA is on, and contact support by live chat or phone so we can secure your account and review recent activity with you.</p></div>
+              </details>
+            </div>
+          </section>
+
+          <div class="empty help-empty" data-search-empty hidden>
+            <p class="empty__title">No answers match “<span data-search-empty-query></span>”.</p>
+            <p>Try a different word, or <a href="#contact">contact support below</a>.</p>
+            <button class="text-btn" type="button" data-search-clear>Clear search</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ Contact ============ -->
+    <section class="section surface-ink help-contact" id="contact" aria-labelledby="contact-title">
+      <div class="container">
+        <div class="stack help-contact__head" style="--stack-gap: var(--space-4)">
+          <p class="overline overline--accent">Support</p>
+          <h2 id="contact-title">Still need help?</h2>
+          <p class="lead">Our support team is available 24/7 by live chat, email and phone, in 10 languages.</p>
+        </div>
+
+        <div class="split help-contact__split">
+          <div>
+            <ul class="help-channels" role="list">
+              <li class="help-channel">
+                <svg class="help-channel__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20.5l1.4-5A8 8 0 1 1 21 12z"/></svg>
+                <div class="help-channel__body">
+                  <h3 class="help-channel__title">Live chat <span class="tag tag--gain">Online now</span></h3>
+                  <p>Chat with a support agent from inside your account, any time of day.</p>
+                  <a class="link-arrow link-arrow--signal" href="login.html">Sign in to chat
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+                </div>
+              </li>
+              <li class="help-channel">
+                <svg class="help-channel__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3.5 6.5l8.5 6 8.5-6"/></svg>
+                <div class="help-channel__body">
+                  <h3 class="help-channel__title">Email</h3>
+                  <p>For account questions, verification and anything that needs documents.</p>
+                  <p class="help-channel__value">
+                    <a href="mailto:support@tedbrokers.com">support@tedbrokers.com</a>
+                    <button class="text-btn text-btn--muted" type="button" data-copy="support@tedbrokers.com" data-copy-message="Email address copied">Copy<span class="sr-only"> email address</span></button>
+                  </p>
+                </div>
+              </li>
+              <li class="help-channel">
+                <svg class="help-channel__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2z"/></svg>
+                <div class="help-channel__body">
+                  <h3 class="help-channel__title">Phone</h3>
+                  <p>Urgent issues such as a locked account or a suspicious login.</p>
+                  <p class="help-channel__value"><a href="tel:+13322208968">+1 (332) 220-8968</a></p>
+                </div>
+              </li>
+            </ul>
+            <div class="help-address">
+              <p class="overline">Head office</p>
+              <address>330 Hudson Street, 12th Floor, New York, NY 10013</address>
+            </div>
+          </div>
+
+          <form class="help-form" action="help.html#contact" method="post" data-demo-form="Message sent — we'll reply within 24 hours" aria-labelledby="form-title">
+            <h3 class="help-form__title" id="form-title">Send us a message</h3>
+            <p class="help-form__note">All fields are required.</p>
+            <div class="help-form__row">
+              <div class="field">
+                <label class="field__label" for="c-name">Name <span aria-hidden="true">*</span></label>
+                <div class="field__control"><input class="field__input" id="c-name" name="name" type="text" autocomplete="name" required></div>
+                <p class="field__error" id="c-name-error"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v6M12 16.5v.5"/></svg>Enter your name.</p>
+              </div>
+              <div class="field">
+                <label class="field__label" for="c-email">Email <span aria-hidden="true">*</span></label>
+                <div class="field__control"><input class="field__input" id="c-email" name="email" type="email" autocomplete="email" required></div>
+                <p class="field__error" id="c-email-error"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v6M12 16.5v.5"/></svg>Enter a valid email address, like name@example.com.</p>
+              </div>
+            </div>
+            <div class="field">
+              <label class="field__label" for="c-subject">Subject <span aria-hidden="true">*</span></label>
+              <div class="field__control">
+                <select class="field__select" id="c-subject" name="subject" required>
+                  <option value="">Choose a topic</option>
+                  <option value="funding">Deposits &amp; withdrawals</option>
+                  <option value="copy-trading">Copy trading</option>
+                  <option value="security">Account &amp; security</option>
+                  <option value="other">Other</option>
+                </select>
+              </div>
+              <p class="field__error" id="c-subject-error"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v6M12 16.5v.5"/></svg>Choose a topic.</p>
+            </div>
+            <div class="field">
+              <label class="field__label" for="c-message">Message <span aria-hidden="true">*</span></label>
+              <div class="field__control"><textarea class="field__input help-form__textarea" id="c-message" name="message" rows="5" required minlength="10" placeholder="Tell us what you need help with. Don't include passwords or card numbers."></textarea></div>
+              <p class="field__error" id="c-message-error"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v6M12 16.5v.5"/></svg>Write a message of at least 10 characters.</p>
+            </div>
+            <div class="help-form__foot">
+              <button class="btn btn--lg" type="submit">Send message
+                <svg class="btn__arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+              </button>
+              <p class="help-form__note">We reply within 24 hours.</p>
+            </div>
+          </form>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ============ Footer ============ -->
+  <footer class="site-footer surface-ink">
+    <div class="container">
+      <div class="site-footer__top">
+        <div class="site-footer__brand">
+          <a class="wordmark" href="index.html" aria-label="TED Brokers home"><span class="wordmark__ted">TED</span><span class="wordmark__brokers">Brokers</span></a>
+          <p>Copy trading across forex, stocks, crypto and commodities — with the controls to manage your risk.</p>
+          <address class="site-footer__contact">330 Hudson Street, 12th Floor<br>New York, NY 10013<br><a href="tel:+13322208968">+1 (332) 220-8968</a></address>
+        </div>
+        <nav aria-labelledby="f-company"><h2 id="f-company">Company</h2><ul role="list"><li><a href="about.html">About us</a></li><li><a href="help.html#contact">Contact</a></li><li><a href="help.html">FAQs</a></li></ul></nav>
+        <nav aria-labelledby="f-resources"><h2 id="f-resources">Resources</h2><ul role="list"><li><a href="how-it-works.html">How it works</a></li><li><a href="traders.html">For traders</a></li><li><a href="help.html">Help center</a></li></ul></nav>
+        <nav aria-labelledby="f-legal"><h2 id="f-legal">Legal</h2><ul role="list"><li><a href="#">Privacy policy</a></li><li><a href="#">Terms &amp; conditions</a></li><li><a href="#">AML / KYC policy</a></li><li><a href="#">Risk disclosure</a></li></ul></nav>
+      </div>
+      <p class="fineprint site-footer__risk"><strong>Risk warning:</strong> Trading forex, cryptocurrencies, stocks and other financial instruments carries a high level of risk and may not be suitable for all investors. You could lose some or all of your capital. Copy trading does not constitute investment advice. Past performance of any trader is not a reliable indicator of future results.</p>
+      <div class="site-footer__bottom">
+        <span>© 2026 TED Brokers</span>
+        <ul class="site-footer__langs" role="list" aria-label="Language">
+          <li><a href="#" aria-current="true" lang="en">EN</a></li><li><a href="#" lang="es">ES</a></li><li><a href="#" lang="de">DE</a></li><li><a href="#" lang="fr">FR</a></li><li><a href="#" lang="pt">PT</a></li><li><a href="#" lang="ar">AR</a></li><li><a href="#" lang="zh">中文</a></li>
+        </ul>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>

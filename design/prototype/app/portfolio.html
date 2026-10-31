@@ -1,0 +1,436 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Portfolio — TED Brokers</title>
+  <meta name="theme-color" content="#0A1626">
+  <meta name="robots" content="noindex">
+  <link rel="icon" href="../assets/img/favicon.ico">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=JetBrains+Mono:wght@400;500;600&family=Sora:wght@300;600;700;800&display=swap">
+  <link rel="stylesheet" href="../assets/css/main.css">
+  <link rel="stylesheet" href="../assets/css/pages/portfolio.css">
+  <script>document.documentElement.classList.add('js');try{var t=localStorage.getItem('ted:theme');if(t==='system')t=matchMedia('(prefers-color-scheme: light)').matches?'light':'dark';if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
+  <script type="module" src="../assets/js/main.js"></script>
+</head>
+<body class="app surface-ink">
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <!-- ===================== RAIL (shared across app pages) ===================== -->
+  <aside class="rail" id="rail" aria-label="Dashboard">
+    <div class="rail__brand">
+      <a class="wordmark" href="index.html" aria-label="TED Brokers dashboard">
+        <span class="wordmark__ted">TED</span><span class="wordmark__brokers">Br<svg class="wordmark__o" viewBox="0 0 20 20" aria-hidden="true"><g fill="currentColor"><circle cx="10" cy="2" r="1.6"/><circle cx="15.2" cy="4.1" r="1.4" opacity=".8"/><circle cx="17.9" cy="9.4" r="1.6"/><circle cx="16.3" cy="14.8" r="1.4" opacity=".8"/><circle cx="11.2" cy="17.9" r="1.6"/><circle cx="5.6" cy="16.4" r="1.4" opacity=".7"/><circle cx="2.2" cy="11.6" r="1.6"/><circle cx="3" cy="6" r="1.4" opacity=".8"/><circle cx="6.6" cy="2.9" r="1.1" opacity=".6"/><circle cx="10" cy="10" r="1.9"/><circle cx="13.3" cy="9.2" r="1" opacity=".7"/><circle cx="7.4" cy="12" r="1" opacity=".7"/></g></svg>kers</span>
+      </a>
+    </div>
+    <nav class="rail__nav" aria-label="Dashboard sections">
+      <ul class="rail__list" role="list">
+        <li><a class="rail__link" href="index.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>Overview</a></li>
+        <li><a class="rail__link" href="wallet.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M3 7a2 2 0 0 1 2-2h13v4"/><path d="M3 7v11a2 2 0 0 0 2 2h15V9H5a2 2 0 0 1-2-2z"/><circle cx="16" cy="14.5" r="1"/></svg>Wallet</a></li>
+        <li><a class="rail__link" href="portfolio.html" aria-current="page"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M21 12A9 9 0 1 1 12 3v9z"/><path d="M15 3.5A9 9 0 0 1 20.5 9H15z"/></svg>Portfolio</a></li>
+        <li><a class="rail__link" href="copy-traders.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0"/><path d="M16 4.5a3.5 3.5 0 0 1 0 7M18 14.5a6.5 6.5 0 0 1 3.5 5.5"/></svg>Copy traders<span class="rail__aside rail__aside--live">3 live</span></a></li>
+      </ul>
+      <p class="rail__group-label" id="rail-plans">Investment plans</p>
+      <ul class="rail__list" role="list" aria-labelledby="rail-plans">
+        <li><a class="rail__link rail__link--sub" href="plans.html">Robo Advisor</a></li>
+        <li><a class="rail__link rail__link--sub" href="plans.html#etf">ETF automation</a></li>
+        <li><a class="rail__link rail__link--sub" href="plans.html#defi">DeFi</a></li>
+        <li><a class="rail__link rail__link--sub" href="plans.html#options">Options</a></li>
+        <li><a class="rail__link rail__link--sub" href="plans.html#staking">Staking<span class="rail__aside rail__aside--soon">soon</span></a></li>
+      </ul>
+      <p class="rail__group-label" id="rail-more">Community</p>
+      <ul class="rail__list" role="list" aria-labelledby="rail-more">
+        <li><a class="rail__link" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M3 12h4l3-8 4 16 3-8h4"/></svg>Network feed</a></li>
+        <li><a class="rail__link" href="referrals.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="18" cy="5" r="2.5"/><circle cx="6" cy="12" r="2.5"/><circle cx="18" cy="19" r="2.5"/><path d="M8.2 10.8l7.6-4.4M8.2 13.2l7.6 4.4"/></svg>Referrals</a></li>
+        <li><a class="rail__link" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M4 5h13v14H6a2 2 0 0 1-2-2z"/><path d="M17 9h3v8a2 2 0 0 1-2 2"/><path d="M7.5 9h6M7.5 13h6"/></svg>News</a></li>
+      </ul>
+    </nav>
+    <div class="rail__foot">
+      <ul class="rail__list" role="list">
+        <li><a class="rail__link" href="../help.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.6.3-1 .8-1 1.5V14"/><path d="M12 17h.01"/></svg>Help center</a></li>
+        <li><a class="rail__link" href="settings.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M12 2.5v3M12 18.5v3M4.2 4.2l2.1 2.1M17.7 17.7l2.1 2.1M2.5 12h3M18.5 12h3M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1"/></svg>Settings</a></li>
+      </ul>
+      <a class="rail__user" href="settings.html">
+        <span class="avatar">DO</span>
+        <span><span class="rail__user-name">Daniel Okafor</span><br><span class="rail__user-meta">● Verified</span></span>
+      </a>
+    </div>
+  </aside>
+  <button class="rail-scrim" type="button" tabindex="-1" aria-hidden="true"></button>
+
+  <div class="app__main">
+    <!-- ===================== TOP BAR (shared) ===================== -->
+    <header class="topbar">
+      <div class="topbar__bar">
+        <button class="icon-btn topbar__menu" type="button" data-rail-toggle aria-controls="rail" aria-expanded="false" aria-label="Open menu">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h10"/></svg>
+        </button>
+        <a class="wordmark topbar__brand" href="index.html" aria-label="TED Brokers dashboard"><span class="wordmark__ted">TED</span><span class="wordmark__brokers">Brokers</span></a>
+        <form class="search" role="search" action="copy-traders.html">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+          <label class="sr-only" for="q">Search</label>
+          <input id="q" name="q" type="search" placeholder="Search traders, plans, markets" autocomplete="off">
+          <kbd aria-hidden="true">⌘K</kbd>
+        </form>
+        <div class="topbar__actions">
+          <button class="lang-select" type="button" aria-label="Language: English">EN
+            <svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M2 3.5l3 3 3-3"/></svg>
+          </button>
+          <button class="icon-btn" type="button" data-theme-toggle aria-pressed="false" aria-label="Light theme">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4 8 8 0 1 0 20 14.5z"/></svg>
+          </button>
+          <button class="icon-btn" type="button" aria-label="Notifications, 2 unread">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M6 8a6 6 0 1 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.9 1.9 0 0 0 3.4 0"/></svg>
+            <span class="icon-btn__dot"></span>
+          </button>
+          <button class="btn btn--sm btn--outline" type="button" data-dialog-open="ted-ai">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true" style="color: var(--color-signal)"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/></svg>TED AI
+          </button>
+          <a class="btn btn--sm" href="wallet.html#deposit">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>Deposit
+          </a>
+        </div>
+      </div>
+      <div class="ticker ticker--sm ticker--app" data-component="ticker" role="region" aria-label="Market prices (indicative)">
+        <div class="ticker__track">
+          <ul class="ticker__list" role="list">
+            <li class="ticker__item"><span class="ticker__sym">EUR/USD</span><span class="ticker__px">1.0842</span><span class="delta" data-trend="up">+0.21%</span></li>
+            <li class="ticker__item"><span class="ticker__sym">BTC/USD</span><span class="ticker__px">67,412.00</span><span class="delta" data-trend="up">+1.84%</span></li>
+            <li class="ticker__item"><span class="ticker__sym">ETH/USD</span><span class="ticker__px">3,540.80</span><span class="delta" data-trend="up">+2.11%</span></li>
+            <li class="ticker__item"><span class="ticker__sym">AAPL</span><span class="ticker__px">228.14</span><span class="delta" data-trend="down">−0.42%</span></li>
+            <li class="ticker__item"><span class="ticker__sym">XAU/USD</span><span class="ticker__px">2,384.10</span><span class="delta" data-trend="up">+0.35%</span></li>
+            <li class="ticker__item"><span class="ticker__sym">SPX</span><span class="ticker__px">5,567.19</span><span class="delta" data-trend="up">+0.38%</span></li>
+            <li class="ticker__item"><span class="ticker__sym">GBP/USD</span><span class="ticker__px">1.2711</span><span class="delta" data-trend="down">−0.08%</span></li>
+          </ul>
+        </div>
+      </div>
+    </header>
+
+
+    <!-- ===================== PAGE CONTENT ===================== -->
+    <main class="app__content" id="main">
+      <div class="page-head">
+        <div>
+          <h1>Portfolio</h1>
+          <p class="page-head__meta">5 investments · Past performance, illustrative figures</p>
+        </div>
+        <div class="field pf-range">
+          <label class="field__label" for="pf-range">Timeframe</label>
+          <div class="field__control">
+            <select class="field__select" id="pf-range" name="range" data-component="pf-range" data-target="pf-chart">
+              <option value="1m">Last month</option>
+              <option value="3m">Last 3 months</option>
+              <option value="12m" selected>Last 12 months</option>
+              <option value="all">All time</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div class="tabs" role="tablist" aria-label="Portfolio views" data-component="tabs">
+          <button class="tabs__tab" type="button" role="tab" id="pf-tab-investments" aria-controls="pf-panel-investments" aria-selected="true">Investments<small>5</small></button>
+          <button class="tabs__tab" type="button" role="tab" id="pf-tab-copies" aria-controls="pf-panel-copies" aria-selected="false">Active copies<small data-pf-copies-count>3</small></button>
+          <button class="tabs__tab" type="button" role="tab" id="pf-tab-performance" aria-controls="pf-panel-performance" aria-selected="false">Performance</button>
+        </div>
+      </div>
+
+      <!-- ===================== INVESTMENTS ===================== -->
+      <div class="pf-panel" role="tabpanel" id="pf-panel-investments" aria-labelledby="pf-tab-investments" tabindex="0">
+        <section aria-label="Portfolio summary">
+          <div class="stat-strip pf-strip">
+            <div class="stat">
+              <span class="stat__label">Total invested</span>
+              <span class="stat__value" data-count="40000" data-format="currency" data-decimals="2">$40,000.00</span>
+              <span class="stat__meta">Across 5 investments</span>
+            </div>
+            <div class="stat">
+              <span class="stat__label">Current value</span>
+              <span class="stat__value" data-count="48216.40" data-format="currency" data-decimals="2">$48,216.40</span>
+              <span class="stat__meta">Marked to market</span>
+            </div>
+            <div class="stat">
+              <span class="stat__label">Total P/L</span>
+              <span class="stat__value"><span class="delta" data-trend="up" data-count="8216.40" data-format="currency" data-decimals="2" data-prefix="+">+$8,216.40</span></span>
+              <span class="stat__meta">Unrealised and realised</span>
+            </div>
+            <div class="stat">
+              <span class="stat__label">Return rate</span>
+              <span class="stat__value gain" data-count="20.5" data-decimals="1" data-prefix="+" data-suffix="%">+20.5%</span>
+              <span class="stat__meta">Past performance</span>
+            </div>
+            <div class="stat">
+              <span class="stat__label">Win rate</span>
+              <span class="stat__value" data-count="71" data-suffix="%">71%</span>
+              <span class="stat__meta">312 trades closed</span>
+            </div>
+          </div>
+        </section>
+
+        <section aria-labelledby="pf-chart-title">
+          <div class="block-head">
+            <h2 id="pf-chart-title">Cumulative performance</h2>
+            <p class="pf-legend">
+              <span class="pf-legend__item"><span class="pf-legend__key" aria-hidden="true"></span>Your portfolio <span class="delta" data-trend="up" data-pf-legend="portfolio">+20.5%</span></span>
+              <span class="pf-legend__item"><span class="pf-legend__key pf-legend__key--dash" aria-hidden="true"></span>S&amp;P 500, rebased <span class="delta" data-trend="up" data-pf-legend="benchmark">+12.4%</span></span>
+            </p>
+          </div>
+          <div class="chart pf-chart mt-5" id="pf-chart" role="img" data-component="chart"
+               data-series="walk:53,seed=33,drift=.5,start=40000,end=48216.4"
+               data-compare="walk:53,seed=41,drift=.3,vol=.7,start=40000,end=44960"
+               data-series-name="Portfolio" data-compare-name="S&amp;P 500"
+               data-format="currency" data-decimals="2" data-yaxis="4" data-xaxis="6" data-dots
+               data-labels="Oct 25,Nov 25,Nov 25,Nov 25,Nov 25,Dec 25,Dec 25,Dec 25,Dec 25,Dec 25,Jan 26,Jan 26,Jan 26,Jan 26,Feb 26,Feb 26,Feb 26,Feb 26,Mar 26,Mar 26,Mar 26,Mar 26,Mar 26,Apr 26,Apr 26,Apr 26,Apr 26,May 26,May 26,May 26,May 26,Jun 26,Jun 26,Jun 26,Jun 26,Jun 26,Jul 26,Jul 26,Jul 26,Jul 26,Aug 26,Aug 26,Aug 26,Aug 26,Aug 26,Sep 26,Sep 26,Sep 26,Sep 26,Oct 26,Oct 26,Oct 26,Oct 26"
+               aria-label="Portfolio value over the last 12 months, from $40,000.00 to $48,216.40 (+20.5%), compared with the S&amp;P 500 rebased to the same start (+12.4%). Use arrow keys to inspect values."></div>
+        </section>
+
+        <section aria-labelledby="pf-monthly-title">
+          <div class="block-head">
+            <h2 id="pf-monthly-title">Monthly returns <small>Nov 2025 – Oct 2026</small></h2>
+            <p class="mono muted">10 positive · 2 negative months</p>
+          </div>
+          <div class="pf-bars-wrap mt-5" tabindex="0" role="region" aria-label="Monthly returns, scrollable">
+            <div class="bars" data-component="bars" data-format="percent" data-show-values
+                 data-values="2.1,1.8,3.0,0.9,-1.2,2.4,1.1,3.8,0.5,-0.8,2.2,3.4"
+                 data-labels="Nov,Dec,Jan,Feb,Mar,Apr,May,Jun,Jul,Aug,Sep,Oct"></div>
+          </div>
+        </section>
+
+        <div class="cols pf-cols">
+          <section aria-labelledby="pf-inv-title">
+            <div class="block-head">
+              <h2 id="pf-inv-title">Your investments <small>5 active</small></h2>
+              <a class="link-arrow" href="copy-traders.html">Find traders to copy <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+            </div>
+            <div class="ledger-wrap" tabindex="0" role="region" aria-labelledby="pf-inv-title">
+              <table class="ledger pf-ledger">
+                <thead><tr><th scope="col">Name</th><th scope="col" class="is-num">Invested</th><th scope="col" class="is-num">Current value</th><th scope="col" class="is-num">P/L</th><th scope="col" class="opt">Started</th><th scope="col"><span class="sr-only">Action</span></th></tr></thead>
+                <tbody>
+                  <tr>
+                    <td><div class="pf-name"><strong>Copy: Elena Vasquez</strong><span>Copy trader · Forex</span></div></td>
+                    <td class="is-num">$10,000.00</td>
+                    <td class="is-num">$12,410.00</td>
+                    <td class="is-num"><span class="delta" data-trend="up">+$2,410.00</span><span class="pf-pct">+24.1%</span></td>
+                    <td class="opt mono muted nowrap"><time datetime="2025-10-28">28 Oct 2025</time></td>
+                    <td class="is-end"><a class="text-btn" href="copy-traders.html">Details<span class="sr-only">: Elena Vasquez</span></a></td>
+                  </tr>
+                  <tr>
+                    <td><div class="pf-name"><strong>Plan: Growth</strong><span>Investment plan · Balanced ETF</span></div></td>
+                    <td class="is-num">$12,000.00</td>
+                    <td class="is-num">$14,120.00</td>
+                    <td class="is-num"><span class="delta" data-trend="up">+$2,120.00</span><span class="pf-pct">+17.7%</span></td>
+                    <td class="opt mono muted nowrap"><time datetime="2025-11-03">3 Nov 2025</time></td>
+                    <td class="is-end"><a class="text-btn" href="plans.html">Details<span class="sr-only">: Growth plan</span></a></td>
+                  </tr>
+                  <tr>
+                    <td><div class="pf-name"><strong>Copy: Marcus Chen</strong><span>Copy trader · Crypto</span></div></td>
+                    <td class="is-num">$8,000.00</td>
+                    <td class="is-num">$10,186.40</td>
+                    <td class="is-num"><span class="delta" data-trend="up">+$2,186.40</span><span class="pf-pct">+27.3%</span></td>
+                    <td class="opt mono muted nowrap"><time datetime="2025-11-17">17 Nov 2025</time></td>
+                    <td class="is-end"><a class="text-btn" href="copy-traders.html">Details<span class="sr-only">: Marcus Chen</span></a></td>
+                  </tr>
+                  <tr>
+                    <td><div class="pf-name"><strong>Plan: Premium</strong><span>Investment plan · Quant macro</span></div></td>
+                    <td class="is-num">$5,000.00</td>
+                    <td class="is-num">$5,650.00</td>
+                    <td class="is-num"><span class="delta" data-trend="up">+$650.00</span><span class="pf-pct">+13.0%</span></td>
+                    <td class="opt mono muted nowrap"><time datetime="2026-01-12">12 Jan 2026</time></td>
+                    <td class="is-end"><a class="text-btn" href="plans.html">Details<span class="sr-only">: Premium plan</span></a></td>
+                  </tr>
+                  <tr>
+                    <td><div class="pf-name"><strong>Copy: Aisha Rahman</strong><span>Copy trader · US equities</span></div></td>
+                    <td class="is-num">$5,000.00</td>
+                    <td class="is-num">$5,850.00</td>
+                    <td class="is-num"><span class="delta" data-trend="up">+$850.00</span><span class="pf-pct">+17.0%</span></td>
+                    <td class="opt mono muted nowrap"><time datetime="2026-02-09">9 Feb 2026</time></td>
+                    <td class="is-end"><a class="text-btn" href="copy-traders.html">Details<span class="sr-only">: Aisha Rahman</span></a></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <p class="pf-ledger-foot"><span>5 of 5 investments shown</span><span>Values in USD</span></p>
+          </section>
+
+          <section aria-labelledby="pf-break-title" class="stack" style="--stack-gap: var(--space-6)">
+            <div class="block-head">
+              <h2 id="pf-break-title">Performance breakdown</h2>
+            </div>
+            <div>
+              <h3 class="stat__label" id="pf-assets-title">Asset class weighting <span>100%</span></h3>
+              <ul class="pf-hbars mt-2" role="list" aria-labelledby="pf-assets-title" data-reveal>
+                <li class="pf-hbar" style="--i:0"><span>Forex</span><span class="pf-hbar__pct">38%</span><span class="pf-hbar__amt">$18,322.23</span><span class="pf-hbar__track" aria-hidden="true"><span class="pf-hbar__fill" style="--w:38%"></span></span></li>
+                <li class="pf-hbar" style="--i:1"><span>Crypto</span><span class="pf-hbar__pct">28%</span><span class="pf-hbar__amt">$13,500.59</span><span class="pf-hbar__track" aria-hidden="true"><span class="pf-hbar__fill" style="--w:28%"></span></span></li>
+                <li class="pf-hbar" style="--i:2"><span>US equities</span><span class="pf-hbar__pct">22%</span><span class="pf-hbar__amt">$10,607.61</span><span class="pf-hbar__track" aria-hidden="true"><span class="pf-hbar__fill" style="--w:22%"></span></span></li>
+                <li class="pf-hbar" style="--i:3"><span>Commodities</span><span class="pf-hbar__pct">12%</span><span class="pf-hbar__amt">$5,785.97</span><span class="pf-hbar__track" aria-hidden="true"><span class="pf-hbar__fill" style="--w:12%"></span></span></li>
+              </ul>
+            </div>
+            <div>
+              <h3 class="stat__label" id="pf-risk-title">Risk</h3>
+              <div class="pf-gauge mt-4" data-component="pf-gauge" data-value="5.2" data-max="10" data-level="med">
+                <div class="pf-gauge__dial" data-gauge><span class="pf-gauge__value" aria-hidden="true">5.2</span></div>
+                <div>
+                  <p class="pf-gauge__title">Portfolio risk <span class="num">5.2 / 10</span></p>
+                  <p class="mt-2"><span class="tag tag--pending">Moderate</span></p>
+                  <p class="fineprint mt-2">Based on volatility and drawdown of your copies over 12 months.</p>
+                </div>
+              </div>
+              <dl class="pf-risk mt-5" aria-labelledby="pf-risk-title">
+                <div><dt>Max drawdown</dt><dd><span class="delta" data-trend="down">−9.4%</span><small>Peak to trough, Mar 2026</small></dd></div>
+                <div><dt>Sharpe ratio</dt><dd>2.14<small>Return per unit of risk</small></dd></div>
+                <div><dt>Sortino ratio</dt><dd>2.88<small>Downside-adjusted</small></dd></div>
+                <div><dt>Beta</dt><dd>0.72<small>vs S&amp;P 500</small></dd></div>
+              </dl>
+            </div>
+          </section>
+        </div>
+      </div>
+
+      <!-- ===================== ACTIVE COPIES ===================== -->
+      <div class="pf-panel" role="tabpanel" id="pf-panel-copies" aria-labelledby="pf-tab-copies" tabindex="0" hidden>
+        <section aria-labelledby="pf-copies-title" data-component="pf-actions" data-stop-dialog="pf-stop-dialog">
+          <div class="block-head">
+            <h2 id="pf-copies-title">Active copies <small><span data-pf-copies-count>3</span> traders</small></h2>
+            <a class="link-arrow" href="copy-traders.html">Browse traders <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+          </div>
+          <div class="ledger-wrap" tabindex="0" role="region" aria-labelledby="pf-copies-title">
+            <table class="ledger ledger--lg">
+              <thead><tr><th scope="col">Trader</th><th scope="col">Status</th><th scope="col" class="is-num">Allocation</th><th scope="col" class="is-num">P/L</th><th scope="col" class="is-num opt">Copy stop-loss</th><th scope="col" class="is-end"><span class="sr-only">Actions</span></th></tr></thead>
+              <tbody>
+                <tr data-trader="Elena Vasquez" data-state="copying">
+                  <td><div class="person"><span class="avatar">EV</span><div><div class="person__name">Elena Vasquez</div><div class="person__meta">Forex · since 28 Oct 2025</div></div></div></td>
+                  <td><span class="tag tag--plain tag--gain" data-pf-status>Copying</span></td>
+                  <td class="is-num">$10,000.00</td>
+                  <td class="is-num"><span class="delta" data-trend="up">+$2,410.00</span></td>
+                  <td class="is-num opt">$8,500.00 <span class="muted">(−15%)</span></td>
+                  <td class="is-end"><span class="pf-actions" data-pf-actions>
+                    <button class="text-btn text-btn--muted" type="button" data-pf-action="toggle"><span data-label>Pause</span><span class="sr-only"> copying Elena Vasquez</span></button>
+                    <button class="text-btn" type="button" data-pf-action="stop">Stop<span class="sr-only"> copying Elena Vasquez</span></button>
+                  </span></td>
+                </tr>
+                <tr data-trader="Marcus Chen" data-state="copying">
+                  <td><div class="person"><span class="avatar avatar--amber">MC</span><div><div class="person__name">Marcus Chen</div><div class="person__meta">Crypto · since 17 Nov 2025</div></div></div></td>
+                  <td><span class="tag tag--plain tag--gain" data-pf-status>Copying</span></td>
+                  <td class="is-num">$8,000.00</td>
+                  <td class="is-num"><span class="delta" data-trend="up">+$2,186.40</span></td>
+                  <td class="is-num opt">$6,400.00 <span class="muted">(−20%)</span></td>
+                  <td class="is-end"><span class="pf-actions" data-pf-actions>
+                    <button class="text-btn text-btn--muted" type="button" data-pf-action="toggle"><span data-label>Pause</span><span class="sr-only"> copying Marcus Chen</span></button>
+                    <button class="text-btn" type="button" data-pf-action="stop">Stop<span class="sr-only"> copying Marcus Chen</span></button>
+                  </span></td>
+                </tr>
+                <tr data-trader="Aisha Rahman" data-state="paused">
+                  <td><div class="person"><span class="avatar avatar--navy">AR</span><div><div class="person__name">Aisha Rahman</div><div class="person__meta">US equities · since 9 Feb 2026</div></div></div></td>
+                  <td><span class="tag tag--plain tag--pending" data-pf-status>Paused</span></td>
+                  <td class="is-num">$5,000.00</td>
+                  <td class="is-num"><span class="delta" data-trend="up">+$850.00</span></td>
+                  <td class="is-num opt">$4,500.00 <span class="muted">(−10%)</span></td>
+                  <td class="is-end"><span class="pf-actions" data-pf-actions>
+                    <button class="text-btn text-btn--muted" type="button" data-pf-action="toggle"><span data-label>Resume</span><span class="sr-only"> copying Aisha Rahman</span></button>
+                    <button class="text-btn" type="button" data-pf-action="stop">Stop<span class="sr-only"> copying Aisha Rahman</span></button>
+                  </span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <p class="fineprint mt-4">Pausing stops new trades from being mirrored; open positions stay open. The copy stop-loss closes a copy automatically if its value falls to the amount shown.</p>
+        </section>
+      </div>
+
+      <!-- ===================== PERFORMANCE ===================== -->
+      <div class="pf-panel" role="tabpanel" id="pf-panel-performance" aria-labelledby="pf-tab-performance" tabindex="0" hidden>
+        <section aria-label="Performance summary, last 12 months">
+          <div class="stat-strip">
+            <div class="stat">
+              <span class="stat__label">Best month</span>
+              <span class="stat__value"><span class="delta" data-trend="up">+3.8%</span></span>
+              <span class="stat__meta">Jun 2026</span>
+            </div>
+            <div class="stat">
+              <span class="stat__label">Worst month</span>
+              <span class="stat__value"><span class="delta" data-trend="down">−1.2%</span></span>
+              <span class="stat__meta">Mar 2026</span>
+            </div>
+            <div class="stat">
+              <span class="stat__label">Average month</span>
+              <span class="stat__value"><span class="delta" data-trend="up">+1.6%</span></span>
+              <span class="stat__meta">12-month mean</span>
+            </div>
+            <div class="stat">
+              <span class="stat__label">Positive months</span>
+              <span class="stat__value">10<span class="muted"> / 12</span></span>
+              <span class="stat__meta">Nov 2025 – Oct 2026</span>
+            </div>
+          </div>
+        </section>
+
+        <section aria-labelledby="pf-compare-title">
+          <div class="block-head">
+            <h2 id="pf-compare-title">Return by investment <small>since start</small></h2>
+          </div>
+          <ul class="pf-hbars" role="list" aria-labelledby="pf-compare-title" data-reveal>
+            <li class="pf-hbar" style="--i:0"><span>Marcus Chen <span class="muted">· copy</span></span><span class="pf-hbar__pct gain">+27.3%</span><span class="pf-hbar__amt">+$2,186.40</span><span class="pf-hbar__track" aria-hidden="true"><span class="pf-hbar__fill" style="--w:100%"></span></span></li>
+            <li class="pf-hbar" style="--i:1"><span>Elena Vasquez <span class="muted">· copy</span></span><span class="pf-hbar__pct gain">+24.1%</span><span class="pf-hbar__amt">+$2,410.00</span><span class="pf-hbar__track" aria-hidden="true"><span class="pf-hbar__fill" style="--w:88%"></span></span></li>
+            <li class="pf-hbar" style="--i:2"><span>Growth <span class="muted">· plan</span></span><span class="pf-hbar__pct gain">+17.7%</span><span class="pf-hbar__amt">+$2,120.00</span><span class="pf-hbar__track" aria-hidden="true"><span class="pf-hbar__fill" style="--w:65%"></span></span></li>
+            <li class="pf-hbar" style="--i:3"><span>Aisha Rahman <span class="muted">· copy</span></span><span class="pf-hbar__pct gain">+17.0%</span><span class="pf-hbar__amt">+$850.00</span><span class="pf-hbar__track" aria-hidden="true"><span class="pf-hbar__fill" style="--w:62%"></span></span></li>
+            <li class="pf-hbar" style="--i:4"><span>Premium <span class="muted">· plan</span></span><span class="pf-hbar__pct gain">+13.0%</span><span class="pf-hbar__amt">+$650.00</span><span class="pf-hbar__track" aria-hidden="true"><span class="pf-hbar__fill" style="--w:48%"></span></span></li>
+            <li class="pf-hbar" style="--i:5"><span>S&amp;P 500 <span class="muted">· benchmark, 12 months</span></span><span class="pf-hbar__pct">+12.4%</span><span class="pf-hbar__amt">—</span><span class="pf-hbar__track" aria-hidden="true"><span class="pf-hbar__fill" style="--w:45%; --_c: var(--color-text-muted)"></span></span></li>
+          </ul>
+        </section>
+      </div>
+
+      <footer class="app__foot"><p class="fineprint">Trading involves risk. Returns shown are past performance and are not indicative of future results. Figures are illustrative. The S&amp;P 500 benchmark is rebased to your starting value for comparison only.</p></footer>
+    </main>
+  </div>
+
+  <!-- ===================== MOBILE TAB BAR + TED AI (shared) ===================== -->
+  <nav class="tabbar" aria-label="Quick navigation">
+    <a href="index.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1z"/></svg>Home</a>
+    <a href="wallet.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M3 7a2 2 0 0 1 2-2h13v4"/><path d="M3 7v11a2 2 0 0 0 2 2h15V9H5a2 2 0 0 1-2-2z"/></svg>Wallet</a>
+    <a href="copy-traders.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0"/><path d="M16 4.5a3.5 3.5 0 0 1 0 7"/></svg>Traders</a>
+    <a href="plans.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M3 17l6-6 4 4 8-8"/><path d="M15 7h6v6"/></svg>Plans</a>
+    <button type="button" data-rail-toggle aria-controls="rail" aria-expanded="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>More</button>
+  </nav>
+  <button class="ai-fab" type="button" data-dialog-open="ted-ai"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/></svg>TED AI</button>
+
+  <dialog class="drawer" id="ted-ai" aria-labelledby="ted-ai-title">
+    <div class="drawer__inner">
+      <div class="drawer__head">
+        <h2 id="ted-ai-title" class="cluster" style="font-size:1.125rem; --cluster-gap: var(--space-2)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true" style="color: var(--color-signal)"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/></svg>TED AI</h2>
+        <button class="icon-btn" type="button" data-dialog-close aria-label="Close TED AI"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+      </div>
+      <div class="drawer__body" aria-live="polite">
+        <div class="ai-msg ai-msg--bot"><span class="ai-msg__who">TED AI · 09:41</span><p>Elena Vasquez opened a EUR/USD long. Your copy mirrored it at 1.0841 with a $42.10 allocation.</p></div>
+        <div class="ai-msg ai-msg--bot"><span class="ai-msg__who">Risk notice</span><p>Copying Aisha Rahman is paused because your 5% drawdown limit was reached. You can resume or adjust the limit from Copy traders.</p></div>
+        <div class="ai-msg ai-msg--user"><span class="ai-msg__who">You</span><p>How diversified is my portfolio?</p></div>
+        <div class="ai-msg ai-msg--bot"><span class="ai-msg__who">TED AI</span><p>You're spread across 4 asset classes. Crypto is 33% of your capital — above the 25% many beginners choose. Consider capping it in Copy traders.</p></div>
+      </div>
+      <form class="drawer__foot" data-demo-form="Message sent to TED AI">
+        <div class="field">
+          <label class="sr-only" for="ai-q">Ask TED AI</label>
+          <div class="field__control">
+            <input class="field__input" id="ai-q" name="q" placeholder="Ask about your portfolio…" required autocomplete="off">
+            <button class="icon-btn" type="submit" aria-label="Send"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4 12l16-8-6 16-2.5-6.5z"/></svg></button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </dialog>
+
+  <dialog class="dialog" id="pf-stop-dialog" aria-labelledby="pf-stop-title" aria-describedby="pf-stop-desc">
+    <div class="dialog__head">
+      <h2 class="dialog__title" id="pf-stop-title">Stop copying <span data-pf-stop-name>this trader</span>?</h2>
+      <button class="icon-btn" type="button" data-dialog-close aria-label="Close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+    </div>
+    <div class="dialog__body">
+      <p class="muted" id="pf-stop-desc">New trades from <span data-pf-stop-name>this trader</span> will no longer be mirrored and open copied positions will be closed at the market price. The remaining value returns to your wallet. This can't be undone, but you can start a new copy at any time.</p>
+    </div>
+    <div class="dialog__foot">
+      <button class="btn btn--outline" type="button" data-dialog-close>Keep copying</button>
+      <button class="btn" type="button" data-pf-stop-confirm>Stop copying</button>
+    </div>
+  </dialog>
+</body>
+</html>

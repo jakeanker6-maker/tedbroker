@@ -1,0 +1,922 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Investment plans — TED Brokers</title>
+  <meta name="theme-color" content="#0A1626">
+  <meta name="robots" content="noindex">
+  <link rel="icon" href="../assets/img/favicon.ico">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=JetBrains+Mono:wght@400;500;600&family=Sora:wght@300;600;700;800&display=swap">
+  <link rel="stylesheet" href="../assets/css/main.css">
+  <link rel="stylesheet" href="../assets/css/pages/plans.css">
+  <script>document.documentElement.classList.add('js');try{var t=localStorage.getItem('ted:theme');if(t==='system')t=matchMedia('(prefers-color-scheme: light)').matches?'light':'dark';if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
+  <script type="module" src="../assets/js/main.js"></script>
+</head>
+<body class="app surface-ink">
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <!-- ===================== RAIL (shared across app pages) ===================== -->
+  <aside class="rail" id="rail" aria-label="Dashboard">
+    <div class="rail__brand">
+      <a class="wordmark" href="index.html" aria-label="TED Brokers dashboard">
+        <span class="wordmark__ted">TED</span><span class="wordmark__brokers">Br<svg class="wordmark__o" viewBox="0 0 20 20" aria-hidden="true"><g fill="currentColor"><circle cx="10" cy="2" r="1.6"/><circle cx="15.2" cy="4.1" r="1.4" opacity=".8"/><circle cx="17.9" cy="9.4" r="1.6"/><circle cx="16.3" cy="14.8" r="1.4" opacity=".8"/><circle cx="11.2" cy="17.9" r="1.6"/><circle cx="5.6" cy="16.4" r="1.4" opacity=".7"/><circle cx="2.2" cy="11.6" r="1.6"/><circle cx="3" cy="6" r="1.4" opacity=".8"/><circle cx="6.6" cy="2.9" r="1.1" opacity=".6"/><circle cx="10" cy="10" r="1.9"/><circle cx="13.3" cy="9.2" r="1" opacity=".7"/><circle cx="7.4" cy="12" r="1" opacity=".7"/></g></svg>kers</span>
+      </a>
+    </div>
+    <nav class="rail__nav" aria-label="Dashboard sections">
+      <ul class="rail__list" role="list">
+        <li><a class="rail__link" href="index.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>Overview</a></li>
+        <li><a class="rail__link" href="wallet.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M3 7a2 2 0 0 1 2-2h13v4"/><path d="M3 7v11a2 2 0 0 0 2 2h15V9H5a2 2 0 0 1-2-2z"/><circle cx="16" cy="14.5" r="1"/></svg>Wallet</a></li>
+        <li><a class="rail__link" href="portfolio.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M21 12A9 9 0 1 1 12 3v9z"/><path d="M15 3.5A9 9 0 0 1 20.5 9H15z"/></svg>Portfolio</a></li>
+        <li><a class="rail__link" href="copy-traders.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0"/><path d="M16 4.5a3.5 3.5 0 0 1 0 7M18 14.5a6.5 6.5 0 0 1 3.5 5.5"/></svg>Copy traders<span class="rail__aside rail__aside--live">3 live</span></a></li>
+      </ul>
+      <p class="rail__group-label" id="rail-plans">Investment plans</p>
+      <ul class="rail__list" role="list" aria-labelledby="rail-plans">
+        <li><a class="rail__link rail__link--sub" href="plans.html" aria-current="page">Robo Advisor</a></li>
+        <li><a class="rail__link rail__link--sub" href="plans.html#etf">ETF automation</a></li>
+        <li><a class="rail__link rail__link--sub" href="plans.html#defi">DeFi</a></li>
+        <li><a class="rail__link rail__link--sub" href="plans.html#options">Options</a></li>
+        <li><a class="rail__link rail__link--sub" href="plans.html#staking">Staking<span class="rail__aside rail__aside--soon">soon</span></a></li>
+      </ul>
+      <p class="rail__group-label" id="rail-more">Community</p>
+      <ul class="rail__list" role="list" aria-labelledby="rail-more">
+        <li><a class="rail__link" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M3 12h4l3-8 4 16 3-8h4"/></svg>Network feed</a></li>
+        <li><a class="rail__link" href="referrals.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="18" cy="5" r="2.5"/><circle cx="6" cy="12" r="2.5"/><circle cx="18" cy="19" r="2.5"/><path d="M8.2 10.8l7.6-4.4M8.2 13.2l7.6 4.4"/></svg>Referrals</a></li>
+        <li><a class="rail__link" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M4 5h13v14H6a2 2 0 0 1-2-2z"/><path d="M17 9h3v8a2 2 0 0 1-2 2"/><path d="M7.5 9h6M7.5 13h6"/></svg>News</a></li>
+      </ul>
+    </nav>
+    <div class="rail__foot">
+      <ul class="rail__list" role="list">
+        <li><a class="rail__link" href="../help.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.6.3-1 .8-1 1.5V14"/><path d="M12 17h.01"/></svg>Help center</a></li>
+        <li><a class="rail__link" href="settings.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M12 2.5v3M12 18.5v3M4.2 4.2l2.1 2.1M17.7 17.7l2.1 2.1M2.5 12h3M18.5 12h3M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1"/></svg>Settings</a></li>
+      </ul>
+      <a class="rail__user" href="settings.html">
+        <span class="avatar">DO</span>
+        <span><span class="rail__user-name">Daniel Okafor</span><br><span class="rail__user-meta">● Verified</span></span>
+      </a>
+    </div>
+  </aside>
+  <button class="rail-scrim" type="button" tabindex="-1" aria-hidden="true"></button>
+
+  <div class="app__main">
+    <!-- ===================== TOP BAR (shared) ===================== -->
+    <header class="topbar">
+      <div class="topbar__bar">
+        <button class="icon-btn topbar__menu" type="button" data-rail-toggle aria-controls="rail" aria-expanded="false" aria-label="Open menu">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h10"/></svg>
+        </button>
+        <a class="wordmark topbar__brand" href="index.html" aria-label="TED Brokers dashboard"><span class="wordmark__ted">TED</span><span class="wordmark__brokers">Brokers</span></a>
+        <form class="search" role="search" action="copy-traders.html">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+          <label class="sr-only" for="q">Search</label>
+          <input id="q" name="q" type="search" placeholder="Search traders, plans, markets" autocomplete="off">
+          <kbd aria-hidden="true">⌘K</kbd>
+        </form>
+        <div class="topbar__actions">
+          <button class="lang-select" type="button" aria-label="Language: English">EN
+            <svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M2 3.5l3 3 3-3"/></svg>
+          </button>
+          <button class="icon-btn" type="button" data-theme-toggle aria-pressed="false" aria-label="Light theme">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4 8 8 0 1 0 20 14.5z"/></svg>
+          </button>
+          <button class="icon-btn" type="button" aria-label="Notifications, 2 unread">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M6 8a6 6 0 1 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.9 1.9 0 0 0 3.4 0"/></svg>
+            <span class="icon-btn__dot"></span>
+          </button>
+          <button class="btn btn--sm btn--outline" type="button" data-dialog-open="ted-ai">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true" style="color: var(--color-signal)"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/></svg>TED AI
+          </button>
+          <a class="btn btn--sm" href="wallet.html#deposit">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>Deposit
+          </a>
+        </div>
+      </div>
+      <div class="ticker ticker--sm ticker--app" data-component="ticker" role="region" aria-label="Market prices (indicative)">
+        <div class="ticker__track">
+          <ul class="ticker__list" role="list">
+            <li class="ticker__item"><span class="ticker__sym">EUR/USD</span><span class="ticker__px">1.0842</span><span class="delta" data-trend="up">+0.21%</span></li>
+            <li class="ticker__item"><span class="ticker__sym">BTC/USD</span><span class="ticker__px">67,412.00</span><span class="delta" data-trend="up">+1.84%</span></li>
+            <li class="ticker__item"><span class="ticker__sym">ETH/USD</span><span class="ticker__px">3,540.80</span><span class="delta" data-trend="up">+2.11%</span></li>
+            <li class="ticker__item"><span class="ticker__sym">AAPL</span><span class="ticker__px">228.14</span><span class="delta" data-trend="down">−0.42%</span></li>
+            <li class="ticker__item"><span class="ticker__sym">XAU/USD</span><span class="ticker__px">2,384.10</span><span class="delta" data-trend="up">+0.35%</span></li>
+            <li class="ticker__item"><span class="ticker__sym">SPX</span><span class="ticker__px">5,567.19</span><span class="delta" data-trend="up">+0.38%</span></li>
+            <li class="ticker__item"><span class="ticker__sym">GBP/USD</span><span class="ticker__px">1.2711</span><span class="delta" data-trend="down">−0.08%</span></li>
+          </ul>
+        </div>
+      </div>
+    </header>
+
+    <!-- ===================== PAGE CONTENT ===================== -->
+    <main class="app__content" id="main">
+      <div class="page-head">
+        <div>
+          <h1>Investment plans</h1>
+          <p class="page-head__meta">Automated strategies · returns are historical targets</p>
+        </div>
+        <p class="plans-avail"><span class="stat__label">Available</span><span class="plans-avail__num">$6,420.00</span><span class="plans-avail__sep" aria-hidden="true">·</span><a class="link-arrow link-arrow--signal" href="wallet.html#deposit">Add funds <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></p>
+      </div>
+
+      <div class="plans">
+        <div class="tabs" role="tablist" aria-label="Plan types" data-component="tabs plans-hash">
+          <button class="tabs__tab" type="button" role="tab" id="tab-robo" aria-controls="panel-robo" aria-selected="true" data-hash="robo">Robo Advisor</button>
+          <button class="tabs__tab" type="button" role="tab" id="tab-etf" aria-controls="panel-etf" aria-selected="false" data-hash="etf">ETF automation</button>
+          <button class="tabs__tab" type="button" role="tab" id="tab-defi" aria-controls="panel-defi" aria-selected="false" data-hash="defi">DeFi</button>
+          <button class="tabs__tab" type="button" role="tab" id="tab-options" aria-controls="panel-options" aria-selected="false" data-hash="options">Options</button>
+          <button class="tabs__tab" type="button" role="tab" id="tab-staking" aria-controls="panel-staking" aria-selected="false" data-hash="staking">Staking<small>soon</small></button>
+        </div>
+
+      <div class="plans-panel" role="tabpanel" id="panel-robo" aria-labelledby="tab-robo" tabindex="0">
+        <section aria-labelledby="map-title">
+          <div class="block-head">
+            <h2 id="map-title">Risk vs expected return</h2>
+            <p class="plans-map__key"><span class="plans-map__key-dot" aria-hidden="true"></span>Dot size = subscribers <span class="plans-map__key-dot plans-map__key-dot--high" aria-hidden="true"></span>High risk</p>
+          </div>
+          <div class="plans-map" data-component="plans-map" data-ledger="robo-ledger">
+            <p class="sr-only" id="map-help">Each plan is a point: risk score from 1 to 10 across, expected annual return up. Select a point to open that plan below.</p>
+          </div>
+        </section>
+
+        <section aria-labelledby="robo-title">
+          <div class="block-head"><h2 id="robo-title">Robo Advisor <small>6 plans</small></h2><p class="plans-panel__intro">Diversified portfolios, rebalanced automatically.</p></div>
+
+          <div class="ledger-wrap" tabindex="0" role="region" aria-labelledby="robo-title">
+            <table class="ledger ledger--lg plans-ledger" id="robo-ledger">
+              <caption class="sr-only">Robo Advisor plans. Expected returns are historical targets, not guaranteed.</caption>
+              <thead>
+                <tr>
+                  <th scope="col">Plan</th>
+                  <th scope="col" class="is-num">Minimum</th>
+                  <th scope="col" class="is-num">Expected return <span class="plans-th-note">historical target</span></th>
+                  <th scope="col" class="is-num opt-sm">Holding period</th>
+                  <th scope="col" class="is-num opt">Subscribers</th>
+                  <th scope="col"><span class="sr-only">Action</span></th>
+                </tr>
+              </thead>
+            <tbody class="plan" data-plan="starter" data-name="Starter" data-min="500" data-return="8.5" data-months="3" data-risk="2" data-subs="4210">
+              <tr>
+                <td><div class="plan-name"><span class="plan-name__title">Starter</span><span class="plan-name__desc">Index-weight rebalancing across large-cap global equities and investment-grade bonds.</span><span class="plan-name__meta">Risk 2/10 · Low</span></div></td>
+                <td class="is-num">$500</td>
+                <td class="is-num"><span class="plan-ret">8.5%</span><span class="sr-only"> per year, historical target</span></td>
+                <td class="is-num opt-sm">3 mo</td>
+                <td class="is-num opt">4,210</td>
+                <td class="is-end"><button class="text-btn xp-btn" type="button" data-expand="plans" aria-controls="plan-starter" aria-expanded="false" data-label-open="Hide" data-label-closed="Invest"><span data-label>Invest</span><span class="sr-only"> in Starter</span><svg class="xp-btn__chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button></td>
+              </tr>
+              <tr class="ledger__detail" id="plan-starter" hidden>
+                <td colspan="6">
+                  <div class="ledger__detail-inner plan-detail" data-component="plans-invest" data-plan="Starter" data-min="500" data-available="6420" data-return="8.5" data-months="3" data-risk="2" data-fee="0.5">
+                    <div class="plan-detail__col">
+                      <h3 class="stat__label">Allocation</h3>
+                      <div class="donut plan-detail__donut" data-component="donut" style="--donut-size: 7.5rem">
+                        <div class="donut__ring" data-ring><div class="donut__center"><strong>3</strong><span>Assets</span></div></div>
+                        <ul class="legend" role="list" aria-label="Starter allocation">
+                          <li data-value="50" style="--c: var(--teal-300)">Global equities <strong>50%</strong></li>
+                          <li data-value="35" style="--c: var(--navy-300)">Bonds <strong>35%</strong></li>
+                          <li data-value="15" style="--c: var(--slate-400)">Cash <strong>15%</strong></li>
+                        </ul>
+                      </div>
+                    </div>
+                    <div class="plan-detail__col">
+                      <div class="plan-detail__head"><h3 class="stat__label">Projected growth</h3><span class="plan-detail__note">3 months · illustrative</span></div>
+                      <div class="chart plan-detail__chart" role="img" data-component="chart" data-proj-chart data-format="currency" data-decimals="0" data-yaxis="3" data-xaxis="4" data-labels="Today,1 mo,2 mo,3 mo" data-series-name="Median" data-series="500.00,500.85,501.70,502.56,503.41,504.27,505.12,505.98,506.84,507.71,508.57,509.44,510.30" data-band-low="500.00,497.67,497.20,497.03,497.02,497.11,497.27,497.48,497.74,498.03,498.36,498.71,499.08" data-band-high="500.00,504.03,506.21,508.08,509.80,511.43,512.98,514.49,515.95,517.38,518.78,520.17,521.53" aria-label="Projected value of $500 in Starter over 3 months: median $510, likely range $499 to $522. Illustrative, not guaranteed."></div>
+                      <p class="plan-detail__key"><span class="plan-detail__key-line" aria-hidden="true"></span>Median at target <span class="plan-detail__key-band" aria-hidden="true"></span>Likely range</p>
+                    </div>
+                    <div class="plan-detail__col">
+                      <form class="plan-form" novalidate aria-label="Invest in Starter">
+                        <div class="field">
+                          <div class="plan-form__row"><label class="field__label" for="inv-starter">Amount</label><span class="field__help">Available $6,420.00</span></div>
+                          <div class="field__control"><span class="field__affix">$</span><input class="field__input amount-input" id="inv-starter" name="amount" type="number" inputmode="decimal" min="500" max="6420" step="any" value="500" required autocomplete="off" aria-describedby="inv-starter-help inv-starter-err"><span class="field__affix">USD</span></div>
+                          <p class="field__help" id="inv-starter-help">Min. $500 · Max. $6,420.00 available</p>
+                          <p class="field__error" id="inv-starter-err"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7.5v5.5M12 16.5h.01"/></svg><span data-error-msg></span><a class="field__error-link" href="wallet.html#deposit" data-error-funds hidden>Add funds →</a></p>
+                        </div>
+                        <dl class="plan-summary">
+                          <div><dt>Projected range</dt><dd data-out="range">$499 – $522</dd></div>
+                          <div><dt>Fee 0.5%</dt><dd data-out="fee">$2.50</dd></div>
+                          <div><dt>Lock-up</dt><dd>3 months</dd></div>
+                        </dl>
+                        <button class="btn btn--block" type="submit"><span data-out="cta">Invest $500</span><svg class="btn__arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+                      </form>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+            <tbody class="plan" data-plan="growth" data-name="Growth" data-min="2000" data-return="15.2" data-months="6" data-risk="4" data-subs="2874">
+              <tr data-expanded="true">
+                <td><div class="plan-name"><span class="tag tag--gain">Recommended</span><span class="plan-name__title">Growth</span><span class="plan-name__desc">Momentum-tilted mix of equities, corporate bonds and real assets, rebalanced monthly.</span><span class="plan-name__meta">Risk 4/10 · Medium</span></div></td>
+                <td class="is-num">$2,000</td>
+                <td class="is-num"><span class="plan-ret">15.2%</span><span class="sr-only"> per year, historical target</span></td>
+                <td class="is-num opt-sm">6 mo</td>
+                <td class="is-num opt">2,874</td>
+                <td class="is-end"><button class="text-btn xp-btn" type="button" data-expand="plans" aria-controls="plan-growth" aria-expanded="true" data-label-open="Hide" data-label-closed="Invest"><span data-label>Hide</span><span class="sr-only"> in Growth</span><svg class="xp-btn__chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button></td>
+              </tr>
+              <tr class="ledger__detail" id="plan-growth">
+                <td colspan="6">
+                  <div class="ledger__detail-inner plan-detail" data-component="plans-invest" data-plan="Growth" data-min="2000" data-available="6420" data-return="15.2" data-months="6" data-risk="4" data-fee="0.5">
+                    <div class="plan-detail__col">
+                      <h3 class="stat__label">Allocation</h3>
+                      <div class="donut plan-detail__donut" data-component="donut" style="--donut-size: 7.5rem">
+                        <div class="donut__ring" data-ring><div class="donut__center"><strong>4</strong><span>Assets</span></div></div>
+                        <ul class="legend" role="list" aria-label="Growth allocation">
+                          <li data-value="40" style="--c: var(--teal-300)">US equities <strong>40%</strong></li>
+                          <li data-value="25" style="--c: var(--navy-300)">Bonds <strong>25%</strong></li>
+                          <li data-value="20" style="--c: var(--amber-400)">REITs <strong>20%</strong></li>
+                          <li data-value="15" style="--c: var(--red-400)">Gold <strong>15%</strong></li>
+                        </ul>
+                      </div>
+                    </div>
+                    <div class="plan-detail__col">
+                      <div class="plan-detail__head"><h3 class="stat__label">Projected growth</h3><span class="plan-detail__note">6 months · illustrative</span></div>
+                      <div class="chart plan-detail__chart" role="img" data-component="chart" data-proj-chart data-format="currency" data-decimals="0" data-yaxis="3" data-xaxis="4" data-labels="Today,1 mo,2 mo,3 mo,4 mo,5 mo,6 mo" data-series-name="Median" data-series="2000.00,2005.90,2011.83,2017.77,2023.72,2029.70,2035.69,2041.70,2047.73,2053.77,2059.84,2065.92,2072.02,2078.13,2084.27,2090.42,2096.59,2102.78,2108.99,2115.22,2121.46,2127.72,2134.01,2140.31,2146.63" data-band-low="2000.00,1986.22,1983.90,1983.46,1984.00,1985.15,1986.75,1988.68,1990.88,1993.30,1995.90,1998.67,2001.57,2004.59,2007.73,2010.96,2014.28,2017.69,2021.17,2024.72,2028.34,2032.02,2035.76,2039.56,2043.41" data-band-high="2000.00,2025.59,2039.75,2052.07,2063.45,2074.24,2084.63,2094.72,2104.57,2114.25,2123.77,2133.17,2142.46,2151.67,2160.81,2169.89,2178.90,2187.88,2196.81,2205.71,2214.58,2223.43,2232.25,2241.05,2249.84" aria-label="Projected value of $2,000 in Growth over 6 months: median $2,147, likely range $2,043 to $2,250. Illustrative, not guaranteed."></div>
+                      <p class="plan-detail__key"><span class="plan-detail__key-line" aria-hidden="true"></span>Median at target <span class="plan-detail__key-band" aria-hidden="true"></span>Likely range</p>
+                    </div>
+                    <div class="plan-detail__col">
+                      <form class="plan-form" novalidate aria-label="Invest in Growth">
+                        <div class="field">
+                          <div class="plan-form__row"><label class="field__label" for="inv-growth">Amount</label><span class="field__help">Available $6,420.00</span></div>
+                          <div class="field__control"><span class="field__affix">$</span><input class="field__input amount-input" id="inv-growth" name="amount" type="number" inputmode="decimal" min="2000" max="6420" step="any" value="2000" required autocomplete="off" aria-describedby="inv-growth-help inv-growth-err"><span class="field__affix">USD</span></div>
+                          <p class="field__help" id="inv-growth-help">Min. $2,000 · Max. $6,420.00 available</p>
+                          <p class="field__error" id="inv-growth-err"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7.5v5.5M12 16.5h.01"/></svg><span data-error-msg></span><a class="field__error-link" href="wallet.html#deposit" data-error-funds hidden>Add funds →</a></p>
+                        </div>
+                        <dl class="plan-summary">
+                          <div><dt>Projected range</dt><dd data-out="range">$2,043 – $2,250</dd></div>
+                          <div><dt>Fee 0.5%</dt><dd data-out="fee">$10.00</dd></div>
+                          <div><dt>Lock-up</dt><dd>6 months</dd></div>
+                        </dl>
+                        <button class="btn btn--block" type="submit"><span data-out="cta">Invest $2,000</span><svg class="btn__arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+                      </form>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+            <tbody class="plan" data-plan="premium" data-name="Premium" data-min="5000" data-return="24.7" data-months="12" data-risk="6" data-subs="1206">
+              <tr>
+                <td><div class="plan-name"><span class="tag tag--pending">Popular</span><span class="plan-name__title">Premium</span><span class="plan-name__desc">Cross-asset volatility harvesting with dynamic, automated hedging.</span><span class="plan-name__meta">Risk 6/10 · Medium</span></div></td>
+                <td class="is-num">$5,000</td>
+                <td class="is-num"><span class="plan-ret">24.7%</span><span class="sr-only"> per year, historical target</span></td>
+                <td class="is-num opt-sm">12 mo</td>
+                <td class="is-num opt">1,206</td>
+                <td class="is-end"><button class="text-btn xp-btn" type="button" data-expand="plans" aria-controls="plan-premium" aria-expanded="false" data-label-open="Hide" data-label-closed="Invest"><span data-label>Invest</span><span class="sr-only"> in Premium</span><svg class="xp-btn__chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button></td>
+              </tr>
+              <tr class="ledger__detail" id="plan-premium" hidden>
+                <td colspan="6">
+                  <div class="ledger__detail-inner plan-detail" data-component="plans-invest" data-plan="Premium" data-min="5000" data-available="6420" data-return="24.7" data-months="12" data-risk="6" data-fee="0.5">
+                    <div class="plan-detail__col">
+                      <h3 class="stat__label">Allocation</h3>
+                      <div class="donut plan-detail__donut" data-component="donut" style="--donut-size: 7.5rem">
+                        <div class="donut__ring" data-ring><div class="donut__center"><strong>4</strong><span>Assets</span></div></div>
+                        <ul class="legend" role="list" aria-label="Premium allocation">
+                          <li data-value="45" style="--c: var(--teal-300)">Global equities <strong>45%</strong></li>
+                          <li data-value="20" style="--c: var(--amber-400)">Commodities <strong>20%</strong></li>
+                          <li data-value="20" style="--c: var(--navy-300)">Bonds <strong>20%</strong></li>
+                          <li data-value="15" style="--c: var(--red-400)">Volatility hedges <strong>15%</strong></li>
+                        </ul>
+                      </div>
+                    </div>
+                    <div class="plan-detail__col">
+                      <div class="plan-detail__head"><h3 class="stat__label">Projected growth</h3><span class="plan-detail__note">12 months · illustrative</span></div>
+                      <div class="chart plan-detail__chart" role="img" data-component="chart" data-proj-chart data-format="currency" data-decimals="0" data-yaxis="3" data-xaxis="5" data-labels="Today,1 mo,2 mo,3 mo,4 mo,5 mo,6 mo,7 mo,8 mo,9 mo,10 mo,11 mo,12 mo" data-series-name="Median" data-series="5000.00,5023.05,5046.20,5069.46,5092.83,5116.30,5139.88,5163.58,5187.38,5211.29,5235.31,5259.44,5283.68,5308.04,5332.50,5357.08,5381.77,5406.58,5431.50,5456.54,5481.69,5506.96,5532.34,5557.84,5583.46,5609.19,5635.05,5661.02,5687.12,5713.33,5739.66,5766.12,5792.70,5819.40,5846.22,5873.17,5900.24,5927.44,5954.76,5982.21,6009.78,6037.48,6065.31,6093.27,6121.36,6149.57,6177.92,6206.39,6235.00" data-band-low="5000.00,4956.35,4951.44,4952.86,4957.57,4964.38,4972.70,4982.16,4992.54,5003.68,5015.47,5027.80,5040.63,5053.90,5067.55,5081.57,5095.91,5110.57,5125.50,5140.70,5156.15,5171.84,5187.76,5203.89,5220.23,5236.77,5253.50,5270.41,5287.50,5304.77,5322.21,5339.80,5357.56,5375.48,5393.55,5411.77,5430.14,5448.66,5467.32,5486.12,5505.06,5524.13,5543.34,5562.69,5582.17,5601.78,5621.52,5641.38,5661.38" data-band-high="5000.00,5089.75,5140.96,5186.06,5228.08,5268.22,5307.07,5344.99,5382.21,5418.89,5455.15,5491.07,5526.73,5562.18,5597.45,5632.59,5667.63,5702.60,5737.50,5772.37,5807.22,5842.07,5876.92,5911.79,5946.68,5981.62,6016.60,6051.63,6086.73,6121.89,6157.12,6192.44,6227.83,6263.32,6298.89,6334.57,6370.34,6406.22,6442.20,6478.30,6514.51,6550.83,6587.28,6623.85,6660.54,6697.37,6734.32,6771.40,6808.62" aria-label="Projected value of $5,000 in Premium over 12 months: median $6,235, likely range $5,661 to $6,809. Illustrative, not guaranteed."></div>
+                      <p class="plan-detail__key"><span class="plan-detail__key-line" aria-hidden="true"></span>Median at target <span class="plan-detail__key-band" aria-hidden="true"></span>Likely range</p>
+                    </div>
+                    <div class="plan-detail__col">
+                      <form class="plan-form" novalidate aria-label="Invest in Premium">
+                        <div class="field">
+                          <div class="plan-form__row"><label class="field__label" for="inv-premium">Amount</label><span class="field__help">Available $6,420.00</span></div>
+                          <div class="field__control"><span class="field__affix">$</span><input class="field__input amount-input" id="inv-premium" name="amount" type="number" inputmode="decimal" min="5000" max="6420" step="any" value="5000" required autocomplete="off" aria-describedby="inv-premium-help inv-premium-err"><span class="field__affix">USD</span></div>
+                          <p class="field__help" id="inv-premium-help">Min. $5,000 · Max. $6,420.00 available</p>
+                          <p class="field__error" id="inv-premium-err"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7.5v5.5M12 16.5h.01"/></svg><span data-error-msg></span><a class="field__error-link" href="wallet.html#deposit" data-error-funds hidden>Add funds →</a></p>
+                        </div>
+                        <dl class="plan-summary">
+                          <div><dt>Projected range</dt><dd data-out="range">$5,661 – $6,809</dd></div>
+                          <div><dt>Fee 0.5%</dt><dd data-out="fee">$25.00</dd></div>
+                          <div><dt>Lock-up</dt><dd>12 months</dd></div>
+                        </dl>
+                        <button class="btn btn--block" type="submit"><span data-out="cta">Invest $5,000</span><svg class="btn__arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+                      </form>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+            <tbody class="plan" data-plan="elite" data-name="Elite" data-min="10000" data-return="35.3" data-months="12" data-risk="7" data-subs="388" data-short>
+              <tr>
+                <td><div class="plan-name"><span class="plan-name__title">Elite</span><span class="plan-name__desc">Market-neutral pairs trading across equities and index futures.</span><span class="plan-name__meta">Risk 7/10 · High</span></div></td>
+                <td class="is-num">$10,000</td>
+                <td class="is-num"><span class="plan-ret">35.3%</span><span class="sr-only"> per year, historical target</span></td>
+                <td class="is-num opt-sm">12 mo</td>
+                <td class="is-num opt">388</td>
+                <td class="is-end"><div class="plan-short"><span class="plan-short__need">Need $3,580 more</span><a class="text-btn plan-short__link" href="wallet.html#deposit">Add funds →<span class="sr-only"> for Elite</span></a></div></td>
+              </tr>
+            </tbody>
+            <tbody class="plan" data-plan="conservative" data-name="Conservative" data-min="1000" data-return="6.8" data-months="6" data-risk="1" data-subs="3019" data-map-label="below">
+              <tr>
+                <td><div class="plan-name"><span class="plan-name__title">Conservative</span><span class="plan-name__desc">Capital-preservation mix of short-duration government bonds and cash.</span><span class="plan-name__meta">Risk 1/10 · Low</span></div></td>
+                <td class="is-num">$1,000</td>
+                <td class="is-num"><span class="plan-ret">6.8%</span><span class="sr-only"> per year, historical target</span></td>
+                <td class="is-num opt-sm">6 mo</td>
+                <td class="is-num opt">3,019</td>
+                <td class="is-end"><button class="text-btn xp-btn" type="button" data-expand="plans" aria-controls="plan-conservative" aria-expanded="false" data-label-open="Hide" data-label-closed="Invest"><span data-label>Invest</span><span class="sr-only"> in Conservative</span><svg class="xp-btn__chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button></td>
+              </tr>
+              <tr class="ledger__detail" id="plan-conservative" hidden>
+                <td colspan="6">
+                  <div class="ledger__detail-inner plan-detail" data-component="plans-invest" data-plan="Conservative" data-min="1000" data-available="6420" data-return="6.8" data-months="6" data-risk="1" data-fee="0.5">
+                    <div class="plan-detail__col">
+                      <h3 class="stat__label">Allocation</h3>
+                      <div class="donut plan-detail__donut" data-component="donut" style="--donut-size: 7.5rem">
+                        <div class="donut__ring" data-ring><div class="donut__center"><strong>3</strong><span>Assets</span></div></div>
+                        <ul class="legend" role="list" aria-label="Conservative allocation">
+                          <li data-value="60" style="--c: var(--navy-300)">Short-term bonds <strong>60%</strong></li>
+                          <li data-value="25" style="--c: var(--slate-400)">Cash <strong>25%</strong></li>
+                          <li data-value="15" style="--c: var(--amber-400)">Gold <strong>15%</strong></li>
+                        </ul>
+                      </div>
+                    </div>
+                    <div class="plan-detail__col">
+                      <div class="plan-detail__head"><h3 class="stat__label">Projected growth</h3><span class="plan-detail__note">6 months · illustrative</span></div>
+                      <div class="chart plan-detail__chart" role="img" data-component="chart" data-proj-chart data-format="currency" data-decimals="0" data-yaxis="3" data-xaxis="4" data-labels="Today,1 mo,2 mo,3 mo,4 mo,5 mo,6 mo" data-series-name="Median" data-series="1000.00,1001.37,1002.74,1004.12,1005.50,1006.88,1008.26,1009.64,1011.02,1012.41,1013.80,1015.19,1016.58,1017.98,1019.37,1020.77,1022.17,1023.57,1024.98,1026.38,1027.79,1029.20,1030.61,1032.03,1033.44" data-band-low="1000.00,996.75,996.20,996.09,996.21,996.48,996.85,997.30,997.82,998.38,998.99,999.64,1000.32,1001.02,1001.76,1002.51,1003.29,1004.08,1004.89,1005.72,1006.56,1007.42,1008.28,1009.17,1010.06" data-band-high="1000.00,1006.00,1009.29,1012.15,1014.79,1017.28,1019.66,1021.98,1024.23,1026.44,1028.61,1030.74,1032.85,1034.93,1036.99,1039.03,1041.06,1043.07,1045.06,1047.05,1049.02,1050.98,1052.94,1054.89,1056.82" aria-label="Projected value of $1,000 in Conservative over 6 months: median $1,033, likely range $1,010 to $1,057. Illustrative, not guaranteed."></div>
+                      <p class="plan-detail__key"><span class="plan-detail__key-line" aria-hidden="true"></span>Median at target <span class="plan-detail__key-band" aria-hidden="true"></span>Likely range</p>
+                    </div>
+                    <div class="plan-detail__col">
+                      <form class="plan-form" novalidate aria-label="Invest in Conservative">
+                        <div class="field">
+                          <div class="plan-form__row"><label class="field__label" for="inv-conservative">Amount</label><span class="field__help">Available $6,420.00</span></div>
+                          <div class="field__control"><span class="field__affix">$</span><input class="field__input amount-input" id="inv-conservative" name="amount" type="number" inputmode="decimal" min="1000" max="6420" step="any" value="1000" required autocomplete="off" aria-describedby="inv-conservative-help inv-conservative-err"><span class="field__affix">USD</span></div>
+                          <p class="field__help" id="inv-conservative-help">Min. $1,000 · Max. $6,420.00 available</p>
+                          <p class="field__error" id="inv-conservative-err"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7.5v5.5M12 16.5h.01"/></svg><span data-error-msg></span><a class="field__error-link" href="wallet.html#deposit" data-error-funds hidden>Add funds →</a></p>
+                        </div>
+                        <dl class="plan-summary">
+                          <div><dt>Projected range</dt><dd data-out="range">$1,010 – $1,057</dd></div>
+                          <div><dt>Fee 0.5%</dt><dd data-out="fee">$5.00</dd></div>
+                          <div><dt>Lock-up</dt><dd>6 months</dd></div>
+                        </dl>
+                        <button class="btn btn--block" type="submit"><span data-out="cta">Invest $1,000</span><svg class="btn__arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+                      </form>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+            <tbody class="plan" data-plan="crypto" data-name="Crypto Accelerator" data-min="3000" data-return="42.5" data-months="6" data-risk="9" data-subs="951">
+              <tr>
+                <td><div class="plan-name"><span class="tag tag--loss">High risk</span><span class="plan-name__title">Crypto Accelerator</span><span class="plan-name__desc">Trend-following basket of large-cap digital assets. Expect sharp swings in value.</span><span class="plan-name__meta">Risk 9/10 · High</span></div></td>
+                <td class="is-num">$3,000</td>
+                <td class="is-num"><span class="plan-ret">42.5%</span><span class="sr-only"> per year, historical target</span></td>
+                <td class="is-num opt-sm">6 mo</td>
+                <td class="is-num opt">951</td>
+                <td class="is-end"><button class="text-btn xp-btn" type="button" data-expand="plans" aria-controls="plan-crypto" aria-expanded="false" data-label-open="Hide" data-label-closed="Invest"><span data-label>Invest</span><span class="sr-only"> in Crypto Accelerator</span><svg class="xp-btn__chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button></td>
+              </tr>
+              <tr class="ledger__detail" id="plan-crypto" hidden>
+                <td colspan="6">
+                  <div class="ledger__detail-inner plan-detail" data-component="plans-invest" data-plan="Crypto Accelerator" data-min="3000" data-available="6420" data-return="42.5" data-months="6" data-risk="9" data-fee="0.5">
+                    <div class="plan-detail__col">
+                      <h3 class="stat__label">Allocation</h3>
+                      <div class="donut plan-detail__donut" data-component="donut" style="--donut-size: 7.5rem">
+                        <div class="donut__ring" data-ring><div class="donut__center"><strong>4</strong><span>Assets</span></div></div>
+                        <ul class="legend" role="list" aria-label="Crypto Accelerator allocation">
+                          <li data-value="50" style="--c: var(--amber-400)">Bitcoin <strong>50%</strong></li>
+                          <li data-value="30" style="--c: var(--teal-300)">Ether <strong>30%</strong></li>
+                          <li data-value="15" style="--c: var(--red-400)">Large-cap alts <strong>15%</strong></li>
+                          <li data-value="5" style="--c: var(--slate-400)">Stablecoins <strong>5%</strong></li>
+                        </ul>
+                      </div>
+                    </div>
+                    <div class="plan-detail__col">
+                      <div class="plan-detail__head"><h3 class="stat__label">Projected growth</h3><span class="plan-detail__note">6 months · illustrative</span></div>
+                      <div class="chart plan-detail__chart" role="img" data-component="chart" data-proj-chart data-format="currency" data-decimals="0" data-yaxis="3" data-xaxis="4" data-labels="Today,1 mo,2 mo,3 mo,4 mo,5 mo,6 mo" data-series-name="Median" data-series="3000.00,3022.22,3044.60,3067.15,3089.86,3112.75,3135.80,3159.02,3182.42,3205.99,3229.73,3253.65,3277.74,3302.02,3326.47,3351.11,3375.93,3400.93,3426.11,3451.49,3477.05,3502.80,3528.74,3554.87,3581.20" data-band-low="3000.00,2966.38,2965.05,2969.00,2975.69,2984.15,2993.89,3004.61,3016.12,3028.29,3041.04,3054.28,3067.97,3082.06,3096.52,3111.32,3126.44,3141.86,3157.56,3173.53,3189.76,3206.24,3222.95,3239.90,3257.07" data-band-high="3000.00,3078.05,3124.15,3165.30,3204.03,3241.34,3277.71,3313.44,3348.72,3383.68,3418.42,3453.02,3487.52,3521.98,3556.42,3590.89,3625.41,3659.99,3694.67,3729.44,3764.34,3799.36,3834.53,3869.85,3905.33" aria-label="Projected value of $3,000 in Crypto Accelerator over 6 months: median $3,581, likely range $3,257 to $3,905. Illustrative, not guaranteed."></div>
+                      <p class="plan-detail__key"><span class="plan-detail__key-line" aria-hidden="true"></span>Median at target <span class="plan-detail__key-band" aria-hidden="true"></span>Likely range</p>
+                    </div>
+                    <div class="plan-detail__col">
+                      <form class="plan-form" novalidate aria-label="Invest in Crypto Accelerator">
+                        <div class="field">
+                          <div class="plan-form__row"><label class="field__label" for="inv-crypto">Amount</label><span class="field__help">Available $6,420.00</span></div>
+                          <div class="field__control"><span class="field__affix">$</span><input class="field__input amount-input" id="inv-crypto" name="amount" type="number" inputmode="decimal" min="3000" max="6420" step="any" value="3000" required autocomplete="off" aria-describedby="inv-crypto-help inv-crypto-err"><span class="field__affix">USD</span></div>
+                          <p class="field__help" id="inv-crypto-help">Min. $3,000 · Max. $6,420.00 available</p>
+                          <p class="field__error" id="inv-crypto-err"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7.5v5.5M12 16.5h.01"/></svg><span data-error-msg></span><a class="field__error-link" href="wallet.html#deposit" data-error-funds hidden>Add funds →</a></p>
+                        </div>
+                        <dl class="plan-summary">
+                          <div><dt>Projected range</dt><dd data-out="range">$3,257 – $3,905</dd></div>
+                          <div><dt>Fee 0.5%</dt><dd data-out="fee">$15.00</dd></div>
+                          <div><dt>Lock-up</dt><dd>6 months</dd></div>
+                        </dl>
+                        <button class="btn btn--block" type="submit"><span data-out="cta">Invest $3,000</span><svg class="btn__arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+                      </form>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+            </table>
+          </div>
+        </section>
+      </div>
+
+      <div class="plans-panel" role="tabpanel" id="panel-etf" aria-labelledby="tab-etf" tabindex="0" hidden>
+        <section aria-labelledby="etf-title">
+          <div class="block-head"><h2 id="etf-title">ETF automation <small>3 plans</small></h2><p class="plans-panel__intro">Rules-based baskets of low-cost index ETFs.</p></div>
+
+          <div class="ledger-wrap" tabindex="0" role="region" aria-labelledby="etf-title">
+            <table class="ledger ledger--lg plans-ledger" id="etf-ledger">
+              <caption class="sr-only">ETF automation plans. Expected returns are historical targets, not guaranteed.</caption>
+              <thead>
+                <tr>
+                  <th scope="col">Plan</th>
+                  <th scope="col" class="is-num">Minimum</th>
+                  <th scope="col" class="is-num">Expected return <span class="plans-th-note">historical target</span></th>
+                  <th scope="col" class="is-num opt-sm">Holding period</th>
+                  <th scope="col" class="is-num opt">Subscribers</th>
+                  <th scope="col"><span class="sr-only">Action</span></th>
+                </tr>
+              </thead>
+            <tbody class="plan" data-plan="etf-conservative" data-name="ETF Conservative" data-min="250" data-return="5.9" data-months="3" data-risk="2" data-subs="2140">
+              <tr>
+                <td><div class="plan-name"><span class="plan-name__title">ETF Conservative</span><span class="plan-name__desc">Bond-heavy ETF basket with a small global-equity sleeve.</span><span class="plan-name__meta">Risk 2/10 · Low</span></div></td>
+                <td class="is-num">$250</td>
+                <td class="is-num"><span class="plan-ret">5.9%</span><span class="sr-only"> per year, historical target</span></td>
+                <td class="is-num opt-sm">3 mo</td>
+                <td class="is-num opt">2,140</td>
+                <td class="is-end"><button class="text-btn xp-btn" type="button" data-expand="plans" aria-controls="plan-etf-conservative" aria-expanded="false" data-label-open="Hide" data-label-closed="Invest"><span data-label>Invest</span><span class="sr-only"> in ETF Conservative</span><svg class="xp-btn__chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button></td>
+              </tr>
+              <tr class="ledger__detail" id="plan-etf-conservative" hidden>
+                <td colspan="6">
+                  <div class="ledger__detail-inner plan-detail" data-component="plans-invest" data-plan="ETF Conservative" data-min="250" data-available="6420" data-return="5.9" data-months="3" data-risk="2" data-fee="0.5">
+                    <div class="plan-detail__col">
+                      <h3 class="stat__label">Allocation</h3>
+                      <div class="donut plan-detail__donut" data-component="donut" style="--donut-size: 7.5rem">
+                        <div class="donut__ring" data-ring><div class="donut__center"><strong>3</strong><span>Assets</span></div></div>
+                        <ul class="legend" role="list" aria-label="ETF Conservative allocation">
+                          <li data-value="60" style="--c: var(--navy-300)">Bond ETFs <strong>60%</strong></li>
+                          <li data-value="30" style="--c: var(--teal-300)">Global equity ETFs <strong>30%</strong></li>
+                          <li data-value="10" style="--c: var(--amber-400)">Gold ETF <strong>10%</strong></li>
+                        </ul>
+                      </div>
+                    </div>
+                    <div class="plan-detail__col">
+                      <div class="plan-detail__head"><h3 class="stat__label">Projected growth</h3><span class="plan-detail__note">3 months · illustrative</span></div>
+                      <div class="chart plan-detail__chart" role="img" data-component="chart" data-proj-chart data-format="currency" data-decimals="0" data-yaxis="3" data-xaxis="4" data-labels="Today,1 mo,2 mo,3 mo" data-series-name="Median" data-series="250.00,250.30,250.60,250.90,251.20,251.50,251.80,252.10,252.40,252.70,253.00,253.31,253.61" data-band-low="250.00,248.71,248.35,248.14,248.01,247.93,247.88,247.86,247.87,247.89,247.92,247.97,248.03" data-band-high="250.00,251.89,252.85,253.66,254.39,255.07,255.71,256.33,256.93,257.52,258.08,258.64,259.19" aria-label="Projected value of $250 in ETF Conservative over 3 months: median $254, likely range $248 to $259. Illustrative, not guaranteed."></div>
+                      <p class="plan-detail__key"><span class="plan-detail__key-line" aria-hidden="true"></span>Median at target <span class="plan-detail__key-band" aria-hidden="true"></span>Likely range</p>
+                    </div>
+                    <div class="plan-detail__col">
+                      <form class="plan-form" novalidate aria-label="Invest in ETF Conservative">
+                        <div class="field">
+                          <div class="plan-form__row"><label class="field__label" for="inv-etf-conservative">Amount</label><span class="field__help">Available $6,420.00</span></div>
+                          <div class="field__control"><span class="field__affix">$</span><input class="field__input amount-input" id="inv-etf-conservative" name="amount" type="number" inputmode="decimal" min="250" max="6420" step="any" value="250" required autocomplete="off" aria-describedby="inv-etf-conservative-help inv-etf-conservative-err"><span class="field__affix">USD</span></div>
+                          <p class="field__help" id="inv-etf-conservative-help">Min. $250 · Max. $6,420.00 available</p>
+                          <p class="field__error" id="inv-etf-conservative-err"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7.5v5.5M12 16.5h.01"/></svg><span data-error-msg></span><a class="field__error-link" href="wallet.html#deposit" data-error-funds hidden>Add funds →</a></p>
+                        </div>
+                        <dl class="plan-summary">
+                          <div><dt>Projected range</dt><dd data-out="range">$248 – $259</dd></div>
+                          <div><dt>Fee 0.5%</dt><dd data-out="fee">$1.25</dd></div>
+                          <div><dt>Lock-up</dt><dd>3 months</dd></div>
+                        </dl>
+                        <button class="btn btn--block" type="submit"><span data-out="cta">Invest $250</span><svg class="btn__arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+                      </form>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+            <tbody class="plan" data-plan="etf-moderate" data-name="ETF Moderate" data-min="1000" data-return="9.8" data-months="6" data-risk="4" data-subs="3388">
+              <tr>
+                <td><div class="plan-name"><span class="tag tag--gain">Recommended</span><span class="plan-name__title">ETF Moderate</span><span class="plan-name__desc">Balanced 60/40 portfolio of low-cost index ETFs, rebalanced quarterly.</span><span class="plan-name__meta">Risk 4/10 · Medium</span></div></td>
+                <td class="is-num">$1,000</td>
+                <td class="is-num"><span class="plan-ret">9.8%</span><span class="sr-only"> per year, historical target</span></td>
+                <td class="is-num opt-sm">6 mo</td>
+                <td class="is-num opt">3,388</td>
+                <td class="is-end"><button class="text-btn xp-btn" type="button" data-expand="plans" aria-controls="plan-etf-moderate" aria-expanded="false" data-label-open="Hide" data-label-closed="Invest"><span data-label>Invest</span><span class="sr-only"> in ETF Moderate</span><svg class="xp-btn__chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button></td>
+              </tr>
+              <tr class="ledger__detail" id="plan-etf-moderate" hidden>
+                <td colspan="6">
+                  <div class="ledger__detail-inner plan-detail" data-component="plans-invest" data-plan="ETF Moderate" data-min="1000" data-available="6420" data-return="9.8" data-months="6" data-risk="4" data-fee="0.5">
+                    <div class="plan-detail__col">
+                      <h3 class="stat__label">Allocation</h3>
+                      <div class="donut plan-detail__donut" data-component="donut" style="--donut-size: 7.5rem">
+                        <div class="donut__ring" data-ring><div class="donut__center"><strong>3</strong><span>Assets</span></div></div>
+                        <ul class="legend" role="list" aria-label="ETF Moderate allocation">
+                          <li data-value="60" style="--c: var(--teal-300)">Equity ETFs <strong>60%</strong></li>
+                          <li data-value="30" style="--c: var(--navy-300)">Bond ETFs <strong>30%</strong></li>
+                          <li data-value="10" style="--c: var(--amber-400)">REIT ETFs <strong>10%</strong></li>
+                        </ul>
+                      </div>
+                    </div>
+                    <div class="plan-detail__col">
+                      <div class="plan-detail__head"><h3 class="stat__label">Projected growth</h3><span class="plan-detail__note">6 months · illustrative</span></div>
+                      <div class="chart plan-detail__chart" role="img" data-component="chart" data-proj-chart data-format="currency" data-decimals="0" data-yaxis="3" data-xaxis="4" data-labels="Today,1 mo,2 mo,3 mo,4 mo,5 mo,6 mo" data-series-name="Median" data-series="1000.00,1001.95,1003.90,1005.86,1007.82,1009.79,1011.75,1013.73,1015.70,1017.68,1019.67,1021.66,1023.65,1025.64,1027.64,1029.65,1031.65,1033.67,1035.68,1037.70,1039.72,1041.75,1043.78,1045.82,1047.85" data-band-low="1000.00,992.12,989.97,988.76,988.04,987.62,987.43,987.40,987.51,987.72,988.02,988.40,988.84,989.35,989.90,990.51,991.15,991.83,992.55,993.30,994.09,994.89,995.73,996.59,997.47" data-band-high="1000.00,1011.78,1017.84,1022.96,1027.60,1031.95,1036.08,1040.05,1043.90,1047.65,1051.32,1054.91,1058.45,1061.94,1065.38,1068.79,1072.16,1075.50,1078.81,1082.10,1085.36,1088.61,1091.83,1095.04,1098.24" aria-label="Projected value of $1,000 in ETF Moderate over 6 months: median $1,048, likely range $997 to $1,098. Illustrative, not guaranteed."></div>
+                      <p class="plan-detail__key"><span class="plan-detail__key-line" aria-hidden="true"></span>Median at target <span class="plan-detail__key-band" aria-hidden="true"></span>Likely range</p>
+                    </div>
+                    <div class="plan-detail__col">
+                      <form class="plan-form" novalidate aria-label="Invest in ETF Moderate">
+                        <div class="field">
+                          <div class="plan-form__row"><label class="field__label" for="inv-etf-moderate">Amount</label><span class="field__help">Available $6,420.00</span></div>
+                          <div class="field__control"><span class="field__affix">$</span><input class="field__input amount-input" id="inv-etf-moderate" name="amount" type="number" inputmode="decimal" min="1000" max="6420" step="any" value="1000" required autocomplete="off" aria-describedby="inv-etf-moderate-help inv-etf-moderate-err"><span class="field__affix">USD</span></div>
+                          <p class="field__help" id="inv-etf-moderate-help">Min. $1,000 · Max. $6,420.00 available</p>
+                          <p class="field__error" id="inv-etf-moderate-err"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7.5v5.5M12 16.5h.01"/></svg><span data-error-msg></span><a class="field__error-link" href="wallet.html#deposit" data-error-funds hidden>Add funds →</a></p>
+                        </div>
+                        <dl class="plan-summary">
+                          <div><dt>Projected range</dt><dd data-out="range">$997 – $1,098</dd></div>
+                          <div><dt>Fee 0.5%</dt><dd data-out="fee">$5.00</dd></div>
+                          <div><dt>Lock-up</dt><dd>6 months</dd></div>
+                        </dl>
+                        <button class="btn btn--block" type="submit"><span data-out="cta">Invest $1,000</span><svg class="btn__arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+                      </form>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+            <tbody class="plan" data-plan="etf-aggressive" data-name="ETF Aggressive" data-min="2500" data-return="14.6" data-months="12" data-risk="6" data-subs="1302">
+              <tr>
+                <td><div class="plan-name"><span class="plan-name__title">ETF Aggressive</span><span class="plan-name__desc">Equity-only ETF mix tilted to growth and emerging markets.</span><span class="plan-name__meta">Risk 6/10 · Medium</span></div></td>
+                <td class="is-num">$2,500</td>
+                <td class="is-num"><span class="plan-ret">14.6%</span><span class="sr-only"> per year, historical target</span></td>
+                <td class="is-num opt-sm">12 mo</td>
+                <td class="is-num opt">1,302</td>
+                <td class="is-end"><button class="text-btn xp-btn" type="button" data-expand="plans" aria-controls="plan-etf-aggressive" aria-expanded="false" data-label-open="Hide" data-label-closed="Invest"><span data-label>Invest</span><span class="sr-only"> in ETF Aggressive</span><svg class="xp-btn__chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button></td>
+              </tr>
+              <tr class="ledger__detail" id="plan-etf-aggressive" hidden>
+                <td colspan="6">
+                  <div class="ledger__detail-inner plan-detail" data-component="plans-invest" data-plan="ETF Aggressive" data-min="2500" data-available="6420" data-return="14.6" data-months="12" data-risk="6" data-fee="0.5">
+                    <div class="plan-detail__col">
+                      <h3 class="stat__label">Allocation</h3>
+                      <div class="donut plan-detail__donut" data-component="donut" style="--donut-size: 7.5rem">
+                        <div class="donut__ring" data-ring><div class="donut__center"><strong>3</strong><span>Assets</span></div></div>
+                        <ul class="legend" role="list" aria-label="ETF Aggressive allocation">
+                          <li data-value="50" style="--c: var(--teal-300)">US growth ETFs <strong>50%</strong></li>
+                          <li data-value="30" style="--c: var(--red-400)">Emerging-market ETFs <strong>30%</strong></li>
+                          <li data-value="20" style="--c: var(--amber-400)">Small-cap ETFs <strong>20%</strong></li>
+                        </ul>
+                      </div>
+                    </div>
+                    <div class="plan-detail__col">
+                      <div class="plan-detail__head"><h3 class="stat__label">Projected growth</h3><span class="plan-detail__note">12 months · illustrative</span></div>
+                      <div class="chart plan-detail__chart" role="img" data-component="chart" data-proj-chart data-format="currency" data-decimals="0" data-yaxis="3" data-xaxis="5" data-labels="Today,1 mo,2 mo,3 mo,4 mo,5 mo,6 mo,7 mo,8 mo,9 mo,10 mo,11 mo,12 mo" data-series-name="Median" data-series="2500.00,2507.11,2514.24,2521.38,2528.55,2535.74,2542.95,2550.18,2557.43,2564.70,2572.00,2579.31,2586.64,2594.00,2601.37,2608.77,2616.18,2623.62,2631.08,2638.56,2646.06,2653.59,2661.13,2668.70,2676.28,2683.89,2691.52,2699.18,2706.85,2714.55,2722.26,2730.00,2737.77,2745.55,2753.36,2761.18,2769.04,2776.91,2784.80,2792.72,2800.66,2808.62,2816.61,2824.62,2832.65,2840.70,2848.78,2856.88,2865.00" data-band-low="2500.00,2473.82,2467.02,2463.39,2461.40,2460.45,2460.24,2460.59,2461.38,2462.53,2463.99,2465.71,2467.66,2469.80,2472.12,2474.60,2477.22,2479.98,2482.85,2485.84,2488.93,2492.11,2495.38,2498.74,2502.18,2505.70,2509.28,2512.93,2516.65,2520.43,2524.27,2528.16,2532.11,2536.11,2540.17,2544.27,2548.41,2552.61,2556.85,2561.13,2565.45,2569.81,2574.22,2578.66,2583.14,2587.66,2592.21,2596.80,2601.42" data-band-high="2500.00,2540.40,2561.45,2579.38,2595.71,2611.04,2625.67,2639.78,2653.49,2666.87,2680.00,2692.90,2705.63,2718.19,2730.62,2742.93,2755.15,2767.27,2779.31,2791.29,2803.20,2815.06,2826.88,2838.65,2850.39,2862.09,2873.77,2885.42,2897.05,2908.66,2920.26,2931.85,2943.42,2954.99,2966.55,2978.10,2989.66,3001.21,3012.76,3024.31,3035.87,3047.43,3059.00,3070.57,3082.16,3093.75,3105.35,3116.96,3128.58" aria-label="Projected value of $2,500 in ETF Aggressive over 12 months: median $2,865, likely range $2,601 to $3,129. Illustrative, not guaranteed."></div>
+                      <p class="plan-detail__key"><span class="plan-detail__key-line" aria-hidden="true"></span>Median at target <span class="plan-detail__key-band" aria-hidden="true"></span>Likely range</p>
+                    </div>
+                    <div class="plan-detail__col">
+                      <form class="plan-form" novalidate aria-label="Invest in ETF Aggressive">
+                        <div class="field">
+                          <div class="plan-form__row"><label class="field__label" for="inv-etf-aggressive">Amount</label><span class="field__help">Available $6,420.00</span></div>
+                          <div class="field__control"><span class="field__affix">$</span><input class="field__input amount-input" id="inv-etf-aggressive" name="amount" type="number" inputmode="decimal" min="2500" max="6420" step="any" value="2500" required autocomplete="off" aria-describedby="inv-etf-aggressive-help inv-etf-aggressive-err"><span class="field__affix">USD</span></div>
+                          <p class="field__help" id="inv-etf-aggressive-help">Min. $2,500 · Max. $6,420.00 available</p>
+                          <p class="field__error" id="inv-etf-aggressive-err"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7.5v5.5M12 16.5h.01"/></svg><span data-error-msg></span><a class="field__error-link" href="wallet.html#deposit" data-error-funds hidden>Add funds →</a></p>
+                        </div>
+                        <dl class="plan-summary">
+                          <div><dt>Projected range</dt><dd data-out="range">$2,601 – $3,129</dd></div>
+                          <div><dt>Fee 0.5%</dt><dd data-out="fee">$12.50</dd></div>
+                          <div><dt>Lock-up</dt><dd>12 months</dd></div>
+                        </dl>
+                        <button class="btn btn--block" type="submit"><span data-out="cta">Invest $2,500</span><svg class="btn__arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+                      </form>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+            </table>
+          </div>
+        </section>
+      </div>
+
+      <div class="plans-panel" role="tabpanel" id="panel-defi" aria-labelledby="tab-defi" tabindex="0" hidden>
+        <section aria-labelledby="defi-title">
+          <div class="block-head"><h2 id="defi-title">DeFi <small>3 plans</small></h2><p class="plans-panel__intro">On-chain yield strategies. Smart-contract and market risk apply.</p></div>
+
+          <div class="ledger-wrap" tabindex="0" role="region" aria-labelledby="defi-title">
+            <table class="ledger ledger--lg plans-ledger" id="defi-ledger">
+              <caption class="sr-only">DeFi plans. Expected returns are historical targets, not guaranteed.</caption>
+              <thead>
+                <tr>
+                  <th scope="col">Plan</th>
+                  <th scope="col" class="is-num">Minimum</th>
+                  <th scope="col" class="is-num">Expected return <span class="plans-th-note">historical target</span></th>
+                  <th scope="col" class="is-num opt-sm">Holding period</th>
+                  <th scope="col" class="is-num opt">Subscribers</th>
+                  <th scope="col"><span class="sr-only">Action</span></th>
+                </tr>
+              </thead>
+            <tbody class="plan" data-plan="defi-stable" data-name="Stable Yield" data-min="1000" data-return="7.4" data-months="3" data-risk="3" data-subs="1870">
+              <tr>
+                <td><div class="plan-name"><span class="plan-name__title">Stable Yield</span><span class="plan-name__desc">Lending of major stablecoins across established on-chain money markets.</span><span class="plan-name__meta">Risk 3/10 · Low</span></div></td>
+                <td class="is-num">$1,000</td>
+                <td class="is-num"><span class="plan-ret">7.4%</span><span class="sr-only"> per year, historical target</span></td>
+                <td class="is-num opt-sm">3 mo</td>
+                <td class="is-num opt">1,870</td>
+                <td class="is-end"><button class="text-btn xp-btn" type="button" data-expand="plans" aria-controls="plan-defi-stable" aria-expanded="false" data-label-open="Hide" data-label-closed="Invest"><span data-label>Invest</span><span class="sr-only"> in Stable Yield</span><svg class="xp-btn__chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button></td>
+              </tr>
+              <tr class="ledger__detail" id="plan-defi-stable" hidden>
+                <td colspan="6">
+                  <div class="ledger__detail-inner plan-detail" data-component="plans-invest" data-plan="Stable Yield" data-min="1000" data-available="6420" data-return="7.4" data-months="3" data-risk="3" data-fee="0.5">
+                    <div class="plan-detail__col">
+                      <h3 class="stat__label">Allocation</h3>
+                      <div class="donut plan-detail__donut" data-component="donut" style="--donut-size: 7.5rem">
+                        <div class="donut__ring" data-ring><div class="donut__center"><strong>3</strong><span>Assets</span></div></div>
+                        <ul class="legend" role="list" aria-label="Stable Yield allocation">
+                          <li data-value="55" style="--c: var(--teal-300)">USDC lending <strong>55%</strong></li>
+                          <li data-value="30" style="--c: var(--navy-300)">USDT lending <strong>30%</strong></li>
+                          <li data-value="15" style="--c: var(--slate-400)">Reserve <strong>15%</strong></li>
+                        </ul>
+                      </div>
+                    </div>
+                    <div class="plan-detail__col">
+                      <div class="plan-detail__head"><h3 class="stat__label">Projected growth</h3><span class="plan-detail__note">3 months · illustrative</span></div>
+                      <div class="chart plan-detail__chart" role="img" data-component="chart" data-proj-chart data-format="currency" data-decimals="0" data-yaxis="3" data-xaxis="4" data-labels="Today,1 mo,2 mo,3 mo" data-series-name="Median" data-series="1000.00,1001.49,1002.98,1004.47,1005.97,1007.46,1008.96,1010.47,1011.97,1013.48,1014.98,1016.49,1018.01" data-band-low="1000.00,993.39,991.51,990.41,989.70,989.26,988.99,988.86,988.83,988.90,989.04,989.24,989.50" data-band-high="1000.00,1009.58,1014.44,1018.53,1022.23,1025.67,1028.94,1032.07,1035.10,1038.05,1040.93,1043.74,1046.51" aria-label="Projected value of $1,000 in Stable Yield over 3 months: median $1,018, likely range $990 to $1,047. Illustrative, not guaranteed."></div>
+                      <p class="plan-detail__key"><span class="plan-detail__key-line" aria-hidden="true"></span>Median at target <span class="plan-detail__key-band" aria-hidden="true"></span>Likely range</p>
+                    </div>
+                    <div class="plan-detail__col">
+                      <form class="plan-form" novalidate aria-label="Invest in Stable Yield">
+                        <div class="field">
+                          <div class="plan-form__row"><label class="field__label" for="inv-defi-stable">Amount</label><span class="field__help">Available $6,420.00</span></div>
+                          <div class="field__control"><span class="field__affix">$</span><input class="field__input amount-input" id="inv-defi-stable" name="amount" type="number" inputmode="decimal" min="1000" max="6420" step="any" value="1000" required autocomplete="off" aria-describedby="inv-defi-stable-help inv-defi-stable-err"><span class="field__affix">USD</span></div>
+                          <p class="field__help" id="inv-defi-stable-help">Min. $1,000 · Max. $6,420.00 available</p>
+                          <p class="field__error" id="inv-defi-stable-err"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7.5v5.5M12 16.5h.01"/></svg><span data-error-msg></span><a class="field__error-link" href="wallet.html#deposit" data-error-funds hidden>Add funds →</a></p>
+                        </div>
+                        <dl class="plan-summary">
+                          <div><dt>Projected range</dt><dd data-out="range">$990 – $1,047</dd></div>
+                          <div><dt>Fee 0.5%</dt><dd data-out="fee">$5.00</dd></div>
+                          <div><dt>Lock-up</dt><dd>3 months</dd></div>
+                        </dl>
+                        <button class="btn btn--block" type="submit"><span data-out="cta">Invest $1,000</span><svg class="btn__arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+                      </form>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+            <tbody class="plan" data-plan="defi-blue" data-name="Blue-chip" data-min="1500" data-return="12.9" data-months="6" data-risk="5" data-subs="1144">
+              <tr>
+                <td><div class="plan-name"><span class="tag tag--pending">Popular</span><span class="plan-name__title">Blue-chip</span><span class="plan-name__desc">Staked ETH and liquid-staking tokens with automated reward compounding.</span><span class="plan-name__meta">Risk 5/10 · Medium</span></div></td>
+                <td class="is-num">$1,500</td>
+                <td class="is-num"><span class="plan-ret">12.9%</span><span class="sr-only"> per year, historical target</span></td>
+                <td class="is-num opt-sm">6 mo</td>
+                <td class="is-num opt">1,144</td>
+                <td class="is-end"><button class="text-btn xp-btn" type="button" data-expand="plans" aria-controls="plan-defi-blue" aria-expanded="false" data-label-open="Hide" data-label-closed="Invest"><span data-label>Invest</span><span class="sr-only"> in Blue-chip</span><svg class="xp-btn__chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button></td>
+              </tr>
+              <tr class="ledger__detail" id="plan-defi-blue" hidden>
+                <td colspan="6">
+                  <div class="ledger__detail-inner plan-detail" data-component="plans-invest" data-plan="Blue-chip" data-min="1500" data-available="6420" data-return="12.9" data-months="6" data-risk="5" data-fee="0.5">
+                    <div class="plan-detail__col">
+                      <h3 class="stat__label">Allocation</h3>
+                      <div class="donut plan-detail__donut" data-component="donut" style="--donut-size: 7.5rem">
+                        <div class="donut__ring" data-ring><div class="donut__center"><strong>3</strong><span>Assets</span></div></div>
+                        <ul class="legend" role="list" aria-label="Blue-chip allocation">
+                          <li data-value="60" style="--c: var(--teal-300)">Liquid-staked ETH <strong>60%</strong></li>
+                          <li data-value="25" style="--c: var(--navy-300)">ETH <strong>25%</strong></li>
+                          <li data-value="15" style="--c: var(--slate-400)">Stablecoins <strong>15%</strong></li>
+                        </ul>
+                      </div>
+                    </div>
+                    <div class="plan-detail__col">
+                      <div class="plan-detail__head"><h3 class="stat__label">Projected growth</h3><span class="plan-detail__note">6 months · illustrative</span></div>
+                      <div class="chart plan-detail__chart" role="img" data-component="chart" data-proj-chart data-format="currency" data-decimals="0" data-yaxis="3" data-xaxis="4" data-labels="Today,1 mo,2 mo,3 mo,4 mo,5 mo,6 mo" data-series-name="Median" data-series="1500.00,1503.80,1507.60,1511.42,1515.24,1519.08,1522.92,1526.78,1530.64,1534.52,1538.40,1542.29,1546.20,1550.11,1554.03,1557.97,1561.91,1565.86,1569.83,1573.80,1577.78,1581.78,1585.78,1589.79,1593.82" data-band-low="1500.00,1486.43,1482.98,1481.19,1480.25,1479.86,1479.85,1480.13,1480.65,1481.36,1482.23,1483.23,1484.35,1485.57,1486.89,1488.29,1489.77,1491.31,1492.92,1494.59,1496.31,1498.08,1499.89,1501.75,1503.66" data-band-high="1500.00,1521.16,1532.22,1541.65,1550.24,1558.30,1566.00,1573.42,1580.63,1587.67,1594.57,1601.36,1608.04,1614.65,1621.18,1627.64,1634.05,1640.41,1646.73,1653.01,1659.26,1665.48,1671.67,1677.83,1683.98" aria-label="Projected value of $1,500 in Blue-chip over 6 months: median $1,594, likely range $1,504 to $1,684. Illustrative, not guaranteed."></div>
+                      <p class="plan-detail__key"><span class="plan-detail__key-line" aria-hidden="true"></span>Median at target <span class="plan-detail__key-band" aria-hidden="true"></span>Likely range</p>
+                    </div>
+                    <div class="plan-detail__col">
+                      <form class="plan-form" novalidate aria-label="Invest in Blue-chip">
+                        <div class="field">
+                          <div class="plan-form__row"><label class="field__label" for="inv-defi-blue">Amount</label><span class="field__help">Available $6,420.00</span></div>
+                          <div class="field__control"><span class="field__affix">$</span><input class="field__input amount-input" id="inv-defi-blue" name="amount" type="number" inputmode="decimal" min="1500" max="6420" step="any" value="1500" required autocomplete="off" aria-describedby="inv-defi-blue-help inv-defi-blue-err"><span class="field__affix">USD</span></div>
+                          <p class="field__help" id="inv-defi-blue-help">Min. $1,500 · Max. $6,420.00 available</p>
+                          <p class="field__error" id="inv-defi-blue-err"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7.5v5.5M12 16.5h.01"/></svg><span data-error-msg></span><a class="field__error-link" href="wallet.html#deposit" data-error-funds hidden>Add funds →</a></p>
+                        </div>
+                        <dl class="plan-summary">
+                          <div><dt>Projected range</dt><dd data-out="range">$1,504 – $1,684</dd></div>
+                          <div><dt>Fee 0.5%</dt><dd data-out="fee">$7.50</dd></div>
+                          <div><dt>Lock-up</dt><dd>6 months</dd></div>
+                        </dl>
+                        <button class="btn btn--block" type="submit"><span data-out="cta">Invest $1,500</span><svg class="btn__arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+                      </form>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+            <tbody class="plan" data-plan="defi-liquidity" data-name="Liquidity" data-min="2500" data-return="18.6" data-months="6" data-risk="7" data-subs="622">
+              <tr>
+                <td><div class="plan-name"><span class="tag tag--loss">High risk</span><span class="plan-name__title">Liquidity</span><span class="plan-name__desc">Concentrated liquidity provision on major pairs. Exposed to impermanent loss.</span><span class="plan-name__meta">Risk 7/10 · High</span></div></td>
+                <td class="is-num">$2,500</td>
+                <td class="is-num"><span class="plan-ret">18.6%</span><span class="sr-only"> per year, historical target</span></td>
+                <td class="is-num opt-sm">6 mo</td>
+                <td class="is-num opt">622</td>
+                <td class="is-end"><button class="text-btn xp-btn" type="button" data-expand="plans" aria-controls="plan-defi-liquidity" aria-expanded="false" data-label-open="Hide" data-label-closed="Invest"><span data-label>Invest</span><span class="sr-only"> in Liquidity</span><svg class="xp-btn__chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button></td>
+              </tr>
+              <tr class="ledger__detail" id="plan-defi-liquidity" hidden>
+                <td colspan="6">
+                  <div class="ledger__detail-inner plan-detail" data-component="plans-invest" data-plan="Liquidity" data-min="2500" data-available="6420" data-return="18.6" data-months="6" data-risk="7" data-fee="0.5">
+                    <div class="plan-detail__col">
+                      <h3 class="stat__label">Allocation</h3>
+                      <div class="donut plan-detail__donut" data-component="donut" style="--donut-size: 7.5rem">
+                        <div class="donut__ring" data-ring><div class="donut__center"><strong>3</strong><span>Assets</span></div></div>
+                        <ul class="legend" role="list" aria-label="Liquidity allocation">
+                          <li data-value="50" style="--c: var(--teal-300)">ETH/USDC pools <strong>50%</strong></li>
+                          <li data-value="35" style="--c: var(--amber-400)">BTC/ETH pools <strong>35%</strong></li>
+                          <li data-value="15" style="--c: var(--slate-400)">Reserve <strong>15%</strong></li>
+                        </ul>
+                      </div>
+                    </div>
+                    <div class="plan-detail__col">
+                      <div class="plan-detail__head"><h3 class="stat__label">Projected growth</h3><span class="plan-detail__note">6 months · illustrative</span></div>
+                      <div class="chart plan-detail__chart" role="img" data-component="chart" data-proj-chart data-format="currency" data-decimals="0" data-yaxis="3" data-xaxis="4" data-labels="Today,1 mo,2 mo,3 mo,4 mo,5 mo,6 mo" data-series-name="Median" data-series="2500.00,2508.90,2517.83,2526.80,2535.79,2544.82,2553.88,2562.97,2572.10,2581.25,2590.44,2599.67,2608.92,2618.21,2627.53,2636.89,2646.27,2655.70,2665.15,2674.64,2684.16,2693.72,2703.31,2712.93,2722.59" data-band-low="2500.00,2471.24,2464.38,2461.10,2459.66,2459.40,2459.98,2461.18,2462.89,2465.01,2467.48,2470.24,2473.26,2476.50,2479.95,2483.58,2487.38,2491.33,2495.42,2499.63,2503.97,2508.42,2512.97,2517.63,2522.37" data-band-high="2500.00,2546.56,2571.28,2592.49,2611.92,2630.24,2647.79,2664.76,2681.30,2697.50,2713.41,2729.09,2744.59,2759.92,2775.11,2790.19,2805.17,2820.06,2834.89,2849.65,2864.35,2879.02,2893.64,2908.24,2922.81" aria-label="Projected value of $2,500 in Liquidity over 6 months: median $2,723, likely range $2,522 to $2,923. Illustrative, not guaranteed."></div>
+                      <p class="plan-detail__key"><span class="plan-detail__key-line" aria-hidden="true"></span>Median at target <span class="plan-detail__key-band" aria-hidden="true"></span>Likely range</p>
+                    </div>
+                    <div class="plan-detail__col">
+                      <form class="plan-form" novalidate aria-label="Invest in Liquidity">
+                        <div class="field">
+                          <div class="plan-form__row"><label class="field__label" for="inv-defi-liquidity">Amount</label><span class="field__help">Available $6,420.00</span></div>
+                          <div class="field__control"><span class="field__affix">$</span><input class="field__input amount-input" id="inv-defi-liquidity" name="amount" type="number" inputmode="decimal" min="2500" max="6420" step="any" value="2500" required autocomplete="off" aria-describedby="inv-defi-liquidity-help inv-defi-liquidity-err"><span class="field__affix">USD</span></div>
+                          <p class="field__help" id="inv-defi-liquidity-help">Min. $2,500 · Max. $6,420.00 available</p>
+                          <p class="field__error" id="inv-defi-liquidity-err"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7.5v5.5M12 16.5h.01"/></svg><span data-error-msg></span><a class="field__error-link" href="wallet.html#deposit" data-error-funds hidden>Add funds →</a></p>
+                        </div>
+                        <dl class="plan-summary">
+                          <div><dt>Projected range</dt><dd data-out="range">$2,522 – $2,923</dd></div>
+                          <div><dt>Fee 0.5%</dt><dd data-out="fee">$12.50</dd></div>
+                          <div><dt>Lock-up</dt><dd>6 months</dd></div>
+                        </dl>
+                        <button class="btn btn--block" type="submit"><span data-out="cta">Invest $2,500</span><svg class="btn__arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+                      </form>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+            </table>
+          </div>
+        </section>
+      </div>
+
+      <div class="plans-panel" role="tabpanel" id="panel-options" aria-labelledby="tab-options" tabindex="0" hidden>
+        <section aria-labelledby="options-title">
+          <div class="block-head"><h2 id="options-title">Options <small>3 plans</small></h2><p class="plans-panel__intro">Systematic options income and directional spreads.</p></div>
+
+          <div class="ledger-wrap" tabindex="0" role="region" aria-labelledby="options-title">
+            <table class="ledger ledger--lg plans-ledger" id="options-ledger">
+              <caption class="sr-only">Options plans. Expected returns are historical targets, not guaranteed.</caption>
+              <thead>
+                <tr>
+                  <th scope="col">Plan</th>
+                  <th scope="col" class="is-num">Minimum</th>
+                  <th scope="col" class="is-num">Expected return <span class="plans-th-note">historical target</span></th>
+                  <th scope="col" class="is-num opt-sm">Holding period</th>
+                  <th scope="col" class="is-num opt">Subscribers</th>
+                  <th scope="col"><span class="sr-only">Action</span></th>
+                </tr>
+              </thead>
+            <tbody class="plan" data-plan="opt-calls" data-name="Covered Calls" data-min="2000" data-return="11.2" data-months="3" data-risk="4" data-subs="1408">
+              <tr>
+                <td><div class="plan-name"><span class="tag tag--pending">Popular</span><span class="plan-name__title">Covered Calls</span><span class="plan-name__desc">Monthly covered calls written on a basket of large-cap US stocks.</span><span class="plan-name__meta">Risk 4/10 · Medium</span></div></td>
+                <td class="is-num">$2,000</td>
+                <td class="is-num"><span class="plan-ret">11.2%</span><span class="sr-only"> per year, historical target</span></td>
+                <td class="is-num opt-sm">3 mo</td>
+                <td class="is-num opt">1,408</td>
+                <td class="is-end"><button class="text-btn xp-btn" type="button" data-expand="plans" aria-controls="plan-opt-calls" aria-expanded="false" data-label-open="Hide" data-label-closed="Invest"><span data-label>Invest</span><span class="sr-only"> in Covered Calls</span><svg class="xp-btn__chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button></td>
+              </tr>
+              <tr class="ledger__detail" id="plan-opt-calls" hidden>
+                <td colspan="6">
+                  <div class="ledger__detail-inner plan-detail" data-component="plans-invest" data-plan="Covered Calls" data-min="2000" data-available="6420" data-return="11.2" data-months="3" data-risk="4" data-fee="0.5">
+                    <div class="plan-detail__col">
+                      <h3 class="stat__label">Allocation</h3>
+                      <div class="donut plan-detail__donut" data-component="donut" style="--donut-size: 7.5rem">
+                        <div class="donut__ring" data-ring><div class="donut__center"><strong>2</strong><span>Assets</span></div></div>
+                        <ul class="legend" role="list" aria-label="Covered Calls allocation">
+                          <li data-value="75" style="--c: var(--teal-300)">Underlying stocks <strong>75%</strong></li>
+                          <li data-value="25" style="--c: var(--slate-400)">Cash collateral <strong>25%</strong></li>
+                        </ul>
+                      </div>
+                    </div>
+                    <div class="plan-detail__col">
+                      <div class="plan-detail__head"><h3 class="stat__label">Projected growth</h3><span class="plan-detail__note">3 months · illustrative</span></div>
+                      <div class="chart plan-detail__chart" role="img" data-component="chart" data-proj-chart data-format="currency" data-decimals="0" data-yaxis="3" data-xaxis="4" data-labels="Today,1 mo,2 mo,3 mo" data-series-name="Median" data-series="2000.00,2004.43,2008.87,2013.31,2017.77,2022.24,2026.72,2031.20,2035.70,2040.21,2044.73,2049.25,2053.79" data-band-low="2000.00,1984.75,1980.98,1979.09,1978.16,1977.86,1977.99,1978.46,1979.19,1980.14,1981.26,1982.55,1983.96" data-band-high="2000.00,2024.10,2036.75,2047.54,2057.38,2066.62,2075.44,2083.95,2092.21,2100.28,2108.19,2115.96,2123.62" aria-label="Projected value of $2,000 in Covered Calls over 3 months: median $2,054, likely range $1,984 to $2,124. Illustrative, not guaranteed."></div>
+                      <p class="plan-detail__key"><span class="plan-detail__key-line" aria-hidden="true"></span>Median at target <span class="plan-detail__key-band" aria-hidden="true"></span>Likely range</p>
+                    </div>
+                    <div class="plan-detail__col">
+                      <form class="plan-form" novalidate aria-label="Invest in Covered Calls">
+                        <div class="field">
+                          <div class="plan-form__row"><label class="field__label" for="inv-opt-calls">Amount</label><span class="field__help">Available $6,420.00</span></div>
+                          <div class="field__control"><span class="field__affix">$</span><input class="field__input amount-input" id="inv-opt-calls" name="amount" type="number" inputmode="decimal" min="2000" max="6420" step="any" value="2000" required autocomplete="off" aria-describedby="inv-opt-calls-help inv-opt-calls-err"><span class="field__affix">USD</span></div>
+                          <p class="field__help" id="inv-opt-calls-help">Min. $2,000 · Max. $6,420.00 available</p>
+                          <p class="field__error" id="inv-opt-calls-err"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7.5v5.5M12 16.5h.01"/></svg><span data-error-msg></span><a class="field__error-link" href="wallet.html#deposit" data-error-funds hidden>Add funds →</a></p>
+                        </div>
+                        <dl class="plan-summary">
+                          <div><dt>Projected range</dt><dd data-out="range">$1,984 – $2,124</dd></div>
+                          <div><dt>Fee 0.5%</dt><dd data-out="fee">$10.00</dd></div>
+                          <div><dt>Lock-up</dt><dd>3 months</dd></div>
+                        </dl>
+                        <button class="btn btn--block" type="submit"><span data-out="cta">Invest $2,000</span><svg class="btn__arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+                      </form>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+            <tbody class="plan" data-plan="opt-condor" data-name="Iron Condor" data-min="5000" data-return="16.8" data-months="6" data-risk="6" data-subs="486">
+              <tr>
+                <td><div class="plan-name"><span class="plan-name__title">Iron Condor</span><span class="plan-name__desc">Defined-risk index iron condors, sized to the volatility regime.</span><span class="plan-name__meta">Risk 6/10 · Medium</span></div></td>
+                <td class="is-num">$5,000</td>
+                <td class="is-num"><span class="plan-ret">16.8%</span><span class="sr-only"> per year, historical target</span></td>
+                <td class="is-num opt-sm">6 mo</td>
+                <td class="is-num opt">486</td>
+                <td class="is-end"><button class="text-btn xp-btn" type="button" data-expand="plans" aria-controls="plan-opt-condor" aria-expanded="false" data-label-open="Hide" data-label-closed="Invest"><span data-label>Invest</span><span class="sr-only"> in Iron Condor</span><svg class="xp-btn__chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button></td>
+              </tr>
+              <tr class="ledger__detail" id="plan-opt-condor" hidden>
+                <td colspan="6">
+                  <div class="ledger__detail-inner plan-detail" data-component="plans-invest" data-plan="Iron Condor" data-min="5000" data-available="6420" data-return="16.8" data-months="6" data-risk="6" data-fee="0.5">
+                    <div class="plan-detail__col">
+                      <h3 class="stat__label">Allocation</h3>
+                      <div class="donut plan-detail__donut" data-component="donut" style="--donut-size: 7.5rem">
+                        <div class="donut__ring" data-ring><div class="donut__center"><strong>2</strong><span>Assets</span></div></div>
+                        <ul class="legend" role="list" aria-label="Iron Condor allocation">
+                          <li data-value="40" style="--c: var(--teal-300)">Index spreads <strong>40%</strong></li>
+                          <li data-value="60" style="--c: var(--slate-400)">Cash collateral <strong>60%</strong></li>
+                        </ul>
+                      </div>
+                    </div>
+                    <div class="plan-detail__col">
+                      <div class="plan-detail__head"><h3 class="stat__label">Projected growth</h3><span class="plan-detail__note">6 months · illustrative</span></div>
+                      <div class="chart plan-detail__chart" role="img" data-component="chart" data-proj-chart data-format="currency" data-decimals="0" data-yaxis="3" data-xaxis="4" data-labels="Today,1 mo,2 mo,3 mo,4 mo,5 mo,6 mo" data-series-name="Median" data-series="5000.00,5016.20,5032.46,5048.77,5065.13,5081.54,5098.01,5114.53,5131.10,5147.73,5164.41,5181.14,5197.93,5214.78,5231.68,5248.63,5265.64,5282.70,5299.82,5316.99,5334.22,5351.51,5368.85,5386.25,5403.70" data-band-low="5000.00,4949.59,4937.95,4932.64,4930.61,4930.65,4932.18,4934.84,4938.38,4942.66,4947.54,4952.96,4958.83,4965.10,4971.74,4978.69,4985.95,4993.47,5001.24,5009.23,5017.45,5025.86,5034.46,5043.23,5052.17" data-band-high="5000.00,5082.81,5126.96,5164.89,5199.65,5232.42,5263.83,5294.22,5323.82,5352.80,5381.27,5409.33,5437.04,5464.45,5491.62,5518.56,5545.33,5571.93,5598.40,5624.75,5651.00,5677.16,5703.25,5729.27,5755.23" aria-label="Projected value of $5,000 in Iron Condor over 6 months: median $5,404, likely range $5,052 to $5,755. Illustrative, not guaranteed."></div>
+                      <p class="plan-detail__key"><span class="plan-detail__key-line" aria-hidden="true"></span>Median at target <span class="plan-detail__key-band" aria-hidden="true"></span>Likely range</p>
+                    </div>
+                    <div class="plan-detail__col">
+                      <form class="plan-form" novalidate aria-label="Invest in Iron Condor">
+                        <div class="field">
+                          <div class="plan-form__row"><label class="field__label" for="inv-opt-condor">Amount</label><span class="field__help">Available $6,420.00</span></div>
+                          <div class="field__control"><span class="field__affix">$</span><input class="field__input amount-input" id="inv-opt-condor" name="amount" type="number" inputmode="decimal" min="5000" max="6420" step="any" value="5000" required autocomplete="off" aria-describedby="inv-opt-condor-help inv-opt-condor-err"><span class="field__affix">USD</span></div>
+                          <p class="field__help" id="inv-opt-condor-help">Min. $5,000 · Max. $6,420.00 available</p>
+                          <p class="field__error" id="inv-opt-condor-err"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7.5v5.5M12 16.5h.01"/></svg><span data-error-msg></span><a class="field__error-link" href="wallet.html#deposit" data-error-funds hidden>Add funds →</a></p>
+                        </div>
+                        <dl class="plan-summary">
+                          <div><dt>Projected range</dt><dd data-out="range">$5,052 – $5,755</dd></div>
+                          <div><dt>Fee 0.5%</dt><dd data-out="fee">$25.00</dd></div>
+                          <div><dt>Lock-up</dt><dd>6 months</dd></div>
+                        </dl>
+                        <button class="btn btn--block" type="submit"><span data-out="cta">Invest $5,000</span><svg class="btn__arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+                      </form>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+            <tbody class="plan" data-plan="opt-momentum" data-name="Momentum" data-min="7500" data-return="27.4" data-months="6" data-risk="8" data-subs="213" data-short>
+              <tr>
+                <td><div class="plan-name"><span class="tag tag--loss">High risk</span><span class="plan-name__title">Momentum</span><span class="plan-name__desc">Directional call and put spreads on high-momentum stocks.</span><span class="plan-name__meta">Risk 8/10 · High</span></div></td>
+                <td class="is-num">$7,500</td>
+                <td class="is-num"><span class="plan-ret">27.4%</span><span class="sr-only"> per year, historical target</span></td>
+                <td class="is-num opt-sm">6 mo</td>
+                <td class="is-num opt">213</td>
+                <td class="is-end"><div class="plan-short"><span class="plan-short__need">Need $1,080 more</span><a class="text-btn plan-short__link" href="wallet.html#deposit">Add funds →<span class="sr-only"> for Momentum</span></a></div></td>
+              </tr>
+            </tbody>
+            </table>
+          </div>
+        </section>
+      </div>
+
+      <div class="plans-panel" role="tabpanel" id="panel-staking" aria-labelledby="tab-staking" tabindex="0" hidden>
+        <div class="empty plans-soon">
+          <p class="overline overline--signal">Coming soon</p>
+          <h2 class="empty__title">Staking plans are on the way</h2>
+          <p>Stake supported assets and track rewards from your dashboard. We'll let you know when it opens.</p>
+          <a class="link-arrow" href="#defi">Explore DeFi plans <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+        </div>
+      </div>
+      </div>
+
+      <footer class="app__foot"><p class="fineprint">Expected returns are targets based on historical data and are not guaranteed. Capital at risk.</p></footer>
+    </main>
+
+  </div>
+
+  <!-- ===================== MOBILE TAB BAR + TED AI (shared) ===================== -->
+  <nav class="tabbar" aria-label="Quick navigation">
+    <a href="index.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1z"/></svg>Home</a>
+    <a href="wallet.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M3 7a2 2 0 0 1 2-2h13v4"/><path d="M3 7v11a2 2 0 0 0 2 2h15V9H5a2 2 0 0 1-2-2z"/></svg>Wallet</a>
+    <a href="copy-traders.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0"/><path d="M16 4.5a3.5 3.5 0 0 1 0 7"/></svg>Traders</a>
+    <a href="plans.html" aria-current="page"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M3 17l6-6 4 4 8-8"/><path d="M15 7h6v6"/></svg>Plans</a>
+    <button type="button" data-rail-toggle aria-controls="rail" aria-expanded="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>More</button>
+  </nav>
+  <button class="ai-fab" type="button" data-dialog-open="ted-ai"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/></svg>TED AI</button>
+
+  <dialog class="drawer" id="ted-ai" aria-labelledby="ted-ai-title">
+    <div class="drawer__inner">
+      <div class="drawer__head">
+        <h2 id="ted-ai-title" class="cluster" style="font-size:1.125rem; --cluster-gap: var(--space-2)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true" style="color: var(--color-signal)"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/></svg>TED AI</h2>
+        <button class="icon-btn" type="button" data-dialog-close aria-label="Close TED AI"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+      </div>
+      <div class="drawer__body" aria-live="polite">
+        <div class="ai-msg ai-msg--bot"><span class="ai-msg__who">TED AI · 09:41</span><p>Elena Vasquez opened a EUR/USD long. Your copy mirrored it at 1.0841 with a $42.10 allocation.</p></div>
+        <div class="ai-msg ai-msg--bot"><span class="ai-msg__who">Risk notice</span><p>Copying Aisha Rahman is paused because your 5% drawdown limit was reached. You can resume or adjust the limit from Copy traders.</p></div>
+        <div class="ai-msg ai-msg--user"><span class="ai-msg__who">You</span><p>How diversified is my portfolio?</p></div>
+        <div class="ai-msg ai-msg--bot"><span class="ai-msg__who">TED AI</span><p>You're spread across 4 asset classes. Crypto is 33% of your capital — above the 25% many beginners choose. Consider capping it in Copy traders.</p></div>
+      </div>
+      <form class="drawer__foot" data-demo-form="Message sent to TED AI">
+        <div class="field">
+          <label class="sr-only" for="ai-q">Ask TED AI</label>
+          <div class="field__control">
+            <input class="field__input" id="ai-q" name="q" placeholder="Ask about your portfolio…" required autocomplete="off">
+            <button class="icon-btn" type="submit" aria-label="Send"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4 12l16-8-6 16-2.5-6.5z"/></svg></button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </dialog>
+</body>
+</html>

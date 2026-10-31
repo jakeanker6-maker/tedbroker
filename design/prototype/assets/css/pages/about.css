@@ -1,0 +1,188 @@
+/* About page — page-only rules. */
+@layer pages {
+  /* ---------- Hero ---------- */
+  .about-hero__copy > * + * { margin-block-start: var(--space-5); }
+
+  /* Dot-matrix world map. Geography is never mirrored, so the figure is forced LTR;
+     inside it, inline-start == left, which keeps the logical properties below honest. */
+  .about-map {
+    position: relative;
+    direction: ltr;
+    inline-size: 100%;
+    aspect-ratio: 2 / 1;
+    container-type: inline-size;
+  }
+  .about-map__canvas { position: absolute; inset: 0; inline-size: 100%; block-size: 100%; }
+
+  .about-map__cities {
+    position: absolute;
+    inset-inline: 0;
+    inset-block-end: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2) var(--space-4);
+    list-style: none;
+    padding: 0;
+  }
+  .about-map[data-mapped] .about-map__cities { inset: 0; display: block; pointer-events: none; }
+
+  .about-map__city {
+    font: 600 var(--text-label)/1.3 var(--font-mono);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--color-text);
+    text-shadow: 0 0 0.5rem var(--color-bg), 0 0 0.2rem var(--color-bg);
+    white-space: nowrap;
+  }
+  .about-map[data-mapped] .about-map__city {
+    position: absolute;
+    inset-inline-start: var(--x);
+    inset-block-start: var(--y);
+    translate: var(--space-4) -50%;
+    padding-inline-start: var(--space-2);
+    border-inline-start: 2px solid var(--color-accent);
+  }
+  .about-map[data-mapped] .about-map__city[data-side="start"] {
+    translate: calc(-100% - var(--space-4)) -50%;
+    padding-inline: 0 var(--space-2);
+    border-inline-start: 0;
+    border-inline-end: 2px solid var(--color-accent);
+    text-align: end;
+  }
+  .about-map__coord {
+    display: block;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    color: var(--color-signal);
+  }
+  @container (width < 30rem) {
+    .about-map__coord { display: none; }
+  }
+
+  /* ---------- Mission / vision: editorial two-column ---------- */
+  .about-chapter {
+    display: grid;
+    gap: var(--space-5) clamp(2rem, 1rem + 4vw, 5rem);
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .about-chapter + .about-chapter {
+    margin-block-start: clamp(3rem, 2rem + 4vw, 6rem);
+    padding-block-start: clamp(3rem, 2rem + 4vw, 6rem);
+    border-block-start: 1px solid var(--color-border);
+  }
+  @media (width >= 60rem) {
+    .about-chapter { grid-template-columns: minmax(0, 4fr) minmax(0, 8fr); }
+    .about-chapter__label {
+      position: sticky;
+      inset-block-start: calc(var(--topbar-h) + var(--space-6));
+      align-self: start;
+    }
+  }
+  .about-chapter__body { display: grid; gap: var(--space-6); }
+  .about-chapter__lead {
+    font: 600 clamp(1.5rem, 1.1rem + 1.6vw, 2.25rem)/1.2 var(--font-display);
+    letter-spacing: -0.025em;
+    text-wrap: balance;
+    max-inline-size: 32ch;
+  }
+  .about-chapter__text {
+    display: grid;
+    gap: var(--space-4) var(--space-6);
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 1fr));
+    color: var(--color-text-muted);
+  }
+
+  /* ---------- Stats (value first, then label) ---------- */
+  .about-stats .stat__label { color: var(--color-accent-text); }
+
+  /* ---------- Why investors choose us: numbered rows with a sliding arrow ---------- */
+  .about-why .num-row {
+    grid-template-columns: clamp(4rem, 3rem + 3vw, 6.5rem) minmax(0, 1fr) auto;
+    align-items: center;
+  }
+  @media (width >= 60rem) {
+    .about-why__body {
+      grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+      align-items: center;
+      gap: var(--space-6);
+    }
+  }
+  .about-why__link {
+    color: inherit;
+    text-decoration: none;
+
+    /* Whole row is the click target; the row is already position: relative. */
+    &::after { content: ""; position: absolute; inset: 0; }
+    &:hover { color: var(--color-accent-text); }
+  }
+  .about-why__mark { color: var(--color-accent-text); margin-inline-start: 0.1em; }
+  .about-why__arrow {
+    inline-size: 1.5rem;
+    block-size: 1.5rem;
+    color: var(--color-text-muted);
+    transition: translate var(--duration-base) var(--ease-out), color var(--duration-fast);
+  }
+  .num-row:is(:hover, :focus-within) .about-why__arrow {
+    translate: var(--space-2) 0;
+    color: var(--color-accent-text);
+  }
+  [dir="rtl"] .about-why__arrow { scale: -1 1; }
+  [dir="rtl"] .num-row:is(:hover, :focus-within) .about-why__arrow { translate: calc(-1 * var(--space-2)) 0; }
+
+  /* ---------- Leadership: big initials, plain text, no cards ---------- */
+  .about-team-section { padding-block-start: 0; }
+  .about-team {
+    display: grid;
+    gap: var(--space-7) var(--space-5);
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 9rem), 1fr));
+  }
+  .about-team__person { display: grid; gap: var(--space-1); align-content: start; justify-items: start; }
+  .about-team__avatar {
+    inline-size: clamp(7rem, 5rem + 5vw, 10rem);
+    block-size: auto;
+    aspect-ratio: 1;
+    margin-block-end: var(--space-4);
+    font: 300 clamp(2rem, 1.4rem + 2vw, 3rem)/1 var(--font-display);
+    letter-spacing: -0.03em;
+  }
+  .about-team__name { font: 700 clamp(1.125rem, 1rem + 0.4vw, 1.3rem)/1.25 var(--font-display); letter-spacing: -0.015em; }
+  .about-team__role {
+    font: 600 var(--text-label)/1.4 var(--font-mono);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--color-accent-text);
+  }
+
+  /* ---------- Office strip ---------- */
+  .about-office { border-block-start: 1px solid var(--color-border); }
+  .about-office__list {
+    display: grid;
+    gap: var(--space-6);
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 14rem), 1fr));
+  }
+  .about-office__item { display: grid; gap: var(--space-3); align-content: start; }
+  .about-office__item dd { margin: 0; font-size: 1.0625rem; line-height: 1.5; }
+  .about-office__item address { font-style: normal; }
+  .about-office__phone {
+    font-family: var(--font-mono);
+    font-variant-numeric: tabular-nums;
+    color: var(--color-text);
+    text-decoration: none;
+
+    &:hover { text-decoration: underline; }
+  }
+  .about-clock {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    font: 500 1.0625rem/1.2 var(--font-mono);
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--color-signal);
+  }
+
+  @media (forced-colors: active) {
+    .about-map[data-mapped] .about-map__city { border-color: CanvasText; }
+  }
+}

@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
+<title>TED Brokers — Copy the traders who win. Automatically.</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&amp;family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&amp;family=Public+Sans:ital,wght@0,100..900;1,100..900&amp;family=Sora:wght@100..800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "error-container": "#93000a",
+            "background": "#081424",
+            "primary-fixed-dim": "#ffb3ad",
+            "on-primary-container": "#fffeff",
+            "on-primary": "#68000a",
+            "surface-variant": "#2a3547",
+            "surface-dim": "#081424",
+            "secondary-fixed": "#cbe6ff",
+            "surface-container-highest": "#2a3547",
+            "surface-container-low": "#101c2c",
+            "surface-bright": "#2e3a4b",
+            "on-secondary-container": "#91bde3",
+            "on-tertiary-container": "#fafffd",
+            "on-primary-fixed": "#410004",
+            "inverse-on-surface": "#263142",
+            "outline-variant": "#5d3f3d",
+            "on-secondary": "#003450",
+            "tertiary": "#51dbcb",
+            "surface": "#081424",
+            "secondary-fixed-dim": "#9fcbf2",
+            "surface-container-high": "#1f2a3b",
+            "outline": "#ad8885",
+            "on-secondary-fixed": "#001e30",
+            "on-tertiary-fixed": "#00201d",
+            "on-secondary-fixed-variant": "#184b6b",
+            "surface-container-lowest": "#030e1e",
+            "secondary": "#9fcbf2",
+            "secondary-container": "#1c4d6e",
+            "on-background": "#d7e3fa",
+            "surface-tint": "#ffb3ad",
+            "on-primary-fixed-variant": "#930013",
+            "on-error": "#690005",
+            "tertiary-fixed-dim": "#51dbcb",
+            "on-surface-variant": "#e6bdb9",
+            "tertiary-container": "#008479",
+            "on-surface": "#d7e3fa",
+            "inverse-primary": "#c0001c",
+            "primary-fixed": "#ffdad7",
+            "inverse-surface": "#d7e3fa",
+            "surface-container": "#152030",
+            "on-error-container": "#ffdad6",
+            "primary": "#ffb3ad",
+            "on-tertiary": "#003732",
+            "error": "#ffb4ab",
+            "primary-container": "#e3262f",
+            "tertiary-fixed": "#72f8e7",
+            "on-tertiary-fixed-variant": "#005049"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "margin": "1.5rem",
+            "gutter": "1rem",
+            "space-sm": "0.5rem",
+            "space-md": "1rem",
+            "space-lg": "1.5rem",
+            "space-xl": "2rem",
+            "space-xs": "0.25rem"
+          },
+          "fontFamily": {
+            "headline-md": ["Sora"],
+            "label-md": ["Public Sans"],
+            "display-lg": ["Sora"],
+            "body-md": ["DM Sans"],
+            "data-mono": ["JetBrains Mono"],
+            "headline-lg": ["Sora"],
+            "body-lg": ["DM Sans"]
+          },
+          "fontSize": {
+            "headline-md": ["28px", { "lineHeight": "36px", "letterSpacing": "-0.015em", "fontWeight": "600" }],
+            "label-md": ["12px", { "lineHeight": "16px", "letterSpacing": "0.12em", "fontWeight": "600" }],
+            "display-lg": ["72px", { "lineHeight": "80px", "letterSpacing": "-0.035em", "fontWeight": "700" }],
+            "body-md": ["15px", { "lineHeight": "22px", "fontWeight": "400" }],
+            "data-mono": ["14px", { "lineHeight": "20px", "fontWeight": "500" }],
+            "headline-lg": ["36px", { "lineHeight": "44px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+            "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }]
+          }
+        },
+      },
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-family: 'Material Symbols Outlined';
+      font-weight: normal;
+      font-style: normal;
+      font-size: 24px;
+      line-height: 1;
+      letter-spacing: normal;
+      text-transform: none;
+      display: inline-block;
+      white-space: nowrap;
+      word-wrap: normal;
+      direction: ltr;
+      -webkit-font-smoothing: antialiased;
+    }
+    @keyframes ticker {
+      0% { transform: translate3d(0, 0, 0); }
+      100% { transform: translate3d(-50%, 0, 0); }
+    }
+    .animate-ticker {
+      display: flex;
+      width: max-content;
+      animation: ticker 25s linear infinite;
+    }
+    .animate-ticker:hover {
+      animation-play-state: paused;
+    }
+    .hairline-grid-pattern {
+      background-size: 24px 24px;
+      background-image: linear-gradient(to right, rgba(29, 78, 111, 0.12) 1px, transparent 1px),
+                        linear-gradient(to bottom, rgba(29, 78, 111, 0.12) 1px, transparent 1px);
+    }
+    .active-row-indicator {
+      position: relative;
+    }
+    .active-row-indicator:hover::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background-color: #E3262F;
+    }
+  </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-surface antialiased overflow-x-hidden selection:bg-primary-container selection:text-white pb-20">
+<!-- TOP APP BAR -->
+<header class="docked full-width top-0 sticky z-50 bg-surface dark:bg-surface border-b border-surface-container-highest dark:border-surface-container-highest">
+<div class="flex justify-between items-center w-full px-margin py-space-sm max-w-full">
+<a class="flex items-center gap-1.5 focus:outline-none" href="#">
+<span class="text-headline-md font-headline-md font-bold tracking-tight text-white">TED<span class="text-primary-container font-headline-md">.</span></span>
+<span class="text-headline-md font-headline-md font-normal tracking-tight text-white/90">Brokers</span>
+</a>
+<div class="flex items-center gap-3">
+<button class="h-9 px-3.5 rounded-[10px] bg-primary-container text-white text-label-md font-label-md tracking-wider flex items-center justify-center active:opacity-80 transition-opacity">
+          Get started
+        </button>
+<button aria-label="Toggle navigation" class="p-1.5 text-on-surface-variant hover:text-white transition-colors focus:outline-none">
+<span class="material-symbols-outlined text-[26px]">menu</span>
+</button>
+</div>
+</div>
+</header>
+<!-- HERO SECTION -->
+<section class="relative w-full pt-8 pb-10 px-margin overflow-hidden hairline-grid-pattern bg-[#0A1626]">
+<div class="absolute inset-0 bg-gradient-to-b from-transparent via-[#0A1626]/70 to-[#0A1626] pointer-events-none"></div>
+<div class="relative z-10 flex flex-col">
+<!-- Live Telemetry Overline -->
+<div class="flex items-center gap-2 mb-4">
+<span class="inline-block w-1.5 h-1.5 rounded-full bg-tertiary animate-pulse"></span>
+<span class="font-data-mono text-[11px] tracking-widest text-tertiary">LIVE · 2,431 TRADES COPIED TODAY</span>
+</div>
+<!-- Main Headline -->
+<h1 class="text-headline-lg font-headline-lg text-white tracking-tight leading-[1.12] mb-4">
+        Copy the traders who <span class="text-primary-container">win.</span> Automatically.
+      </h1>
+<!-- Subcopy -->
+<p class="text-body-md font-body-md text-on-surface-variant/90 leading-relaxed mb-8">
+        Follow verified traders across forex, stocks, crypto and commodities. Every trade they make is mirrored in your account in real time — you stay in control of risk.
+      </p>
+<!-- CTAs -->
+<div class="flex flex-col gap-3 w-full mb-8">
+<button class="w-full h-12 rounded-[10px] bg-primary-container text-white font-headline-md font-semibold text-[15px] flex items-center justify-center gap-2 active:opacity-85 transition-opacity">
+          Start copying
+          <span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+</button>
+<button class="w-full h-12 rounded-[10px] border border-white/15 bg-transparent text-white font-headline-md font-medium text-[15px] flex items-center justify-center hover:bg-white/5 active:bg-white/10 transition-colors">
+          See how it works
+        </button>
+</div>
+<!-- Performance Line Chart -->
+<div class="w-full pt-4">
+<div class="flex justify-between items-baseline mb-2">
+<span class="font-label-md text-label-md text-white/50 tracking-wider">PORTFOLIO YIELD DELTA</span>
+<span class="font-data-mono text-tertiary font-semibold text-[13px] tracking-tight">+24.5% · 30d</span>
+</div>
+<!-- SVG Vector Chart -->
+<div class="w-full h-32 relative">
+<svg class="w-full h-full overflow-visible" fill="none" preserveaspectratio="none" viewbox="0 0 342 120">
+<defs>
+<lineargradient id="chartGradient" x1="0%" x2="0%" y1="0%" y2="100%">
+<stop offset="0%" stop-color="#2EE6D3" stop-opacity="0.28"></stop>
+<stop offset="100%" stop-color="#2EE6D3" stop-opacity="0"></stop>
+</lineargradient>
+<lineargradient id="strokeGradient" x1="0%" x2="100%" y1="0%" y2="0%">
+<stop offset="0%" stop-color="#1D4E6F"></stop>
+<stop offset="40%" stop-color="#2EE6D3"></stop>
+<stop offset="100%" stop-color="#51dbcb"></stop>
+</lineargradient>
+</defs>
+<!-- Grid Lines -->
+<line stroke="#1D4E6F" stroke-dasharray="2 2" stroke-opacity="0.35" stroke-width="0.8" x1="0" x2="342" y1="20" y2="20"></line>
+<line stroke="#1D4E6F" stroke-dasharray="2 2" stroke-opacity="0.35" stroke-width="0.8" x1="0" x2="342" y1="60" y2="60"></line>
+<line stroke="#1D4E6F" stroke-dasharray="2 2" stroke-opacity="0.35" stroke-width="0.8" x1="0" x2="342" y1="100" y2="100"></line>
+<!-- Area Fill -->
+<path d="M0,105 Q 35,98 70,82 T 140,75 T 210,48 T 280,32 T 342,12 L 342,120 L 0,120 Z" fill="url(#chartGradient)"></path>
+<!-- Glowing Line -->
+<path d="M0,105 Q 35,98 70,82 T 140,75 T 210,48 T 280,32 T 342,12" stroke="url(#strokeGradient)" stroke-linecap="round" stroke-width="2.5"></path>
+<!-- Terminal Peak Indicator -->
+<circle class="animate-ping" cx="342" cy="12" fill="#2EE6D3" opacity="0.75" r="3.5"></circle>
+<circle cx="342" cy="12" fill="#2EE6D3" r="3.5"></circle>
+</svg>
+</div>
+<!-- Trust indicators hairlines -->
+<div class="mt-4 pt-3 border-t border-white/10 flex justify-between items-center text-[10px] font-data-mono text-white/40 tracking-wider">
+<span>0.04s LATENCY</span>
+<span class="text-white/20">|</span>
+<span>100% VERIFIED HISTORIES</span>
+<span class="text-white/20">|</span>
+<span>AUDITED LEDGERS</span>
+</div>
+</div>
+</div>
+</section>
+<!-- SCROLLING TICKER BAND -->
+<div class="w-full bg-surface-container-lowest border-y border-white/10 overflow-hidden py-2.5">
+<div class="animate-ticker text-[11px] font-data-mono tracking-tight flex items-center">
+<div class="flex items-center space-x-6 pr-6">
+<span class="text-white/70">EUR/USD <span class="text-white">1.0842</span> <span class="text-tertiary">+0.21%</span></span>
+<span class="text-white/20">/</span>
+<span class="text-white/70">BTC/USD <span class="text-white">67,412.00</span> <span class="text-tertiary">+1.84%</span></span>
+<span class="text-white/20">/</span>
+<span class="text-white/70">ETH/USD <span class="text-white">3,540.80</span> <span class="text-tertiary">+2.11%</span></span>
+<span class="text-white/20">/</span>
+<span class="text-white/70">AAPL <span class="text-white">228.14</span> <span class="text-error">-0.42%</span></span>
+<span class="text-white/20">/</span>
+<span class="text-white/70">XAU/USD <span class="text-white">2,384.10</span> <span class="text-tertiary">+0.35%</span></span>
+<span class="text-white/20">/</span>
+<span class="text-white/70">SPX <span class="text-white">5,567.19</span> <span class="text-tertiary">+0.38%</span></span>
+<span class="text-white/20">/</span>
+</div>
+<!-- Duplicate set for continuous wrap -->
+<div class="flex items-center space-x-6 pr-6">
+<span class="text-white/70">EUR/USD <span class="text-white">1.0842</span> <span class="text-tertiary">+0.21%</span></span>
+<span class="text-white/20">/</span>
+<span class="text-white/70">BTC/USD <span class="text-white">67,412.00</span> <span class="text-tertiary">+1.84%</span></span>
+<span class="text-white/20">/</span>
+<span class="text-white/70">ETH/USD <span class="text-white">3,540.80</span> <span class="text-tertiary">+2.11%</span></span>
+<span class="text-white/20">/</span>
+<span class="text-white/70">AAPL <span class="text-white">228.14</span> <span class="text-error">-0.42%</span></span>
+<span class="text-white/20">/</span>
+<span class="text-white/70">XAU/USD <span class="text-white">2,384.10</span> <span class="text-tertiary">+0.35%</span></span>
+<span class="text-white/20">/</span>
+<span class="text-white/70">SPX <span class="text-white">5,567.19</span> <span class="text-tertiary">+0.38%</span></span>
+<span class="text-white/20">/</span>
+</div>
+</div>
+</div>
+<!-- 2x2 OPEN GRID STATS -->
+<section class="w-full bg-[#081424] border-b border-white/10">
+<div class="grid grid-cols-2">
+<!-- Item 1 -->
+<div class="p-5 border-r border-b border-white/10 flex flex-col justify-between">
+<span class="font-headline-lg text-[32px] font-bold text-white tracking-tight leading-none mb-1.5">10,000+</span>
+<span class="font-body-md text-[13px] text-on-surface-variant/80 leading-snug">Active copiers across 4 continents</span>
+</div>
+<!-- Item 2 -->
+<div class="p-5 border-b border-white/10 flex flex-col justify-between">
+<span class="font-headline-lg text-[32px] font-bold text-white tracking-tight leading-none mb-1.5">87%<span class="text-primary-container text-lg align-top">*</span></span>
+<span class="font-body-md text-[13px] text-on-surface-variant/80 leading-snug">Trader win rate*</span>
+</div>
+<!-- Item 3 -->
+<div class="p-5 border-r border-white/10 flex flex-col justify-between">
+<span class="font-headline-lg text-[32px] font-bold text-white tracking-tight leading-none mb-1.5">4.8/5</span>
+<span class="font-body-md text-[13px] text-on-surface-variant/80 leading-snug">User rating across verified reviews</span>
+</div>
+<!-- Item 4 -->
+<div class="p-5 flex flex-col justify-between">
+<span class="font-headline-lg text-[32px] font-bold text-white tracking-tight leading-none mb-1.5">24/7</span>
+<span class="font-body-md text-[13px] text-on-surface-variant/80 leading-snug">Institutional desk &amp; live support</span>
+</div>
+</div>
+<div class="px-margin py-2.5 bg-surface-container-lowest/50 text-[10px] font-data-mono text-white/40">
+      *Past performance of top-ranked traders. Not a guarantee of future results.
+    </div>
+</section>
+<!-- HOW COPY TRADING WORKS (OFF-WHITE LIGHT SECTION) -->
+<section class="w-full bg-[#F8FAFC] text-[#0A1626] py-12 px-margin">
+<div class="mb-8">
+<span class="font-label-md text-label-md text-primary-container tracking-widest block mb-1">01 — EXECUTION BLUEPRINT</span>
+<h2 class="text-headline-md font-headline-md font-bold text-[#0A1626] tracking-tight">How copy trading works.</h2>
+</div>
+<div class="flex flex-col border-t border-[#0A1626]/10">
+<!-- Step 01 -->
+<div class="py-6 border-b border-[#0A1626]/10 flex flex-col">
+<div class="flex items-baseline justify-between mb-2">
+<span class="font-headline-lg text-[38px] font-light text-[#0A1626]/30 leading-none">01</span>
+<span class="font-label-md text-[10px] text-[#0A1626]/40 tracking-wider">ONBOARDING</span>
+</div>
+<h3 class="font-headline-md text-lg font-bold text-[#0A1626] mb-1.5">Create &amp; verify your account</h3>
+<p class="font-body-md text-[14px] text-[#334155] leading-relaxed">
+          Register in under 3 minutes with standard KYC. Your dedicated custodial sub-account is segregated under tier-1 banking protections.
+        </p>
+</div>
+<!-- Step 02 -->
+<div class="py-6 border-b border-[#0A1626]/10 flex flex-col">
+<div class="flex items-baseline justify-between mb-2">
+<span class="font-headline-lg text-[38px] font-light text-[#0A1626]/30 leading-none">02</span>
+<span class="font-label-md text-[10px] text-[#0A1626]/40 tracking-wider">CUSTODY &amp; DEPOSIT</span>
+</div>
+<h3 class="font-headline-md text-lg font-bold text-[#0A1626] mb-1.5">Fund your wallet — bank, crypto or PayPal</h3>
+<p class="font-body-md text-[14px] text-[#334155] leading-relaxed">
+          Zero deposit fees across multi-currency wires, SEPA, Visa, Mastercard, USDT/USDC, and PayPal. Start copying with as little as $50.
+        </p>
+</div>
+<!-- Step 03 -->
+<div class="py-6 border-b border-[#0A1626]/10 flex flex-col">
+<div class="flex items-baseline justify-between mb-2">
+<span class="font-headline-lg text-[38px] font-light text-[#0A1626]/30 leading-none">03</span>
+<span class="font-label-md text-[10px] text-[#0A1626]/40 tracking-wider">SELECTION</span>
+</div>
+<h3 class="font-headline-md text-lg font-bold text-[#0A1626] mb-1.5">Pick a trader by return, risk and style</h3>
+<p class="font-body-md text-[14px] text-[#334155] leading-relaxed">
+          Inspect audited histories, maximum drawdowns, average trade duration, and portfolio diversification. Filter by algorithmic, swing, or macro strategies.
+        </p>
+</div>
+<!-- Step 04 -->
+<div class="py-6 border-b border-[#0A1626]/10 flex flex-col">
+<div class="flex items-baseline justify-between mb-2">
+<span class="font-headline-lg text-[38px] font-light text-[#0A1626]/30 leading-none">04</span>
+<span class="font-label-md text-[10px] text-[#0A1626]/40 tracking-wider">AUTOMATION</span>
+</div>
+<h3 class="font-headline-md text-lg font-bold text-[#0A1626] mb-1.5">Copy automatically, stop anytime</h3>
+<p class="font-body-md text-[14px] text-[#334155] leading-relaxed">
+          Proportional position sizing mirrors every opening and closing tick instantly. Pause, modify stop-loss levels, or liquidate positions with a single tap.
+        </p>
+</div>
+</div>
+</section>
+<!-- TOP TRADERS LEDGER TABLE -->
+<section class="w-full bg-[#081424] py-10 px-margin border-b border-white/10">
+<div class="flex flex-col mb-6">
+<span class="font-label-md text-[11px] text-tertiary tracking-widest block mb-1">LEADERBOARD // AUDITED SHARPE RATIO</span>
+<h2 class="text-headline-md font-headline-md font-bold text-white tracking-tight">Top traders this month</h2>
+</div>
+<!-- Compact Ledger List -->
+<div class="flex flex-col divide-y divide-white/10 border-y border-white/10">
+<!-- Trader 1 -->
+<div class="py-3.5 flex items-center justify-between active-row-indicator">
+<div class="flex items-center gap-3">
+<div class="w-9 h-9 rounded-full bg-secondary-container flex items-center justify-center font-headline-md font-semibold text-xs text-white">
+            EV
+          </div>
+<div>
+<div class="font-headline-md font-semibold text-sm text-white leading-tight">Elena Vasquez</div>
+<div class="font-data-mono text-[11px] text-white/50">Forex · London Breakout</div>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<div class="flex flex-col items-end">
+<!-- Sparkline SVG -->
+<svg class="w-12 h-4 mb-0.5" fill="none" viewbox="0 0 48 16">
+<path d="M1,14 L12,10 L24,12 L34,4 L47,2" stroke="#2EE6D3" stroke-linecap="round" stroke-width="1.5"></path>
+</svg>
+<span class="font-data-mono text-tertiary font-semibold text-xs">+38.2%</span>
+</div>
+<button class="text-primary-container font-headline-md font-semibold text-xs hover:underline flex items-center">
+            Copy →
+          </button>
+</div>
+</div>
+<!-- Trader 2 -->
+<div class="py-3.5 flex items-center justify-between active-row-indicator">
+<div class="flex items-center gap-3">
+<div class="w-9 h-9 rounded-full bg-surface-variant flex items-center justify-center font-headline-md font-semibold text-xs text-white">
+            MC
+          </div>
+<div>
+<div class="font-headline-md font-semibold text-sm text-white leading-tight">Marcus Chen</div>
+<div class="font-data-mono text-[11px] text-white/50">Crypto · Trend Momentum</div>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<div class="flex flex-col items-end">
+<svg class="w-12 h-4 mb-0.5" fill="none" viewbox="0 0 48 16">
+<path d="M1,15 L14,13 L22,8 L36,9 L47,1" stroke="#2EE6D3" stroke-linecap="round" stroke-width="1.5"></path>
+</svg>
+<span class="font-data-mono text-tertiary font-semibold text-xs">+52.7%</span>
+</div>
+<button class="text-primary-container font-headline-md font-semibold text-xs hover:underline flex items-center">
+            Copy →
+          </button>
+</div>
+</div>
+<!-- Trader 3 -->
+<div class="py-3.5 flex items-center justify-between active-row-indicator">
+<div class="flex items-center gap-3">
+<div class="w-9 h-9 rounded-full bg-surface-bright flex items-center justify-center font-headline-md font-semibold text-xs text-white">
+            AR
+          </div>
+<div>
+<div class="font-headline-md font-semibold text-sm text-white leading-tight">Aisha Rahman</div>
+<div class="font-data-mono text-[11px] text-white/50">Equities · Global Tech</div>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<div class="flex flex-col items-end">
+<svg class="w-12 h-4 mb-0.5" fill="none" viewbox="0 0 48 16">
+<path d="M1,11 L10,13 L20,7 L35,8 L47,3" stroke="#2EE6D3" stroke-linecap="round" stroke-width="1.5"></path>
+</svg>
+<span class="font-data-mono text-tertiary font-semibold text-xs">+21.4%</span>
+</div>
+<button class="text-primary-container font-headline-md font-semibold text-xs hover:underline flex items-center">
+            Copy →
+          </button>
+</div>
+</div>
+<!-- Trader 4 -->
+<div class="py-3.5 flex items-center justify-between active-row-indicator">
+<div class="flex items-center gap-3">
+<div class="w-9 h-9 rounded-full bg-surface-container-high flex items-center justify-center font-headline-md font-semibold text-xs text-white">
+            LB
+          </div>
+<div>
+<div class="font-headline-md font-semibold text-sm text-white leading-tight">Lukas Brandt</div>
+<div class="font-data-mono text-[11px] text-white/50">Commodities · Energy Mean Revert</div>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<div class="flex flex-col items-end">
+<svg class="w-12 h-4 mb-0.5" fill="none" viewbox="0 0 48 16">
+<path d="M1,9 L12,12 L25,10 L33,6 L47,4" stroke="#2EE6D3" stroke-linecap="round" stroke-width="1.5"></path>
+</svg>
+<span class="font-data-mono text-tertiary font-semibold text-xs">+17.9%</span>
+</div>
+<button class="text-primary-container font-headline-md font-semibold text-xs hover:underline flex items-center">
+            Copy →
+          </button>
+</div>
+</div>
+<!-- Trader 5 -->
+<div class="py-3.5 flex items-center justify-between active-row-indicator">
+<div class="flex items-center gap-3">
+<div class="w-9 h-9 rounded-full bg-secondary-container flex items-center justify-center font-headline-md font-semibold text-xs text-white">
+            SM
+          </div>
+<div>
+<div class="font-headline-md font-semibold text-sm text-white leading-tight">Sofia Moretti</div>
+<div class="font-data-mono text-[11px] text-white/50">Options · Quantitative Vol</div>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<div class="flex flex-col items-end">
+<svg class="w-12 h-4 mb-0.5" fill="none" viewbox="0 0 48 16">
+<path d="M1,13 L13,11 L23,12 L35,5 L47,2" stroke="#2EE6D3" stroke-linecap="round" stroke-width="1.5"></path>
+</svg>
+<span class="font-data-mono text-tertiary font-semibold text-xs">+26.3%</span>
+</div>
+<button class="text-primary-container font-headline-md font-semibold text-xs hover:underline flex items-center">
+            Copy →
+          </button>
+</div>
+</div>
+</div>
+<!-- Directory Link -->
+<div class="mt-5">
+<a class="font-label-md text-xs text-on-surface hover:text-primary-container tracking-wider flex items-center gap-1 transition-colors" href="#">
+        View full trader directory →
+      </a>
+</div>
+</section>
+<!-- ALLOCATION DONUT & RISK ARCHITECTURE SECTION -->
+<section class="w-full bg-[#0A1626] py-12 px-margin border-b border-white/10">
+<div class="mb-6">
+<span class="font-label-md text-[11px] text-white/50 tracking-widest block mb-1">GUARDIAN ARCHITECTURE</span>
+<h2 class="text-headline-md font-headline-md font-bold text-white tracking-tight">Risk managed, not ignored.</h2>
+</div>
+<!-- Segmented Donut Chart & Legend -->
+<div class="py-6 border-y border-white/10 flex flex-col items-center">
+<div class="relative w-44 h-44 mb-6">
+<!-- SVG Donut Chart -->
+<svg class="w-full h-full -rotate-90" viewbox="0 0 100 100">
+<!-- Forex 35% -> stroke-dasharray="35 65" offset 0 -->
+<circle cx="50" cy="50" fill="transparent" r="38" stroke="#2EE6D3" stroke-dasharray="35 65" stroke-dashoffset="0" stroke-width="8"></circle>
+<!-- Crypto 25% -> stroke-dasharray="25 75" offset -35 -->
+<circle cx="50" cy="50" fill="transparent" r="38" stroke="#E3262F" stroke-dasharray="25 75" stroke-dashoffset="-35" stroke-width="8"></circle>
+<!-- Stocks 25% -> stroke-dasharray="25 75" offset -60 -->
+<circle cx="50" cy="50" fill="transparent" r="38" stroke="#9FCBF2" stroke-dasharray="25 75" stroke-dashoffset="-60" stroke-width="8"></circle>
+<!-- Commodities 15% -> stroke-dasharray="15 85" offset -85 -->
+<circle cx="50" cy="50" fill="transparent" opacity="0.6" r="38" stroke="#51DBCB" stroke-dasharray="15 85" stroke-dashoffset="-85" stroke-width="8"></circle>
+</svg>
+<div class="absolute inset-0 flex flex-col items-center justify-center text-center">
+<span class="font-data-mono text-[10px] text-white/50 tracking-wider">BALANCED</span>
+<span class="font-headline-md text-base font-bold text-white">MODEL</span>
+</div>
+</div>
+<!-- Plain Text Legend (NO PILLS, NO CHIPS) -->
+<div class="grid grid-cols-2 gap-x-6 gap-y-2 w-full text-xs font-data-mono">
+<div class="flex items-center justify-between border-b border-white/5 pb-1">
+<span class="text-tertiary">● Forex</span>
+<span class="text-white">35%</span>
+</div>
+<div class="flex items-center justify-between border-b border-white/5 pb-1">
+<span class="text-primary-container">● Crypto</span>
+<span class="text-white">25%</span>
+</div>
+<div class="flex items-center justify-between border-b border-white/5 pb-1">
+<span class="text-[#9FCBF2]">● Stocks</span>
+<span class="text-white">25%</span>
+</div>
+<div class="flex items-center justify-between border-b border-white/5 pb-1">
+<span class="text-[#51DBCB]/80">● Commodities</span>
+<span class="text-white">15%</span>
+</div>
+</div>
+</div>
+<!-- Risk Safeguards List -->
+<div class="flex flex-col divide-y divide-white/10">
+<div class="py-4">
+<h3 class="font-headline-md font-semibold text-sm text-white mb-1">Copy stop-loss</h3>
+<p class="font-body-md text-xs text-white/60 leading-relaxed">
+          Define maximum tolerable drawdown per trader. If cumulative loss breaches threshold, positions unwind automatically.
+        </p>
+</div>
+<div class="py-4">
+<h3 class="font-headline-md font-semibold text-sm text-white mb-1">Allocation limits</h3>
+<p class="font-body-md text-xs text-white/60 leading-relaxed">
+          Restrict total wallet exposure to any single strategy. Balance allocations across unrelated asset classes.
+        </p>
+</div>
+<div class="py-4">
+<h3 class="font-headline-md font-semibold text-sm text-white mb-1">Real-time monitoring</h3>
+<p class="font-body-md text-xs text-white/60 leading-relaxed">
+          Continuous variance audits alert you to deviation in trader behavior.
+        </p>
+</div>
+</div>
+</section>
+<!-- PULL-QUOTE TESTIMONIAL SECTION -->
+<section class="w-full bg-[#081424] py-12 px-margin border-b border-white/10 relative overflow-hidden">
+<div class="text-primary-container font-headline-lg text-[64px] leading-none mb-1 select-none font-serif">“</div>
+<blockquote class="font-body-lg text-lg text-white leading-snug mb-5">
+      I'm a software engineer who used to lose money trying to day-trade between standups. With TED, I allocated $12k across Elena and Marcus. My account grew 34% this year without me opening a chart once.
+    </blockquote>
+<div class="font-data-mono text-[11px] text-tertiary tracking-wider uppercase">
+      Sarah M. · COPYING SINCE 2024 · VERIFIED INVESTOR
+    </div>
+</section>
+<!-- RED-TO-INK FULL-WIDTH CTA BAND -->
+<section class="w-full bg-gradient-to-b from-primary-container to-[#0A1626] py-12 px-margin text-center">
+<span class="font-data-mono text-[11px] text-white/80 tracking-widest block mb-2">INSTANT SETUP · NO CODING REQUIRED</span>
+<h2 class="text-headline-md font-headline-md font-bold text-white tracking-tight leading-tight mb-3">
+      Your first copied trade is minutes away.
+    </h2>
+<p class="font-body-md text-sm text-white/80 leading-relaxed mb-6">
+      Join 10,000+ investors who let professional traders do the heavy lifting while maintaining complete control of their funds.
+    </p>
+<a class="inline-flex w-full h-12 rounded-[10px] bg-white text-[#0A1626] font-headline-md font-bold text-sm items-center justify-center hover:bg-neutral-100 active:bg-neutral-200 transition-colors" href="#">
+      Create free account →
+    </a>
+</section>
+<!-- MOBILE ACCORDION FOOTER & DISCLOSURES -->
+<footer class="w-full bg-surface-container-lowest py-10 px-margin border-t border-surface-container-highest">
+<!-- Brand Anchor -->
+<div class="mb-8">
+<span class="text-headline-md font-headline-md font-bold text-white">TED<span class="text-primary-container font-headline-md">.</span></span>
+<span class="text-headline-md font-headline-md font-normal text-white/90">Brokers</span>
+</div>
+<!-- Accordion Nav Groups -->
+<div class="border-t border-white/10 divide-y divide-white/10 mb-8 text-sm">
+<details class="group py-3 cursor-pointer">
+<summary class="flex justify-between items-center list-none font-headline-md text-white font-medium">
+          Company
+          <span class="font-data-mono text-white/40 group-open:rotate-45 transition-transform">+</span>
+</summary>
+<div class="pt-3 pb-1 flex flex-col space-y-2 text-white/60 font-body-md text-xs">
+<a class="hover:text-white" href="#">About TED Brokers</a>
+<a class="hover:text-white" href="#">Execution Engine</a>
+<a class="hover:text-white" href="#">Institutional Custody</a>
+<a class="hover:text-white" href="#">Careers</a>
+</div>
+</details>
+<details class="group py-3 cursor-pointer">
+<summary class="flex justify-between items-center list-none font-headline-md text-white font-medium">
+          Resources
+          <span class="font-data-mono text-white/40 group-open:rotate-45 transition-transform">+</span>
+</summary>
+<div class="pt-3 pb-1 flex flex-col space-y-2 text-white/60 font-body-md text-xs">
+<a class="hover:text-white" href="#">Markets &amp; Instruments</a>
+<a class="hover:text-white" href="#">Top Traders</a>
+<a class="hover:text-white" href="#">Copy Trading Guide</a>
+<a class="hover:text-white" href="#">API &amp; Algo Documentation</a>
+</div>
+</details>
+<details class="group py-3 cursor-pointer">
+<summary class="flex justify-between items-center list-none font-headline-md text-white font-medium">
+          Legal &amp; Policy
+          <span class="font-data-mono text-white/40 group-open:rotate-45 transition-transform">+</span>
+</summary>
+<div class="pt-3 pb-1 flex flex-col space-y-2 text-white/60 font-body-md text-xs">
+<a class="hover:text-white" href="#">Regulatory Disclosures</a>
+<a class="hover:text-white" href="#">Risk Warning</a>
+<a class="hover:text-white" href="#">Terms of Business</a>
+<a class="hover:text-white" href="#">Privacy Notice</a>
+</div>
+</details>
+</div>
+<!-- Regulatory Warning & High-Risk Investment Notice -->
+<div class="border-t border-white/10 pt-6 mb-6">
+<p class="font-body-md text-[11px] text-white/40 leading-relaxed mb-3">
+        High Risk Investment Notice: Trading Financial Instruments including Forex, Cryptocurrencies, Contracts for Difference (CFDs), and Stocks carries a high level of risk to your capital and you may lose more than your initial deposit. Copy Trading is an investment management service and does not constitute personalized investment advice.
+      </p>
+<p class="font-body-md text-[11px] text-white/40 leading-relaxed">
+        TED Brokers does not solicit clients where local regulations prohibit copy-trading services. © 2025 TED Brokers Ltd. High Risk Investment Notice: CFDs, FX and copy trading carry high risk.
+      </p>
+</div>
+<!-- Metadata & Copyright -->
+<div class="flex flex-col gap-2 font-data-mono text-[10px] text-white/30 border-t border-white/5 pt-4">
+<div>© 2025 TED BROKERS LTD. ALL RIGHTS RESERVED. · CRN: 4892019</div>
+<div class="flex items-center gap-1.5 text-white/50">
+<span class="material-symbols-outlined text-[14px]">language</span>
+<span>GLOBAL / ENGLISH (US)</span>
+</div>
+</div>
+</footer>
+<!-- BOTTOM NAVIGATION BAR (FIXED MOBILE SHELL) -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-margin py-space-xs bg-surface-container-lowest dark:bg-surface-container-lowest border-t border-surface-container-highest dark:border-surface-container-highest">
+<!-- Active Destination: Markets (Homepage) -->
+<a class="flex flex-col items-center justify-center text-primary-container dark:text-primary-container py-space-xs active:scale-95 transition-transform duration-100" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="show_chart">show_chart</span>
+<span class="text-label-md font-label-md text-[10px] tracking-tight mt-0.5">Markets</span>
+</a>
+<!-- Destination 2: Copy -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-on-surface-variant py-space-xs active:scale-95 transition-transform duration-100 hover:text-on-surface dark:hover:text-on-surface" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="group_work">group_work</span>
+<span class="text-label-md font-label-md text-[10px] tracking-tight mt-0.5">Copy</span>
+</a>
+<!-- Destination 3: Portfolio -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-on-surface-variant py-space-xs active:scale-95 transition-transform duration-100 hover:text-on-surface dark:hover:text-on-surface" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="account_balance_wallet">account_balance_wallet</span>
+<span class="text-label-md font-label-md text-[10px] tracking-tight mt-0.5">Portfolio</span>
+</a>
+<!-- Destination 4: Menu -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-on-surface-variant py-space-xs active:scale-95 transition-transform duration-100 hover:text-on-surface dark:hover:text-on-surface" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="menu">menu</span>
+<span class="text-label-md font-label-md text-[10px] tracking-tight mt-0.5">Menu</span>
+</a>
+</nav>
+</body></html>

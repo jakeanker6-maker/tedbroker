@@ -1,0 +1,1132 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>TED Brokers — Copy the traders who win. Automatically.</title>
+<!-- Tailwind CSS CDN -->
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&amp;family=Sora:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        fontFamily: {
+          sans: ['Sora', 'sans-serif'],
+          mono: ['"JetBrains Mono"', 'monospace'],
+        },
+        colors: {
+          brand: {
+            ink: '#0A1626',
+            inkDark: '#050D18',
+            inkLight: '#112238',
+            red: '#E3262F',
+            redHover: '#C81E26',
+            teal: '#00E5BE',
+            tealMuted: '#00B899',
+            lightBg: '#F7F8FA',
+            lightBorder: '#E2E5EA',
+          }
+        },
+        animation: {
+          'ticker': 'ticker 35s linear infinite',
+          'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+          'float': 'float 6s ease-in-out infinite',
+        },
+        keyframes: {
+          ticker: {
+            '0%': { transform: 'translateX(0%)' },
+            '100%': { transform: 'translateX(-50%)' },
+          },
+          float: {
+            '0%, 100%': { transform: 'translateY(0px)' },
+            '50%': { transform: 'translateY(-6px)' },
+          }
+        }
+      }
+    }
+  }
+</script>
+<style>
+  /* Custom Hairline Dividers & Resets */
+  .hairline-b { border-bottom: 1px solid rgba(255, 255, 255, 0.08); }
+  .hairline-t { border-top: 1px solid rgba(255, 255, 255, 0.08); }
+  .hairline-r { border-right: 1px solid rgba(255, 255, 255, 0.08); }
+  .hairline-l { border-left: 1px solid rgba(255, 255, 255, 0.08); }
+  
+  .hairline-light-b { border-bottom: 1px solid #E2E5EA; }
+  .hairline-light-t { border-top: 1px solid #E2E5EA; }
+  .hairline-light-r { border-right: 1px solid #E2E5EA; }
+
+  /* Radial glow mesh backdrop */
+  .mesh-glow {
+    background: 
+      radial-gradient(circle at 75% 20%, rgba(227, 38, 47, 0.18) 0%, transparent 45%),
+      radial-gradient(circle at 85% 70%, rgba(0, 229, 190, 0.12) 0%, transparent 50%),
+      radial-gradient(circle at 30% 90%, rgba(255, 180, 0, 0.08) 0%, transparent 40%),
+      #0A1626;
+  }
+
+  /* Outline numbers */
+  .num-outline {
+    -webkit-text-stroke: 1.5px #CBD2DB;
+    color: transparent;
+  }
+
+  /* Table row hover indicator */
+  .ruled-row {
+    position: relative;
+    transition: background-color 0.2s ease;
+  }
+  .ruled-row::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 3px;
+    background-color: #E3262F;
+    transform: scaleY(0);
+    transition: transform 0.2s ease;
+  }
+  .ruled-row:hover::before {
+    transform: scaleY(1);
+  }
+  .ruled-row:hover {
+    background-color: rgba(227, 38, 47, 0.025);
+  }
+
+  /* Dot matrix canvas styling */
+  canvas#dotMatrixGlobe {
+    opacity: 0.85;
+  }
+</style>
+</head>
+<body class="bg-[#0A1626] text-white font-sans antialiased selection:bg-[#E3262F] selection:text-white">
+<!-- 1. TRANSPARENT HEADER OVER DARK INK HERO -->
+<header class="w-full relative z-40 bg-[#0A1626]/90 backdrop-blur-md hairline-b transition-colors duration-200">
+<div class="max-w-[1400px] mx-auto px-6 lg:px-12 h-20 flex items-center justify-between">
+<!-- Wordmark: TED (red) + Brokers (white) with 'o' as dot cluster -->
+<a class="flex items-center space-x-1 tracking-tight select-none group" href="#">
+<span class="font-extrabold text-2xl tracking-tighter text-[#E3262F]">TED</span>
+<span class="font-bold text-2xl tracking-tight text-white flex items-center">
+          Br
+          <!-- Custom Dot Cluster for the 'o' -->
+<span class="inline-grid grid-cols-2 gap-[2.5px] w-4 h-4 mx-[1.5px] items-center justify-center p-[1px] relative top-[-1px]">
+<span class="w-[4px] h-[4px] bg-[#E3262F] rounded-full group-hover:scale-125 transition-transform"></span>
+<span class="w-[4px] h-[4px] bg-white rounded-full"></span>
+<span class="w-[4px] h-[4px] bg-[#00E5BE] rounded-full"></span>
+<span class="w-[4px] h-[4px] bg-white rounded-full"></span>
+</span>
+          kers
+        </span>
+</a>
+<!-- Primary Text Nav Links (NO pills/badges) -->
+<nav class="hidden md:flex items-center space-x-8 text-sm font-medium tracking-wide">
+<a class="text-white/70 hover:text-white transition-colors" href="#markets">Markets</a>
+<a class="text-white hover:text-white flex items-center gap-1.5 transition-colors" href="#copy-trading">
+          Copy trading
+          <span class="w-1.5 h-1.5 rounded-full bg-[#00E5BE] animate-ping"></span>
+</a>
+<a class="text-white/70 hover:text-white transition-colors" href="#investors">Investors</a>
+<a class="text-white/70 hover:text-white transition-colors" href="#traders">Traders</a>
+<a class="text-white/70 hover:text-white transition-colors" href="#company">Company</a>
+<a class="text-white/70 hover:text-white transition-colors" href="#help">Help</a>
+</nav>
+<!-- Right Nav Actions -->
+<div class="flex items-center space-x-6 text-sm">
+<button class="font-mono text-xs text-white/60 hover:text-white flex items-center gap-1 tracking-wider uppercase">
+<span>EN</span>
+<svg class="w-3 h-3 text-white/40" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</button>
+<a class="text-white/80 hover:text-white font-medium transition-colors" href="#signin">Sign in</a>
+<!-- Red primary button -->
+<a class="inline-flex items-center justify-center bg-[#E3262F] hover:bg-[#C81E26] text-white px-5 py-2.5 font-medium tracking-tight transition-all duration-150 active:translate-y-0.5" href="#signup">
+          Get started <span class="ml-1.5 font-mono text-base">→</span>
+</a>
+</div>
+</div>
+</header>
+<!-- 2. HERO SECTION -->
+<section class="relative w-full mesh-glow overflow-hidden hairline-b">
+<!-- Kinetic Particle Canvas for hero background -->
+<canvas class="absolute inset-0 pointer-events-none w-full h-full opacity-40" id="heroParticles"></canvas>
+<div class="max-w-[1400px] mx-auto px-6 lg:px-12 py-20 lg:py-28 relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
+<!-- Left Hero Content -->
+<div class="lg:col-span-6 xl:col-span-7 flex flex-col justify-center">
+<!-- Live overline in teal mono - NOT a pill/chip, plain text -->
+<div class="flex items-center space-x-2 text-xs font-mono tracking-widest text-[#00E5BE] mb-6">
+<span class="inline-block w-2 h-2 rounded-full bg-[#00E5BE] animate-pulse"></span>
+<span>LIVE · 2,431 TRADES COPIED TODAY</span>
+</div>
+<!-- Huge Sora Headline -->
+<h1 class="text-5xl sm:text-6xl xl:text-7xl font-extrabold tracking-tight text-white leading-[1.08] mb-8">
+          Copy the traders who <span class="text-[#E3262F]">win.</span> Automatically.
+        </h1>
+<!-- Subcopy -->
+<p class="text-lg lg:text-xl text-white/70 font-normal leading-relaxed max-w-2xl mb-10">
+          Follow verified traders across forex, stocks, crypto and commodities. Every trade they make is mirrored in your account in real time — you stay in control of risk.
+        </p>
+<!-- CTA Buttons -->
+<div class="flex flex-wrap items-center gap-5">
+<a class="inline-flex items-center justify-center bg-[#E3262F] hover:bg-[#C81E26] text-white text-base font-semibold px-8 py-4 transition-all duration-150" href="#start">
+            Start copying <span class="ml-2 font-mono">→</span>
+</a>
+<a class="inline-flex items-center justify-center border border-white/20 hover:border-white/50 text-white text-base font-medium px-7 py-4 transition-colors" href="#how-it-works">
+            See how it works
+          </a>
+</div>
+<!-- Secondary telemetry text below buttons -->
+<div class="mt-12 flex items-center space-x-8 text-xs font-mono text-white/40 tracking-wider">
+<div><span class="text-white/80 font-semibold">0.04s</span> LATENCY</div>
+<div class="h-3 w-px bg-white/10"></div>
+<div><span class="text-white/80 font-semibold">100%</span> VERIFIED HISTORIES</div>
+<div class="h-3 w-px bg-white/10"></div>
+<div><span class="text-white/80 font-semibold">FSCA &amp; FSA</span> LICENSED</div>
+</div>
+</div>
+<!-- Right Interactive Visual (Globe + Live Chart + Plain Text Trader Row, NO CARDS) -->
+<div class="lg:col-span-6 xl:col-span-5 relative flex flex-col items-center justify-center">
+<div class="relative w-full aspect-square max-w-[540px]">
+<!-- Dot matrix globe with connecting arcs -->
+<canvas class="w-full h-full block" height="540" id="dotMatrixGlobe" width="540"></canvas>
+<!-- Floating Live Equity Line Chart Overlay (Plain Glass / Line overlay, NO CARD styling) -->
+<div class="absolute top-10 right-4 lg:right-0 w-72 backdrop-blur-md bg-[#0A1626]/85 border-b border-r border-[#00E5BE]/30 p-4 animate-float">
+<div class="flex items-center justify-between mb-2">
+<span class="font-mono text-[11px] text-white/50 uppercase tracking-widest">Real-time Performance</span>
+<!-- Tooltip: +24.5% · 30d in teal mono -->
+<span class="font-mono text-xs font-bold text-[#00E5BE] tracking-tight bg-[#00E5BE]/10 px-1.5 py-0.5 border border-[#00E5BE]/30">
+                +24.5% · 30d
+              </span>
+</div>
+<!-- SVG Equity Sparkline with Glowing Gradient -->
+<svg class="w-full h-20 overflow-visible" viewbox="0 0 260 70">
+<defs>
+<lineargradient id="equityGlow" x1="0" x2="0" y1="0" y2="1">
+<stop offset="0%" stop-color="#00E5BE" stop-opacity="0.3"></stop>
+<stop offset="100%" stop-color="#00E5BE" stop-opacity="0"></stop>
+</lineargradient>
+</defs>
+<!-- Filled area -->
+<path d="M 0,55 Q 35,48 70,50 T 140,32 T 200,22 T 260,8 L 260,70 L 0,70 Z" fill="url(#equityGlow)"></path>
+<!-- Stroke line -->
+<path d="M 0,55 Q 35,48 70,50 T 140,32 T 200,22 T 260,8" fill="none" stroke="#00E5BE" stroke-linecap="round" stroke-width="2.5"></path>
+<!-- Active trade ping -->
+<circle class="animate-ping" cx="260" cy="8" fill="#00E5BE" r="4"></circle>
+<circle cx="260" cy="8" fill="#FFFFFF" r="3"></circle>
+</svg>
+<div class="flex justify-between items-center mt-2 text-[10px] font-mono text-white/40">
+<span>DAY 0</span>
+<span>LIVE REPLICATION</span>
+<span>NOW</span>
+</div>
+</div>
+<!-- Trader Avatar Row (Strictly Plain Text, NOT A CARD) -->
+<div class="absolute bottom-6 left-2 lg:left-0 flex items-center space-x-3 backdrop-blur-md bg-[#0A1626]/90 hairline-b py-2 px-3">
+<!-- Circular avatar -->
+<img alt="Elena V." class="w-9 h-9 rounded-full object-cover border border-white/20" src="https://www.gstatic.com/labs-code/stitch/stitch-placeholder-300x300.svg"/>
+<div class="font-mono text-xs">
+<span class="text-white font-semibold">Elena V.</span>
+<span class="text-[#00E5BE] font-bold ml-2">▲ 38.2% YTD</span>
+</div>
+<div class="h-3 w-px bg-white/20 mx-1"></div>
+<div class="text-[11px] font-mono text-white/50 tracking-wider">
+              1,419 COPIERS
+            </div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- 3. FULL-WIDTH SCROLLING TICKER BAND -->
+<div class="w-full bg-[#050D18] hairline-t hairline-b py-3 overflow-hidden select-none">
+<div class="flex whitespace-nowrap animate-ticker font-mono text-xs tracking-wider">
+<!-- Repeated items for continuous loop -->
+<div class="flex items-center space-x-12 shrink-0 pr-12">
+<span class="flex items-center gap-1.5"><span class="text-white/60">EUR/USD</span> <span class="text-white">1.0842</span> <span class="text-[#00E5BE]">▲0.21%</span></span>
+<span class="text-white/20">·</span>
+<span class="flex items-center gap-1.5"><span class="text-white/60">BTC/USD</span> <span class="text-white">67,412</span> <span class="text-[#00E5BE]">▲1.84%</span></span>
+<span class="text-white/20">·</span>
+<span class="flex items-center gap-1.5"><span class="text-white/60">AAPL</span> <span class="text-white">228.14</span> <span class="text-[#E3262F]">▼0.42%</span></span>
+<span class="text-white/20">·</span>
+<span class="flex items-center gap-1.5"><span class="text-white/60">XAU/USD</span> <span class="text-white">2,384</span> <span class="text-[#00E5BE]">▲0.35%</span></span>
+<span class="text-white/20">·</span>
+<span class="flex items-center gap-1.5"><span class="text-white/60">NAS100</span> <span class="text-white">19,880</span> <span class="text-[#00E5BE]">▲0.66%</span></span>
+<span class="text-white/20">·</span>
+<span class="flex items-center gap-1.5"><span class="text-white/60">NVDA</span> <span class="text-white">128.80</span> <span class="text-[#00E5BE]">▲2.15%</span></span>
+<span class="text-white/20">·</span>
+<span class="flex items-center gap-1.5"><span class="text-white/60">ETH/USD</span> <span class="text-white">3,540</span> <span class="text-[#E3262F]">▼0.88%</span></span>
+<span class="text-white/20">·</span>
+<span class="flex items-center gap-1.5"><span class="text-white/60">GBP/USD</span> <span class="text-white">1.2915</span> <span class="text-[#00E5BE]">▲0.12%</span></span>
+<span class="text-white/20">·</span>
+</div>
+<div class="flex items-center space-x-12 shrink-0 pr-12">
+<span class="flex items-center gap-1.5"><span class="text-white/60">EUR/USD</span> <span class="text-white">1.0842</span> <span class="text-[#00E5BE]">▲0.21%</span></span>
+<span class="text-white/20">·</span>
+<span class="flex items-center gap-1.5"><span class="text-white/60">BTC/USD</span> <span class="text-white">67,412</span> <span class="text-[#00E5BE]">▲1.84%</span></span>
+<span class="text-white/20">·</span>
+<span class="flex items-center gap-1.5"><span class="text-white/60">AAPL</span> <span class="text-white">228.14</span> <span class="text-[#E3262F]">▼0.42%</span></span>
+<span class="text-white/20">·</span>
+<span class="flex items-center gap-1.5"><span class="text-white/60">XAU/USD</span> <span class="text-white">2,384</span> <span class="text-[#00E5BE]">▲0.35%</span></span>
+<span class="text-white/20">·</span>
+<span class="flex items-center gap-1.5"><span class="text-white/60">NAS100</span> <span class="text-white">19,880</span> <span class="text-[#00E5BE]">▲0.66%</span></span>
+<span class="text-white/20">·</span>
+<span class="flex items-center gap-1.5"><span class="text-white/60">NVDA</span> <span class="text-white">128.80</span> <span class="text-[#00E5BE]">▲2.15%</span></span>
+<span class="text-white/20">·</span>
+<span class="flex items-center gap-1.5"><span class="text-white/60">ETH/USD</span> <span class="text-white">3,540</span> <span class="text-[#E3262F]">▼0.88%</span></span>
+<span class="text-white/20">·</span>
+<span class="flex items-center gap-1.5"><span class="text-white/60">GBP/USD</span> <span class="text-white">1.2915</span> <span class="text-[#00E5BE]">▲0.12%</span></span>
+<span class="text-white/20">·</span>
+</div>
+</div>
+</div>
+<!-- 4. STATS STRIP ON INK (FOUR OPEN COLUMNS DIVIDED BY VERTICAL HAIRLINES) -->
+<section class="w-full bg-[#0A1626] hairline-b py-20">
+<div class="max-w-[1400px] mx-auto px-6 lg:px-12">
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
+<!-- Col 1 -->
+<div class="py-6 lg:py-0 lg:pr-8 lg:hairline-r">
+<p class="font-mono text-xs uppercase tracking-widest text-white/50 mb-3">ACTIVE COPIERS</p>
+<p class="font-mono text-5xl xl:text-6xl font-extrabold text-white tracking-tight">10,000+</p>
+<p class="text-sm text-white/60 mt-3 font-normal">Allocating across 4 continents</p>
+</div>
+<!-- Col 2 -->
+<div class="py-6 lg:py-0 lg:px-8 lg:hairline-r border-t sm:border-t-0 border-white/10">
+<p class="font-mono text-xs uppercase tracking-widest text-white/50 mb-3">TRADER WIN RATE*</p>
+<p class="font-mono text-5xl xl:text-6xl font-extrabold text-[#00E5BE] tracking-tight">87%</p>
+<p class="text-sm text-white/60 mt-3 font-normal">Audited monthly track record</p>
+</div>
+<!-- Col 3 -->
+<div class="py-6 lg:py-0 lg:px-8 lg:hairline-r border-t lg:border-t-0 border-white/10">
+<p class="font-mono text-xs uppercase tracking-widest text-white/50 mb-3">USER RATING</p>
+<p class="font-mono text-5xl xl:text-6xl font-extrabold text-white tracking-tight">4.8/5</p>
+<p class="text-sm text-white/60 mt-3 font-normal">Trustpilot &amp; verified reviews</p>
+</div>
+<!-- Col 4 -->
+<div class="py-6 lg:py-0 lg:pl-8 border-t lg:border-t-0 border-white/10">
+<p class="font-mono text-xs uppercase tracking-widest text-white/50 mb-3">SUPPORT</p>
+<p class="font-mono text-5xl xl:text-6xl font-extrabold text-white tracking-tight">24/7</p>
+<p class="text-sm text-white/60 mt-3 font-normal">Institutional desk &amp; live chat</p>
+</div>
+</div>
+<!-- Footnote -->
+<div class="mt-12 pt-6 hairline-t">
+<p class="font-mono text-xs text-white/30 tracking-wide">
+          *Past performance of top-ranked traders. Not a guarantee of future results.
+        </p>
+</div>
+</div>
+</section>
+<!-- 5. LIGHT OFF-WHITE (#F7F8FA) SECTION "HOW COPY TRADING WORKS" -->
+<section class="w-full bg-[#F7F8FA] text-[#0A1626] py-28 hairline-light-b" id="how-it-works">
+<div class="max-w-[1400px] mx-auto px-6 lg:px-12 grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-24">
+<!-- Left Sticky Big Headline -->
+<div class="lg:col-span-5">
+<div class="lg:sticky lg:top-32">
+<span class="font-mono text-xs uppercase tracking-widest text-[#E3262F] font-bold block mb-4">
+            01 — EXECUTION BLUEPRINT
+          </span>
+<h2 class="text-4xl sm:text-5xl font-extrabold tracking-tight text-[#0A1626] leading-[1.15] mb-6">
+            How copy trading works.
+          </h2>
+<p class="text-lg text-slate-600 font-normal leading-relaxed mb-8">
+            You don’t need to analyze 50 charts every morning or execute complex options math. Connect with proven masters and mirror their portfolio moves seamlessly in milliseconds.
+          </p>
+<div class="hairline-light-t pt-6">
+<div class="font-mono text-xs text-slate-500 space-y-2">
+<div class="flex items-center justify-between">
+<span>AVERAGE REPLICATION DELAY</span>
+<span class="font-bold text-[#0A1626]">38 MS</span>
+</div>
+<div class="flex items-center justify-between">
+<span>SLIPPAGE PROTECTION</span>
+<span class="font-bold text-[#0A1626]">GUARANTEED LIMITS</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Right Vertical List of 4 Numbered Rows Separated by Hairlines with Huge Outline Numerals 01-04 -->
+<div class="lg:col-span-7 divide-y divide-[#E2E5EA]">
+<!-- Row 01 -->
+<div class="py-12 group">
+<div class="flex items-start justify-between">
+<span class="font-mono text-6xl lg:text-7xl font-bold num-outline select-none leading-none group-hover:text-[#E3262F] transition-colors">
+              01
+            </span>
+<span class="font-mono text-xs uppercase tracking-widest text-slate-400 mt-2">STEP 01/04</span>
+</div>
+<h3 class="text-2xl font-bold text-[#0A1626] mt-4 mb-3 tracking-tight">
+            Create &amp; verify your account
+          </h3>
+<p class="text-slate-600 text-base leading-relaxed max-w-xl">
+            Register in under 3 minutes with standard KYC. Your dedicated custodial sub-account is segregated under tier-1 regulatory banking protections.
+          </p>
+<!-- Thin animated progress line -->
+<div class="w-full bg-[#E2E5EA] h-[2px] mt-8 overflow-hidden">
+<div class="bg-[#E3262F] h-full w-full transform -translate-x-full group-hover:translate-x-0 transition-transform duration-700 ease-out"></div>
+</div>
+</div>
+<!-- Row 02 -->
+<div class="py-12 group">
+<div class="flex items-start justify-between">
+<span class="font-mono text-6xl lg:text-7xl font-bold num-outline select-none leading-none group-hover:text-[#E3262F] transition-colors">
+              02
+            </span>
+<span class="font-mono text-xs uppercase tracking-widest text-slate-400 mt-2">STEP 02/04</span>
+</div>
+<h3 class="text-2xl font-bold text-[#0A1626] mt-4 mb-3 tracking-tight">
+            Fund your wallet — bank, crypto or PayPal
+          </h3>
+<p class="text-slate-600 text-base leading-relaxed max-w-xl">
+            Zero deposit fees across multi-currency wires, SEPA, Visa, Mastercard, USDT/USDC, and PayPal. Start copying with as little as $100.
+          </p>
+<!-- Thin animated progress line -->
+<div class="w-full bg-[#E2E5EA] h-[2px] mt-8 overflow-hidden">
+<div class="bg-[#E3262F] h-full w-full transform -translate-x-full group-hover:translate-x-0 transition-transform duration-700 ease-out"></div>
+</div>
+</div>
+<!-- Row 03 -->
+<div class="py-12 group">
+<div class="flex items-start justify-between">
+<span class="font-mono text-6xl lg:text-7xl font-bold num-outline select-none leading-none group-hover:text-[#E3262F] transition-colors">
+              03
+            </span>
+<span class="font-mono text-xs uppercase tracking-widest text-slate-400 mt-2">STEP 03/04</span>
+</div>
+<h3 class="text-2xl font-bold text-[#0A1626] mt-4 mb-3 tracking-tight">
+            Pick a trader by return, risk and style
+          </h3>
+<p class="text-slate-600 text-base leading-relaxed max-w-xl">
+            Inspect audited histories, maximum drawdowns, average trade duration, and portfolio diversification. Filter by algorithmic, swing, or macro strategies.
+          </p>
+<!-- Thin animated progress line -->
+<div class="w-full bg-[#E2E5EA] h-[2px] mt-8 overflow-hidden">
+<div class="bg-[#E3262F] h-full w-full transform -translate-x-full group-hover:translate-x-0 transition-transform duration-700 ease-out"></div>
+</div>
+</div>
+<!-- Row 04 -->
+<div class="py-12 group">
+<div class="flex items-start justify-between">
+<span class="font-mono text-6xl lg:text-7xl font-bold num-outline select-none leading-none group-hover:text-[#E3262F] transition-colors">
+              04
+            </span>
+<span class="font-mono text-xs uppercase tracking-widest text-slate-400 mt-2">STEP 04/04</span>
+</div>
+<h3 class="text-2xl font-bold text-[#0A1626] mt-4 mb-3 tracking-tight">
+            Copy automatically, stop anytime
+          </h3>
+<p class="text-slate-600 text-base leading-relaxed max-w-xl">
+            Proportional position sizing mirrors every opening and closing tick instantly. Pause, modify stop-loss levels, or liquidate positions with a single click.
+          </p>
+<!-- Thin animated progress line -->
+<div class="w-full bg-[#E2E5EA] h-[2px] mt-8 overflow-hidden">
+<div class="bg-[#E3262F] h-full w-full transform -translate-x-full group-hover:translate-x-0 transition-transform duration-700 ease-out"></div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- 6. "TOP TRADERS THIS MONTH" RULED TABLE (LIGHT BACKGROUND, STRICTLY NO CARDS) -->
+<section class="w-full bg-[#F7F8FA] text-[#0A1626] pb-28 hairline-light-b" id="traders">
+<div class="max-w-[1400px] mx-auto px-6 lg:px-12">
+<div class="flex flex-col md:flex-row md:items-end justify-between mb-12">
+<div>
+<span class="font-mono text-xs uppercase tracking-widest text-[#E3262F] font-bold block mb-2">
+            LEADERBOARD
+          </span>
+<h2 class="text-3xl sm:text-4xl font-extrabold tracking-tight text-[#0A1626]">
+            Top traders this month
+          </h2>
+</div>
+<div class="mt-4 md:mt-0 font-mono text-xs text-slate-500">
+          RANKED BY RISK-ADJUSTED SHARPE RATIO · AUDITED DATA
+        </div>
+</div>
+<!-- Ruled Table Container -->
+<div class="overflow-x-auto w-full">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="hairline-light-b text-xs font-mono uppercase tracking-wider text-slate-400">
+<th class="py-4 pl-4 pr-6 font-semibold">Trader</th>
+<th class="py-4 px-6 font-semibold">12-Mo Return</th>
+<th class="py-4 px-6 font-semibold">Win Rate</th>
+<th class="py-4 px-6 font-semibold">Risk Score</th>
+<th class="py-4 px-6 font-semibold">Copiers</th>
+<th class="py-4 pr-4 pl-6 text-right font-semibold">Action</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-[#E2E5EA] text-sm">
+<!-- Row 1: Elena Vasquez (Forex) +38.2% -->
+<tr class="ruled-row">
+<td class="py-5 pl-4 pr-6">
+<div class="flex items-center space-x-3">
+<img alt="Elena Vasquez" class="w-10 h-10 rounded-full object-cover grayscale hover:grayscale-0 transition-all border border-slate-300" src="https://www.gstatic.com/labs-code/stitch/stitch-placeholder-300x300.svg"/>
+<div>
+<div class="font-bold text-base text-[#0A1626]">Elena Vasquez</div>
+<div class="text-xs font-mono text-slate-500">Forex · London Breakout</div>
+</div>
+</div>
+</td>
+<td class="py-5 px-6">
+<div class="flex items-center space-x-3">
+<span class="font-mono text-base font-bold text-[#009E82]">+38.2%</span>
+<!-- Inline teal sparkline -->
+<svg class="w-24 h-6 text-[#009E82]" viewbox="0 0 100 24">
+<polyline fill="none" points="0,20 18,17 35,19 50,11 68,14 85,6 100,3" stroke="currentColor" stroke-linecap="round" stroke-width="2"></polyline>
+</svg>
+</div>
+</td>
+<td class="py-5 px-6 font-mono font-medium text-slate-700">76.4%</td>
+<td class="py-5 px-6">
+<div class="flex items-center space-x-2">
+<span class="font-mono text-xs font-semibold text-slate-700">4/10</span>
+<!-- 10-segment bar -->
+<div class="flex space-x-0.5">
+<span class="w-1.5 h-3 bg-slate-700"></span>
+<span class="w-1.5 h-3 bg-slate-700"></span>
+<span class="w-1.5 h-3 bg-slate-700"></span>
+<span class="w-1.5 h-3 bg-slate-700"></span>
+<span class="w-1.5 h-3 bg-slate-200"></span>
+<span class="w-1.5 h-3 bg-slate-200"></span>
+<span class="w-1.5 h-3 bg-slate-200"></span>
+<span class="w-1.5 h-3 bg-slate-200"></span>
+<span class="w-1.5 h-3 bg-slate-200"></span>
+<span class="w-1.5 h-3 bg-slate-200"></span>
+</div>
+</div>
+</td>
+<td class="py-5 px-6 font-mono text-slate-600">1,419</td>
+<td class="py-5 pr-4 pl-6 text-right">
+<a class="font-semibold text-[#E3262F] hover:text-[#C81E26] inline-flex items-center tracking-tight" href="#copy-elena">
+                  Copy <span class="ml-1 font-mono">→</span>
+</a>
+</td>
+</tr>
+<!-- Row 2: Marcus Chen (Crypto) +52.7% -->
+<tr class="ruled-row">
+<td class="py-5 pl-4 pr-6">
+<div class="flex items-center space-x-3">
+<img alt="Marcus Chen" class="w-10 h-10 rounded-full object-cover grayscale hover:grayscale-0 transition-all border border-slate-300" src="https://www.gstatic.com/labs-code/stitch/stitch-placeholder-300x300.svg"/>
+<div>
+<div class="font-bold text-base text-[#0A1626]">Marcus Chen</div>
+<div class="text-xs font-mono text-slate-500">Crypto · Momentum Alpha</div>
+</div>
+</div>
+</td>
+<td class="py-5 px-6">
+<div class="flex items-center space-x-3">
+<span class="font-mono text-base font-bold text-[#009E82]">+52.7%</span>
+<!-- Inline teal sparkline -->
+<svg class="w-24 h-6 text-[#009E82]" viewbox="0 0 100 24">
+<polyline fill="none" points="0,22 20,18 36,21 54,9 72,12 88,4 100,2" stroke="currentColor" stroke-linecap="round" stroke-width="2"></polyline>
+</svg>
+</div>
+</td>
+<td class="py-5 px-6 font-mono font-medium text-slate-700">68.1%</td>
+<td class="py-5 px-6">
+<div class="flex items-center space-x-2">
+<span class="font-mono text-xs font-semibold text-slate-700">6/10</span>
+<!-- 10-segment bar -->
+<div class="flex space-x-0.5">
+<span class="w-1.5 h-3 bg-amber-500"></span>
+<span class="w-1.5 h-3 bg-amber-500"></span>
+<span class="w-1.5 h-3 bg-amber-500"></span>
+<span class="w-1.5 h-3 bg-amber-500"></span>
+<span class="w-1.5 h-3 bg-amber-500"></span>
+<span class="w-1.5 h-3 bg-amber-500"></span>
+<span class="w-1.5 h-3 bg-slate-200"></span>
+<span class="w-1.5 h-3 bg-slate-200"></span>
+<span class="w-1.5 h-3 bg-slate-200"></span>
+<span class="w-1.5 h-3 bg-slate-200"></span>
+</div>
+</div>
+</td>
+<td class="py-5 px-6 font-mono text-slate-600">2,884</td>
+<td class="py-5 pr-4 pl-6 text-right">
+<a class="font-semibold text-[#E3262F] hover:text-[#C81E26] inline-flex items-center tracking-tight" href="#copy-marcus">
+                  Copy <span class="ml-1 font-mono">→</span>
+</a>
+</td>
+</tr>
+<!-- Row 3: Aisha Rahman (Stocks) +21.4% -->
+<tr class="ruled-row">
+<td class="py-5 pl-4 pr-6">
+<div class="flex items-center space-x-3">
+<img alt="Aisha Rahman" class="w-10 h-10 rounded-full object-cover grayscale hover:grayscale-0 transition-all border border-slate-300" src="https://www.gstatic.com/labs-code/stitch/stitch-placeholder-300x300.svg"/>
+<div>
+<div class="font-bold text-base text-[#0A1626]">Aisha Rahman</div>
+<div class="text-xs font-mono text-slate-500">Stocks · Large-Cap Tech</div>
+</div>
+</div>
+</td>
+<td class="py-5 px-6">
+<div class="flex items-center space-x-3">
+<span class="font-mono text-base font-bold text-[#009E82]">+21.4%</span>
+<!-- Inline teal sparkline -->
+<svg class="w-24 h-6 text-[#009E82]" viewbox="0 0 100 24">
+<polyline fill="none" points="0,18 25,16 45,15 65,10 80,11 100,5" stroke="currentColor" stroke-linecap="round" stroke-width="2"></polyline>
+</svg>
+</div>
+</td>
+<td class="py-5 px-6 font-mono font-medium text-slate-700">81.9%</td>
+<td class="py-5 px-6">
+<div class="flex items-center space-x-2">
+<span class="font-mono text-xs font-semibold text-slate-700">3/10</span>
+<!-- 10-segment bar -->
+<div class="flex space-x-0.5">
+<span class="w-1.5 h-3 bg-emerald-600"></span>
+<span class="w-1.5 h-3 bg-emerald-600"></span>
+<span class="w-1.5 h-3 bg-emerald-600"></span>
+<span class="w-1.5 h-3 bg-slate-200"></span>
+<span class="w-1.5 h-3 bg-slate-200"></span>
+<span class="w-1.5 h-3 bg-slate-200"></span>
+<span class="w-1.5 h-3 bg-slate-200"></span>
+<span class="w-1.5 h-3 bg-slate-200"></span>
+<span class="w-1.5 h-3 bg-slate-200"></span>
+<span class="w-1.5 h-3 bg-slate-200"></span>
+</div>
+</div>
+</td>
+<td class="py-5 px-6 font-mono text-slate-600">932</td>
+<td class="py-5 pr-4 pl-6 text-right">
+<a class="font-semibold text-[#E3262F] hover:text-[#C81E26] inline-flex items-center tracking-tight" href="#copy-aisha">
+                  Copy <span class="ml-1 font-mono">→</span>
+</a>
+</td>
+</tr>
+<!-- Row 4: Lukas Brandt (Commodities) +17.9% -->
+<tr class="ruled-row">
+<td class="py-5 pl-4 pr-6">
+<div class="flex items-center space-x-3">
+<img alt="Lukas Brandt" class="w-10 h-10 rounded-full object-cover grayscale hover:grayscale-0 transition-all border border-slate-300" src="https://www.gstatic.com/labs-code/stitch/stitch-placeholder-300x300.svg"/>
+<div>
+<div class="font-bold text-base text-[#0A1626]">Lukas Brandt</div>
+<div class="text-xs font-mono text-slate-500">Commodities · Energy &amp; Gold</div>
+</div>
+</div>
+</td>
+<td class="py-5 px-6">
+<div class="flex items-center space-x-3">
+<span class="font-mono text-base font-bold text-[#009E82]">+17.9%</span>
+<!-- Inline teal sparkline -->
+<svg class="w-24 h-6 text-[#009E82]" viewbox="0 0 100 24">
+<polyline fill="none" points="0,21 22,20 40,16 60,18 78,11 100,7" stroke="currentColor" stroke-linecap="round" stroke-width="2"></polyline>
+</svg>
+</div>
+</td>
+<td class="py-5 px-6 font-mono font-medium text-slate-700">74.2%</td>
+<td class="py-5 px-6">
+<div class="flex items-center space-x-2">
+<span class="font-mono text-xs font-semibold text-slate-700">4/10</span>
+<!-- 10-segment bar -->
+<div class="flex space-x-0.5">
+<span class="w-1.5 h-3 bg-slate-700"></span>
+<span class="w-1.5 h-3 bg-slate-700"></span>
+<span class="w-1.5 h-3 bg-slate-700"></span>
+<span class="w-1.5 h-3 bg-slate-700"></span>
+<span class="w-1.5 h-3 bg-slate-200"></span>
+<span class="w-1.5 h-3 bg-slate-200"></span>
+<span class="w-1.5 h-3 bg-slate-200"></span>
+<span class="w-1.5 h-3 bg-slate-200"></span>
+<span class="w-1.5 h-3 bg-slate-200"></span>
+<span class="w-1.5 h-3 bg-slate-200"></span>
+</div>
+</div>
+</td>
+<td class="py-5 px-6 font-mono text-slate-600">675</td>
+<td class="py-5 pr-4 pl-6 text-right">
+<a class="font-semibold text-[#E3262F] hover:text-[#C81E26] inline-flex items-center tracking-tight" href="#copy-lukas">
+                  Copy <span class="ml-1 font-mono">→</span>
+</a>
+</td>
+</tr>
+<!-- Row 5: Sofia Moretti (Indices) +26.3% -->
+<tr class="ruled-row">
+<td class="py-5 pl-4 pr-6">
+<div class="flex items-center space-x-3">
+<img alt="Sofia Moretti" class="w-10 h-10 rounded-full object-cover grayscale hover:grayscale-0 transition-all border border-slate-300" src="https://www.gstatic.com/labs-code/stitch/stitch-placeholder-300x300.svg"/>
+<div>
+<div class="font-bold text-base text-[#0A1626]">Sofia Moretti</div>
+<div class="text-xs font-mono text-slate-500">Indices · S&amp;P &amp; DAX Flow</div>
+</div>
+</div>
+</td>
+<td class="py-5 px-6">
+<div class="flex items-center space-x-3">
+<span class="font-mono text-base font-bold text-[#009E82]">+26.3%</span>
+<!-- Inline teal sparkline -->
+<svg class="w-24 h-6 text-[#009E82]" viewbox="0 0 100 24">
+<polyline fill="none" points="0,19 18,17 38,18 56,12 75,8 100,4" stroke="currentColor" stroke-linecap="round" stroke-width="2"></polyline>
+</svg>
+</div>
+</td>
+<td class="py-5 px-6 font-mono font-medium text-slate-700">79.0%</td>
+<td class="py-5 px-6">
+<div class="flex items-center space-x-2">
+<span class="font-mono text-xs font-semibold text-slate-700">5/10</span>
+<!-- 10-segment bar -->
+<div class="flex space-x-0.5">
+<span class="w-1.5 h-3 bg-slate-700"></span>
+<span class="w-1.5 h-3 bg-slate-700"></span>
+<span class="w-1.5 h-3 bg-slate-700"></span>
+<span class="w-1.5 h-3 bg-slate-700"></span>
+<span class="w-1.5 h-3 bg-slate-700"></span>
+<span class="w-1.5 h-3 bg-slate-200"></span>
+<span class="w-1.5 h-3 bg-slate-200"></span>
+<span class="w-1.5 h-3 bg-slate-200"></span>
+<span class="w-1.5 h-3 bg-slate-200"></span>
+<span class="w-1.5 h-3 bg-slate-200"></span>
+</div>
+</div>
+</td>
+<td class="py-5 px-6 font-mono text-slate-600">1,120</td>
+<td class="py-5 pr-4 pl-6 text-right">
+<a class="font-semibold text-[#E3262F] hover:text-[#C81E26] inline-flex items-center tracking-tight" href="#copy-sofia">
+                  Copy <span class="ml-1 font-mono">→</span>
+</a>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Explore all traders text link -->
+<div class="mt-8 pt-4 flex justify-between items-center text-sm">
+<span class="text-slate-500 font-mono text-xs">SHOWING 5 OF 340+ AUDITED TRADERS</span>
+<a class="font-semibold text-[#0A1626] hover:text-[#E3262F] inline-flex items-center" href="#all-traders">
+          View full trader directory <span class="ml-1.5 font-mono">→</span>
+</a>
+</div>
+</div>
+</section>
+<!-- 7. SPLIT SECTION ON INK: RISK MANAGEMENT + ANIMATED ALLOCATION DONUT RING -->
+<section class="w-full bg-[#0A1626] text-white py-28 hairline-b">
+<div class="max-w-[1400px] mx-auto px-6 lg:px-12 grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-20 items-center">
+<!-- Left Column: Headline and three hairline-separated text rows -->
+<div class="lg:col-span-6">
+<span class="font-mono text-xs uppercase tracking-widest text-[#00E5BE] font-bold block mb-4">
+          GUARDIAN ARCHITECTURE
+        </span>
+<h2 class="text-4xl sm:text-5xl font-extrabold tracking-tight text-white leading-tight mb-8">
+          Risk managed, not ignored.
+        </h2>
+<p class="text-lg text-white/70 font-normal leading-relaxed mb-12">
+          High returns are worthless if a single rogue position erases your balance. We enforce algorithmic safety guardrails that protect capital before execution happens.
+        </p>
+<!-- Three Hairline-Separated Text Rows (NO CARDS) -->
+<div class="divide-y divide-white/10 hairline-t hairline-b">
+<div class="py-6 group">
+<div class="flex items-baseline justify-between mb-2">
+<h3 class="text-xl font-bold text-white group-hover:text-[#00E5BE] transition-colors">
+                Copy stop-loss
+              </h3>
+<span class="font-mono text-xs text-[#00E5BE]">AUTOMATED</span>
+</div>
+<p class="text-sm text-white/60 leading-relaxed">
+              Define maximum tolerable drawdown per trader. If cumulative loss breaches 5%, 10%, or custom limit, positions unwind automatically in milliseconds.
+            </p>
+</div>
+<div class="py-6 group">
+<div class="flex items-baseline justify-between mb-2">
+<h3 class="text-xl font-bold text-white group-hover:text-[#00E5BE] transition-colors">
+                Allocation limits
+              </h3>
+<span class="font-mono text-xs text-white/40">CAP ENFORCEMENT</span>
+</div>
+<p class="text-sm text-white/60 leading-relaxed">
+              Restrict total wallet exposure to any single strategy. Balance allocations across unrelated asset classes to shield against localized market shocks.
+            </p>
+</div>
+<div class="py-6 group">
+<div class="flex items-baseline justify-between mb-2">
+<h3 class="text-xl font-bold text-white group-hover:text-[#00E5BE] transition-colors">
+                Real-time monitoring
+              </h3>
+<span class="font-mono text-xs text-[#E3262F]">TICK-BY-TICK</span>
+</div>
+<p class="text-sm text-white/60 leading-relaxed">
+              Continuous variance audits alert you to deviation in trader behavior. If a swing trader suddenly initiates ultra-leveraged scalping, copy mode freezes.
+            </p>
+</div>
+</div>
+</div>
+<!-- Right Column: Animated Allocation Donut Ring + Text Legend (NO CARDS) -->
+<div class="lg:col-span-6 flex flex-col items-center">
+<div class="relative w-72 h-72 sm:w-80 sm:h-80 flex items-center justify-center">
+<!-- SVG Donut Chart (Forex 35%, Crypto 25%, Stocks 25%, Commodities 15%) -->
+<svg class="w-full h-full transform -rotate-90" viewbox="0 0 200 200">
+<!-- Radius = 75, Circumference = 2 * PI * 75 = 471.2388 -->
+<!-- Forex 35%: 164.93 -->
+<!-- Crypto 25%: 117.81 -->
+<!-- Stocks 25%: 117.81 -->
+<!-- Commodities 15%: 70.68 -->
+<circle cx="100" cy="100" fill="none" r="75" stroke="rgba(255,255,255,0.05)" stroke-width="22"></circle>
+<!-- Segment 1: Forex (Teal) 35% -->
+<circle class="hover:opacity-90 transition-all cursor-pointer" cx="100" cy="100" fill="none" r="75" stroke="#00E5BE" stroke-dasharray="164.93 471.24" stroke-dashoffset="0" stroke-width="22"></circle>
+<!-- Segment 2: Crypto (Red) 25% -->
+<circle class="hover:opacity-90 transition-all cursor-pointer" cx="100" cy="100" fill="none" r="75" stroke="#E3262F" stroke-dasharray="117.81 471.24" stroke-dashoffset="-164.93" stroke-width="22"></circle>
+<!-- Segment 3: Stocks (White) 25% -->
+<circle class="hover:opacity-90 transition-all cursor-pointer" cx="100" cy="100" fill="none" r="75" stroke="#FFFFFF" stroke-dasharray="117.81 471.24" stroke-dashoffset="-282.74" stroke-width="22"></circle>
+<!-- Segment 4: Commodities (Amber) 15% -->
+<circle class="hover:opacity-90 transition-all cursor-pointer" cx="100" cy="100" fill="none" r="75" stroke="#F59E0B" stroke-dasharray="70.68 471.24" stroke-dashoffset="-400.55" stroke-width="22"></circle>
+</svg>
+<!-- Donut Center Telemetry -->
+<div class="absolute inset-0 flex flex-col items-center justify-center text-center pointer-events-none">
+<span class="font-mono text-xs text-white/50 tracking-widest uppercase">MODEL</span>
+<span class="font-mono text-3xl font-extrabold text-white tracking-tight">100%</span>
+<span class="font-mono text-[11px] text-[#00E5BE] mt-0.5">DIVERSIFIED</span>
+</div>
+</div>
+<!-- Legend as Clean Text (NO badges, pills, or cards) -->
+<div class="w-full max-w-md mt-10 grid grid-cols-2 gap-y-4 gap-x-8 text-xs font-mono">
+<div class="flex items-center justify-between hairline-b pb-2">
+<div class="flex items-center space-x-2">
+<span class="w-2.5 h-2.5 rounded-none bg-[#00E5BE]"></span>
+<span class="text-white/80">FOREX</span>
+</div>
+<span class="font-bold text-white">35%</span>
+</div>
+<div class="flex items-center justify-between hairline-b pb-2">
+<div class="flex items-center space-x-2">
+<span class="w-2.5 h-2.5 rounded-none bg-[#E3262F]"></span>
+<span class="text-white/80">CRYPTO</span>
+</div>
+<span class="font-bold text-white">25%</span>
+</div>
+<div class="flex items-center justify-between hairline-b pb-2">
+<div class="flex items-center space-x-2">
+<span class="w-2.5 h-2.5 rounded-none bg-[#FFFFFF]"></span>
+<span class="text-white/80">STOCKS</span>
+</div>
+<span class="font-bold text-white">25%</span>
+</div>
+<div class="flex items-center justify-between hairline-b pb-2">
+<div class="flex items-center space-x-2">
+<span class="w-2.5 h-2.5 rounded-none bg-[#F59E0B]"></span>
+<span class="text-white/80">COMMODITIES</span>
+</div>
+<span class="font-bold text-white">15%</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- 8. TESTIMONIALS AS A LARGE EDITORIAL PULL-QUOTE CAROUSEL (NO CARDS) -->
+<section class="w-full bg-[#0A1626] text-white py-28 hairline-b overflow-hidden">
+<div class="max-w-[1200px] mx-auto px-6 lg:px-12 text-center">
+<span class="font-mono text-xs uppercase tracking-widest text-white/40 block mb-6">
+        VERIFIED REPLICATION EXPERIENCES
+      </span>
+<!-- Giant Quotation Mark Icon / Typographic Glyphs -->
+<div class="text-8xl sm:text-9xl font-serif text-[#E3262F]/30 leading-none select-none -mb-8">
+        “
+      </div>
+<!-- Pull Quote Container (Editorial Carousel, NO CARDS) -->
+<div class="relative min-h-[220px] flex items-center justify-center">
+<!-- Quote Item 1 (Active) -->
+<div class="transition-opacity duration-500" id="quote-1">
+<blockquote class="text-2xl sm:text-3xl lg:text-4xl font-light text-white leading-relaxed tracking-tight max-w-4xl mx-auto">
+            I’m a software engineer who used to lose money trying to day-trade between standups. With TED, I allocated $12k across Elena and Marcus. My account grew 34% this year without me opening a chart once.
+          </blockquote>
+<div class="mt-8 flex flex-col items-center justify-center">
+<p class="font-mono text-sm font-semibold tracking-wide text-white">
+              Sarah M.
+            </p>
+<p class="font-mono text-xs text-[#00E5BE] tracking-wider mt-1">
+              COPYING SINCE 2024 · VERIFIED INVESTOR
+            </p>
+</div>
+</div>
+</div>
+<!-- Carousel Progress Dots & Navigation -->
+<div class="mt-12 flex items-center justify-center space-x-4">
+<button aria-label="Quote 1" class="w-8 h-[2px] bg-[#E3262F] transition-all"></button>
+<button aria-label="Quote 2" class="w-4 h-[2px] bg-white/20 hover:bg-white/50 transition-all"></button>
+<button aria-label="Quote 3" class="w-4 h-[2px] bg-white/20 hover:bg-white/50 transition-all"></button>
+</div>
+</div>
+</section>
+<!-- 9. FULL-BLEED RED-TO-INK GRADIENT CTA BAND -->
+<section class="w-full bg-gradient-to-r from-[#E3262F] via-[#9B151C] to-[#0A1626] text-white py-24 hairline-b relative overflow-hidden">
+<div class="max-w-[1400px] mx-auto px-6 lg:px-12 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-10 relative z-10">
+<div class="max-w-3xl">
+<span class="font-mono text-xs uppercase tracking-widest text-white/80 font-bold block mb-3">
+          INSTANT SETUP · NO CODING REQUIRED
+        </span>
+<h2 class="text-4xl sm:text-5xl font-extrabold tracking-tight text-white leading-tight">
+          Your first copied trade is minutes away.
+        </h2>
+<p class="text-lg text-white/80 mt-4 max-w-xl">
+          Join 10,000+ investors who let professional traders do the heavy lifting while maintaining complete control of their funds.
+        </p>
+</div>
+<div class="shrink-0 flex flex-col sm:flex-row items-start sm:items-center gap-4">
+<!-- White Button "Create free account →" -->
+<a class="inline-flex items-center justify-center bg-white hover:bg-slate-100 text-[#0A1626] text-base font-bold px-9 py-4 transition-all duration-150" href="#register">
+          Create free account <span class="ml-2 font-mono">→</span>
+</a>
+</div>
+</div>
+<!-- Background decorative grid lines -->
+<div class="absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.05)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.05)_1px,transparent_1px)] bg-[size:4rem_4rem] pointer-events-none opacity-20"></div>
+</section>
+<!-- 10. FOOTER ON INK -->
+<footer class="w-full bg-[#050D18] text-white py-20">
+<div class="max-w-[1400px] mx-auto px-6 lg:px-12">
+<!-- Top Row: Columns Company, Resources, Legal, Contact -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12 pb-16 hairline-b">
+<!-- Brand & Address -->
+<div class="lg:col-span-2 pr-6">
+<a class="flex items-center space-x-1 tracking-tight select-none mb-6" href="#">
+<span class="font-extrabold text-2xl tracking-tighter text-[#E3262F]">TED</span>
+<span class="font-bold text-2xl tracking-tight text-white flex items-center">
+              Br
+              <span class="inline-grid grid-cols-2 gap-[2.5px] w-4 h-4 mx-[1.5px] items-center justify-center p-[1px] relative top-[-1px]">
+<span class="w-[4px] h-[4px] bg-[#E3262F] rounded-full"></span>
+<span class="w-[4px] h-[4px] bg-white rounded-full"></span>
+<span class="w-[4px] h-[4px] bg-[#00E5BE] rounded-full"></span>
+<span class="w-[4px] h-[4px] bg-white rounded-full"></span>
+</span>
+              kers
+            </span>
+</a>
+<p class="text-sm text-white/60 leading-relaxed mb-6 max-w-sm">
+            Next-generation social trading infrastructure connecting high-conviction retail capital with audited institutional traders.
+          </p>
+<!-- Contact details required by user prompt -->
+<div class="font-mono text-xs text-white/50 space-y-1.5">
+<div class="text-white/80 font-medium">TED Brokers Global Headquarters</div>
+<div>330 Hudson Street, New York, NY 10013</div>
+<div class="text-white/80">+1 (332) 220-8968 · desk@tedbrokers.com</div>
+</div>
+</div>
+<!-- Col: Company -->
+<div>
+<h4 class="font-mono text-xs uppercase tracking-widest text-white/40 font-semibold mb-5">Company</h4>
+<ul class="space-y-3 text-sm text-white/70">
+<li><a class="hover:text-white transition-colors" href="#">About Us</a></li>
+<li><a class="hover:text-white transition-colors" href="#">Leadership &amp; Team</a></li>
+<li><a class="hover:text-white transition-colors" href="#">Careers <span class="font-mono text-[10px] text-[#00E5BE]">WE'RE HIRING</span></a></li>
+<li><a class="hover:text-white transition-colors" href="#">Press &amp; Media</a></li>
+<li><a class="hover:text-white transition-colors" href="#">Market Insights</a></li>
+</ul>
+</div>
+<!-- Col: Resources -->
+<div>
+<h4 class="font-mono text-xs uppercase tracking-widest text-white/40 font-semibold mb-5">Resources</h4>
+<ul class="space-y-3 text-sm text-white/70">
+<li><a class="hover:text-white transition-colors" href="#">Copy Trading Academy</a></li>
+<li><a class="hover:text-white transition-colors" href="#">Trader Verification Audit</a></li>
+<li><a class="hover:text-white transition-colors" href="#">Fee Schedule</a></li>
+<li><a class="hover:text-white transition-colors" href="#">API Documentation</a></li>
+<li><a class="hover:text-white transition-colors" href="#">System Status <span class="font-mono text-[10px] text-[#00E5BE]">100% OPERATIONAL</span></a></li>
+</ul>
+</div>
+<!-- Col: Legal -->
+<div>
+<h4 class="font-mono text-xs uppercase tracking-widest text-white/40 font-semibold mb-5">Legal &amp; Policy</h4>
+<ul class="space-y-3 text-sm text-white/70">
+<li><a class="hover:text-white transition-colors" href="#">Terms of Service</a></li>
+<li><a class="hover:text-white transition-colors" href="#">Risk Disclosure</a></li>
+<li><a class="hover:text-white transition-colors" href="#">Privacy Policy</a></li>
+<li><a class="hover:text-white transition-colors" href="#">Order Execution Policy</a></li>
+<li><a class="hover:text-white transition-colors" href="#">Conflict of Interest</a></li>
+</ul>
+</div>
+</div>
+<!-- Language Selector & Copyright Row -->
+<div class="py-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 hairline-b">
+<div class="flex items-center space-x-6 text-xs font-mono text-white/50">
+<span>© 2025 TED BROKERS LTD. ALL RIGHTS RESERVED.</span>
+<span>CRN: 4892019</span>
+</div>
+<!-- Language Selector -->
+<div class="flex items-center space-x-4 text-xs font-mono">
+<span class="text-white/40">LANGUAGE:</span>
+<button class="text-white hover:text-[#00E5BE] font-bold">EN</button>
+<span class="text-white/20">/</span>
+<button class="text-white/50 hover:text-white">ES</button>
+<span class="text-white/20">/</span>
+<button class="text-white/50 hover:text-white">DE</button>
+<span class="text-white/20">/</span>
+<button class="text-white/50 hover:text-white">FR</button>
+<span class="text-white/20">/</span>
+<button class="text-white/50 hover:text-white">JA</button>
+</div>
+</div>
+<!-- Visible Risk Disclosure Paragraph in Small Muted Text -->
+<div class="pt-8">
+<p class="text-xs text-white/40 leading-relaxed font-sans">
+<strong class="text-white/60">Risk Disclosure:</strong> Trading Financial Instruments including Forex, Cryptocurrencies, Contracts for Difference (CFDs), and Stocks carries a high level of risk to your capital and you may lose more than your initial deposit. Copy Trading is an investment management service and does not constitute personalized investment advice. Historical results, performance metrics, and win-rates of featured signal providers are verified against trade logs but are not indicative of future performance. You should carefully evaluate whether you understand how leveraged copy-trading operates and whether you can afford to take the high risk of losing your money before proceeding. TED Brokers does not solicit clients where local regulations prohibit copy-trading services.
+        </p>
+</div>
+</div>
+</footer>
+<!-- SCRIPT FOR KINETIC VISUALS (DOT MATRIX GLOBE & PARTICLE FIELD) -->
+<script>
+    // 1. Hero Background Drifting Teal Particle Field
+    (function initHeroParticles() {
+      const canvas = document.getElementById('heroParticles');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      let width = canvas.width = window.innerWidth;
+      let height = canvas.height = canvas.parentElement.clientHeight || 700;
+
+      const particles = [];
+      const particleCount = 45;
+
+      for (let i = 0; i < particleCount; i++) {
+        particles.push({
+          x: Math.random() * width,
+          y: Math.random() * height,
+          vx: (Math.random() - 0.5) * 0.4,
+          vy: (Math.random() - 0.5) * 0.4,
+          radius: Math.random() * 1.5 + 0.8,
+          alpha: Math.random() * 0.5 + 0.2
+        });
+      }
+
+      function render() {
+        ctx.clearRect(0, 0, width, height);
+        ctx.fillStyle = '#00E5BE';
+
+        for (let i = 0; i < particles.length; i++) {
+          const p = particles[i];
+          p.x += p.vx;
+          p.y += p.vy;
+
+          if (p.x < 0) p.x = width;
+          if (p.x > width) p.x = 0;
+          if (p.y < 0) p.y = height;
+          if (p.y > height) p.y = 0;
+
+          ctx.globalAlpha = p.alpha;
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+          ctx.fill();
+        }
+
+        requestAnimationFrame(render);
+      }
+
+      window.addEventListener('resize', () => {
+        width = canvas.width = window.innerWidth;
+        height = canvas.height = canvas.parentElement.clientHeight || 700;
+      });
+
+      render();
+    })();
+
+    // 2. Interactive Dot-Matrix Globe with Glowing Teal Arcs
+    (function initGlobe() {
+      const canvas = document.getElementById('dotMatrixGlobe');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      const size = 540;
+      canvas.width = size;
+      canvas.height = size;
+      const centerX = size / 2;
+      const centerY = size / 2;
+      const radius = 210;
+
+      // Generate sphere lattice points
+      const points = [];
+      const totalPoints = 480;
+      for (let i = 0; i < totalPoints; i++) {
+        const phi = Math.acos(-1 + (2 * i) / totalPoints);
+        const theta = Math.sqrt(totalPoints * Math.PI) * phi;
+        points.push({
+          x: radius * Math.cos(theta) * Math.sin(phi),
+          y: radius * Math.sin(theta) * Math.sin(phi),
+          z: radius * Math.cos(phi)
+        });
+      }
+
+      // City hubs for trade connection arcs
+      const cities = [
+        { name: 'London', theta: 0.2, phi: 0.9 },
+        { name: 'New York', theta: -1.2, phi: 1.1 },
+        { name: 'Tokyo', theta: 2.4, phi: 1.0 },
+        { name: 'Singapore', theta: 1.8, phi: 1.5 },
+        { name: 'Frankfurt', theta: 0.35, phi: 0.85 }
+      ];
+
+      let angle = 0;
+
+      function drawGlobe() {
+        ctx.clearRect(0, 0, size, size);
+
+        // Rotation matrix around Y axis
+        angle += 0.004;
+        const cosA = Math.cos(angle);
+        const sinA = Math.sin(angle);
+
+        // Draw dots
+        for (let i = 0; i < points.length; i++) {
+          const pt = points[i];
+          const rotX = pt.x * cosA - pt.z * sinA;
+          const rotZ = pt.x * sinA + pt.z * cosA;
+          const rotY = pt.y;
+
+          // Perspective depth
+          const scale = 360 / (360 + rotZ);
+          const screenX = centerX + rotX * scale;
+          const screenY = centerY + rotY * scale;
+
+          if (rotZ > -radius * 0.8) {
+            const alpha = (rotZ + radius) / (2 * radius);
+            ctx.fillStyle = rotZ > 60 ? '#00E5BE' : '#FFFFFF';
+            ctx.globalAlpha = Math.max(0.08, alpha * 0.7);
+            ctx.beginPath();
+            ctx.arc(screenX, screenY, Math.max(0.6, 1.6 * scale), 0, Math.PI * 2);
+            ctx.fill();
+          }
+        }
+
+        // Draw animated glowing connecting arcs between nodes
+        ctx.strokeStyle = '#00E5BE';
+        ctx.lineWidth = 1.2;
+        ctx.globalAlpha = 0.55;
+
+        // Dynamic arc across globe
+        const time = Date.now() * 0.0015;
+        const arcStart = {
+          x: centerX + Math.cos(angle + 1.2) * 140,
+          y: centerY + Math.sin(angle * 0.8) * 50
+        };
+        const arcEnd = {
+          x: centerX + Math.cos(angle - 1.5) * 160,
+          y: centerY + Math.sin(angle * 1.1 + 2) * 60
+        };
+        const control = {
+          x: centerX + Math.sin(time) * 40,
+          y: centerY - 130
+        };
+
+        ctx.beginPath();
+        ctx.moveTo(arcStart.x, arcStart.y);
+        ctx.quadraticCurveTo(control.x, control.y, arcEnd.x, arcEnd.y);
+        ctx.stroke();
+
+        // Glowing dot traveling on arc
+        const t = (Math.sin(time * 2) + 1) / 2;
+        const dotX = (1 - t) * (1 - t) * arcStart.x + 2 * (1 - t) * t * control.x + t * t * arcEnd.x;
+        const dotY = (1 - t) * (1 - t) * arcStart.y + 2 * (1 - t) * t * control.y + t * t * arcEnd.y;
+        
+        ctx.globalAlpha = 0.95;
+        ctx.fillStyle = '#E3262F';
+        ctx.beginPath();
+        ctx.arc(dotX, dotY, 3, 0, Math.PI * 2);
+        ctx.fill();
+
+        requestAnimationFrame(drawGlobe);
+      }
+
+      drawGlobe();
+    })();
+  </script>
+</body>
+</html>

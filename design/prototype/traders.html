@@ -1,0 +1,356 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>For traders — TED Brokers</title>
+  <meta name="description" content="Publish your strategy on TED Brokers and earn from subscription fees, performance commission above a high-water mark and volume bonuses. See who qualifies and estimate your earnings.">
+  <meta name="theme-color" content="#0A1626">
+  <link rel="icon" href="assets/img/favicon.ico">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=JetBrains+Mono:wght@400;500;600&family=Sora:wght@300;600;700;800&display=swap">
+  <link rel="stylesheet" href="assets/css/main.css">
+  <link rel="stylesheet" href="assets/css/pages/traders.css">
+  <script>document.documentElement.classList.add('js');try{var t=localStorage.getItem('ted:theme');if(t==='system')t=matchMedia('(prefers-color-scheme: light)').matches?'light':'dark';if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
+  <script type="module" src="assets/js/main.js"></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <!-- ============ Header ============ -->
+  <header class="site-header surface-ink">
+    <div class="container site-header__bar">
+      <a class="wordmark" href="index.html" aria-label="TED Brokers home">
+        <span class="wordmark__ted">TED</span><span class="wordmark__brokers">Br<svg class="wordmark__o" viewBox="0 0 20 20" aria-hidden="true"><g fill="currentColor"><circle cx="10" cy="2" r="1.6"/><circle cx="15.2" cy="4.1" r="1.4" opacity=".8"/><circle cx="17.9" cy="9.4" r="1.6"/><circle cx="16.3" cy="14.8" r="1.4" opacity=".8"/><circle cx="11.2" cy="17.9" r="1.6"/><circle cx="5.6" cy="16.4" r="1.4" opacity=".7"/><circle cx="2.2" cy="11.6" r="1.6"/><circle cx="3" cy="6" r="1.4" opacity=".8"/><circle cx="6.6" cy="2.9" r="1.1" opacity=".6"/><circle cx="10" cy="10" r="1.9"/><circle cx="13.3" cy="9.2" r="1" opacity=".7"/><circle cx="7.4" cy="12" r="1" opacity=".7"/></g></svg>kers</span>
+      </a>
+      <button class="icon-btn nav-toggle" type="button" data-nav-toggle aria-expanded="false" aria-controls="site-nav" aria-label="Menu">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h10"/></svg>
+      </button>
+      <nav class="site-nav" id="site-nav" aria-label="Main">
+        <ul class="site-nav__links" role="list">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="how-it-works.html">How it works</a></li>
+          <li><a href="traders.html" aria-current="page">For traders</a></li>
+          <li><a href="about.html">Company</a></li>
+          <li><a href="help.html">Help</a></li>
+        </ul>
+        <div class="site-nav__actions">
+          <button class="lang-select" type="button" aria-label="Language: English">EN
+            <svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M2 3.5l3 3 3-3"/></svg>
+          </button>
+          <a class="site-nav__signin" href="login.html">Sign in</a>
+          <a class="btn btn--sm" href="register.html">Get started
+            <svg class="btn__arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </a>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <!-- ============ Hero ============ -->
+    <section class="hero surface-ink section" aria-labelledby="hero-title">
+      <div class="mesh" aria-hidden="true"><span></span></div>
+      <div class="grid-lines" aria-hidden="true"></div>
+      <div class="container hero__grid">
+        <div class="hero__copy">
+          <p class="overline overline--accent" data-reveal>For traders</p>
+          <h1 class="display" id="hero-title" data-reveal style="--i:1">Your strategy. Thousands of followers. <em>Real income.</em></h1>
+          <p class="lead" data-reveal style="--i:2">Keep trading your own strategy. Investors copy your positions automatically, and you earn from subscriptions, performance and volume — without managing anyone else's money.</p>
+          <div class="hero__actions" data-reveal style="--i:3">
+            <a class="btn btn--lg" href="register.html">Apply as a trader
+              <svg class="btn__arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            </a>
+            <a class="btn btn--lg btn--outline" href="#requirements">Read the requirements</a>
+          </div>
+        </div>
+
+        <div class="hero__visual traders-hero__visual" data-reveal style="--i:2">
+          <canvas class="dotfield" data-component="dotfield" data-mode="network" aria-hidden="true"></canvas>
+          <p class="traders-hero__stat traders-hero__stat--top">
+            <span class="overline">Example provider</span>
+            <span class="traders-hero__value">1,419 followers</span>
+            <span class="traders-hero__meta"><span class="live-dot" aria-hidden="true"></span> +18 joined today</span>
+          </p>
+          <p class="traders-hero__stat traders-hero__stat--bottom">
+            <span class="overline">Provider payout · illustrative</span>
+            <span class="traders-hero__value">$8,240 earned this month</span>
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ Earnings calculator ============ -->
+    <section class="section surface-paper" aria-labelledby="calc-title">
+      <div class="container">
+        <h2 id="calc-title" class="overline overline--accent">Earnings calculator</h2>
+        <form class="traders-calc" data-component="traders-calc" aria-labelledby="calc-title">
+          <p class="traders-calc__sentence">
+            If <output class="traders-calc__val" for="calc-followers" data-calc="followers">250</output> followers copy you with an average of
+            <output class="traders-calc__val" for="calc-capital" data-calc="capital">$2,000</output> and you return
+            <output class="traders-calc__val" for="calc-return" data-calc="return">5%</output> a month, you could earn
+          </p>
+          <p class="traders-calc__total">
+            <output class="traders-calc__num" for="calc-followers calc-capital calc-return" data-calc="total">$4,250</output>
+            <span class="traders-calc__per">/ month</span>
+          </p>
+          <p class="traders-calc__breakdown"><span data-calc="perf">$3,750</span> performance fees + <span data-calc="subs">$500</span> subscriptions</p>
+          <p class="sr-only" role="status" data-calc="status"></p>
+
+          <div class="traders-calc__sliders">
+            <div class="traders-calc__field">
+              <div class="traders-calc__row">
+                <label class="field__label" for="calc-followers">Followers</label>
+                <output class="traders-calc__readout" for="calc-followers" data-calc="followers">250</output>
+              </div>
+              <input class="traders-range" type="range" id="calc-followers" name="followers" min="20" max="1500" step="10" value="250" aria-valuetext="250 followers" style="--fill: 15.54%">
+              <div class="range-scale" aria-hidden="true"><span>20</span><span>1,500</span></div>
+            </div>
+            <div class="traders-calc__field">
+              <div class="traders-calc__row">
+                <label class="field__label" for="calc-capital">Average capital per follower</label>
+                <output class="traders-calc__readout" for="calc-capital" data-calc="capital">$2,000</output>
+              </div>
+              <input class="traders-range" type="range" id="calc-capital" name="capital" min="500" max="10000" step="100" value="2000" aria-valuetext="$2,000 per follower" style="--fill: 15.79%">
+              <div class="range-scale" aria-hidden="true"><span>$500</span><span>$10,000</span></div>
+            </div>
+            <div class="traders-calc__field">
+              <div class="traders-calc__row">
+                <label class="field__label" for="calc-return">Monthly return</label>
+                <output class="traders-calc__readout" for="calc-return" data-calc="return">5%</output>
+              </div>
+              <input class="traders-range" type="range" id="calc-return" name="return" min="1" max="25" step="0.5" value="5" aria-valuetext="5% a month" style="--fill: 16.67%">
+              <div class="range-scale" aria-hidden="true"><span>1%</span><span>25%</span></div>
+            </div>
+          </div>
+
+          <p class="fineprint traders-calc__foot">Illustrative. Not a guarantee of income. Assumes a 15% performance fee on followers' monthly profit plus a $2 monthly subscription per follower, with every follower in profit above their high-water mark. Losing months, withdrawals, follower churn and fees are not modelled — real earnings are often lower, and can be zero.</p>
+        </form>
+      </div>
+    </section>
+
+    <!-- ============ Earnings system ============ -->
+    <section class="section surface-paper traders-system" aria-labelledby="system-title">
+      <div class="container">
+        <div class="section-head">
+          <div class="stack">
+            <p class="overline overline--accent">How you're paid</p>
+            <h2 id="system-title" class="h-xl">Earnings system.</h2>
+          </div>
+          <p class="lead">Three income streams, each tied to how well your followers do.</p>
+        </div>
+        <ol class="num-rows traders-rows" role="list">
+          <li class="num-row">
+            <span class="num-row__index" aria-hidden="true">01</span>
+            <div class="num-row__body">
+              <h3 class="num-row__title">Subscription fees</h3>
+              <p class="num-row__text">A fixed monthly fee for each follower copying your strategy, shown to followers before they start.</p>
+            </div>
+            <p class="traders-rows__fig"><span class="traders-rows__value">$2</span><span class="traders-rows__unit">per follower / month</span></p>
+          </li>
+          <li class="num-row">
+            <span class="num-row__index" aria-hidden="true">02</span>
+            <div class="num-row__body">
+              <h3 class="num-row__title">Performance commissions</h3>
+              <p class="num-row__text">A share of the profit you make for followers, charged only above a high-water mark: if a follower's account falls, you earn nothing from them until it's back above its previous peak.</p>
+            </div>
+            <p class="traders-rows__fig"><span class="traders-rows__value">15%</span><span class="traders-rows__unit">of profit above high-water mark</span></p>
+          </li>
+          <li class="num-row">
+            <span class="num-row__index" aria-hidden="true">03</span>
+            <div class="num-row__body">
+              <h3 class="num-row__title">Volume bonuses</h3>
+              <p class="num-row__text">Tiered rebates on the trading volume your followers replicate, paid by TED Brokers. Followers aren't charged extra.</p>
+            </div>
+            <p class="traders-rows__fig"><span class="traders-rows__value">$3.50</span><span class="traders-rows__unit">per lot copied · tiered</span></p>
+          </li>
+        </ol>
+        <p class="fineprint mt-5">Example rates, matching the calculator above. Your rates are agreed when your application is approved.</p>
+      </div>
+    </section>
+
+    <!-- ============ Who qualifies ============ -->
+    <section class="section surface-ink" id="requirements" aria-labelledby="req-title">
+      <div class="container split" style="--split-cols: minmax(0, 5fr) minmax(0, 7fr)">
+        <div class="stack" style="--stack-gap: var(--space-5)">
+          <p class="overline overline--signal">Requirements</p>
+          <h2 id="req-title" class="h-xl">Who qualifies.</h2>
+          <p class="lead">We only list traders whose record we can verify. You'll need all four of these to apply.</p>
+          <p class="fineprint">Meeting the thresholds doesn't guarantee a listing — every application is reviewed.</p>
+        </div>
+        <ul class="traders-checks" role="list">
+          <li class="traders-check" data-reveal>
+            <svg class="traders-check__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true" focusable="false"><path d="M5 12.5l4.5 4.5L19 7"/></svg>
+            <div>
+              <h3 class="traders-check__title">1+ year verified track record</h3>
+              <p class="traders-check__text">Twelve months or more of trading history we can verify from your broker statements or a connected account.</p>
+            </div>
+          </li>
+          <li class="traders-check" data-reveal style="--i:1">
+            <svg class="traders-check__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true" focusable="false"><path d="M5 12.5l4.5 4.5L19 7"/></svg>
+            <div>
+              <h3 class="traders-check__title">3+ consecutive profitable months</h3>
+              <p class="traders-check__text">At least three months in a row with net positive returns — consistency, not one lucky month.</p>
+            </div>
+          </li>
+          <li class="traders-check" data-reveal style="--i:2">
+            <svg class="traders-check__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true" focusable="false"><path d="M5 12.5l4.5 4.5L19 7"/></svg>
+            <div>
+              <h3 class="traders-check__title">Max drawdown under 30%</h3>
+              <p class="traders-check__text">Your largest peak-to-trough decline stayed below 30% across the verified period.</p>
+            </div>
+          </li>
+          <li class="traders-check" data-reveal style="--i:3">
+            <svg class="traders-check__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true" focusable="false"><path d="M5 12.5l4.5 4.5L19 7"/></svg>
+            <div>
+              <h3 class="traders-check__title">Completed KYC</h3>
+              <p class="traders-check__text">Identity and address verification — the same checks every TED Brokers account completes.</p>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ============ Tools ============ -->
+    <section class="section surface-ink traders-tools-section" aria-labelledby="tools-title">
+      <div class="container">
+        <div class="section-head">
+          <div class="stack">
+            <p class="overline overline--accent">Provider workspace</p>
+            <h2 id="tools-title" class="h-xl">Tools built for pros.</h2>
+          </div>
+          <p class="overline traders-tools__hint">Scroll to explore <span class="traders-tools__arrow" aria-hidden="true">→</span></p>
+        </div>
+
+        <div class="traders-tools" role="region" aria-label="Provider tools, scrollable" tabindex="0">
+          <ul class="traders-tools__list" role="list">
+            <li class="traders-tool" data-reveal>
+              <figure>
+                <div class="traders-tool__visual">
+                  <div class="traders-tool__head">
+                    <span class="overline">Strategy performance · 12 mo</span>
+                    <span class="delta" data-trend="up">+38.2%</span>
+                  </div>
+                  <div class="chart" role="img" style="--chart-h: 9rem" data-component="chart" data-series="walk:48,seed=5,drift=.8,start=100,end=138.2" data-format="number" data-decimals="1" data-labels="Nov,Dec,Jan,Feb,Mar,Apr,May,Jun,Jul,Aug,Sep,Oct" data-series-name="Index" aria-label="Sample strategy performance chart, up 38.2% over 12 months"></div>
+                  <p class="traders-tool__foot"><span>Sharpe 1.84</span><span>Max DD 12.4%</span><span>Win rate 76%</span></p>
+                </div>
+                <figcaption class="traders-tool__caption">
+                  <h3 class="traders-tool__title">Analytics</h3>
+                  <p>Drawdown, Sharpe ratio, win rate and per-market breakdowns — the same numbers your followers see.</p>
+                </figcaption>
+              </figure>
+            </li>
+
+            <li class="traders-tool" data-reveal style="--i:1">
+              <figure>
+                <div class="traders-tool__visual">
+                  <div class="traders-tool__head"><span class="overline">Subscribers</span><span class="tag tag--gain">Live</span></div>
+                  <table class="ledger traders-mini">
+                    <caption class="sr-only">Sample subscriber list</caption>
+                    <thead><tr><th scope="col">Copier</th><th scope="col">Since</th><th scope="col" class="is-num">Allocated</th></tr></thead>
+                    <tbody>
+                      <tr><td>C-8829 <span class="muted">Frankfurt</span></td><td>Mar 2026</td><td class="is-num">$4,800</td></tr>
+                      <tr><td>C-1044 <span class="muted">Tokyo</span></td><td>Jan 2026</td><td class="is-num">$12,500</td></tr>
+                      <tr><td>C-3916 <span class="muted">London</span></td><td>Aug 2026</td><td class="is-num">$1,500</td></tr>
+                      <tr><td>C-6602 <span class="muted">New York</span></td><td>Oct 2026</td><td class="is-num">$7,900</td></tr>
+                    </tbody>
+                  </table>
+                  <p class="traders-tool__foot"><span>1,419 active copiers</span></p>
+                </div>
+                <figcaption class="traders-tool__caption">
+                  <h3 class="traders-tool__title">Subscriber management</h3>
+                  <p>See who's copying you, how much they've allocated and when they joined or left.</p>
+                </figcaption>
+              </figure>
+            </li>
+
+            <li class="traders-tool" data-reveal style="--i:2">
+              <figure>
+                <div class="traders-tool__visual">
+                  <div class="traders-tool__head"><span class="overline">Risk controls</span></div>
+                  <div class="traders-gauge">
+                    <svg class="traders-gauge__svg" viewBox="0 0 220 124" aria-hidden="true" focusable="false">
+                      <path class="traders-gauge__track" d="M14 110 A96 96 0 0 1 206 110" pathLength="100"/>
+                      <path class="traders-gauge__limit" d="M14 110 A96 96 0 0 1 206 110" pathLength="100"/>
+                      <path class="traders-gauge__value" d="M14 110 A96 96 0 0 1 206 110" pathLength="100" style="--off: 58.7"/>
+                      <path class="traders-gauge__ticks" d="M14 110 A96 96 0 0 1 206 110" pathLength="100"/>
+                    </svg>
+                    <p class="traders-gauge__readout"><span class="traders-gauge__num">12.4%</span><span class="traders-gauge__label">Max drawdown · limit 30%</span></p>
+                  </div>
+                  <p class="traders-tool__foot"><span>Copy stop-loss</span><span>Allocation caps</span></p>
+                </div>
+                <figcaption class="traders-tool__caption">
+                  <h3 class="traders-tool__title">Risk controls</h3>
+                  <p>Track drawdown against your limits in real time, and see the stop-loss levels your followers have set.</p>
+                </figcaption>
+              </figure>
+            </li>
+
+            <li class="traders-tool" data-reveal style="--i:3">
+              <figure>
+                <div class="traders-tool__visual">
+                  <div class="traders-tool__head"><span class="overline">Profile preview</span></div>
+                  <div class="traders-profile">
+                    <div class="person">
+                      <span class="avatar avatar--lg">EV</span>
+                      <div><div class="person__name">Elena Vasquez</div><div class="person__meta">Forex · London breakout</div></div>
+                    </div>
+                    <dl class="traders-profile__stats">
+                      <div><dt>12-mo return</dt><dd><span class="delta" data-trend="up">+38.2%</span></dd></div>
+                      <div><dt>Copiers</dt><dd class="mono">1,419</dd></div>
+                      <div><dt>Risk</dt><dd><span class="riskbar" style="--risk:4"><span class="riskbar__track"></span>4/10</span></dd></div>
+                    </dl>
+                    <span class="spark" data-component="spark" data-series="walk:30,seed=3,drift=.8" style="--spark-w: 100%; --spark-h: 3rem"></span>
+                  </div>
+                </div>
+                <figcaption class="traders-tool__caption">
+                  <h3 class="traders-tool__title">Profile preview</h3>
+                  <p>See exactly how your public profile, track record and risk score appear to investors before you publish.</p>
+                </figcaption>
+              </figure>
+            </li>
+          </ul>
+        </div>
+        <p class="fineprint mt-5">Previews use sample data. Past performance is not a reliable indicator of future results.</p>
+      </div>
+    </section>
+
+    <!-- ============ CTA ============ -->
+    <section class="cta-band" aria-labelledby="cta-title">
+      <div class="container cta-band__inner">
+        <div>
+          <p class="overline">Trader program</p>
+          <h2 id="cta-title" class="mt-4">Ready to lead?</h2>
+          <p>Apply in minutes. Once you're verified, keep trading your strategy — replication, billing and payouts are handled for you.</p>
+        </div>
+        <a class="btn btn--lg btn--white" href="register.html">Apply as a trader
+          <svg class="btn__arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+      </div>
+    </section>
+  </main>
+
+  <!-- ============ Footer ============ -->
+  <footer class="site-footer surface-ink">
+    <div class="container">
+      <div class="site-footer__top">
+        <div class="site-footer__brand">
+          <a class="wordmark" href="index.html" aria-label="TED Brokers home"><span class="wordmark__ted">TED</span><span class="wordmark__brokers">Brokers</span></a>
+          <p>Copy trading across forex, stocks, crypto and commodities — with the controls to manage your risk.</p>
+          <address class="site-footer__contact">330 Hudson Street, 12th Floor<br>New York, NY 10013<br><a href="tel:+13322208968">+1 (332) 220-8968</a></address>
+        </div>
+        <nav aria-labelledby="f-company"><h2 id="f-company">Company</h2><ul role="list"><li><a href="about.html">About us</a></li><li><a href="help.html#contact">Contact</a></li><li><a href="help.html">FAQs</a></li></ul></nav>
+        <nav aria-labelledby="f-resources"><h2 id="f-resources">Resources</h2><ul role="list"><li><a href="how-it-works.html">How it works</a></li><li><a href="traders.html">For traders</a></li><li><a href="help.html">Help center</a></li></ul></nav>
+        <nav aria-labelledby="f-legal"><h2 id="f-legal">Legal</h2><ul role="list"><li><a href="#">Privacy policy</a></li><li><a href="#">Terms &amp; conditions</a></li><li><a href="#">AML / KYC policy</a></li><li><a href="#">Risk disclosure</a></li></ul></nav>
+      </div>
+      <p class="fineprint site-footer__risk"><strong>Risk warning:</strong> Trading forex, cryptocurrencies, stocks and other financial instruments carries a high level of risk and may not be suitable for all investors. You could lose some or all of your capital. Copy trading does not constitute investment advice. Past performance of any trader is not a reliable indicator of future results.</p>
+      <div class="site-footer__bottom">
+        <span>© 2026 TED Brokers</span>
+        <ul class="site-footer__langs" role="list" aria-label="Language">
+          <li><a href="#" aria-current="true" lang="en">EN</a></li><li><a href="#" lang="es">ES</a></li><li><a href="#" lang="de">DE</a></li><li><a href="#" lang="fr">FR</a></li><li><a href="#" lang="pt">PT</a></li><li><a href="#" lang="ar">AR</a></li><li><a href="#" lang="zh">中文</a></li>
+        </ul>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>

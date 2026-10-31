@@ -1,0 +1,765 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>TED Brokers — Referrals &amp; Network Architecture</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&amp;family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&amp;family=Public+Sans:ital,wght@0,100..900;1,100..900&amp;family=Sora:wght@100..800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "on-primary-fixed-variant": "#930013",
+            "on-primary-fixed": "#410004",
+            "surface-variant": "#2a3547",
+            "surface-bright": "#2e3a4b",
+            "tertiary": "#51dbcb",
+            "on-tertiary": "#003732",
+            "on-surface-variant": "#e6bdb9",
+            "tertiary-fixed-dim": "#51dbcb",
+            "on-tertiary-fixed-variant": "#005049",
+            "primary-fixed-dim": "#ffb3ad",
+            "on-primary": "#68000a",
+            "surface-container-low": "#101c2c",
+            "primary-fixed": "#ffdad7",
+            "inverse-on-surface": "#263142",
+            "secondary": "#9fcbf2",
+            "surface-dim": "#081424",
+            "surface": "#081424",
+            "primary-container": "#e3262f",
+            "on-background": "#d7e3fa",
+            "surface-container-high": "#1f2a3b",
+            "background": "#081424",
+            "on-secondary-container": "#91bde3",
+            "on-secondary": "#003450",
+            "on-secondary-fixed-variant": "#184b6b",
+            "secondary-fixed-dim": "#9fcbf2",
+            "tertiary-fixed": "#72f8e7",
+            "inverse-primary": "#c0001c",
+            "primary": "#ffb3ad",
+            "error": "#ffb4ab",
+            "surface-container": "#152030",
+            "on-primary-container": "#fffeff",
+            "surface-tint": "#ffb3ad",
+            "on-error-container": "#ffdad6",
+            "tertiary-container": "#008479",
+            "surface-container-lowest": "#030e1e",
+            "on-error": "#690005",
+            "secondary-container": "#1c4d6e",
+            "surface-container-highest": "#2a3547",
+            "outline-variant": "#5d3f3d",
+            "error-container": "#93000a",
+            "on-tertiary-container": "#fafffd",
+            "outline": "#ad8885",
+            "on-surface": "#d7e3fa",
+            "inverse-surface": "#d7e3fa",
+            "on-tertiary-fixed": "#00201d",
+            "secondary-fixed": "#cbe6ff",
+            "on-secondary-fixed": "#001e30"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "space-lg": "1.5rem",
+            "space-xl": "2rem",
+            "space-md": "1rem",
+            "space-xs": "0.25rem",
+            "space-sm": "0.5rem",
+            "gutter": "1rem",
+            "margin": "1.5rem"
+          },
+          "fontFamily": {
+            "body-md": ["DM Sans"],
+            "headline-md": ["Sora"],
+            "data-mono": ["JetBrains Mono"],
+            "body-lg": ["DM Sans"],
+            "headline-lg": ["Sora"],
+            "display-lg": ["Sora"],
+            "label-md": ["Public Sans"]
+          },
+          "fontSize": {
+            "body-md": ["15px", { "lineHeight": "22px", "fontWeight": "400" }],
+            "headline-md": ["28px", { "lineHeight": "36px", "letterSpacing": "-0.015em", "fontWeight": "600" }],
+            "data-mono": ["14px", { "lineHeight": "20px", "fontWeight": "500" }],
+            "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+            "headline-lg": ["36px", { "lineHeight": "44px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+            "display-lg": ["72px", { "lineHeight": "80px", "letterSpacing": "-0.035em", "fontWeight": "700" }],
+            "label-md": ["12px", { "lineHeight": "16px", "letterSpacing": "0.12em", "fontWeight": "600" }]
+          }
+        },
+      },
+    }
+  </script>
+</head>
+<body class="bg-background text-on-surface antialiased font-body-md selection:bg-primary-container selection:text-white min-h-screen flex flex-col">
+<!-- TOP TICKER BAR -->
+<header class="w-full bg-[#030e1e] border-b border-secondary-container h-8 flex items-center px-6 overflow-hidden select-none z-50 text-[11px] font-data-mono">
+<div class="flex items-center gap-6 whitespace-nowrap animate-[marquee_45s_linear_infinite] w-full text-on-surface-variant/80">
+<div class="flex items-center gap-2"><span class="text-on-surface font-semibold">EUR/USD</span> <span>1.0842</span> <span class="text-tertiary">▲ +0.21%</span></div>
+<span class="text-secondary-container">|</span>
+<div class="flex items-center gap-2"><span class="text-on-surface font-semibold">BTC/USD</span> <span>67,412.00</span> <span class="text-tertiary">▲ +1.84%</span></div>
+<span class="text-secondary-container">|</span>
+<div class="flex items-center gap-2"><span class="text-on-surface font-semibold">ETH/USD</span> <span>3,540.80</span> <span class="text-tertiary">▲ +2.11%</span></div>
+<span class="text-secondary-container">|</span>
+<div class="flex items-center gap-2"><span class="text-on-surface font-semibold">AAPL</span> <span>228.14</span> <span class="text-primary-container">▼ -0.42%</span></div>
+<span class="text-secondary-container">|</span>
+<div class="flex items-center gap-2"><span class="text-on-surface font-semibold">XAU/USD</span> <span>2,384.10</span> <span class="text-tertiary">▲ +0.35%</span></div>
+<span class="text-secondary-container">|</span>
+<div class="flex items-center gap-2"><span class="text-on-surface font-semibold">SPX</span> <span>5,567.19</span> <span class="text-tertiary">▲ +0.38%</span></div>
+<span class="text-secondary-container">|</span>
+<div class="flex items-center gap-2"><span class="text-on-surface font-semibold">NVDA</span> <span>138.25</span> <span class="text-tertiary">▲ +3.12%</span></div>
+<span class="text-secondary-container">|</span>
+<div class="flex items-center gap-2"><span class="text-on-surface font-semibold">US10Y</span> <span>4.218%</span> <span class="text-primary-container">▼ -0.015</span></div>
+</div>
+</header>
+<!-- TOP APP BAR -->
+<nav class="w-full px-margin py-space-sm flex items-center justify-between border-b border-secondary-container dark:border-secondary-container bg-background dark:bg-background z-40 sticky top-0">
+<!-- Brand Anchor -->
+<div class="flex items-center gap-8">
+<div class="flex items-center gap-2">
+<span class="font-headline-md text-headline-md tracking-tight font-bold text-on-surface dark:text-on-surface">TED Brokers</span>
+<span class="w-2 h-2 rounded-full bg-primary-container inline-block shadow-[0_0_8px_#e3262f]"></span>
+</div>
+<!-- Command / Search -->
+<div class="hidden md:flex items-center bg-[#101c2c] border border-secondary-container/60 px-3 py-1.5 w-72 text-xs">
+<span class="material-symbols-outlined text-secondary text-sm mr-2" data-icon="search">search</span>
+<input class="bg-transparent border-none p-0 focus:ring-0 text-xs w-full text-on-surface placeholder:text-on-surface-variant/50 focus:outline-none" placeholder="Search markets, referrals, traders..." type="text"/>
+<span class="text-[10px] font-data-mono text-on-surface-variant/60 border border-secondary-container px-1 py-0.5 ml-2">⌘K</span>
+</div>
+</div>
+<!-- Right Utility Cluster -->
+<div class="flex items-center gap-4">
+<div class="flex items-center text-xs font-data-mono text-on-surface-variant cursor-pointer hover:text-on-surface transition-colors">
+<span class="material-symbols-outlined text-base mr-1" data-icon="language">language</span>
+<span>EN</span>
+</div>
+<button class="text-on-surface-variant hover:text-on-surface transition-colors p-1" title="Toggle Theme">
+<span class="material-symbols-outlined text-lg" data-icon="dark_mode">dark_mode</span>
+</button>
+<div class="relative p-1 text-on-surface-variant hover:text-on-surface transition-colors cursor-pointer">
+<span class="material-symbols-outlined text-lg" data-icon="notifications">notifications</span>
+<span class="absolute top-1 right-1 w-1.5 h-1.5 bg-primary-container rounded-full"></span>
+</div>
+<div class="h-4 w-px bg-secondary-container"></div>
+<button class="h-9 px-3.5 border border-secondary-container text-xs font-label-md uppercase tracking-wider text-on-surface hover:border-secondary transition-colors flex items-center gap-1.5">
+<span class="material-symbols-outlined text-sm text-tertiary" data-icon="auto_awesome">auto_awesome</span>
+<span>TED AI</span>
+</button>
+<button class="h-9 px-4 bg-primary-container hover:bg-primary-container/90 text-on-primary-container text-xs font-label-md uppercase tracking-wider font-semibold transition-all flex items-center gap-1.5 shadow-[0_0_12px_rgba(227,38,47,0.35)]">
+<span class="material-symbols-outlined text-sm" data-icon="add">add</span>
+<span>DEPOSIT</span>
+</button>
+</div>
+</nav>
+<!-- BODY GRID: Left Rail (240px) + Main Content Canvas -->
+<div class="flex-1 flex w-full">
+<!-- LEFT NAVIGATION RAIL -->
+<aside class="w-[240px] shrink-0 bg-[#11223A] border-r border-secondary-container flex flex-col justify-between select-none">
+<div class="py-4">
+<!-- Main Navigation Links -->
+<div class="flex flex-col text-xs font-body-md">
+<a class="flex items-center gap-3 px-5 py-2.5 text-on-surface-variant hover:text-on-surface transition-colors" href="#">
+<span class="material-symbols-outlined text-base" data-icon="dashboard">dashboard</span>
+<span>Overview</span>
+</a>
+<a class="flex items-center gap-3 px-5 py-2.5 text-on-surface-variant hover:text-on-surface transition-colors" href="#">
+<span class="material-symbols-outlined text-base" data-icon="account_balance_wallet">account_balance_wallet</span>
+<span>Wallet</span>
+</a>
+<a class="flex items-center gap-3 px-5 py-2.5 text-on-surface-variant hover:text-on-surface transition-colors" href="#">
+<span class="material-symbols-outlined text-base" data-icon="pie_chart">pie_chart</span>
+<span>Portfolio</span>
+</a>
+<a class="flex items-center justify-between px-5 py-2.5 text-on-surface-variant hover:text-on-surface transition-colors" href="#">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-base" data-icon="groups">groups</span>
+<span>Copy traders</span>
+</div>
+<span class="text-[10px] font-data-mono text-tertiary">3 LIVE</span>
+</a>
+<!-- Section Divider -->
+<div class="px-5 pt-5 pb-2 text-[10px] font-label-md uppercase tracking-wider text-on-surface-variant/40">
+            INVESTMENT PLANS
+          </div>
+<a class="flex items-center gap-3 px-5 py-2 text-on-surface-variant/80 hover:text-on-surface transition-colors" href="#">
+<span class="material-symbols-outlined text-base" data-icon="smart_toy">smart_toy</span>
+<span>Robo Advisor</span>
+</a>
+<a class="flex items-center gap-3 px-5 py-2 text-on-surface-variant/80 hover:text-on-surface transition-colors" href="#">
+<span class="material-symbols-outlined text-base" data-icon="inventory_2">inventory_2</span>
+<span>ETF Baskets</span>
+</a>
+<a class="flex items-center gap-3 px-5 py-2 text-on-surface-variant/80 hover:text-on-surface transition-colors" href="#">
+<span class="material-symbols-outlined text-base" data-icon="savings">savings</span>
+<span>DeFi Yields</span>
+</a>
+<a class="flex items-center gap-3 px-5 py-2 text-on-surface-variant/80 hover:text-on-surface transition-colors" href="#">
+<span class="material-symbols-outlined text-base" data-icon="show_chart">show_chart</span>
+<span>Options Alpha</span>
+</a>
+<!-- Feed & Community -->
+<div class="h-px bg-secondary-container/50 my-3 mx-4"></div>
+<a class="flex items-center gap-3 px-5 py-2.5 text-on-surface-variant hover:text-on-surface transition-colors" href="#">
+<span class="material-symbols-outlined text-base" data-icon="rss_feed">rss_feed</span>
+<span>Network feed</span>
+</a>
+<!-- Referrals (ACTIVE STATE) -->
+<a class="flex items-center gap-3 px-5 py-2.5 text-white bg-[#0A1626]/70 border-l-2 border-primary-container font-medium" href="#">
+<span class="material-symbols-outlined text-base text-primary-container" data-icon="share">share</span>
+<span>Referrals</span>
+</a>
+<a class="flex items-center gap-3 px-5 py-2.5 text-on-surface-variant hover:text-on-surface transition-colors" href="#">
+<span class="material-symbols-outlined text-base" data-icon="terminal">terminal</span>
+<span>News &amp; Terminal</span>
+</a>
+</div>
+</div>
+<!-- User Profile Anchor -->
+<div class="border-t border-secondary-container p-4 bg-[#0a1626]/40">
+<div class="flex items-center gap-3 mb-3">
+<div class="w-8 h-8 bg-secondary-container/80 text-white flex items-center justify-center font-headline-md text-xs font-bold">
+            DO
+          </div>
+<div class="overflow-hidden">
+<div class="text-xs font-headline-md font-semibold text-white truncate">Daniel Okafor</div>
+<div class="text-[10px] font-data-mono text-tertiary">● Verified Tier 1</div>
+</div>
+</div>
+<div class="flex items-center justify-between text-xs text-on-surface-variant pt-1">
+<a class="hover:text-white flex items-center gap-1" href="#"><span class="material-symbols-outlined text-sm" data-icon="settings">settings</span> Settings</a>
+<a class="hover:text-white flex items-center gap-1" href="#"><span class="material-symbols-outlined text-sm" data-icon="help">help</span> Help</a>
+</div>
+</div>
+</aside>
+<!-- MAIN DASHBOARD CANVAS (No Cards, Pure Open Hairline Architecture) -->
+<main class="flex-1 bg-surface-dim overflow-y-auto px-10 py-8">
+<div class="max-w-6xl mx-auto space-y-12">
+<!-- 1. SPLIT HERO SECTION (NO CONTAINER, NO BOX) -->
+<section class="grid grid-cols-12 gap-8 items-center border-b border-secondary-container pb-12">
+<!-- Left Column (w-7/12) -->
+<div class="col-span-7">
+<div class="font-data-mono uppercase tracking-widest text-[#e3262f] text-xs font-semibold mb-2">
+              REFERRAL PROGRAM // AUDITED NETWORK
+            </div>
+<h1 class="font-headline-lg text-[44px] leading-[52px] font-bold text-white tracking-tight">
+              Invite friends. Earn on every deposit they make.
+            </h1>
+<p class="font-body-md text-base text-[#8e9fad] max-w-lg mt-3">
+              Earn 5% of your friends' first deposit, paid to your wallet. Uncapped allocations, instant verification pipeline, continuous tier bonuses.
+            </p>
+<!-- Referral Link Sharing Field -->
+<div class="mt-8 max-w-lg">
+<div class="border-b border-[#223755] pb-2 flex items-center justify-between">
+<span class="font-data-mono text-lg text-white tracking-wide select-all">
+                  tedbrokers.com/r/DANIEL-48211
+                </span>
+<button class="bg-[#E3262F] hover:bg-[#c91e26] text-white px-5 py-2 font-medium text-xs font-label-md uppercase tracking-wider transition-colors flex items-center gap-1.5 shadow-[0_0_10px_rgba(227,38,47,0.4)]">
+<span class="material-symbols-outlined text-sm" data-icon="content_copy">content_copy</span>
+<span>Copy link</span>
+</button>
+</div>
+<!-- Quick Share Actions -->
+<div class="flex items-center gap-4 mt-5 text-xs">
+<span class="font-data-mono text-[#8e9fad] text-[11px] uppercase tracking-wider">Quick share:</span>
+<div class="flex items-center gap-4 text-on-surface-variant">
+<!-- X (Twitter) -->
+<a class="hover:text-white hover:drop-shadow-[0_0_6px_#ffffff] transition-all" href="#" title="Share on X">
+<svg class="w-4 h-4 fill-current" viewbox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"></path></svg>
+</a>
+<!-- WhatsApp -->
+<a class="hover:text-[#2EE6D3] hover:drop-shadow-[0_0_6px_#2EE6D3] transition-all" href="#" title="Share on WhatsApp">
+<svg class="w-4 h-4 fill-current" viewbox="0 0 24 24"><path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.816 9.816 0 0012.04 2m.01 1.67c2.2 0 4.26.86 5.82 2.42a8.225 8.225 0 012.41 5.83c0 4.54-3.7 8.24-8.24 8.24-1.42 0-2.82-.37-4.05-1.07l-.29-.17-3.12.82.83-3.04-.19-.3a8.21 8.21 0 01-1.26-4.47c0-4.54 3.7-8.24 8.24-8.24m4.52 11.66c-.25-.13-1.47-.72-1.7-.81-.23-.08-.39-.13-.56.13-.17.25-.64.81-.79.97-.14.17-.29.19-.54.06-.25-.13-1.06-.39-2.02-1.24-.75-.67-1.25-1.49-1.39-1.74-.14-.25-.02-.39.11-.51.11-.11.25-.29.38-.44.13-.14.17-.25.25-.42.08-.17.04-.31-.02-.44-.06-.13-.56-1.34-.76-1.84-.2-.49-.4-.42-.56-.43h-.47c-.17 0-.44.06-.67.31-.23.25-.87.85-.87 2.07s.89 2.4 1.02 2.57c.13.17 1.76 2.68 4.26 3.76.6.26 1.06.41 1.42.53.6.19 1.15.16 1.58.1.48-.07 1.47-.6 1.68-1.18.21-.58.21-1.07.15-1.18-.07-.1-.23-.17-.48-.29z"></path></svg>
+</a>
+<!-- Telegram -->
+<a class="hover:text-secondary hover:drop-shadow-[0_0_6px_#9fcbf2] transition-all" href="#" title="Share on Telegram">
+<svg class="w-4 h-4 fill-current" viewbox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2m4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69a.2.2 0 00-.05-.18c-.06-.05-.14-.03-.21-.02-.09.02-1.49.95-4.22 2.79-.4.27-.76.41-1.08.4-.36-.01-1.04-.2-1.55-.37-.63-.2-1.12-.31-1.08-.66.02-.18.27-.36.75-.55 2.92-1.27 4.86-2.11 5.83-2.51 2.78-1.16 3.35-1.36 3.73-1.36.08 0 .27.02.39.12.1.08.13.19.14.27-.01.06.01.24 0 .38z"></path></svg>
+</a>
+<!-- Email -->
+<a class="hover:text-white hover:drop-shadow-[0_0_6px_#ffffff] transition-all" href="#" title="Share via Email">
+<span class="material-symbols-outlined text-base leading-none" data-icon="mail">mail</span>
+</a>
+</div>
+</div>
+</div>
+</div>
+<!-- Right Column (w-5/12): Animated Network Graphic -->
+<div class="col-span-5 flex items-center justify-center relative">
+<div class="w-full relative flex items-center justify-center">
+<!-- STITCH_SVG_START:ANIMATION_19 class="w-full h-80" --><div class="w-full h-80" id="animated-svg-ANIMATION_19" style="display:block;"><svg class="w-full h-full overflow-visible" height="100%" viewbox="0 0 540 380" width="100%" xmlns="http://www.w3.org/2000/svg">
+<defs>
+<!-- Dot matrix grid pattern -->
+<pattern height="24" id="dot-grid" patternunits="userSpaceOnUse" width="24">
+<circle cx="2" cy="2" fill="#1b2e4b" opacity="0.6" r="1"></circle>
+</pattern>
+<!-- Glow filters -->
+<filter height="200%" id="glow-red" width="200%" x="-50%" y="-50%">
+<fegaussianblur result="blur" stddeviation="6"></fegaussianblur>
+<femerge>
+<femergenode in="blur"></femergenode>
+<femergenode in="SourceGraphic"></femergenode>
+</femerge>
+</filter>
+<filter height="200%" id="glow-teal" width="200%" x="-50%" y="-50%">
+<fegaussianblur result="blur" stddeviation="5"></fegaussianblur>
+<femerge>
+<femergenode in="blur"></femergenode>
+<femergenode in="SourceGraphic"></femergenode>
+</femerge>
+</filter>
+</defs>
+<!-- Background matrix -->
+<rect fill="url(#dot-grid)" height="100%" opacity="0.75" width="100%"></rect>
+<!-- Radiating subtle pulse rings from central node -->
+<circle cx="270" cy="190" fill="none" opacity="0.3" r="45" stroke="#e3262f" stroke-width="1">
+<animate attributename="r" dur="4s" repeatcount="indefinite" values="30;120;180"></animate>
+<animate attributename="opacity" dur="4s" repeatcount="indefinite" values="0.45;0.15;0"></animate>
+</circle>
+<circle cx="270" cy="190" fill="none" opacity="0.25" r="75" stroke="#2ee6d3" stroke-dasharray="3,3" stroke-width="0.75">
+<animate attributename="r" begin="1.5s" dur="5s" repeatcount="indefinite" values="50;150;220"></animate>
+<animate attributename="opacity" begin="1.5s" dur="5s" repeatcount="indefinite" values="0.35;0.1;0"></animate>
+</circle>
+<!-- Branching connection lines -->
+<!-- Node 1: Elena V (Top Left) -->
+<line opacity="0.45" stroke="#2ee6d3" stroke-dasharray="4,4" stroke-width="1.2" x1="270" x2="130" y1="190" y2="90">
+<animate attributename="stroke-dashoffset" dur="2s" repeatcount="indefinite" values="16;0"></animate>
+</line>
+<!-- Node 2: Marcus C (Top Right) -->
+<line opacity="0.5" stroke="#2ee6d3" stroke-dasharray="4,4" stroke-width="1.2" x1="270" x2="410" y1="190" y2="105">
+<animate attributename="stroke-dashoffset" dur="2.4s" repeatcount="indefinite" values="16;0"></animate>
+</line>
+<!-- Node 3: Aisha R (Mid Right) -->
+<line opacity="0.55" stroke="#2ee6d3" stroke-dasharray="4,4" stroke-width="1.2" x1="270" x2="450" y1="190" y2="225">
+<animate attributename="stroke-dashoffset" dur="1.8s" repeatcount="indefinite" values="16;0"></animate>
+</line>
+<!-- Node 4: Lukas B (Bottom Right) -->
+<line opacity="0.4" stroke="#2ee6d3" stroke-dasharray="4,4" stroke-width="1" x1="270" x2="385" y1="190" y2="310">
+<animate attributename="stroke-dashoffset" dur="2.8s" repeatcount="indefinite" values="16;0"></animate>
+</line>
+<!-- Node 5: Sofia M (Bottom Left) -->
+<line opacity="0.5" stroke="#2ee6d3" stroke-dasharray="4,4" stroke-width="1.2" x1="270" x2="155" y1="190" y2="295">
+<animate attributename="stroke-dashoffset" dur="2.1s" repeatcount="indefinite" values="16;0"></animate>
+</line>
+<!-- Node 6: Kenji W (Far Left) -->
+<line opacity="0.35" stroke="#2ee6d3" stroke-dasharray="4,4" stroke-width="1" x1="270" x2="75" y1="190" y2="180">
+<animate attributename="stroke-dashoffset" dur="2.5s" repeatcount="indefinite" values="16;0"></animate>
+</line>
+<!-- Secondary child branches (tier 2 network) -->
+<line opacity="0.25" stroke="#2ee6d3" stroke-width="0.75" x1="130" x2="60" y1="90" y2="60"></line>
+<line opacity="0.25" stroke="#2ee6d3" stroke-width="0.75" x1="130" x2="180" y1="90" y2="40"></line>
+<line opacity="0.25" stroke="#2ee6d3" stroke-width="0.75" x1="410" x2="490" y1="105" y2="65"></line>
+<line opacity="0.35" stroke="#ffb020" stroke-dasharray="3,3" stroke-width="0.8" x1="450" x2="515" y1="225" y2="260"></line>
+<line opacity="0.25" stroke="#2ee6d3" stroke-width="0.75" x1="155" x2="105" y1="295" y2="345"></line>
+<!-- Secondary leaf nodes -->
+<circle cx="60" cy="60" fill="#2ee6d3" opacity="0.5" r="3"></circle>
+<circle cx="180" cy="40" fill="#2ee6d3" opacity="0.5" r="3"></circle>
+<circle cx="490" cy="65" fill="#2ee6d3" opacity="0.6" r="3.5"></circle>
+<circle cx="515" cy="260" fill="#ffb020" opacity="0.7" r="3.5">
+<animate attributename="opacity" dur="2s" repeatcount="indefinite" values="0.4;1;0.4"></animate>
+</circle>
+<circle cx="105" cy="345" fill="#2ee6d3" opacity="0.5" r="3"></circle>
+<!-- Active Teal Nodes (Friends) -->
+<!-- Node 1: Elena V -->
+<g transform="translate(130, 90)">
+<circle cx="0" cy="0" fill="#0e233d" filter="url(#glow-teal)" r="14" stroke="#2ee6d3" stroke-width="1.5"></circle>
+<circle cx="0" cy="0" fill="#2ee6d3" r="4.5"></circle>
+<text fill="#a4b4cb" font-family="'JetBrains Mono', monospace" font-size="9" letter-spacing="0.5" text-anchor="middle" x="0" y="24">EV +$120</text>
+</g>
+<!-- Node 2: Marcus C -->
+<g transform="translate(410, 105)">
+<circle cx="0" cy="0" fill="#0e233d" filter="url(#glow-teal)" r="15" stroke="#2ee6d3" stroke-width="1.5"></circle>
+<circle cx="0" cy="0" fill="#2ee6d3" r="5"></circle>
+<text fill="#a4b4cb" font-family="'JetBrains Mono', monospace" font-size="9" letter-spacing="0.5" text-anchor="middle" x="0" y="25">MC +$450</text>
+</g>
+<!-- Node 3: Aisha R -->
+<g transform="translate(450, 225)">
+<circle cx="0" cy="0" fill="#0e233d" filter="url(#glow-teal)" r="13" stroke="#2ee6d3" stroke-width="1.5"></circle>
+<circle cx="0" cy="0" fill="#2ee6d3" r="4"></circle>
+<text fill="#a4b4cb" font-family="'JetBrains Mono', monospace" font-size="9" letter-spacing="0.5" text-anchor="middle" x="0" y="23">AR +$250</text>
+</g>
+<!-- Node 4: Lukas B (Newly joined pulsing node) -->
+<g transform="translate(385, 310)">
+<circle cx="0" cy="0" fill="none" opacity="0.6" r="18" stroke="#ffb020" stroke-width="1">
+<animate attributename="r" dur="2.2s" repeatcount="indefinite" values="12;26;12"></animate>
+<animate attributename="opacity" dur="2.2s" repeatcount="indefinite" values="0.8;0;0.8"></animate>
+</circle>
+<circle cx="0" cy="0" fill="#142636" r="12" stroke="#ffb020" stroke-width="1.5"></circle>
+<circle cx="0" cy="0" fill="#ffb020" r="4">
+<animate attributename="fill" dur="1.5s" repeatcount="indefinite" values="#ffb020;#fff;#ffb020"></animate>
+</circle>
+<text fill="#ffb020" font-family="'JetBrains Mono', monospace" font-size="9" letter-spacing="0.5" text-anchor="middle" x="0" y="22">NEW LB</text>
+</g>
+<!-- Node 5: Sofia M -->
+<g transform="translate(155, 295)">
+<circle cx="0" cy="0" fill="#0e233d" filter="url(#glow-teal)" r="13" stroke="#2ee6d3" stroke-width="1.5"></circle>
+<circle cx="0" cy="0" fill="#2ee6d3" r="4"></circle>
+<text fill="#a4b4cb" font-family="'JetBrains Mono', monospace" font-size="9" letter-spacing="0.5" text-anchor="middle" x="0" y="23">SM +$310</text>
+</g>
+<!-- Node 6: Kenji W -->
+<g transform="translate(75, 180)">
+<circle cx="0" cy="0" fill="#0e233d" opacity="0.85" r="12" stroke="#2ee6d3" stroke-width="1.5"></circle>
+<circle cx="0" cy="0" fill="#2ee6d3" r="3.5"></circle>
+<text fill="#a4b4cb" font-family="'JetBrains Mono', monospace" font-size="9" letter-spacing="0.5" text-anchor="middle" x="0" y="22">KW +$154</text>
+</g>
+<!-- Center Hub: Daniel Okafor (YOU) -->
+<g transform="translate(270, 190)">
+<!-- Ambient Red Aura -->
+<circle cx="0" cy="0" fill="#e3262f" opacity="0.18" r="28">
+<animate attributename="transform" dur="3s" repeatcount="indefinite" transform-origin="0 0" type="scale" values="1;1.2;1"></animate>
+</circle>
+<!-- Outer Shield Ring -->
+<circle cx="0" cy="0" fill="#132034" filter="url(#glow-red)" r="22" stroke="#e3262f" stroke-width="2"></circle>
+<!-- Inner Core -->
+<circle cx="0" cy="0" fill="#e3262f" r="8">
+<animate attributename="opacity" dur="2s" repeatcount="indefinite" values="0.85;1;0.85"></animate>
+</circle>
+<text fill="#ffffff" font-family="'Sora', sans-serif" font-size="10" font-weight="700" letter-spacing="1" text-anchor="middle" x="0" y="38">YOU (HOST)</text>
+<text fill="#e3262f" font-family="'JetBrains Mono', monospace" font-size="8.5" text-anchor="middle" x="0" y="49">24 CONNECTED</text>
+</g>
+</svg></div><!-- STITCH_SVG_END:ANIMATION_19 -->
+</div>
+</div>
+</section>
+<!-- 2. STATS STRIP (4 OPEN HORIZONTAL COLUMNS WITH HAIRLINE SPLITS) -->
+<section class="grid grid-cols-4 border-b border-secondary-container">
+<!-- Col 1 -->
+<div class="pr-8 py-4 border-r border-[#1e324d]">
+<div class="font-label-md text-label-md uppercase text-on-surface-variant tracking-wider">
+              TOTAL REFERRALS
+            </div>
+<div class="font-headline-lg text-[36px] font-bold text-white mt-1">
+              24
+            </div>
+<div class="font-body-md text-xs text-[#8e9fad] mt-1">
+              All-time invited
+            </div>
+</div>
+<!-- Col 2 -->
+<div class="px-8 py-4 border-r border-[#1e324d]">
+<div class="font-label-md text-label-md uppercase text-on-surface-variant tracking-wider">
+              ACTIVE TRADERS
+            </div>
+<div class="font-headline-lg text-[36px] font-bold text-white mt-1">
+              17
+            </div>
+<div class="font-data-mono text-xs text-tertiary mt-1">
+              70.8% conversion
+            </div>
+</div>
+<!-- Col 3 -->
+<div class="px-8 py-4 border-r border-[#1e324d]">
+<div class="font-label-md text-label-md uppercase text-on-surface-variant tracking-wider">
+              TOTAL EARNINGS
+            </div>
+<div class="font-headline-lg text-[36px] font-bold text-[#2EE6D3] mt-1">
+              $1,284.50
+            </div>
+<div class="font-body-md text-xs text-[#8e9fad] mt-1">
+              Paid directly to wallet
+            </div>
+</div>
+<!-- Col 4 -->
+<div class="pl-8 py-4">
+<div class="font-label-md text-label-md uppercase text-on-surface-variant tracking-wider">
+              PENDING REWARDS
+            </div>
+<div class="font-headline-lg text-[36px] font-bold text-[#FFB020] mt-1">
+              $210.00
+            </div>
+<div class="font-body-md text-xs text-[#8e9fad] mt-1">
+              Awaiting first trade / settlement
+            </div>
+</div>
+</section>
+<!-- 3. HOW IT WORKS TIMELINE (OPEN BASELINE HAIRLINE) -->
+<section class="border-b border-secondary-container pb-12 pt-2">
+<div class="flex items-center justify-between mb-8">
+<div class="font-data-mono text-xs uppercase tracking-widest text-on-surface-variant">
+              01 // LIFECYCLE MECHANISM
+            </div>
+<div class="font-data-mono text-xs text-[#8e9fad]">
+              LATENCY: &lt; 120MS · AUDITED REWARDS
+            </div>
+</div>
+<div class="relative">
+<!-- Continuous Hairline Track -->
+<div class="absolute top-3 left-0 w-full h-px bg-secondary-container"></div>
+<!-- Traveling Active Indicator Segment -->
+<div class="absolute top-3 left-0 w-2/3 h-px bg-gradient-to-r from-primary-container via-tertiary to-secondary"></div>
+<div class="absolute top-2.5 left-2/3 w-1.5 h-1.5 -ml-0.5 rounded-full bg-tertiary shadow-[0_0_8px_#51dbcb]"></div>
+<div class="grid grid-cols-3 gap-8 relative z-10">
+<!-- Step 1 -->
+<div>
+<div class="flex items-center gap-3 mb-4">
+<div class="w-6 h-6 rounded-none bg-background border border-primary-container text-primary-container flex items-center justify-center font-data-mono text-xs font-bold">
+                    01
+                  </div>
+<h4 class="font-headline-md text-base font-semibold text-white">Share your link</h4>
+</div>
+<p class="font-body-md text-sm text-[#8e9fad] pl-9">
+                  Unique referral code generated per sub-account with embedded attribution cookies.
+                </p>
+</div>
+<!-- Step 2 -->
+<div>
+<div class="flex items-center gap-3 mb-4">
+<div class="w-6 h-6 rounded-none bg-background border border-tertiary text-tertiary flex items-center justify-center font-data-mono text-xs font-bold">
+                    02
+                  </div>
+<h4 class="font-headline-md text-base font-semibold text-white">Friend signs up &amp; deposits</h4>
+</div>
+<p class="font-body-md text-sm text-[#8e9fad] pl-9">
+                  Zero latency onboarding, tier-1 segregated vault clearance across 40+ supported global currencies.
+                </p>
+</div>
+<!-- Step 3 -->
+<div>
+<div class="flex items-center gap-3 mb-4">
+<div class="w-6 h-6 rounded-none bg-background border border-secondary text-secondary flex items-center justify-center font-data-mono text-xs font-bold">
+                    03
+                  </div>
+<h4 class="font-headline-md text-base font-semibold text-white">You get 5%</h4>
+</div>
+<p class="font-body-md text-sm text-[#8e9fad] pl-9">
+                  Instant automated credit into your primary wallet balance available for withdrawal or automated copy deployment.
+                </p>
+</div>
+</div>
+</div>
+</section>
+<!-- 4. EARNINGS HISTORY CHART (MINIMALIST INSTITUTIONAL BAR LEDGER) -->
+<section class="border-b border-secondary-container pb-12">
+<div class="flex items-end justify-between mb-8">
+<div>
+<div class="font-data-mono uppercase tracking-widest text-on-surface-variant text-xs">
+                CHART ANALYTICS
+              </div>
+<h3 class="font-headline-md text-xl font-bold text-white mt-1">
+                Referral earnings volume // 12-Month Audited Growth
+              </h3>
+</div>
+<div class="text-right">
+<span class="font-data-mono text-2xl font-bold text-[#2EE6D3]">$1,284.50</span>
+<span class="block font-data-mono text-xs text-[#8e9fad]">12M NET ACCUMULATED</span>
+</div>
+</div>
+<!-- Bare Grid Bars Chart -->
+<div class="relative h-48 w-full flex flex-col justify-end pt-6">
+<!-- Horizontal Dashed Gridlines -->
+<div class="absolute inset-0 flex flex-col justify-between pointer-events-none opacity-20">
+<div class="border-b border-dashed border-[#8e9fad] w-full"></div>
+<div class="border-b border-dashed border-[#8e9fad] w-full"></div>
+<div class="border-b border-dashed border-[#8e9fad] w-full"></div>
+<div class="border-b border-dashed border-[#8e9fad] w-full"></div>
+</div>
+<!-- 12 Bars Layout -->
+<div class="grid grid-cols-12 gap-3 h-full items-end z-10 pb-1">
+<!-- NOV $45 -->
+<div class="flex flex-col items-center h-full justify-end group cursor-crosshair">
+<div class="w-full bg-gradient-to-t from-tertiary-container/30 to-tertiary/70 group-hover:to-tertiary transition-all" style="height: 22%;"></div>
+<span class="mt-3 font-data-mono text-[10px] text-on-surface-variant/70">NOV</span>
+</div>
+<!-- DEC $60 -->
+<div class="flex flex-col items-center h-full justify-end group cursor-crosshair">
+<div class="w-full bg-gradient-to-t from-tertiary-container/30 to-tertiary/70 group-hover:to-tertiary transition-all" style="height: 29%;"></div>
+<span class="mt-3 font-data-mono text-[10px] text-on-surface-variant/70">DEC</span>
+</div>
+<!-- JAN $50 -->
+<div class="flex flex-col items-center h-full justify-end group cursor-crosshair">
+<div class="w-full bg-gradient-to-t from-tertiary-container/30 to-tertiary/70 group-hover:to-tertiary transition-all" style="height: 24%;"></div>
+<span class="mt-3 font-data-mono text-[10px] text-on-surface-variant/70">JAN</span>
+</div>
+<!-- FEB $85 -->
+<div class="flex flex-col items-center h-full justify-end group cursor-crosshair">
+<div class="w-full bg-gradient-to-t from-tertiary-container/30 to-tertiary/70 group-hover:to-tertiary transition-all" style="height: 41%;"></div>
+<span class="mt-3 font-data-mono text-[10px] text-on-surface-variant/70">FEB</span>
+</div>
+<!-- MAR $95 -->
+<div class="flex flex-col items-center h-full justify-end group cursor-crosshair">
+<div class="w-full bg-gradient-to-t from-tertiary-container/30 to-tertiary/70 group-hover:to-tertiary transition-all" style="height: 46%;"></div>
+<span class="mt-3 font-data-mono text-[10px] text-on-surface-variant/70">MAR</span>
+</div>
+<!-- APR $110 -->
+<div class="flex flex-col items-center h-full justify-end group cursor-crosshair">
+<div class="w-full bg-gradient-to-t from-tertiary-container/30 to-tertiary/70 group-hover:to-tertiary transition-all" style="height: 53%;"></div>
+<span class="mt-3 font-data-mono text-[10px] text-on-surface-variant/70">APR</span>
+</div>
+<!-- MAY $80 -->
+<div class="flex flex-col items-center h-full justify-end group cursor-crosshair">
+<div class="w-full bg-gradient-to-t from-tertiary-container/30 to-tertiary/70 group-hover:to-tertiary transition-all" style="height: 38%;"></div>
+<span class="mt-3 font-data-mono text-[10px] text-on-surface-variant/70">MAY</span>
+</div>
+<!-- JUN $140 -->
+<div class="flex flex-col items-center h-full justify-end group cursor-crosshair">
+<div class="w-full bg-gradient-to-t from-tertiary-container/30 to-tertiary/70 group-hover:to-tertiary transition-all" style="height: 67%;"></div>
+<span class="mt-3 font-data-mono text-[10px] text-on-surface-variant/70">JUN</span>
+</div>
+<!-- JUL $125 -->
+<div class="flex flex-col items-center h-full justify-end group cursor-crosshair">
+<div class="w-full bg-gradient-to-t from-tertiary-container/30 to-tertiary/70 group-hover:to-tertiary transition-all" style="height: 60%;"></div>
+<span class="mt-3 font-data-mono text-[10px] text-on-surface-variant/70">JUL</span>
+</div>
+<!-- AUG $165 -->
+<div class="flex flex-col items-center h-full justify-end group cursor-crosshair">
+<div class="w-full bg-gradient-to-t from-tertiary-container/30 to-tertiary/70 group-hover:to-tertiary transition-all" style="height: 79%;"></div>
+<span class="mt-3 font-data-mono text-[10px] text-on-surface-variant/70">AUG</span>
+</div>
+<!-- SEP $190 -->
+<div class="flex flex-col items-center h-full justify-end group cursor-crosshair">
+<div class="w-full bg-gradient-to-t from-tertiary-container/30 to-tertiary/70 group-hover:to-tertiary transition-all" style="height: 90%;"></div>
+<span class="mt-3 font-data-mono text-[10px] text-on-surface-variant/70">SEP</span>
+</div>
+<!-- OCT $210 (PEAK) -->
+<div class="flex flex-col items-center h-full justify-end group cursor-crosshair">
+<div class="w-full bg-gradient-to-t from-tertiary-container/50 to-tertiary shadow-[0_0_12px_rgba(46,230,211,0.3)] group-hover:to-white transition-all" style="height: 100%;"></div>
+<span class="mt-3 font-data-mono text-[10px] text-tertiary font-bold">OCT</span>
+</div>
+</div>
+</div>
+</section>
+<!-- 5. "YOUR REFERRALS" OPEN LEDGER (NO CARDS, NO PILLS) -->
+<section class="space-y-4 pb-12">
+<div class="flex items-center justify-between">
+<h3 class="font-headline-md text-xl font-bold text-white">
+              Audited referral directory
+            </h3>
+<!-- Segmented Filter Status -->
+<div class="flex items-center font-data-mono text-xs space-x-6 border-b border-transparent">
+<button class="text-white border-b-2 border-primary-container pb-1 font-medium">All (24)</button>
+<button class="text-on-surface-variant hover:text-white pb-1 transition-colors">Active (17)</button>
+<button class="text-on-surface-variant hover:text-white pb-1 transition-colors">Pending (5)</button>
+<button class="text-on-surface-variant hover:text-white pb-1 transition-colors">Inactive (2)</button>
+</div>
+</div>
+<!-- Pure Open Ledger Table -->
+<div class="w-full overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="border-b border-[#223755] text-[11px] font-label-md uppercase tracking-wider text-on-surface-variant/70">
+<th class="py-3 pr-4 font-semibold">NAME</th>
+<th class="py-3 px-4 font-semibold">JOINED</th>
+<th class="py-3 px-4 font-semibold">STATUS</th>
+<th class="py-3 px-4 font-semibold text-right">FIRST DEPOSIT</th>
+<th class="py-3 pl-4 font-semibold text-right">YOUR EARNINGS (5%)</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-secondary-container/40 text-xs font-body-md">
+<!-- Row 1 -->
+<tr class="hover:bg-[#11223A]/40 transition-colors group">
+<td class="py-3.5 pr-4 text-white font-medium flex items-center gap-2">
+<span class="w-0.5 h-3 bg-transparent group-hover:bg-primary-container transition-colors -ml-2 mr-1"></span>
+                    Elena Vasquez
+                  </td>
+<td class="py-3.5 px-4 font-data-mono text-on-surface-variant">14 Oct 2024</td>
+<td class="py-3.5 px-4 font-data-mono text-[#2EE6D3]">● Active</td>
+<td class="py-3.5 px-4 font-data-mono text-right text-white tabular-nums">$2,400.00</td>
+<td class="py-3.5 pl-4 font-data-mono text-right text-[#2EE6D3] font-semibold tabular-nums">$120.00</td>
+</tr>
+<!-- Row 2 -->
+<tr class="hover:bg-[#11223A]/40 transition-colors group">
+<td class="py-3.5 pr-4 text-white font-medium flex items-center gap-2">
+<span class="w-0.5 h-3 bg-transparent group-hover:bg-primary-container transition-colors -ml-2 mr-1"></span>
+                    Marcus Chen
+                  </td>
+<td class="py-3.5 px-4 font-data-mono text-on-surface-variant">02 Oct 2024</td>
+<td class="py-3.5 px-4 font-data-mono text-[#2EE6D3]">● Active</td>
+<td class="py-3.5 px-4 font-data-mono text-right text-white tabular-nums">$9,000.00</td>
+<td class="py-3.5 pl-4 font-data-mono text-right text-[#2EE6D3] font-semibold tabular-nums">$450.00</td>
+</tr>
+<!-- Row 3 -->
+<tr class="hover:bg-[#11223A]/40 transition-colors group">
+<td class="py-3.5 pr-4 text-white font-medium flex items-center gap-2">
+<span class="w-0.5 h-3 bg-transparent group-hover:bg-primary-container transition-colors -ml-2 mr-1"></span>
+                    Aisha Rahman
+                  </td>
+<td class="py-3.5 px-4 font-data-mono text-on-surface-variant">18 Sep 2024</td>
+<td class="py-3.5 px-4 font-data-mono text-[#2EE6D3]">● Active</td>
+<td class="py-3.5 px-4 font-data-mono text-right text-white tabular-nums">$5,000.00</td>
+<td class="py-3.5 pl-4 font-data-mono text-right text-[#2EE6D3] font-semibold tabular-nums">$250.00</td>
+</tr>
+<!-- Row 4 -->
+<tr class="hover:bg-[#11223A]/40 transition-colors group">
+<td class="py-3.5 pr-4 text-white font-medium flex items-center gap-2">
+<span class="w-0.5 h-3 bg-transparent group-hover:bg-primary-container transition-colors -ml-2 mr-1"></span>
+                    Lukas Brandt
+                  </td>
+<td class="py-3.5 px-4 font-data-mono text-on-surface-variant">26 Oct 2024</td>
+<td class="py-3.5 px-4 font-data-mono text-[#FFB020]">● Pending deposit</td>
+<td class="py-3.5 px-4 font-data-mono text-right text-on-surface-variant tabular-nums">$0.00</td>
+<td class="py-3.5 pl-4 font-data-mono text-right text-[#8e9fad] tabular-nums">$0.00</td>
+</tr>
+<!-- Row 5 -->
+<tr class="hover:bg-[#11223A]/40 transition-colors group">
+<td class="py-3.5 pr-4 text-white font-medium flex items-center gap-2">
+<span class="w-0.5 h-3 bg-transparent group-hover:bg-primary-container transition-colors -ml-2 mr-1"></span>
+                    Sofia Moretti
+                  </td>
+<td class="py-3.5 px-4 font-data-mono text-on-surface-variant">22 Aug 2024</td>
+<td class="py-3.5 px-4 font-data-mono text-[#2EE6D3]">● Active</td>
+<td class="py-3.5 px-4 font-data-mono text-right text-white tabular-nums">$6,200.00</td>
+<td class="py-3.5 pl-4 font-data-mono text-right text-[#2EE6D3] font-semibold tabular-nums">$310.00</td>
+</tr>
+<!-- Row 6 -->
+<tr class="hover:bg-[#11223A]/40 transition-colors group">
+<td class="py-3.5 pr-4 text-white font-medium flex items-center gap-2">
+<span class="w-0.5 h-3 bg-transparent group-hover:bg-primary-container transition-colors -ml-2 mr-1"></span>
+                    Kenji Watanabe
+                  </td>
+<td class="py-3.5 px-4 font-data-mono text-on-surface-variant">15 Jul 2024</td>
+<td class="py-3.5 px-4 font-data-mono text-[#2EE6D3]">● Active</td>
+<td class="py-3.5 px-4 font-data-mono text-right text-white tabular-nums">$3,080.00</td>
+<td class="py-3.5 pl-4 font-data-mono text-right text-[#2EE6D3] font-semibold tabular-nums">$154.00</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Empty-state / Settlement Hint -->
+<div class="pt-4 border-t border-secondary-container/40 flex items-center justify-between text-xs text-[#8e9fad]">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-sm text-secondary" data-icon="info">info</span>
+<span>Referrals appear here as soon as someone signs up with your link. Settlement window: automated bi-weekly or instant upon verified Tier-1 deposit clearance.</span>
+</div>
+<div class="font-data-mono text-[11px] text-on-surface-variant">
+              LEDGER REF: #REF-48211-AUDIT
+            </div>
+</div>
+</section>
+</div>
+</main>
+</div>
+<!-- DOCKED INSTITUTIONAL FOOTER -->
+<footer class="w-full px-margin py-space-xl border-t border-secondary-container dark:border-secondary-container flex flex-col gap-space-lg bg-surface-container-lowest dark:bg-surface-container-lowest z-30">
+<div class="max-w-6xl mx-auto w-full flex flex-col md:flex-row items-center justify-between gap-4">
+<div class="flex items-center gap-6">
+<span class="font-headline-md text-headline-md font-bold text-on-surface dark:text-on-surface">TED Brokers</span>
+<div class="h-4 w-px bg-secondary-container"></div>
+<div class="flex flex-wrap gap-4 text-xs font-body-md text-on-surface-variant dark:text-on-surface-variant">
+<a class="hover:text-primary dark:hover:text-primary transition-colors duration-150" href="#">Execution Policy</a>
+<a class="hover:text-primary dark:hover:text-primary transition-colors duration-150" href="#">Risk Disclosure</a>
+<a class="hover:text-primary dark:hover:text-primary transition-colors duration-150" href="#">Terms of Service</a>
+<a class="hover:text-primary dark:hover:text-primary transition-colors duration-150" href="#">Regulatory Licenses</a>
+<a class="hover:text-primary dark:hover:text-primary transition-colors duration-150" href="#">Privacy Policy</a>
+<a class="hover:text-primary dark:hover:text-primary transition-colors duration-150" href="#">Institutional API</a>
+</div>
+</div>
+<div class="text-xs font-data-mono text-[#8e9fad]">
+        AUDITED PROTOCOL V4.18.2
+      </div>
+</div>
+<div class="max-w-6xl mx-auto w-full border-t border-secondary-container/40 pt-4">
+<p class="font-body-md text-body-md text-on-surface-variant/80 text-xs">
+        © 2024 TED Brokers Financial Ltd. All rights reserved. High Risk Investment Notice: FX, CFDs, and copy-trading derivatives involve substantial risk of loss.
+      </p>
+</div>
+</footer>
+</body></html>

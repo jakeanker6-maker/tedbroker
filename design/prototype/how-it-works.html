@@ -1,0 +1,383 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>How it works — TED Brokers</title>
+  <meta name="description" content="How copy trading works at TED Brokers: connect to a verified trader, have every move replicated in your sub-account, and see how traders earn. Includes an illustrative capital simulator.">
+  <meta name="theme-color" content="#0A1626">
+  <link rel="icon" href="assets/img/favicon.ico">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=JetBrains+Mono:wght@400;500;600&family=Sora:wght@300;600;700;800&display=swap">
+  <link rel="stylesheet" href="assets/css/main.css">
+  <link rel="stylesheet" href="assets/css/pages/how-it-works.css">
+  <script>document.documentElement.classList.add('js');try{var t=localStorage.getItem('ted:theme');if(t==='system')t=matchMedia('(prefers-color-scheme: light)').matches?'light':'dark';if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
+  <script type="module" src="assets/js/main.js"></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <!-- ============ Header ============ -->
+  <header class="site-header surface-ink">
+    <div class="container site-header__bar">
+      <a class="wordmark" href="index.html" aria-label="TED Brokers home">
+        <span class="wordmark__ted">TED</span><span class="wordmark__brokers">Br<svg class="wordmark__o" viewBox="0 0 20 20" aria-hidden="true"><g fill="currentColor"><circle cx="10" cy="2" r="1.6"/><circle cx="15.2" cy="4.1" r="1.4" opacity=".8"/><circle cx="17.9" cy="9.4" r="1.6"/><circle cx="16.3" cy="14.8" r="1.4" opacity=".8"/><circle cx="11.2" cy="17.9" r="1.6"/><circle cx="5.6" cy="16.4" r="1.4" opacity=".7"/><circle cx="2.2" cy="11.6" r="1.6"/><circle cx="3" cy="6" r="1.4" opacity=".8"/><circle cx="6.6" cy="2.9" r="1.1" opacity=".6"/><circle cx="10" cy="10" r="1.9"/><circle cx="13.3" cy="9.2" r="1" opacity=".7"/><circle cx="7.4" cy="12" r="1" opacity=".7"/></g></svg>kers</span>
+      </a>
+      <button class="icon-btn nav-toggle" type="button" data-nav-toggle aria-expanded="false" aria-controls="site-nav" aria-label="Menu">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h10"/></svg>
+      </button>
+      <nav class="site-nav" id="site-nav" aria-label="Main">
+        <ul class="site-nav__links" role="list">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="how-it-works.html" aria-current="page">How it works</a></li>
+          <li><a href="traders.html">For traders</a></li>
+          <li><a href="about.html">Company</a></li>
+          <li><a href="help.html">Help</a></li>
+        </ul>
+        <div class="site-nav__actions">
+          <button class="lang-select" type="button" aria-label="Language: English">EN
+            <svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M2 3.5l3 3 3-3"/></svg>
+          </button>
+          <a class="site-nav__signin" href="login.html">Sign in</a>
+          <a class="btn btn--sm" href="register.html">Get started
+            <svg class="btn__arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </a>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <!-- ============ Hero + replication diagram ============ -->
+    <section class="hero hero--compact surface-ink section" aria-labelledby="hero-title">
+      <div class="mesh" aria-hidden="true"><span></span></div>
+      <div class="grid-lines" aria-hidden="true"></div>
+      <div class="container">
+        <div class="hiw-hero__copy">
+          <p class="overline overline--accent" data-reveal>How it works</p>
+          <h1 class="page-hero__title" id="hero-title" data-reveal style="--i:1">One account. Every move of a pro, mirrored.</h1>
+          <p class="lead" data-reveal style="--i:2">When a verified trader opens or closes a position, your sub-account mirrors it automatically — in proportion to the amount you allocate, and within the limits you set.</p>
+        </div>
+
+        <figure class="hiw-flow" data-reveal style="--i:3">
+          <p class="hiw-flow__label hiw-flow__label--source overline">01 — Trader</p>
+          <p class="hiw-flow__label hiw-flow__label--targets overline">02 — Your sub-accounts</p>
+
+          <div class="hiw-flow__source">
+            <span class="hiw-flow__node" aria-hidden="true"></span>
+            <span class="hiw-flow__who">
+              <span class="overline overline--signal">Trader signal</span>
+              <strong class="hiw-flow__name">Elena Vasquez</strong>
+              <span class="hiw-flow__order">BUY 0.50 lot EUR/USD</span>
+            </span>
+          </div>
+
+          <ol class="hiw-flow__stages" role="list">
+            <li>Connection</li>
+            <li class="hiw-flow__stage--live">Replication</li>
+            <li>Profit sharing</li>
+          </ol>
+
+          <div class="hiw-flow__wire" aria-hidden="true">
+            <svg viewBox="0 0 600 180" preserveAspectRatio="none" focusable="false">
+              <g class="hiw-flow__base">
+                <path d="M0 90 H260 C400 90 420 30 600 30"/>
+                <path d="M0 90 H600"/>
+                <path d="M0 90 H260 C400 90 420 150 600 150"/>
+              </g>
+              <g class="hiw-flow__glow">
+                <path d="M0 90 H260"/>
+              </g>
+              <g class="hiw-flow__pulses">
+                <path pathLength="100" style="--d:0s" d="M0 90 H260 C400 90 420 30 600 30"/>
+                <path pathLength="100" style="--d:.35s" d="M0 90 H600"/>
+                <path pathLength="100" style="--d:.7s" d="M0 90 H260 C400 90 420 150 600 150"/>
+              </g>
+            </svg>
+          </div>
+
+          <ul class="hiw-flow__targets" role="list">
+            <li style="--d:0s"><span class="hiw-flow__dot" aria-hidden="true"></span><span>Sub-account <span class="mono">#8812</span></span><span class="delta" data-trend="up">+0.24%</span></li>
+            <li style="--d:.35s"><span class="hiw-flow__dot" aria-hidden="true"></span><span>Sub-account <span class="mono">#4109</span></span><span class="delta" data-trend="up">+0.24%</span></li>
+            <li style="--d:.7s"><span class="hiw-flow__dot" aria-hidden="true"></span><span>Sub-account <span class="mono">#9034</span></span><span class="delta" data-trend="up">+0.24%</span></li>
+          </ul>
+
+          <figcaption class="hiw-flow__caption fineprint">Illustration: one trade from the trader's account is replicated in each investor's sub-account in proportion to their allocation. When copied trades close in profit, the agreed share goes to the trader.</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <!-- ============ Step-by-step (tabs) ============ -->
+    <section class="section surface-ink hiw-journey" aria-labelledby="journey-title">
+      <div class="container">
+        <div class="section-head">
+          <div class="stack">
+            <p class="overline overline--accent">Step by step</p>
+            <h2 id="journey-title">Four steps, whichever side you're on.</h2>
+          </div>
+        </div>
+
+        <div class="tabs tabs--lg" role="tablist" data-component="tabs" aria-label="Choose your path">
+          <button class="tabs__tab" type="button" role="tab" id="tab-investors" aria-controls="panel-investors" aria-selected="true">For investors</button>
+          <button class="tabs__tab" type="button" role="tab" id="tab-traders" aria-controls="panel-traders" aria-selected="false" tabindex="-1">For traders</button>
+        </div>
+
+        <div class="hiw-panel" role="tabpanel" id="panel-investors" aria-labelledby="tab-investors" tabindex="0">
+          <div class="hiw-timeline">
+            <div class="hiw-timeline__runner" aria-hidden="true"></div>
+            <ol class="hiw-steps" role="list">
+              <li class="hiw-step">
+                <span class="hiw-step__num" aria-hidden="true">01</span>
+                <p class="overline">Step 01 / 04</p>
+                <h3 class="hiw-step__title">Sign up &amp; verify</h3>
+                <p class="hiw-step__text">Create your account in minutes, then confirm your identity so your account is ready to fund.</p>
+              </li>
+              <li class="hiw-step">
+                <span class="hiw-step__num" aria-hidden="true">02</span>
+                <p class="overline">Step 02 / 04</p>
+                <h3 class="hiw-step__title">Fund your wallet</h3>
+                <p class="hiw-step__text">Deposit from $50 by bank transfer, BTC, ETH or USDT, or PayPal. Fees and timings are shown before you confirm.</p>
+              </li>
+              <li class="hiw-step">
+                <span class="hiw-step__num" aria-hidden="true">03</span>
+                <p class="overline">Step 03 / 04</p>
+                <h3 class="hiw-step__title">Choose a trader</h3>
+                <p class="hiw-step__text">Compare track records, maximum drawdown, win rate and a 1–10 risk score. Split your allocation across several traders if you like.</p>
+              </li>
+              <li class="hiw-step">
+                <span class="hiw-step__num" aria-hidden="true">04</span>
+                <p class="overline">Step 04 / 04</p>
+                <h3 class="hiw-step__title">Copy &amp; monitor</h3>
+                <p class="hiw-step__text">Positions are mirrored in proportion to your allocation. Set a copy stop-loss, pause or stop copying at any time.</p>
+              </li>
+            </ol>
+          </div>
+        </div>
+
+        <div class="hiw-panel" role="tabpanel" id="panel-traders" aria-labelledby="tab-traders" tabindex="0" hidden>
+          <div class="hiw-timeline">
+            <div class="hiw-timeline__runner" aria-hidden="true"></div>
+            <ol class="hiw-steps" role="list">
+              <li class="hiw-step">
+                <span class="hiw-step__num" aria-hidden="true">01</span>
+                <p class="overline">Step 01 / 04</p>
+                <h3 class="hiw-step__title">Apply</h3>
+                <p class="hiw-step__text">Tell us about your strategy, the markets you trade and your trading history.</p>
+              </li>
+              <li class="hiw-step">
+                <span class="hiw-step__num" aria-hidden="true">02</span>
+                <p class="overline">Step 02 / 04</p>
+                <h3 class="hiw-step__title">Get verified</h3>
+                <p class="hiw-step__text">We review your track record against our listing thresholds and complete identity checks (KYC).</p>
+              </li>
+              <li class="hiw-step">
+                <span class="hiw-step__num" aria-hidden="true">03</span>
+                <p class="overline">Step 03 / 04</p>
+                <h3 class="hiw-step__title">Publish your strategy</h3>
+                <p class="hiw-step__text">Write your strategy profile, set your subscription fee and choose which markets copiers will follow.</p>
+              </li>
+              <li class="hiw-step">
+                <span class="hiw-step__num" aria-hidden="true">04</span>
+                <p class="overline">Step 04 / 04</p>
+                <h3 class="hiw-step__title">Earn from copiers</h3>
+                <p class="hiw-step__text">Earn subscription fees, performance commission above a high-water mark and volume bonuses.</p>
+              </li>
+            </ol>
+          </div>
+          <a class="link-arrow link-arrow--accent mt-6" href="traders.html">Everything for traders
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ Simulator ============ -->
+    <section class="section surface-paper" aria-labelledby="sim-title">
+      <div class="container">
+        <div class="section-head">
+          <div class="stack">
+            <p class="overline overline--accent">Interactive projection</p>
+            <h2 id="sim-title" class="h-xl">What could your capital do?</h2>
+            <p class="lead">Move the deposit and pick a risk level to see an illustrative 12-month range, based on historical monthly returns of traders on the platform.</p>
+          </div>
+        </div>
+
+        <form class="hiw-sim" data-component="hiw-sim" aria-labelledby="sim-title">
+          <div class="hiw-sim__controls">
+            <div class="hiw-sim__group">
+              <label class="field__label" for="sim-deposit">Initial deposit</label>
+              <output class="hiw-sim__deposit" for="sim-deposit" data-sim="deposit">$10,000</output>
+              <input class="hiw-range" type="range" id="sim-deposit" name="deposit" min="1000" max="50000" step="500" value="10000" aria-valuetext="$10,000" style="--fill: 18.37%">
+              <div class="range-scale" aria-hidden="true"><span>$1,000</span><span>$50,000</span></div>
+            </div>
+
+            <fieldset class="hiw-sim__group hiw-risk">
+              <legend class="field__label">Trader risk</legend>
+              <div class="hiw-risk__opts">
+                <label class="hiw-risk__opt"><input type="radio" name="risk" value="low"><span class="hiw-risk__name">Low</span><span class="hiw-risk__rate">1–2% / mo</span></label>
+                <label class="hiw-risk__opt"><input type="radio" name="risk" value="medium" checked><span class="hiw-risk__name">Medium</span><span class="hiw-risk__rate">2–4% / mo</span></label>
+                <label class="hiw-risk__opt"><input type="radio" name="risk" value="high"><span class="hiw-risk__name">High</span><span class="hiw-risk__rate">3–7% / mo</span></label>
+              </div>
+            </fieldset>
+
+            <div class="hiw-sim__group hiw-sim__outcome">
+              <p class="field__label">12-month illustrative range</p>
+              <p class="hiw-sim__result">
+                <span class="hiw-sim__gain" data-sim="gain">+$3,607</span>
+                <span class="hiw-sim__span">(range <span data-sim="low">+$2,682</span> to <span data-sim="high">+$6,010</span>)</span>
+              </p>
+              <p class="sr-only" role="status" data-sim="status"></p>
+            </div>
+          </div>
+
+          <div class="hiw-sim__visual">
+            <div class="hiw-sim__head">
+              <p class="overline">Account value · 12 months</p>
+              <ul class="hiw-legend" role="list" aria-label="Chart legend">
+                <li class="hiw-legend__median">Median</li>
+                <li class="hiw-legend__band">Range</li>
+              </ul>
+            </div>
+            <div class="chart hiw-sim__chart" role="img" data-component="chart" data-sim="chart"
+                 data-series="10000,10260,10527,10800,11081,11369,11665,11968,12279,12599,12926,13262,13607"
+                 data-band-low="10000,10200,10404,10612,10824,11041,11262,11487,11717,11951,12190,12434,12682"
+                 data-band-high="10000,10400,10816,11249,11699,12167,12653,13159,13686,14233,14802,15395,16010"
+                 data-format="currency" data-labels="Start,M1,M2,M3,M4,M5,M6,M7,M8,M9,M10,M11,M12"
+                 data-xaxis="5" data-yaxis="4" data-series-name="Median"
+                 aria-label="Illustrative 12-month value of a $10,000 deposit at medium risk: median $13,607, range $12,682 to $16,010."></div>
+            <p class="hiw-sim__note">Illustrative range based on historical trader performance. Not a forecast or guarantee.</p>
+          </div>
+
+          <div class="hiw-ledger">
+            <div class="section-head">
+              <h3 id="range-title" class="hiw-ledger__title">Historical monthly range by deposit</h3>
+              <p class="overline">Per month · same assumptions as above</p>
+            </div>
+            <div class="ledger-wrap" tabindex="0" role="region" aria-labelledby="range-title">
+              <table class="ledger ledger--lg ledger--on-paper" data-sim="table" data-risk="medium">
+                <caption class="sr-only">Illustrative monthly gain range for each deposit size and trader risk level</caption>
+                <thead>
+                  <tr>
+                    <th scope="col">Deposit</th>
+                    <th scope="col" class="is-num" data-col="low">Low risk <span class="hiw-ledger__rate">1–2%</span></th>
+                    <th scope="col" class="is-num" data-col="medium">Medium risk <span class="hiw-ledger__rate">2–4%</span></th>
+                    <th scope="col" class="is-num" data-col="high">High risk <span class="hiw-ledger__rate">3–7%</span></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr><th scope="row">$1,000</th><td class="is-num" data-col="low">+$10 – $20</td><td class="is-num" data-col="medium">+$20 – $40</td><td class="is-num" data-col="high">+$30 – $70</td></tr>
+                  <tr><th scope="row">$5,000</th><td class="is-num" data-col="low">+$50 – $100</td><td class="is-num" data-col="medium">+$100 – $200</td><td class="is-num" data-col="high">+$150 – $350</td></tr>
+                  <tr><th scope="row">$10,000</th><td class="is-num" data-col="low">+$100 – $200</td><td class="is-num" data-col="medium">+$200 – $400</td><td class="is-num" data-col="high">+$300 – $700</td></tr>
+                  <tr><th scope="row">$50,000</th><td class="is-num" data-col="low">+$500 – $1,000</td><td class="is-num" data-col="medium">+$1,000 – $2,000</td><td class="is-num" data-col="high">+$1,500 – $3,500</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p class="fineprint mt-5">Illustrative ranges based on historical monthly performance of traders on the platform, before fees. They exclude losing months: copied accounts can and do lose money, and you could lose some or all of your capital. Past performance is not a reliable indicator of future results.</p>
+          </div>
+        </form>
+      </div>
+    </section>
+
+    <!-- ============ How traders earn ============ -->
+    <section class="section surface-ink" aria-labelledby="earn-title">
+      <div class="container">
+        <div class="section-head">
+          <div class="stack">
+            <p class="overline overline--signal">For traders</p>
+            <h2 id="earn-title" class="h-xl">How traders earn.</h2>
+            <p class="lead">Traders are paid by the people who copy them — so their income depends on keeping copiers' accounts healthy.</p>
+          </div>
+          <a class="link-arrow link-arrow--accent" href="traders.html">Become a trader
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+        </div>
+        <ol class="hiw-earn" role="list">
+          <li class="hiw-earn__col" data-reveal>
+            <span class="hiw-earn__num" aria-hidden="true">01</span>
+            <h3 class="hiw-earn__title">Subscription fees</h3>
+            <p class="hiw-earn__text">A fixed monthly fee per copier, set by the trader and shown to you before you start copying.</p>
+            <p class="hiw-earn__meta">Charged monthly, per copier</p>
+          </li>
+          <li class="hiw-earn__col" data-reveal style="--i:1">
+            <span class="hiw-earn__num" aria-hidden="true">02</span>
+            <h3 class="hiw-earn__title">Performance commission</h3>
+            <p class="hiw-earn__text">A share of the profit made on your copied trades, charged only above a high-water mark — the trader earns only when your account reaches a new high.</p>
+            <p class="hiw-earn__meta">Above the high-water mark only</p>
+          </li>
+          <li class="hiw-earn__col" data-reveal style="--i:2">
+            <span class="hiw-earn__num" aria-hidden="true">03</span>
+            <h3 class="hiw-earn__title">Volume bonuses</h3>
+            <p class="hiw-earn__text">Tiered rebates paid by TED Brokers on the trading volume copiers replicate. Copiers aren't charged extra for them.</p>
+            <p class="hiw-earn__meta">Tiered on copied volume</p>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- ============ FAQ teaser ============ -->
+    <section class="section surface-paper" aria-labelledby="faq-title">
+      <div class="container split" style="--split-cols: minmax(0, 5fr) minmax(0, 7fr)">
+        <div class="stack" style="--stack-gap: var(--space-5)">
+          <p class="overline overline--accent">Questions</p>
+          <h2 id="faq-title" class="h-xl">Frequently asked questions.</h2>
+          <a class="link-arrow link-arrow--accent" href="help.html">Visit the help center
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+        </div>
+        <div class="accordion">
+          <details name="faq">
+            <summary>Can I stop copying anytime?</summary>
+            <div class="accordion__body"><p>Yes. You can pause or stop copying a trader from your dashboard at any time. When you stop, you choose whether to close the copied positions at the current market price or keep them open and manage them yourself.</p></div>
+          </details>
+          <details name="faq">
+            <summary>What happens if a trader loses?</summary>
+            <div class="accordion__body"><p>Your copied positions lose in proportion to your allocation. A copy stop-loss lets you set the maximum drawdown you'll accept from each trader — if it's reached, copying stops and those positions close.</p></div>
+          </details>
+          <details name="faq">
+            <summary>How much do I need to start?</summary>
+            <div class="accordion__body"><p>You can fund your wallet from $50. Some traders set a higher minimum allocation, which is shown on their profile before you copy.</p></div>
+          </details>
+          <details name="faq">
+            <summary>How are fees charged?</summary>
+            <div class="accordion__body"><p>Each trader's subscription fee and performance commission are shown on their profile before you start. Subscriptions are charged monthly; performance commission is charged only on profit above your account's previous high.</p></div>
+          </details>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ CTA ============ -->
+    <section class="cta-band" aria-labelledby="cta-title">
+      <div class="container cta-band__inner">
+        <div>
+          <p class="overline">Sign up in minutes</p>
+          <h2 id="cta-title" class="mt-4">Start with as little as $50.</h2>
+          <p>Create a free account, verify your identity and choose the first trader to copy.</p>
+        </div>
+        <a class="btn btn--lg btn--white" href="register.html">Create free account
+          <svg class="btn__arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+      </div>
+    </section>
+  </main>
+
+  <!-- ============ Footer ============ -->
+  <footer class="site-footer surface-ink">
+    <div class="container">
+      <div class="site-footer__top">
+        <div class="site-footer__brand">
+          <a class="wordmark" href="index.html" aria-label="TED Brokers home"><span class="wordmark__ted">TED</span><span class="wordmark__brokers">Brokers</span></a>
+          <p>Copy trading across forex, stocks, crypto and commodities — with the controls to manage your risk.</p>
+          <address class="site-footer__contact">330 Hudson Street, 12th Floor<br>New York, NY 10013<br><a href="tel:+13322208968">+1 (332) 220-8968</a></address>
+        </div>
+        <nav aria-labelledby="f-company"><h2 id="f-company">Company</h2><ul role="list"><li><a href="about.html">About us</a></li><li><a href="help.html#contact">Contact</a></li><li><a href="help.html">FAQs</a></li></ul></nav>
+        <nav aria-labelledby="f-resources"><h2 id="f-resources">Resources</h2><ul role="list"><li><a href="how-it-works.html">How it works</a></li><li><a href="traders.html">For traders</a></li><li><a href="help.html">Help center</a></li></ul></nav>
+        <nav aria-labelledby="f-legal"><h2 id="f-legal">Legal</h2><ul role="list"><li><a href="#">Privacy policy</a></li><li><a href="#">Terms &amp; conditions</a></li><li><a href="#">AML / KYC policy</a></li><li><a href="#">Risk disclosure</a></li></ul></nav>
+      </div>
+      <p class="fineprint site-footer__risk"><strong>Risk warning:</strong> Trading forex, cryptocurrencies, stocks and other financial instruments carries a high level of risk and may not be suitable for all investors. You could lose some or all of your capital. Copy trading does not constitute investment advice. Past performance of any trader is not a reliable indicator of future results.</p>
+      <div class="site-footer__bottom">
+        <span>© 2026 TED Brokers</span>
+        <ul class="site-footer__langs" role="list" aria-label="Language">
+          <li><a href="#" aria-current="true" lang="en">EN</a></li><li><a href="#" lang="es">ES</a></li><li><a href="#" lang="de">DE</a></li><li><a href="#" lang="fr">FR</a></li><li><a href="#" lang="pt">PT</a></li><li><a href="#" lang="ar">AR</a></li><li><a href="#" lang="zh">中文</a></li>
+        </ul>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>

@@ -1,0 +1,17 @@
+.sr-only {
+  position: absolute !important; inline-size: 1px !important; block-size: 1px !important;
+  padding: 0 !important; margin: -1px !important; overflow: hidden !important;
+  clip: rect(0 0 0 0) !important; white-space: nowrap !important; border: 0 !important;
+}
+.gain { color: var(--color-gain); }
+.loss { color: var(--color-loss); }
+.pending { color: var(--color-pending); }
+.accent { color: var(--color-accent-text); }
+.text-end { text-align: end; }
+.nowrap { white-space: nowrap; }
+.mt-2 { margin-block-start: var(--space-2); }
+.mt-4 { margin-block-start: var(--space-4); }
+.mt-5 { margin-block-start: var(--space-5); }
+.mt-6 { margin-block-start: var(--space-6); }
+.mt-7 { margin-block-start: var(--space-7); }
+.w-full { inline-size: 100%; }

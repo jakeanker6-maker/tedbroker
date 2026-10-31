@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TED Brokers — Create Account</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300..700;1,9..40,300..700&family=JetBrains+Mono:wght@300;400;500;600&family=Sora:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            ted: {
+              red: '#E3262F',
+              'red-hover': '#c71f27',
+              ink: '#0A1626',
+              'ink-dark': '#060E18',
+              teal: '#2EE6D3',
+              offwhite: '#F7F8FA',
+              border: '#E2E5EA',
+              label: '#64748B',
+              text: '#0F172A',
+            }
+          },
+          fontFamily: {
+            sora: ['Sora', 'sans-serif'],
+            dmsans: ['DM Sans', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace'],
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    /* Dot Matrix & Gradient Mesh Animation */
+    .bg-dot-matrix {
+      background-image: radial-gradient(rgba(46, 230, 211, 0.12) 1px, transparent 1px);
+      background-size: 24px 24px;
+    }
+    @keyframes meshFloat {
+      0%, 100% { transform: translate(0px, 0px) scale(1); }
+      50% { transform: translate(30px, -25px) scale(1.15); }
+    }
+    @keyframes redPulse {
+      0%, 100% { opacity: 0.18; transform: translate(0px, 0px) scale(1); }
+      50% { opacity: 0.28; transform: translate(-20px, 30px) scale(1.2); }
+    }
+    .animate-mesh {
+      animation: meshFloat 14s ease-in-out infinite;
+    }
+    .animate-red-aura {
+      animation: redPulse 10s ease-in-out infinite;
+    }
+
+    /* Clean Underline Input with Floating/Active Labels */
+    .underline-group {
+      position: relative;
+    }
+    .underline-input {
+      width: 100%;
+      background: transparent;
+      border: none;
+      border-bottom: 1px solid #CBD5E1;
+      padding: 10px 0 8px 0;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 15px;
+      color: #0F172A;
+      outline: none;
+      transition: border-color 0.2s ease;
+      border-radius: 0;
+    }
+    .underline-input:focus {
+      border-bottom-color: #0A1626;
+    }
+    .underline-input::placeholder {
+      color: #94A3B8;
+      font-size: 14px;
+    }
+
+    /* Select arrow override */
+    select.underline-input {
+      appearance: none;
+      -webkit-appearance: none;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body class="font-dmsans antialiased min-h-screen w-full flex flex-col md:flex-row bg-ted-offwhite text-ted-text selection:bg-ted-red selection:text-white">
+
+  <!-- ================= LEFT COLUMN: 40% BRAND & PROGRESS ================= -->
+  <div class="relative w-full md:w-[40%] bg-ted-ink text-white flex flex-col justify-between p-8 sm:p-12 lg:p-16 overflow-hidden min-h-[520px] md:min-h-screen">
+    
+    <!-- Animated Gradient Mesh Orbs -->
+    <div class="absolute -top-32 -left-32 w-96 h-96 bg-ted-teal/15 rounded-full blur-3xl pointer-events-none animate-mesh"></div>
+    <div class="absolute bottom-10 -right-20 w-80 h-80 bg-ted-red/20 rounded-full blur-3xl pointer-events-none animate-red-aura"></div>
+    <div class="absolute top-1/2 left-1/4 w-72 h-72 bg-[#1b345b]/30 rounded-full blur-2xl pointer-events-none"></div>
+
+    <!-- Dot matrix grid overlay -->
+    <div class="absolute inset-0 bg-dot-matrix pointer-events-none opacity-80"></div>
+
+    <!-- Content layer -->
+    <div class="relative z-10 flex flex-col h-full justify-between gap-12">
+      
+      <!-- Top Brand Wordmark & Engine Status -->
+      <div>
+        <div class="flex items-center gap-4">
+          <div class="flex items-center gap-1.5 text-2xl font-extrabold tracking-tight font-sora">
+            <span class="text-ted-red">TED</span>
+            <span class="text-white">Brokers</span>
+          </div>
+          <span class="w-1.5 h-1.5 rounded-full bg-ted-teal inline-block shadow-[0_0_8px_#2EE6D3]"></span>
+        </div>
+        <div class="mt-3 font-mono text-[10px] uppercase tracking-widest text-slate-400 flex items-center gap-2">
+          <span>LD4 ENGINE ONLINE</span>
+          <span class="text-slate-600">//</span>
+          <span class="text-ted-teal">TIER-1 CUSTODY</span>
+        </div>
+      </div>
+
+      <!-- Center: Headline & Vertical Progress Rail -->
+      <div class="my-auto py-6">
+        <h1 class="font-sora text-3xl sm:text-4xl lg:text-[40px] font-bold leading-[1.15] tracking-tight text-white mb-4">
+          Start copying in<br class="hidden sm:inline"/> three steps.
+        </h1>
+        <p class="text-slate-300 text-sm sm:text-base leading-relaxed max-w-sm mb-12">
+          Access algorithmic liquidity pools and institutional copy-trading execution within minutes.
+        </p>
+
+        <!-- Vertical Progress Rail -->
+        <div class="relative pl-10 space-y-10">
+          <!-- Continuous Connecting Vertical Rail Line -->
+          <div class="absolute left-[13px] top-3.5 bottom-3.5 w-[1.5px] bg-slate-800">
+            <!-- Filling red progress indicator down to Step 01 completion -->
+            <div class="w-full h-8 bg-ted-red shadow-[0_0_8px_#E3262F]"></div>
+          </div>
+
+          <!-- Step 01: Active -->
+          <div class="relative group">
+            <!-- Node icon / indicator -->
+            <div class="absolute -left-10 top-0.5 w-[28px] h-[28px] rounded-full bg-ted-ink border-2 border-ted-red flex items-center justify-center shadow-[0_0_12px_rgba(227,38,47,0.45)]">
+              <span class="w-2 h-2 rounded-full bg-ted-red animate-pulse"></span>
+            </div>
+            <div>
+              <div class="font-mono text-[11px] font-semibold tracking-wider text-ted-red uppercase flex items-center gap-2">
+                <span>01</span>
+                <span>//</span>
+                <span>Create account</span>
+              </div>
+              <p class="text-xs text-slate-300 mt-1 font-dmsans">Set up your credentials and trading preferences</p>
+            </div>
+          </div>
+
+          <!-- Step 02: Inactive -->
+          <div class="relative group">
+            <div class="absolute -left-10 top-0.5 w-[28px] h-[28px] rounded-full bg-ted-ink border border-slate-700 flex items-center justify-center">
+              <span class="w-1.5 h-1.5 rounded-full bg-slate-600"></span>
+            </div>
+            <div>
+              <div class="font-mono text-[11px] font-medium tracking-wider text-slate-400 uppercase flex items-center gap-2">
+                <span>02</span>
+                <span>//</span>
+                <span>Verify identity</span>
+              </div>
+              <p class="text-xs text-slate-500 mt-1 font-dmsans">Quick automated KYC via government ID</p>
+            </div>
+          </div>
+
+          <!-- Step 03: Inactive -->
+          <div class="relative group">
+            <div class="absolute -left-10 top-0.5 w-[28px] h-[28px] rounded-full bg-ted-ink border border-slate-700 flex items-center justify-center">
+              <span class="w-1.5 h-1.5 rounded-full bg-slate-600"></span>
+            </div>
+            <div>
+              <div class="font-mono text-[11px] font-medium tracking-wider text-slate-400 uppercase flex items-center gap-2">
+                <span>03</span>
+                <span>//</span>
+                <span>Fund & copy</span>
+              </div>
+              <p class="text-xs text-slate-500 mt-1 font-dmsans">Allocate capital to audited signal providers</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bottom Open Stats Separated by Hairlines in Mono -->
+      <div class="pt-8 border-t border-slate-800/80">
+        <div class="grid grid-cols-3 divide-x divide-slate-800">
+          <div class="pr-4">
+            <div class="font-sora text-xl lg:text-2xl font-bold text-white">$50</div>
+            <div class="font-mono text-[10px] tracking-wider uppercase text-slate-400 mt-1">Min. Deposit</div>
+          </div>
+          <div class="px-4">
+            <div class="font-sora text-xl lg:text-2xl font-bold text-white">340+</div>
+            <div class="font-mono text-[10px] tracking-wider uppercase text-slate-400 mt-1">Traders</div>
+          </div>
+          <div class="pl-4">
+            <div class="font-sora text-xl lg:text-2xl font-bold text-white">10</div>
+            <div class="font-mono text-[10px] tracking-wider uppercase text-slate-400 mt-1">Languages</div>
+          </div>
+        </div>
+        
+        <div class="mt-6 flex items-center gap-2 font-mono text-[10px] text-slate-400">
+          <svg class="w-3.5 h-3.5 text-ted-teal" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+          </svg>
+          <span>Tier-1 Segregated Custody · Real-Time Trade Replication</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ================= RIGHT COLUMN: 60% OFF-WHITE FORM ================= -->
+  <div class="relative w-full md:w-[60%] bg-ted-offwhite flex flex-col justify-between p-8 sm:p-12 lg:p-20 overflow-y-auto">
+    
+    <!-- Top-Right Header Links -->
+    <div class="flex items-center justify-end gap-6 text-sm mb-12 sm:mb-16">
+      <!-- Language Selector -->
+      <button type="button" class="flex items-center gap-1.5 text-slate-600 hover:text-ted-ink transition font-mono text-xs">
+        <svg class="w-4 h-4 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9" />
+        </svg>
+        <span>EN</span>
+        <svg class="w-3 h-3 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+        </svg>
+      </button>
+
+      <!-- Already have an account link -->
+      <a href="#" class="text-slate-600 hover:text-ted-ink transition group flex items-center gap-1 font-dmsans text-sm">
+        <span>Already have an account?</span>
+        <span class="font-semibold text-ted-ink group-hover:text-ted-red transition">Sign in &rarr;</span>
+      </a>
+    </div>
+
+    <!-- Main Registration Form (NO CARDS, DIRECTLY ON BACKGROUND) -->
+    <div class="w-full max-w-xl mx-auto my-auto">
+      
+      <!-- Overline & Main Headline -->
+      <div class="mb-10">
+        <div class="font-mono text-xs uppercase tracking-widest text-slate-500 font-semibold mb-2">
+          Step 1 of 3
+        </div>
+        <h2 class="font-sora text-3xl sm:text-4xl font-bold tracking-tight text-ted-ink mb-3">
+          Sign up for free
+        </h2>
+        <p class="text-slate-600 text-sm sm:text-base font-dmsans">
+          Join 10,000+ investors copying institutional quantitative strategies.
+        </p>
+      </div>
+
+      <!-- Registration Form -->
+      <form class="space-y-7" onsubmit="event.preventDefault();">
+        
+        <!-- Two-column grid of Underline Inputs -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-6">
+          
+          <!-- Full Name -->
+          <div class="underline-group">
+            <label class="block font-mono text-[11px] uppercase tracking-wider text-slate-500 font-medium mb-1">
+              Full Name
+            </label>
+            <input type="text" placeholder="e.g. Alexander Wright" class="underline-input" value="Daniel Okafor" required>
+          </div>
+
+          <!-- Username -->
+          <div class="underline-group">
+            <label class="block font-mono text-[11px] uppercase tracking-wider text-slate-500 font-medium mb-1">
+              Username
+            </label>
+            <input type="text" placeholder="e.g. awright_quant" class="underline-input" value="daniel_okafor" required>
+          </div>
+
+          <!-- Email Address -->
+          <div class="underline-group">
+            <label class="block font-mono text-[11px] uppercase tracking-wider text-slate-500 font-medium mb-1">
+              Email Address
+            </label>
+            <input type="email" placeholder="alexander@firm.com" class="underline-input" value="daniel.okafor@gmail.com" required>
+          </div>
+
+          <!-- Phone Number with Country Select -->
+          <div class="underline-group">
+            <label class="block font-mono text-[11px] uppercase tracking-wider text-slate-500 font-medium mb-1">
+              Phone Number
+            </label>
+            <div class="flex items-center">
+              <div class="relative w-24 shrink-0">
+                <select class="underline-input pr-4 font-mono text-xs text-slate-700">
+                  <option selected>+1 (US)</option>
+                  <option>+44 (UK)</option>
+                  <option>+234 (NG)</option>
+                  <option>+49 (DE)</option>
+                  <option>+81 (JP)</option>
+                </select>
+                <span class="pointer-events-none absolute right-1 bottom-3 text-slate-400">
+                  <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                  </svg>
+                </span>
+              </div>
+              <input type="tel" placeholder="(555) 234-5678" class="underline-input ml-3 flex-1" value="(555) 782-9104" required>
+            </div>
+          </div>
+
+          <!-- Gender Select -->
+          <div class="underline-group">
+            <label class="block font-mono text-[11px] uppercase tracking-wider text-slate-500 font-medium mb-1">
+              Gender
+            </label>
+            <div class="relative">
+              <select class="underline-input pr-6">
+                <option value="" disabled>Select gender</option>
+                <option value="male" selected>Male</option>
+                <option value="female">Female</option>
+                <option value="nonbinary">Non-binary</option>
+                <option value="prefer_not">Prefer not to say</option>
+              </select>
+              <span class="pointer-events-none absolute right-1 bottom-3 text-slate-400">
+                <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                </svg>
+              </span>
+            </div>
+          </div>
+
+          <!-- Country of Residence Select -->
+          <div class="underline-group">
+            <label class="block font-mono text-[11px] uppercase tracking-wider text-slate-500 font-medium mb-1">
+              Country of Residence
+            </label>
+            <div class="relative">
+              <select class="underline-input pr-6">
+                <option value="US">United States</option>
+                <option value="UK" selected>United Kingdom</option>
+                <option value="NG">Nigeria</option>
+                <option value="DE">Germany</option>
+                <option value="SG">Singapore</option>
+                <option value="AE">United Arab Emirates</option>
+              </select>
+              <span class="pointer-events-none absolute right-1 bottom-3 text-slate-400">
+                <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                </svg>
+              </span>
+            </div>
+          </div>
+
+          <!-- Password -->
+          <div class="underline-group">
+            <label class="block font-mono text-[11px] uppercase tracking-wider text-slate-500 font-medium mb-1">
+              Password
+            </label>
+            <div class="relative">
+              <input type="password" class="underline-input pr-7" value="••••••••••••••••" placeholder="Create strong passphrase" required>
+              <button type="button" class="absolute right-0 bottom-2.5 text-slate-400 hover:text-slate-600 transition" aria-label="Toggle password visibility">
+                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <!-- Confirm Password -->
+          <div class="underline-group">
+            <label class="block font-mono text-[11px] uppercase tracking-wider text-slate-500 font-medium mb-1">
+              Confirm Password
+            </label>
+            <div class="relative">
+              <input type="password" class="underline-input pr-7" value="••••••••••••••••" placeholder="Repeat passphrase" required>
+              <button type="button" class="absolute right-0 bottom-2.5 text-slate-400 hover:text-slate-600 transition" aria-label="Toggle password visibility">
+                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                </svg>
+              </button>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- 4-segment thin password-strength line labeled "Strong" in teal -->
+        <div class="pt-2">
+          <div class="flex items-center justify-between text-xs mb-1.5 font-mono">
+            <span class="text-slate-500 text-[11px] tracking-wider uppercase">Security Entropy:</span>
+            <div class="flex items-center gap-1.5 text-emerald-600 font-semibold">
+              <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+              <span class="tracking-wide">Strong</span>
+              <span class="text-slate-400 font-normal text-[10px]">(16 chars, symbols, numeric)</span>
+            </div>
+          </div>
+          <!-- 4 Thin segments -->
+          <div class="grid grid-cols-4 gap-2">
+            <div class="h-1 bg-emerald-500 rounded-full"></div>
+            <div class="h-1 bg-emerald-500 rounded-full"></div>
+            <div class="h-1 bg-emerald-500 rounded-full"></div>
+            <div class="h-1 bg-emerald-500 rounded-full"></div>
+          </div>
+        </div>
+
+        <!-- Optional Referral Code -->
+        <div class="underline-group pt-2">
+          <label class="block font-mono text-[11px] uppercase tracking-wider text-slate-500 font-medium mb-1">
+            Referral or Affiliate Code <span class="text-slate-400 font-normal">(Optional)</span>
+          </label>
+          <input type="text" placeholder="e.g. DANIEL-48211" class="underline-input uppercase font-mono tracking-wider" value="DANIEL-48211">
+        </div>
+
+        <!-- Checkbox: Terms, Privacy, Risk Disclosure -->
+        <div class="pt-2">
+          <label class="flex items-start gap-3 cursor-pointer select-none">
+            <input type="checkbox" checked class="mt-1 w-4 h-4 rounded border-slate-300 text-ted-red focus:ring-ted-red accent-ted-red">
+            <span class="text-xs sm:text-sm text-slate-600 leading-normal">
+              I agree to the 
+              <a href="#" class="underline text-ted-ink hover:text-ted-red transition">Terms &amp; Conditions</a>, 
+              <a href="#" class="underline text-ted-ink hover:text-ted-red transition">Privacy Policy</a>, and 
+              <a href="#" class="underline text-ted-ink hover:text-ted-red transition">Risk Disclosure</a>.
+            </span>
+          </label>
+        </div>
+
+        <!-- Full-width red CTA button -->
+        <div class="pt-3">
+          <button type="submit" class="w-full py-4 px-6 bg-ted-red hover:bg-ted-red-hover active:scale-[0.99] text-white font-sora font-semibold text-base rounded shadow-[0_2px_12px_rgba(227,38,47,0.25)] transition duration-150 flex items-center justify-center gap-2">
+            <span>Create account</span>
+            <span>&rarr;</span>
+          </button>
+        </div>
+
+        <!-- Divider "or" -->
+        <div class="relative py-2 flex items-center justify-center">
+          <div class="absolute inset-0 flex items-center">
+            <div class="w-full border-t border-slate-200"></div>
+          </div>
+          <div class="relative bg-ted-offwhite px-4 text-xs font-mono uppercase tracking-widest text-slate-400">
+            or
+          </div>
+        </div>
+
+        <!-- Outline "Sign up with Google" -->
+        <div>
+          <button type="button" class="w-full py-3.5 px-6 border border-slate-300 hover:border-slate-400 bg-white hover:bg-slate-50 active:scale-[0.99] text-slate-700 font-dmsans font-medium text-sm rounded shadow-sm transition duration-150 flex items-center justify-center gap-3">
+            <svg class="w-4 h-4 shrink-0" viewBox="0 0 24 24">
+              <path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.8-2.4 3.68v3.05h3.88c2.27-2.09 3.665-5.17 3.665-9.17z"/>
+              <path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.1-6.72-4.93H1.26v3.15C3.25 21.36 7.33 24 12 24z"/>
+              <path fill="#FBBC05" d="M5.28 14.27c-.25-.72-.38-1.49-.38-2.27s.13-1.55.38-2.27V6.58H1.26C.46 8.16 0 9.94 0 12s.46 3.84 1.26 5.42l4.02-3.15z"/>
+              <path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.33 0 3.25 2.64 1.26 6.58l4.02 3.15c.95-2.83 3.6-4.98 6.72-4.98z"/>
+            </svg>
+            <span>Sign up with Google</span>
+          </button>
+        </div>
+
+        <!-- Small print -->
+        <p class="text-[11px] leading-relaxed text-slate-500 pt-4 text-center">
+          Trading involves risk. You could lose some or all of your capital. High Risk Investment Notice: FX, CFDs, and copy-trading derivatives carry substantial financial risk. Past performance of signal providers is not an indicator of future results.
+        </p>
+
+      </form>
+    </div>
+
+    <!-- Bottom Security Footnote -->
+    <div class="mt-12 pt-6 border-t border-slate-200/60 flex flex-col sm:flex-row items-center justify-between text-[11px] font-mono text-slate-500 gap-3">
+      <div class="flex items-center gap-2">
+        <svg class="w-3.5 h-3.5 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+        </svg>
+        <span>Protected by two-factor authentication</span>
+      </div>
+      <div>
+        <a href="#" class="hover:text-ted-ink underline">Risk disclosure</a>
+        <span class="mx-2">·</span>
+        <a href="#" class="hover:text-ted-ink underline">Execution policy</a>
+      </div>
+    </div>
+
+  </div>
+
+</body>
+</html>

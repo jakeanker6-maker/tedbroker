@@ -1,0 +1,424 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Wallet — TED Brokers</title>
+  <meta name="theme-color" content="#0A1626">
+  <meta name="robots" content="noindex">
+  <link rel="icon" href="../assets/img/favicon.ico">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=JetBrains+Mono:wght@400;500;600&family=Sora:wght@300;600;700;800&display=swap">
+  <link rel="stylesheet" href="../assets/css/main.css">
+  <link rel="stylesheet" href="../assets/css/pages/wallet.css">
+  <script>document.documentElement.classList.add('js');try{var t=localStorage.getItem('ted:theme');if(t==='system')t=matchMedia('(prefers-color-scheme: light)').matches?'light':'dark';if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
+  <script type="module" src="../assets/js/main.js"></script>
+</head>
+<body class="app surface-ink">
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <!-- ===================== RAIL (shared across app pages) ===================== -->
+  <aside class="rail" id="rail" aria-label="Dashboard">
+    <div class="rail__brand">
+      <a class="wordmark" href="index.html" aria-label="TED Brokers dashboard">
+        <span class="wordmark__ted">TED</span><span class="wordmark__brokers">Br<svg class="wordmark__o" viewBox="0 0 20 20" aria-hidden="true"><g fill="currentColor"><circle cx="10" cy="2" r="1.6"/><circle cx="15.2" cy="4.1" r="1.4" opacity=".8"/><circle cx="17.9" cy="9.4" r="1.6"/><circle cx="16.3" cy="14.8" r="1.4" opacity=".8"/><circle cx="11.2" cy="17.9" r="1.6"/><circle cx="5.6" cy="16.4" r="1.4" opacity=".7"/><circle cx="2.2" cy="11.6" r="1.6"/><circle cx="3" cy="6" r="1.4" opacity=".8"/><circle cx="6.6" cy="2.9" r="1.1" opacity=".6"/><circle cx="10" cy="10" r="1.9"/><circle cx="13.3" cy="9.2" r="1" opacity=".7"/><circle cx="7.4" cy="12" r="1" opacity=".7"/></g></svg>kers</span>
+      </a>
+    </div>
+    <nav class="rail__nav" aria-label="Dashboard sections">
+      <ul class="rail__list" role="list">
+        <li><a class="rail__link" href="index.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>Overview</a></li>
+        <li><a class="rail__link" href="wallet.html" aria-current="page"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M3 7a2 2 0 0 1 2-2h13v4"/><path d="M3 7v11a2 2 0 0 0 2 2h15V9H5a2 2 0 0 1-2-2z"/><circle cx="16" cy="14.5" r="1"/></svg>Wallet</a></li>
+        <li><a class="rail__link" href="portfolio.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M21 12A9 9 0 1 1 12 3v9z"/><path d="M15 3.5A9 9 0 0 1 20.5 9H15z"/></svg>Portfolio</a></li>
+        <li><a class="rail__link" href="copy-traders.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0"/><path d="M16 4.5a3.5 3.5 0 0 1 0 7M18 14.5a6.5 6.5 0 0 1 3.5 5.5"/></svg>Copy traders<span class="rail__aside rail__aside--live">3 live</span></a></li>
+      </ul>
+      <p class="rail__group-label" id="rail-plans">Investment plans</p>
+      <ul class="rail__list" role="list" aria-labelledby="rail-plans">
+        <li><a class="rail__link rail__link--sub" href="plans.html">Robo Advisor</a></li>
+        <li><a class="rail__link rail__link--sub" href="plans.html#etf">ETF automation</a></li>
+        <li><a class="rail__link rail__link--sub" href="plans.html#defi">DeFi</a></li>
+        <li><a class="rail__link rail__link--sub" href="plans.html#options">Options</a></li>
+        <li><a class="rail__link rail__link--sub" href="plans.html#staking">Staking<span class="rail__aside rail__aside--soon">soon</span></a></li>
+      </ul>
+      <p class="rail__group-label" id="rail-more">Community</p>
+      <ul class="rail__list" role="list" aria-labelledby="rail-more">
+        <li><a class="rail__link" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M3 12h4l3-8 4 16 3-8h4"/></svg>Network feed</a></li>
+        <li><a class="rail__link" href="referrals.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="18" cy="5" r="2.5"/><circle cx="6" cy="12" r="2.5"/><circle cx="18" cy="19" r="2.5"/><path d="M8.2 10.8l7.6-4.4M8.2 13.2l7.6 4.4"/></svg>Referrals</a></li>
+        <li><a class="rail__link" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M4 5h13v14H6a2 2 0 0 1-2-2z"/><path d="M17 9h3v8a2 2 0 0 1-2 2"/><path d="M7.5 9h6M7.5 13h6"/></svg>News</a></li>
+      </ul>
+    </nav>
+    <div class="rail__foot">
+      <ul class="rail__list" role="list">
+        <li><a class="rail__link" href="../help.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.6.3-1 .8-1 1.5V14"/><path d="M12 17h.01"/></svg>Help center</a></li>
+        <li><a class="rail__link" href="settings.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M12 2.5v3M12 18.5v3M4.2 4.2l2.1 2.1M17.7 17.7l2.1 2.1M2.5 12h3M18.5 12h3M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1"/></svg>Settings</a></li>
+      </ul>
+      <a class="rail__user" href="settings.html">
+        <span class="avatar">DO</span>
+        <span><span class="rail__user-name">Daniel Okafor</span><br><span class="rail__user-meta">● Verified</span></span>
+      </a>
+    </div>
+  </aside>
+  <button class="rail-scrim" type="button" tabindex="-1" aria-hidden="true"></button>
+
+  <div class="app__main">
+    <!-- ===================== TOP BAR (shared) ===================== -->
+    <header class="topbar">
+      <div class="topbar__bar">
+        <button class="icon-btn topbar__menu" type="button" data-rail-toggle aria-controls="rail" aria-expanded="false" aria-label="Open menu">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h10"/></svg>
+        </button>
+        <a class="wordmark topbar__brand" href="index.html" aria-label="TED Brokers dashboard"><span class="wordmark__ted">TED</span><span class="wordmark__brokers">Brokers</span></a>
+        <form class="search" role="search" action="copy-traders.html">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+          <label class="sr-only" for="q">Search</label>
+          <input id="q" name="q" type="search" placeholder="Search traders, plans, markets" autocomplete="off">
+          <kbd aria-hidden="true">⌘K</kbd>
+        </form>
+        <div class="topbar__actions">
+          <button class="lang-select" type="button" aria-label="Language: English">EN
+            <svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M2 3.5l3 3 3-3"/></svg>
+          </button>
+          <button class="icon-btn" type="button" data-theme-toggle aria-pressed="false" aria-label="Light theme">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4 8 8 0 1 0 20 14.5z"/></svg>
+          </button>
+          <button class="icon-btn" type="button" aria-label="Notifications, 2 unread">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M6 8a6 6 0 1 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.9 1.9 0 0 0 3.4 0"/></svg>
+            <span class="icon-btn__dot"></span>
+          </button>
+          <button class="btn btn--sm btn--outline" type="button" data-dialog-open="ted-ai">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true" style="color: var(--color-signal)"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/></svg>TED AI
+          </button>
+          <a class="btn btn--sm" href="wallet.html#deposit">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>Deposit
+          </a>
+        </div>
+      </div>
+      <div class="ticker ticker--sm ticker--app" data-component="ticker" role="region" aria-label="Market prices (indicative)">
+        <div class="ticker__track">
+          <ul class="ticker__list" role="list">
+            <li class="ticker__item"><span class="ticker__sym">EUR/USD</span><span class="ticker__px">1.0842</span><span class="delta" data-trend="up">+0.21%</span></li>
+            <li class="ticker__item"><span class="ticker__sym">BTC/USD</span><span class="ticker__px">67,412.00</span><span class="delta" data-trend="up">+1.84%</span></li>
+            <li class="ticker__item"><span class="ticker__sym">ETH/USD</span><span class="ticker__px">3,540.80</span><span class="delta" data-trend="up">+2.11%</span></li>
+            <li class="ticker__item"><span class="ticker__sym">AAPL</span><span class="ticker__px">228.14</span><span class="delta" data-trend="down">−0.42%</span></li>
+            <li class="ticker__item"><span class="ticker__sym">XAU/USD</span><span class="ticker__px">2,384.10</span><span class="delta" data-trend="up">+0.35%</span></li>
+            <li class="ticker__item"><span class="ticker__sym">SPX</span><span class="ticker__px">5,567.19</span><span class="delta" data-trend="up">+0.38%</span></li>
+            <li class="ticker__item"><span class="ticker__sym">GBP/USD</span><span class="ticker__px">1.2711</span><span class="delta" data-trend="down">−0.08%</span></li>
+          </ul>
+        </div>
+      </div>
+    </header>
+
+    <!-- ===================== PAGE CONTENT ===================== -->
+    <main class="app__content" id="main">
+      <div class="page-head">
+        <div>
+          <h1>Wallet</h1>
+          <p class="page-head__meta">USD account · Figures are illustrative</p>
+        </div>
+        <div class="wl-head-actions">
+          <button class="btn" type="button" data-dialog-open="deposit">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>Deposit
+          </button>
+          <button class="btn btn--outline" type="button" data-dialog-open="withdraw">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 19V5M6 11l6-6 6 6"/></svg>Withdraw
+          </button>
+        </div>
+      </div>
+
+      <!-- Balance -->
+      <section class="wl-balance" aria-labelledby="bal-label">
+        <div class="wl-balance__main">
+          <p class="stat__label" id="bal-label">Available balance</p>
+          <p class="hero-value__num mt-2" data-count="6420" data-format="currency" data-decimals="2">$6,420.00</p>
+          <p class="stat__meta mt-2">Ready to allocate to traders and plans, or to withdraw.</p>
+        </div>
+        <dl class="wl-balance__side">
+          <div>
+            <dt class="stat__label">Pending deposit</dt>
+            <dd><span class="wl-balance__num pending">$500.00</span><span class="tag tag--plain tag--pending">1 bank transfer</span></dd>
+          </div>
+          <div>
+            <dt class="stat__label">Pending withdrawal</dt>
+            <dd><span class="wl-balance__num">$0.00</span><span class="stat__meta">None in progress</span></dd>
+          </div>
+        </dl>
+      </section>
+
+      <!-- Cash flow -->
+      <section aria-labelledby="flow-title">
+        <div class="block-head">
+          <h2 id="flow-title">Cash flow <small>last 90 days</small></h2>
+          <p class="wl-legend">
+            <span class="wl-legend__item"><span class="wl-legend__key" aria-hidden="true"></span>Inflows <b>$5,120</b></span>
+            <span class="wl-legend__item"><span class="wl-legend__key wl-legend__key--out" aria-hidden="true"></span>Outflows <b>$750</b></span>
+            <span class="wl-legend__item">Net <b class="gain">+$4,370</b></span>
+          </p>
+        </div>
+        <div class="wl-bars-wrap mt-5" tabindex="0" role="region" aria-label="Weekly net cash flow, scrollable">
+          <div class="bars" role="img" aria-label="Weekly net cash flow over the last 13 weeks: inflows up, outflows down." data-component="bars" data-format="currency"
+               data-values="1200,0,-300,500,0,2000,-150,0,800,-300,0,500,120"
+               data-labels="W1,W2,W3,W4,W5,W6,W7,W8,W9,W10,W11,W12,W13"></div>
+        </div>
+      </section>
+
+      <!-- Transaction history -->
+      <section class="wl-history" aria-labelledby="history-title" data-component="wallet-history">
+        <div class="block-head">
+          <h2 id="history-title">Transaction history</h2>
+          <p class="mono muted" data-history-count aria-live="polite">10 transactions</p>
+        </div>
+        <div class="tabs" role="tablist" aria-label="Filter transactions" data-component="tabs">
+          <button class="tabs__tab" type="button" role="tab" id="wl-tab-all" aria-controls="wl-history-panel" aria-selected="true" data-filter="all">All<small>10</small></button>
+          <button class="tabs__tab" type="button" role="tab" id="wl-tab-deposit" aria-controls="wl-history-panel" aria-selected="false" data-filter="deposit">Deposits<small>3</small></button>
+          <button class="tabs__tab" type="button" role="tab" id="wl-tab-withdrawal" aria-controls="wl-history-panel" aria-selected="false" data-filter="withdrawal">Withdrawals<small>2</small></button>
+          <button class="tabs__tab" type="button" role="tab" id="wl-tab-copy" aria-controls="wl-history-panel" aria-selected="false" data-filter="copy">Copy P/L<small>3</small></button>
+          <button class="tabs__tab" type="button" role="tab" id="wl-tab-payout" aria-controls="wl-history-panel" aria-selected="false" data-filter="payout">Plan payouts<small>2</small></button>
+        </div>
+
+        <div class="wl-panel" role="tabpanel" id="wl-history-panel" aria-labelledby="wl-tab-all" tabindex="0">
+          <div class="ledger-wrap" tabindex="0" role="region" aria-labelledby="history-title">
+            <table class="ledger">
+              <thead>
+                <tr><th scope="col">Date</th><th scope="col">Description</th><th scope="col" class="opt">Reference</th><th scope="col">Status</th><th scope="col" class="is-num">Amount</th></tr>
+              </thead>
+              <tbody>
+                <tr data-type="copy"><td class="mono muted nowrap">27 Oct 2026</td><td><div class="wl-desc"><strong>Copy P/L · EUR/USD</strong><span>Elena Vasquez</span></div></td><td class="opt wl-ref">CP-90412</td><td><span class="tag tag--plain tag--gain">Completed</span></td><td class="is-num"><span class="delta" data-trend="up">+$42.10</span></td></tr>
+                <tr data-type="deposit"><td class="mono muted nowrap">26 Oct 2026</td><td><div class="wl-desc"><strong>Deposit</strong><span>Bank transfer</span></div></td><td class="opt wl-ref">TED-DO-48190</td><td><span class="tag tag--plain tag--pending">Pending</span></td><td class="is-num pending">+$500.00</td></tr>
+                <tr data-type="payout"><td class="mono muted nowrap">25 Oct 2026</td><td><div class="wl-desc"><strong>Plan payout</strong><span>Robo Advisor</span></div></td><td class="opt wl-ref">PP-20931</td><td><span class="tag tag--plain tag--gain">Completed</span></td><td class="is-num gain">+$120.00</td></tr>
+                <tr data-type="withdrawal"><td class="mono muted nowrap">24 Oct 2026</td><td><div class="wl-desc"><strong>Withdrawal</strong><span>Crypto wallet · BTC</span></div></td><td class="opt wl-ref">WD-11873</td><td><span class="tag tag--plain tag--gain">Completed</span></td><td class="is-num loss">−$300.00</td></tr>
+                <tr data-type="copy"><td class="mono muted nowrap">22 Oct 2026</td><td><div class="wl-desc"><strong>Copy P/L · AAPL</strong><span>Aisha Rahman</span></div></td><td class="opt wl-ref">CP-90377</td><td><span class="tag tag--plain tag--gain">Completed</span></td><td class="is-num"><span class="delta" data-trend="down">−$88.12</span></td></tr>
+                <tr data-type="withdrawal"><td class="mono muted nowrap">19 Oct 2026</td><td><div class="wl-desc"><strong>Withdrawal</strong><span>Bank account ••••4402 · details didn’t match</span></div></td><td class="opt wl-ref">WD-11802</td><td><span class="tag tag--plain tag--loss">Rejected</span></td><td class="is-num"><span class="wl-void">−$150.00</span></td></tr>
+                <tr data-type="deposit"><td class="mono muted nowrap">15 Oct 2026</td><td><div class="wl-desc"><strong>Deposit</strong><span>Cryptocurrency · USDT (TRC-20)</span></div></td><td class="opt wl-ref">TED-DO-47902</td><td><span class="tag tag--plain tag--gain">Completed</span></td><td class="is-num gain">+$2,000.00</td></tr>
+                <tr data-type="copy"><td class="mono muted nowrap">11 Oct 2026</td><td><div class="wl-desc"><strong>Copy P/L · BTC/USD</strong><span>Marcus Chen</span></div></td><td class="opt wl-ref">CP-90211</td><td><span class="tag tag--plain tag--gain">Completed</span></td><td class="is-num"><span class="delta" data-trend="up">+$318.40</span></td></tr>
+                <tr data-type="payout"><td class="mono muted nowrap">04 Oct 2026</td><td><div class="wl-desc"><strong>Plan payout</strong><span>Robo Advisor</span></div></td><td class="opt wl-ref">PP-20877</td><td><span class="tag tag--plain tag--gain">Completed</span></td><td class="is-num gain">+$115.00</td></tr>
+                <tr data-type="deposit"><td class="mono muted nowrap">01 Oct 2026</td><td><div class="wl-desc"><strong>Deposit</strong><span>Bank transfer</span></div></td><td class="opt wl-ref">TED-DO-47655</td><td><span class="tag tag--plain tag--gain">Completed</span></td><td class="is-num gain">+$800.00</td></tr>
+                <tr class="wl-empty" data-history-empty hidden>
+                  <td colspan="5">
+                    <div class="empty">
+                      <p class="empty__title" data-history-empty-title>No transactions yet</p>
+                      <p>Entries appear here as soon as they’re created.</p>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <footer class="app__foot"><p class="fineprint">Trading involves risk. Past performance is not indicative of future results. Figures shown are illustrative.</p></footer>
+    </main>
+  </div>
+
+  <!-- ===================== MOBILE TAB BAR + TED AI (shared) ===================== -->
+  <nav class="tabbar" aria-label="Quick navigation">
+    <a href="index.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1z"/></svg>Home</a>
+    <a href="wallet.html" aria-current="page"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M3 7a2 2 0 0 1 2-2h13v4"/><path d="M3 7v11a2 2 0 0 0 2 2h15V9H5a2 2 0 0 1-2-2z"/></svg>Wallet</a>
+    <a href="copy-traders.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0"/><path d="M16 4.5a3.5 3.5 0 0 1 0 7"/></svg>Traders</a>
+    <a href="plans.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M3 17l6-6 4 4 8-8"/><path d="M15 7h6v6"/></svg>Plans</a>
+    <button type="button" data-rail-toggle aria-controls="rail" aria-expanded="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>More</button>
+  </nav>
+  <button class="ai-fab" type="button" data-dialog-open="ted-ai"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/></svg>TED AI</button>
+
+  <dialog class="drawer" id="ted-ai" aria-labelledby="ted-ai-title">
+    <div class="drawer__inner">
+      <div class="drawer__head">
+        <h2 id="ted-ai-title" class="cluster" style="font-size:1.125rem; --cluster-gap: var(--space-2)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true" style="color: var(--color-signal)"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/></svg>TED AI</h2>
+        <button class="icon-btn" type="button" data-dialog-close aria-label="Close TED AI"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+      </div>
+      <div class="drawer__body" aria-live="polite">
+        <div class="ai-msg ai-msg--bot"><span class="ai-msg__who">TED AI · 09:41</span><p>Elena Vasquez opened a EUR/USD long. Your copy mirrored it at 1.0841 with a $42.10 allocation.</p></div>
+        <div class="ai-msg ai-msg--bot"><span class="ai-msg__who">Risk notice</span><p>Copying Aisha Rahman is paused because your 5% drawdown limit was reached. You can resume or adjust the limit from Copy traders.</p></div>
+        <div class="ai-msg ai-msg--user"><span class="ai-msg__who">You</span><p>How diversified is my portfolio?</p></div>
+        <div class="ai-msg ai-msg--bot"><span class="ai-msg__who">TED AI</span><p>You're spread across 4 asset classes. Crypto is 33% of your capital — above the 25% many beginners choose. Consider capping it in Copy traders.</p></div>
+      </div>
+      <form class="drawer__foot" data-demo-form="Message sent to TED AI">
+        <div class="field">
+          <label class="sr-only" for="ai-q">Ask TED AI</label>
+          <div class="field__control">
+            <input class="field__input" id="ai-q" name="q" placeholder="Ask about your portfolio…" required autocomplete="off">
+            <button class="icon-btn" type="submit" aria-label="Send"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4 12l16-8-6 16-2.5-6.5z"/></svg></button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </dialog>
+  <!-- ===================== DEPOSIT ===================== -->
+  <dialog class="dialog wl-dialog" id="deposit" aria-labelledby="dep-title">
+    <form data-component="wallet-deposit" novalidate>
+      <div class="dialog__head">
+        <h2 class="dialog__title" id="dep-title">Deposit funds</h2>
+        <button class="icon-btn" type="button" data-dialog-close aria-label="Close deposit"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+      </div>
+
+      <ol class="wl-steps" role="list" data-steps style="--step: 1" aria-label="Deposit progress">
+        <li aria-current="step">1 Amount</li>
+        <li>2 Method</li>
+        <li>3 Confirm</li>
+      </ol>
+
+      <div class="dialog__body mt-5">
+        <!-- Step 1: amount -->
+        <fieldset class="wl-step" data-step="1">
+          <legend class="sr-only">Amount</legend>
+          <div class="field field--xl wl-amount">
+            <label class="field__label" for="dep-amount">Deposit amount (USD)</label>
+            <div class="field__control">
+              <span class="field__affix" aria-hidden="true">$</span>
+              <input class="field__input" id="dep-amount" name="amount" type="text" inputmode="decimal" autocomplete="off" placeholder="0" aria-describedby="dep-amount-help" autofocus>
+              <span class="field__affix field__affix--end" aria-hidden="true">USD</span>
+            </div>
+            <p class="field__error" id="dep-amount-error"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7.5v5.5M12 16.5h.01"/></svg><span data-error-msg></span></p>
+            <div class="wl-amount__foot">
+              <p class="field__help" id="dep-amount-help">Min $10 · Max $1,000,000</p>
+              <div class="wl-quick" role="group" aria-label="Quick amounts">
+                <button type="button" data-quick="100" aria-pressed="false">$100</button>
+                <button type="button" data-quick="500" aria-pressed="false">$500</button>
+                <button type="button" data-quick="1000" aria-pressed="false">$1,000</button>
+                <button type="button" data-quick="5000" aria-pressed="false">$5,000</button>
+              </div>
+            </div>
+          </div>
+        </fieldset>
+
+        <!-- Step 2: method -->
+        <fieldset class="wl-step" data-step="2" hidden>
+          <legend class="wl-legend-label">Funding method</legend>
+          <div class="wl-options">
+            <label class="wl-option">
+              <input type="radio" name="method" value="bank" data-name="Bank transfer" checked>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M3 9.5L12 4l9 5.5"/><path d="M5 10v8M9.5 10v8M14.5 10v8M19 10v8M3 20.5h18"/></svg>
+              <span class="wl-option__name">Bank transfer</span>
+              <span class="wl-option__meta">1–3 business days · no fee</span>
+            </label>
+            <label class="wl-option">
+              <input type="radio" name="method" value="crypto" data-name="Cryptocurrency">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M9.5 7.5v9M9.5 8h3.8a2 2 0 0 1 0 4H9.5h4.3a2 2 0 0 1 0 4H9.5M11 6v2M11 16v2"/></svg>
+              <span class="wl-option__name">Cryptocurrency</span>
+              <span class="wl-option__meta">BTC, ETH, USDT · ~30 min</span>
+            </label>
+            <label class="wl-option">
+              <input type="radio" name="method" value="paypal" data-name="PayPal">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><rect x="3" y="6" width="18" height="12" rx="1.5"/><circle cx="12" cy="12" r="2.5"/><path d="M6 9.5v5M18 9.5v5"/></svg>
+              <span class="wl-option__name">PayPal</span>
+              <span class="wl-option__meta">instant · 2.9% fee</span>
+            </label>
+          </div>
+
+          <div class="wl-detail" data-method-detail="bank">
+            <dl>
+              <div class="copyline"><dt>Bank name</dt><dd>Example Bank N.A. <button class="icon-btn" type="button" data-copy="Example Bank N.A." aria-label="Copy bank name"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="1.5"/><path d="M16 8V5.5A1.5 1.5 0 0 0 14.5 4h-9A1.5 1.5 0 0 0 4 5.5v9A1.5 1.5 0 0 0 5.5 16H8"/></svg></button></dd></div>
+              <div class="copyline"><dt>Account number</dt><dd>0000 1234 5678 <button class="icon-btn" type="button" data-copy="000012345678" aria-label="Copy account number"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="1.5"/><path d="M16 8V5.5A1.5 1.5 0 0 0 14.5 4h-9A1.5 1.5 0 0 0 4 5.5v9A1.5 1.5 0 0 0 5.5 16H8"/></svg></button></dd></div>
+              <div class="copyline"><dt>SWIFT</dt><dd>EXAMPUS33 <button class="icon-btn" type="button" data-copy="EXAMPUS33" aria-label="Copy SWIFT code"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="1.5"/><path d="M16 8V5.5A1.5 1.5 0 0 0 14.5 4h-9A1.5 1.5 0 0 0 4 5.5v9A1.5 1.5 0 0 0 5.5 16H8"/></svg></button></dd></div>
+              <div class="copyline"><dt>Reference</dt><dd><span class="wl-ref-value">TED-DO-48211</span> <button class="icon-btn" type="button" data-copy="TED-DO-48211" aria-label="Copy payment reference"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="1.5"/><path d="M16 8V5.5A1.5 1.5 0 0 0 14.5 4h-9A1.5 1.5 0 0 0 4 5.5v9A1.5 1.5 0 0 0 5.5 16H8"/></svg></button></dd></div>
+            </dl>
+            <p class="wl-note"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v5.5M12 7.5h.01"/></svg>Include the reference with your transfer so we can match it to your account.</p>
+          </div>
+
+          <div class="wl-detail" data-method-detail="crypto" hidden>
+            <div class="field">
+              <label class="field__label" for="dep-network">Network</label>
+              <div class="field__control">
+                <select class="field__select" id="dep-network" name="network">
+                  <option value="btc">BTC</option>
+                  <option value="eth">ETH (ERC-20)</option>
+                  <option value="usdt">USDT (TRC-20)</option>
+                </select>
+              </div>
+            </div>
+            <dl>
+              <div class="copyline"><dt>Deposit address</dt><dd><span class="wl-address" data-dep-address>bc1qdemo7ted0brokers0example0address9x</span> <button class="icon-btn" type="button" data-copy="bc1qdemo7ted0brokers0example0address9x" data-dep-address-copy aria-label="Copy deposit address"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="1.5"/><path d="M16 8V5.5A1.5 1.5 0 0 0 14.5 4h-9A1.5 1.5 0 0 0 4 5.5v9A1.5 1.5 0 0 0 5.5 16H8"/></svg></button></dd></div>
+            </dl>
+            <p class="wl-note wl-note--pending"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M12 3.5l9.5 16.5h-19z"/><path d="M12 10v4.5M12 17.5h.01"/></svg>Send only the selected asset on this network.</p>
+          </div>
+
+          <div class="wl-detail" data-method-detail="paypal" hidden>
+            <p class="wl-note"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M14 4h6v6M20 4l-9 9"/><path d="M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></svg>You’ll be redirected to PayPal to approve.</p>
+          </div>
+        </fieldset>
+
+        <!-- Step 3: confirm -->
+        <fieldset class="wl-step" data-step="3" hidden>
+          <legend class="wl-legend-label">Review deposit</legend>
+          <dl class="wl-summary">
+            <div><dt>Amount</dt><dd data-sum="amount">$0.00</dd></div>
+            <div><dt>Method</dt><dd data-sum="method">Bank transfer</dd></div>
+            <div><dt>Fee</dt><dd data-sum="fee">$0.00</dd></div>
+            <div class="wl-summary__total"><dt>You’ll receive</dt><dd data-sum="receive">$0.00</dd></div>
+          </dl>
+        </fieldset>
+      </div>
+
+      <div class="dialog__foot">
+        <p class="fineprint">Funds are credited after confirmation.</p>
+        <div class="wl-foot-actions">
+          <button class="btn btn--ghost" type="button" data-dep-back>Cancel</button>
+          <button class="btn" type="submit" data-dep-next><span data-label>Continue</span></button>
+        </div>
+      </div>
+    </form>
+  </dialog>
+
+  <!-- ===================== WITHDRAW ===================== -->
+  <dialog class="dialog wl-dialog" id="withdraw" aria-labelledby="wd-title">
+    <form data-component="wallet-withdraw" data-available="6420" novalidate>
+      <div class="dialog__head">
+        <h2 class="dialog__title" id="wd-title">Withdraw funds</h2>
+        <button class="icon-btn" type="button" data-dialog-close aria-label="Close withdrawal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+      </div>
+
+      <div class="dialog__body">
+        <div class="field field--xl wl-amount">
+          <label class="field__label" for="wd-amount">Amount (USD)</label>
+          <div class="field__control">
+            <span class="field__affix" aria-hidden="true">$</span>
+            <input class="field__input" id="wd-amount" name="amount" type="text" inputmode="decimal" autocomplete="off" placeholder="0" aria-describedby="wd-amount-help" autofocus>
+            <span class="field__affix field__affix--end" aria-hidden="true">USD</span>
+          </div>
+          <p class="field__error" id="wd-amount-error"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7.5v5.5M12 16.5h.01"/></svg><span data-error-msg></span></p>
+          <p class="field__help" id="wd-amount-help">Available $6,420.00 · Min $10</p>
+        </div>
+
+        <fieldset class="wl-step">
+          <legend class="wl-legend-label">Send to</legend>
+          <div class="wl-options">
+            <label class="wl-option">
+              <input type="radio" name="destination" value="bank" checked>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M3 9.5L12 4l9 5.5"/><path d="M5 10v8M9.5 10v8M14.5 10v8M19 10v8M3 20.5h18"/></svg>
+              <span class="wl-option__name">Bank account <span class="mono">••••4402</span></span>
+              <span class="wl-option__meta">Example Bank N.A.</span>
+            </label>
+            <label class="wl-option">
+              <input type="radio" name="destination" value="crypto">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M9.5 7.5v9M9.5 8h3.8a2 2 0 0 1 0 4H9.5h4.3a2 2 0 0 1 0 4H9.5M11 6v2M11 16v2"/></svg>
+              <span class="wl-option__name">Crypto wallet</span>
+              <span class="wl-option__meta">BTC, ETH or USDT</span>
+            </label>
+          </div>
+        </fieldset>
+
+        <div class="field" data-wd-address hidden>
+          <label class="field__label" for="wd-address">Wallet address</label>
+          <div class="field__control"><input class="field__input mono" id="wd-address" name="wallet_address" autocomplete="off" autocapitalize="none" spellcheck="false"></div>
+          <p class="field__error" id="wd-address-error"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7.5v5.5M12 16.5h.01"/></svg><span data-error-msg></span></p>
+        </div>
+
+        <div class="field wl-code">
+          <label class="field__label" for="wd-code">2FA code</label>
+          <div class="field__control"><input class="field__input" id="wd-code" name="otp" type="text" inputmode="numeric" pattern="\d{6}" maxlength="6" autocomplete="one-time-code" aria-describedby="wd-code-help"></div>
+          <p class="field__error" id="wd-code-error"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7.5v5.5M12 16.5h.01"/></svg><span data-error-msg></span></p>
+          <p class="field__help" id="wd-code-help">6-digit code from your authenticator app.</p>
+        </div>
+      </div>
+
+      <div class="dialog__foot">
+        <p class="fineprint">Usually processed within 24 hours.</p>
+        <div class="wl-foot-actions">
+          <button class="btn btn--ghost" type="button" data-dialog-close>Cancel</button>
+          <button class="btn" type="submit">Request withdrawal</button>
+        </div>
+      </div>
+    </form>
+  </dialog>
+</body>
+</html>

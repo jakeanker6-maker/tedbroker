@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>TED Brokers — Wallet &amp; Funds Ledger</title>
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Web Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&amp;family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&amp;family=Public+Sans:ital,wght@0,100..900;1,100..900&amp;family=Sora:wght@100..800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "surface-container": "#152030",
+            "on-error-container": "#ffdad6",
+            "error": "#ffb4ab",
+            "on-secondary-fixed-variant": "#184b6b",
+            "on-secondary": "#003450",
+            "secondary-fixed-dim": "#9fcbf2",
+            "on-background": "#d7e3fa",
+            "tertiary-container": "#008479",
+            "primary": "#ffb3ad",
+            "on-surface-variant": "#e6bdb9",
+            "on-surface": "#d7e3fa",
+            "on-secondary-container": "#91bde3",
+            "secondary-container": "#1c4d6e",
+            "surface-container-high": "#1f2a3b",
+            "surface-bright": "#2e3a4b",
+            "inverse-primary": "#c0001c",
+            "surface-container-highest": "#2a3547",
+            "primary-container": "#e3262f",
+            "on-primary-container": "#fffeff",
+            "tertiary": "#51dbcb",
+            "inverse-surface": "#d7e3fa",
+            "surface-tint": "#ffb3ad",
+            "surface-container-low": "#101c2c",
+            "on-tertiary": "#003732",
+            "on-tertiary-container": "#fafffd",
+            "on-error": "#690005",
+            "tertiary-fixed": "#72f8e7",
+            "on-tertiary-fixed-variant": "#005049",
+            "inverse-on-surface": "#263142",
+            "on-primary-fixed": "#410004",
+            "outline": "#ad8885",
+            "primary-fixed-dim": "#ffb3ad",
+            "surface-dim": "#081424",
+            "surface": "#081424",
+            "background": "#081424",
+            "on-primary": "#68000a",
+            "surface-container-lowest": "#030e1e",
+            "tertiary-fixed-dim": "#51dbcb",
+            "primary-fixed": "#ffdad7",
+            "secondary": "#9fcbf2",
+            "outline-variant": "#5d3f3d",
+            "on-tertiary-fixed": "#00201d",
+            "on-secondary-fixed": "#001e30",
+            "on-primary-fixed-variant": "#930013",
+            "surface-variant": "#2a3547",
+            "secondary-fixed": "#cbe6ff",
+            "error-container": "#93000a"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "space-xs": "0.25rem",
+            "gutter": "1rem",
+            "margin": "1.5rem",
+            "space-md": "1rem",
+            "space-lg": "1.5rem",
+            "space-xl": "2rem",
+            "space-sm": "0.5rem"
+          },
+          "fontFamily": {
+            "body-lg": ["DM Sans"],
+            "data-mono": ["JetBrains Mono"],
+            "body-md": ["DM Sans"],
+            "headline-md": ["Sora"],
+            "display-lg": ["Sora"],
+            "label-md": ["Public Sans"],
+            "headline-lg": ["Sora"]
+          },
+          "fontSize": {
+            "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+            "data-mono": ["14px", { "lineHeight": "20px", "fontWeight": "500" }],
+            "body-md": ["15px", { "lineHeight": "22px", "fontWeight": "400" }],
+            "headline-md": ["28px", { "lineHeight": "36px", "letterSpacing": "-0.015em", "fontWeight": "600" }],
+            "display-lg": ["72px", { "lineHeight": "80px", "letterSpacing": "-0.035em", "fontWeight": "700" }],
+            "label-md": ["12px", { "lineHeight": "16px", "letterSpacing": "0.12em", "fontWeight": "600" }],
+            "headline-lg": ["36px", { "lineHeight": "44px", "letterSpacing": "-0.02em", "fontWeight": "700" }]
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    /* Custom Scrollbar for terminal aesthetics */
+    ::-webkit-scrollbar {
+      width: 4px;
+      height: 4px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #081424;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #1c4d6e;
+    }
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 20;
+    }
+    .material-symbols-outlined.fill-icon {
+      font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 20;
+    }
+  </style>
+</head>
+<body class="bg-background text-on-surface antialiased flex h-screen overflow-hidden selection:bg-primary-container selection:text-on-primary-container">
+<!-- ========================================================================= -->
+<!-- LEFT RAIL: 240px Fixed Navigation (Terminal Aesthetic, Hairline Right)     -->
+<!-- ========================================================================= -->
+<aside class="w-[240px] flex-shrink-0 bg-surface-container-low border-r border-secondary-container/40 flex flex-col justify-between h-full z-20">
+<div class="flex flex-col">
+<!-- Brand Anchor -->
+<div class="h-14 px-margin flex items-center gap-2 border-b border-secondary-container/30">
+<span class="w-2.5 h-2.5 bg-primary-container inline-block"></span>
+<span class="font-headline-md text-[17px] font-bold text-on-surface tracking-tight">TED Brokers</span>
+</div>
+<!-- Navigation Tree -->
+<nav class="py-space-md flex flex-col gap-0.5 text-on-surface-variant font-label-md text-label-md">
+<a class="px-space-lg py-2 flex items-center gap-3 text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-colors duration-150" href="#">
+<span class="material-symbols-outlined text-[18px]">dashboard</span>
+<span class="tracking-normal normal-case font-body-md text-[14px]">Overview</span>
+</a>
+<a class="px-space-lg py-2 flex items-center gap-3 text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-colors duration-150" href="#">
+<span class="material-symbols-outlined text-[18px]">pie_chart</span>
+<span class="tracking-normal normal-case font-body-md text-[14px]">Portfolio</span>
+</a>
+<!-- Active Item: Wallet -->
+<a class="px-space-lg py-2 flex items-center justify-between text-on-surface bg-surface-container/60 border-l-[2px] border-primary-container" href="#">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-[18px] text-primary-container">account_balance_wallet</span>
+<span class="tracking-normal normal-case font-body-md text-[14px] font-medium text-on-surface">Wallet</span>
+</div>
+<span class="font-data-mono text-[10px] text-tertiary">● SYNC</span>
+</a>
+<a class="px-space-lg py-2 flex items-center justify-between text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-colors duration-150" href="#">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-[18px]">group</span>
+<span class="tracking-normal normal-case font-body-md text-[14px]">Copy traders</span>
+</div>
+<span class="font-data-mono text-[11px] text-tertiary font-medium">3 LIVE</span>
+</a>
+<!-- Nested Investment Plans -->
+<div class="pt-2 pb-1">
+<div class="px-space-lg py-1.5 flex items-center justify-between text-on-surface-variant text-[11px] font-label-md uppercase tracking-wider text-secondary">
+<span>Investment Plans</span>
+<span class="material-symbols-outlined text-[14px]">expand_more</span>
+</div>
+<div class="flex flex-col pl-7 border-l border-secondary-container/20 ml-6 my-1 gap-1">
+<a class="py-1 text-[13px] font-body-md text-on-surface-variant/80 hover:text-on-surface transition-colors" href="#">Robo Advisor</a>
+<a class="py-1 text-[13px] font-body-md text-on-surface-variant/80 hover:text-on-surface transition-colors" href="#">ETF Baskets</a>
+<a class="py-1 text-[13px] font-body-md text-on-surface-variant/80 hover:text-on-surface transition-colors" href="#">DeFi Yields</a>
+<a class="py-1 text-[13px] font-body-md text-on-surface-variant/80 hover:text-on-surface transition-colors" href="#">Options Alpha</a>
+<a class="py-1 text-[13px] font-body-md text-on-surface-variant/80 hover:text-on-surface transition-colors" href="#">ETH Staking</a>
+</div>
+</div>
+<a class="px-space-lg py-2 flex items-center gap-3 text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-colors duration-150" href="#">
+<span class="material-symbols-outlined text-[18px]">rss_feed</span>
+<span class="tracking-normal normal-case font-body-md text-[14px]">Network feed</span>
+</a>
+<a class="px-space-lg py-2 flex items-center gap-3 text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-colors duration-150" href="#">
+<span class="material-symbols-outlined text-[18px]">share</span>
+<span class="tracking-normal normal-case font-body-md text-[14px]">Referrals</span>
+</a>
+<a class="px-space-lg py-2 flex items-center gap-3 text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-colors duration-150" href="#">
+<span class="material-symbols-outlined text-[18px]">terminal</span>
+<span class="tracking-normal normal-case font-body-md text-[14px]">News &amp; Terminal</span>
+</a>
+</nav>
+</div>
+<!-- Bottom Nav Segment -->
+<div class="flex flex-col border-t border-secondary-container/30">
+<div class="py-2 flex flex-col font-body-md text-[13px] text-on-surface-variant">
+<a class="px-space-lg py-1.5 flex items-center gap-3 hover:text-on-surface" href="#">
+<span class="material-symbols-outlined text-[17px]">help_outline</span>
+<span>Help center</span>
+</a>
+<a class="px-space-lg py-1.5 flex items-center gap-3 hover:text-on-surface" href="#">
+<span class="material-symbols-outlined text-[17px]">settings</span>
+<span>Settings</span>
+</a>
+</div>
+<!-- User Profile Row -->
+<div class="px-space-lg py-3 border-t border-secondary-container/30 flex items-center justify-between bg-surface-container-lowest/50">
+<div class="flex flex-col">
+<span class="font-body-md text-[13px] font-semibold text-on-surface tracking-tight">Daniel Okafor</span>
+<span class="font-data-mono text-[10px] text-tertiary uppercase tracking-wider">● Verified T-1</span>
+</div>
+<span class="material-symbols-outlined text-[18px] text-secondary">unfold_more</span>
+</div>
+</div>
+</aside>
+<!-- ========================================================================= -->
+<!-- MAIN SHELL: TOP BAR + UNDERLYING WALLET CANVAS                            -->
+<!-- ========================================================================= -->
+<div class="flex-1 flex flex-col min-w-0 relative h-full">
+<!-- Top Bar: Financial Terminal Ticker & Quick Controls -->
+<header class="h-14 px-space-lg border-b border-secondary-container/40 flex items-center justify-between bg-background flex-shrink-0 z-10">
+<!-- Search & Ticker -->
+<div class="flex items-center gap-6">
+<div class="flex items-center gap-2 px-2.5 py-1.5 border border-secondary-container/60 bg-surface-container-low text-on-surface-variant text-[13px] w-52">
+<span class="material-symbols-outlined text-[16px]">search</span>
+<span class="font-body-md text-[13px] flex-1">Search</span>
+<span class="font-data-mono text-[11px] px-1 bg-surface-container text-secondary">⌘K</span>
+</div>
+<!-- Terminal Hairline Live Tickers -->
+<div class="hidden xl:flex items-center divide-x divide-secondary-container/40 font-data-mono text-[12px]">
+<div class="px-3 flex items-center gap-1.5">
+<span class="text-secondary">EUR/USD</span>
+<span class="text-on-surface">1.0842</span>
+<span class="text-tertiary">▲ 0.14%</span>
+</div>
+<div class="px-3 flex items-center gap-1.5">
+<span class="text-secondary">BTC/USD</span>
+<span class="text-on-surface">67,420.50</span>
+<span class="text-tertiary">▲ 2.81%</span>
+</div>
+<div class="px-3 flex items-center gap-1.5">
+<span class="text-secondary">ETH/USD</span>
+<span class="text-on-surface">3,512.10</span>
+<span class="text-primary-container">▼ 0.45%</span>
+</div>
+<div class="px-3 flex items-center gap-1.5">
+<span class="text-secondary">AAPL</span>
+<span class="text-on-surface">224.23</span>
+<span class="text-tertiary">▲ 0.90%</span>
+</div>
+<div class="px-3 flex items-center gap-1.5">
+<span class="text-secondary">XAU/USD</span>
+<span class="text-on-surface">2,735.80</span>
+<span class="text-tertiary">▲ 0.32%</span>
+</div>
+</div>
+</div>
+<!-- Actions -->
+<div class="flex items-center gap-3">
+<button class="flex items-center gap-1 text-[12px] font-data-mono text-secondary hover:text-on-surface px-2 py-1">
+<span>EN</span>
+<span class="material-symbols-outlined text-[14px]">expand_more</span>
+</button>
+<button aria-label="Notifications" class="p-1.5 text-on-surface-variant hover:text-on-surface">
+<span class="material-symbols-outlined text-[19px]">notifications</span>
+</button>
+<button class="px-3 py-1.5 border border-tertiary/40 text-tertiary hover:bg-tertiary/10 text-[12px] font-data-mono flex items-center gap-1.5 transition-colors">
+<span class="material-symbols-outlined text-[14px]">auto_awesome</span>
+<span>TED AI</span>
+</button>
+<button class="h-8 px-4 bg-primary-container text-on-primary-container text-[12px] font-label-md uppercase tracking-wider font-semibold hover:opacity-90 flex items-center gap-1">
+<span>Deposit</span>
+<span class="material-symbols-outlined text-[14px]">arrow_forward</span>
+</button>
+</div>
+</header>
+<!-- Underlying Canvas (Scrollable Ledger & Statistics) -->
+<main class="flex-1 overflow-y-auto px-margin py-space-xl flex flex-col gap-space-xl">
+<!-- Top Section: Header & Buttons -->
+<div class="flex items-center justify-between border-b border-secondary-container/40 pb-space-lg">
+<div>
+<h1 class="font-headline-lg text-headline-lg text-on-surface">Wallet</h1>
+<p class="font-body-md text-on-surface-variant text-[14px]">Multi-currency settlement clearing accounts &amp; custody ledgers</p>
+</div>
+<div class="flex items-center gap-3">
+<button class="h-10 px-5 border border-secondary-container text-on-surface hover:border-secondary font-label-md text-label-md uppercase tracking-wider">
+            Withdraw
+          </button>
+<button class="h-10 px-6 bg-primary-container text-on-primary-container font-label-md text-label-md uppercase tracking-wider flex items-center gap-2">
+<span>Deposit</span>
+<span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+</button>
+</div>
+</div>
+<!-- Big Balance Region & Open Stat Columns -->
+<div class="grid grid-cols-12 gap-0 border-b border-secondary-container/40 pb-space-xl">
+<div class="col-span-12 md:col-span-6 pr-space-xl">
+<span class="font-label-md text-label-md text-secondary tracking-widest uppercase block mb-1">AVAILABLE BALANCE</span>
+<div class="font-data-mono text-[48px] leading-tight font-bold text-on-surface tracking-tight">
+            $6,420.00
+          </div>
+<div class="flex items-center gap-3 mt-2 font-data-mono text-[13px] text-on-surface-variant">
+<span>Base Currency: <span class="text-on-surface font-semibold">USD</span></span>
+<span>·</span>
+<span>Unrealized P/L: <span class="text-tertiary">▲ +$842.19</span></span>
+</div>
+</div>
+<!-- Vertical Hairline 1 -->
+<div class="col-span-6 md:col-span-3 border-l border-secondary-container/40 pl-space-lg flex flex-col justify-center">
+<span class="font-label-md text-[11px] text-secondary tracking-wider uppercase mb-1">Pending Inflow</span>
+<div class="font-data-mono text-[22px] font-semibold text-[#FFB020] flex items-center gap-2">
+<span>● $500.00</span>
+</div>
+<span class="font-body-md text-[12px] text-on-surface-variant mt-1">1 clearing item via SEPA</span>
+</div>
+<!-- Vertical Hairline 2 -->
+<div class="col-span-6 md:col-span-3 border-l border-secondary-container/40 pl-space-lg flex flex-col justify-center">
+<span class="font-label-md text-[11px] text-secondary tracking-wider uppercase mb-1">Pending Withdrawal</span>
+<div class="font-data-mono text-[22px] font-semibold text-on-surface flex items-center gap-2">
+<span>● $0.00</span>
+</div>
+<span class="font-body-md text-[12px] text-on-surface-variant mt-1">Zero pending release actions</span>
+</div>
+</div>
+<!-- 90-Day Cash Flow Bar Chart (Terminal Native, No Box/Card) -->
+<div class="flex flex-col gap-2 border-b border-secondary-container/40 pb-space-xl">
+<div class="flex items-center justify-between">
+<span class="font-label-md text-label-md uppercase tracking-wider text-secondary">90-Day Cash Flow Ledger (Inflows &amp; Disbursals)</span>
+<div class="flex items-center gap-4 font-data-mono text-[11px]">
+<span class="flex items-center gap-1.5 text-tertiary">
+<span class="w-2 h-2 bg-tertiary inline-block"></span> Net Inflows
+            </span>
+<span class="flex items-center gap-1.5 text-[#E5484D]">
+<span class="w-2 h-2 bg-[#E5484D] inline-block"></span> Outflows / Fees
+            </span>
+</div>
+</div>
+<!-- Naked Bar Canvas with Zero Baseline -->
+<div class="h-32 w-full pt-4 flex flex-col justify-center relative">
+<!-- Zero axis hairline -->
+<div class="absolute inset-x-0 top-1/2 h-[1px] bg-secondary-container/70 z-0"></div>
+<div class="grid grid-cols-24 h-full w-full items-center z-10 gap-1.5">
+<!-- 24 Micro bars simulating 90 days -->
+<div class="h-full flex flex-col justify-end items-center"><div class="w-full bg-tertiary h-[30%]"></div><div class="h-1/2"></div></div>
+<div class="h-full flex flex-col justify-end items-center"><div class="w-full bg-tertiary h-[60%]"></div><div class="h-1/2"></div></div>
+<div class="h-full flex flex-col justify-start items-center"><div class="h-1/2"></div><div class="w-full bg-[#E5484D] h-[20%]"></div></div>
+<div class="h-full flex flex-col justify-end items-center"><div class="w-full bg-tertiary h-[15%]"></div><div class="h-1/2"></div></div>
+<div class="h-full flex flex-col justify-end items-center"><div class="w-full bg-tertiary h-[85%]"></div><div class="h-1/2"></div></div>
+<div class="h-full flex flex-col justify-start items-center"><div class="h-1/2"></div><div class="w-full bg-[#E5484D] h-[45%]"></div></div>
+<div class="h-full flex flex-col justify-end items-center"><div class="w-full bg-tertiary h-[40%]"></div><div class="h-1/2"></div></div>
+<div class="h-full flex flex-col justify-start items-center"><div class="h-1/2"></div><div class="w-full bg-[#E5484D] h-[10%]"></div></div>
+<div class="h-full flex flex-col justify-end items-center"><div class="w-full bg-tertiary h-[90%]"></div><div class="h-1/2"></div></div>
+<div class="h-full flex flex-col justify-end items-center"><div class="w-full bg-tertiary h-[55%]"></div><div class="h-1/2"></div></div>
+<div class="h-full flex flex-col justify-start items-center"><div class="h-1/2"></div><div class="w-full bg-[#E5484D] h-[75%]"></div></div>
+<div class="h-full flex flex-col justify-end items-center"><div class="w-full bg-tertiary h-[20%]"></div><div class="h-1/2"></div></div>
+<div class="h-full flex flex-col justify-end items-center"><div class="w-full bg-tertiary h-[35%]"></div><div class="h-1/2"></div></div>
+<div class="h-full flex flex-col justify-start items-center"><div class="h-1/2"></div><div class="w-full bg-[#E5484D] h-[30%]"></div></div>
+<div class="h-full flex flex-col justify-end items-center"><div class="w-full bg-tertiary h-[70%]"></div><div class="h-1/2"></div></div>
+<div class="h-full flex flex-col justify-end items-center"><div class="w-full bg-tertiary h-[45%]"></div><div class="h-1/2"></div></div>
+<div class="h-full flex flex-col justify-start items-center"><div class="h-1/2"></div><div class="w-full bg-[#E5484D] h-[15%]"></div></div>
+<div class="h-full flex flex-col justify-end items-center"><div class="w-full bg-tertiary h-[65%]"></div><div class="h-1/2"></div></div>
+<div class="h-full flex flex-col justify-end items-center"><div class="w-full bg-tertiary h-[25%]"></div><div class="h-1/2"></div></div>
+<div class="h-full flex flex-col justify-start items-center"><div class="h-1/2"></div><div class="w-full bg-[#E5484D] h-[50%]"></div></div>
+<div class="h-full flex flex-col justify-end items-center"><div class="w-full bg-tertiary h-[95%]"></div><div class="h-1/2"></div></div>
+<div class="h-full flex flex-col justify-end items-center"><div class="w-full bg-tertiary h-[40%]"></div><div class="h-1/2"></div></div>
+<div class="h-full flex flex-col justify-start items-center"><div class="h-1/2"></div><div class="w-full bg-[#E5484D] h-[10%]"></div></div>
+<div class="h-full flex flex-col justify-end items-center"><div class="w-full bg-tertiary h-[75%]"></div><div class="h-1/2"></div></div>
+</div>
+</div>
+<div class="flex justify-between font-data-mono text-[11px] text-on-surface-variant/70">
+<span>90 DAYS AGO</span>
+<span>45 DAYS AGO</span>
+<span>TODAY</span>
+</div>
+</div>
+<!-- Transaction History: Text Tabs & Pure Terminal Ledger Rows -->
+<div class="flex flex-col">
+<div class="flex items-center justify-between border-b border-secondary-container/40">
+<div class="flex items-center gap-6 font-label-md text-label-md uppercase tracking-wider">
+<button class="pb-3 text-on-surface border-b-2 border-primary-container font-semibold">All</button>
+<button class="pb-3 text-on-surface-variant hover:text-on-surface">Deposits</button>
+<button class="pb-3 text-on-surface-variant hover:text-on-surface">Withdrawals</button>
+<button class="pb-3 text-on-surface-variant hover:text-on-surface">Copy P/L</button>
+<button class="pb-3 text-on-surface-variant hover:text-on-surface">Plan payouts</button>
+</div>
+<div class="flex items-center gap-2 pb-2 text-[12px] font-data-mono text-secondary">
+<span>EXPORT CSV</span>
+<span class="material-symbols-outlined text-[15px]">download</span>
+</div>
+</div>
+<!-- Ledger Table Header -->
+<div class="grid grid-cols-12 py-3 border-b border-secondary-container/40 font-label-md text-[11px] tracking-wider uppercase text-secondary">
+<div class="col-span-3">Timestamp</div>
+<div class="col-span-4">Description / Entity</div>
+<div class="col-span-2">Reference</div>
+<div class="col-span-2">Settlement Status</div>
+<div class="col-span-1 text-right">Amount</div>
+</div>
+<!-- Ledger Rows -->
+<div class="divide-y divide-secondary-container/30 font-body-md text-[14px]">
+<!-- Row 1 -->
+<div class="grid grid-cols-12 py-3.5 items-center hover:bg-surface-container-low transition-colors duration-100 group relative">
+<div class="absolute left-0 top-0 bottom-0 w-[2px] bg-primary-container opacity-0 group-hover:opacity-100"></div>
+<div class="col-span-3 font-data-mono text-[13px] text-on-surface">27 OCT 2026 14:10</div>
+<div class="col-span-4 text-on-surface flex items-center gap-2">
+<span class="material-symbols-outlined text-[16px] text-secondary">account_balance</span>
+<span>SEPA Bank Transfer Deposit</span>
+</div>
+<div class="col-span-2 font-data-mono text-[12px] text-secondary">REF-99318-US</div>
+<div class="col-span-2 font-data-mono text-[12px] text-tertiary">● Completed</div>
+<div class="col-span-1 text-right font-data-mono font-medium text-tertiary">+$1,500.00</div>
+</div>
+<!-- Row 2 -->
+<div class="grid grid-cols-12 py-3.5 items-center hover:bg-surface-container-low transition-colors duration-100 group relative">
+<div class="absolute left-0 top-0 bottom-0 w-[2px] bg-primary-container opacity-0 group-hover:opacity-100"></div>
+<div class="col-span-3 font-data-mono text-[13px] text-on-surface">26 OCT 2026 09:34</div>
+<div class="col-span-4 text-on-surface flex items-center gap-2">
+<span class="material-symbols-outlined text-[16px] text-secondary">currency_bitcoin</span>
+<span>ETH Wallet Withdrawal</span>
+</div>
+<div class="col-span-2 font-data-mono text-[12px] text-secondary">REF-84729-TX</div>
+<div class="col-span-2 font-data-mono text-[12px] text-[#FFB020]">● Pending</div>
+<div class="col-span-1 text-right font-data-mono font-medium text-[#E5484D]">-$500.00</div>
+</div>
+<!-- Row 3 -->
+<div class="grid grid-cols-12 py-3.5 items-center hover:bg-surface-container-low transition-colors duration-100 group relative">
+<div class="absolute left-0 top-0 bottom-0 w-[2px] bg-primary-container opacity-0 group-hover:opacity-100"></div>
+<div class="col-span-3 font-data-mono text-[13px] text-on-surface">25 OCT 2026 21:04</div>
+<div class="col-span-4 text-on-surface flex items-center gap-2">
+<span class="material-symbols-outlined text-[16px] text-secondary">monitoring</span>
+<span>Trader Copier Profit Elena Vasquez</span>
+</div>
+<div class="col-span-2 font-data-mono text-[12px] text-secondary">REF-31204-CP</div>
+<div class="col-span-2 font-data-mono text-[12px] text-tertiary">● Completed</div>
+<div class="col-span-1 text-right font-data-mono font-medium text-tertiary">+$231.84</div>
+</div>
+<!-- Row 4 -->
+<div class="grid grid-cols-12 py-3.5 items-center hover:bg-surface-container-low transition-colors duration-100 group relative">
+<div class="absolute left-0 top-0 bottom-0 w-[2px] bg-primary-container opacity-0 group-hover:opacity-100"></div>
+<div class="col-span-3 font-data-mono text-[13px] text-on-surface">22 OCT 2026 18:22</div>
+<div class="col-span-4 text-on-surface flex items-center gap-2">
+<span class="material-symbols-outlined text-[16px] text-secondary">paid</span>
+<span>USDC Clearing Settlement</span>
+</div>
+<div class="col-span-2 font-data-mono text-[12px] text-secondary">REF-10928-CR</div>
+<div class="col-span-2 font-data-mono text-[12px] text-[#E5484D]">● Rejected</div>
+<div class="col-span-1 text-right font-data-mono font-medium text-on-surface-variant">$0.00</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+<!-- ========================================================================= -->
+<!-- MODAL SCRIM & DEPOSIT DIALOG (Width 560px, Elevated Modal Surface)        -->
+<!-- ========================================================================= -->
+<div class="fixed inset-0 bg-black/65 backdrop-blur-[2px] z-50 flex items-center justify-center p-4">
+<!-- Modal Window -->
+<div class="w-full max-w-[560px] bg-[#11223A] rounded-[16px] border border-slate-700/60 shadow-[0_24px_50px_rgba(0,0,0,0.85)] flex flex-col overflow-hidden animate-in fade-in zoom-in-95 duration-200">
+<!-- Modal Header -->
+<div class="px-6 pt-6 pb-4 flex items-center justify-between border-b border-secondary-container/30">
+<h2 class="font-headline-md text-[20px] font-bold text-on-surface tracking-tight">Deposit funds</h2>
+<button aria-label="Close dialog" class="w-8 h-8 rounded-full flex items-center justify-center text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-colors">
+<span class="material-symbols-outlined text-[18px]">close</span>
+</button>
+</div>
+<!-- Step Indicator Ribbon -->
+<div class="px-6 py-3 border-b border-secondary-container/20 flex flex-col gap-1.5 bg-surface-container-lowest/30">
+<div class="flex items-center justify-between font-label-md text-[11px] uppercase tracking-wider text-secondary">
+<span class="text-on-surface font-semibold">1 Amount</span>
+<span class="text-on-surface font-semibold">2 Method</span>
+<span class="text-on-surface-variant/60">3 Confirm</span>
+</div>
+<!-- Sleek indicator progress bar (1 to 2 active) -->
+<div class="w-full h-[2px] bg-secondary-container/40 relative">
+<div class="absolute left-0 top-0 bottom-0 w-2/3 bg-primary-container"></div>
+</div>
+</div>
+<!-- Modal Body -->
+<div class="p-6 flex flex-col gap-5 overflow-y-auto max-h-[calc(90vh-140px)]">
+<!-- Amount Input Section -->
+<div class="flex flex-col gap-2">
+<span class="font-label-md text-[11px] uppercase tracking-wider text-secondary">DEPOSIT AMOUNT (USD)</span>
+<div class="relative border-b-2 border-primary-container pb-1 pt-1 flex items-baseline justify-between">
+<input class="bg-transparent border-0 p-0 font-data-mono text-[36px] font-bold text-on-surface focus:ring-0 focus:outline-none w-full" type="text" value="$1,000"/>
+<span class="font-data-mono text-[14px] text-tertiary">USD</span>
+</div>
+<div class="flex items-center justify-between font-body-md text-[12px] pt-1 text-on-surface-variant">
+<span>Min $10 · Max $1,000,000</span>
+<!-- Quick-amount plain text links (Underlined, strictly NO pills) -->
+<div class="flex items-center gap-3 font-data-mono text-[12px]">
+<button class="underline decoration-secondary-container hover:decoration-on-surface text-secondary hover:text-on-surface">$100</button>
+<button class="underline decoration-secondary-container hover:decoration-on-surface text-secondary hover:text-on-surface">$500</button>
+<button class="underline decoration-primary-container text-on-surface font-semibold">$1,000</button>
+<button class="underline decoration-secondary-container hover:decoration-on-surface text-secondary hover:text-on-surface">$5,000</button>
+</div>
+</div>
+</div>
+<!-- Method Selection (Radio Rows Separated by Hairlines) -->
+<div class="flex flex-col mt-2">
+<span class="font-label-md text-[11px] uppercase tracking-wider text-secondary mb-2">SELECT FUNDING METHOD</span>
+<div class="border border-secondary-container/40 divide-y divide-secondary-container/40">
+<!-- Row 1: Bank Transfer (SELECTED) -->
+<div class="relative bg-surface-container/40 p-3.5 flex flex-col gap-3">
+<!-- Inline-start 2px Red indicator -->
+<div class="absolute left-0 top-0 bottom-0 w-[2px] bg-primary-container"></div>
+<div class="flex items-center justify-between cursor-pointer">
+<div class="flex items-center gap-3">
+<div class="w-4 h-4 rounded-full border border-primary-container flex items-center justify-center">
+<div class="w-2 h-2 rounded-full bg-primary-container"></div>
+</div>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px] text-on-surface">account_balance</span>
+<span class="font-body-md text-[14px] font-semibold text-on-surface">Bank transfer</span>
+</div>
+</div>
+<span class="font-body-md text-[12px] text-on-surface-variant">1–3 business days · no fee</span>
+</div>
+<!-- Revealed Bank Wire Instructions in Terminal Mono -->
+<div class="mt-1 pt-3 border-t border-secondary-container/30 pl-7 flex flex-col gap-2 font-data-mono text-[12px]">
+<div class="flex items-center justify-between">
+<span class="text-secondary text-[11px]">BENEFICIARY BANK:</span>
+<div class="flex items-center gap-1.5 text-on-surface font-medium">
+<span>Barclays Private Client UK</span>
+<button class="text-secondary hover:text-on-surface" title="Copy"><span class="material-symbols-outlined text-[14px]">content_copy</span></button>
+</div>
+</div>
+<div class="flex items-center justify-between">
+<span class="text-secondary text-[11px]">ACCOUNT / IBAN:</span>
+<div class="flex items-center gap-1.5 text-on-surface font-medium">
+<span>GB82 BARC 2000 1198 4402 19</span>
+<button class="text-secondary hover:text-on-surface" title="Copy"><span class="material-symbols-outlined text-[14px]">content_copy</span></button>
+</div>
+</div>
+<div class="flex items-center justify-between">
+<span class="text-secondary text-[11px]">SWIFT / BIC:</span>
+<div class="flex items-center gap-1.5 text-on-surface font-medium">
+<span>BARCGB22XXX</span>
+<button class="text-secondary hover:text-on-surface" title="Copy"><span class="material-symbols-outlined text-[14px]">content_copy</span></button>
+</div>
+</div>
+<div class="flex items-center justify-between bg-surface-container-lowest/60 p-2 border border-secondary-container/30">
+<div class="flex flex-col">
+<span class="text-primary-container text-[10px] uppercase font-bold tracking-wider">● WIRE REFERENCE (MANDATORY)</span>
+<span class="text-on-surface font-bold text-[13px]">TED-DO-48211</span>
+</div>
+<button class="px-2 py-1 bg-surface-container hover:bg-surface-bright text-on-surface text-[11px] flex items-center gap-1">
+<span>COPY REF</span>
+<span class="material-symbols-outlined text-[13px]">content_copy</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Row 2: Cryptocurrency -->
+<div class="p-3.5 flex items-center justify-between cursor-pointer hover:bg-surface-container-low transition-colors">
+<div class="flex items-center gap-3">
+<div class="w-4 h-4 rounded-full border border-secondary-container flex items-center justify-center"></div>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px] text-secondary">currency_bitcoin</span>
+<span class="font-body-md text-[14px] text-on-surface">Cryptocurrency</span>
+</div>
+</div>
+<span class="font-body-md text-[12px] text-on-surface-variant">BTC, ETH, USDT · ~30 min</span>
+</div>
+<!-- Row 3: PayPal -->
+<div class="p-3.5 flex items-center justify-between cursor-pointer hover:bg-surface-container-low transition-colors">
+<div class="flex items-center gap-3">
+<div class="w-4 h-4 rounded-full border border-secondary-container flex items-center justify-center"></div>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px] text-secondary">payments</span>
+<span class="font-body-md text-[14px] text-on-surface">PayPal</span>
+</div>
+</div>
+<span class="font-body-md text-[12px] text-on-surface-variant">instant · 2.9% fee</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Dialog Footer -->
+<div class="px-6 py-4 border-t border-secondary-container/30 bg-surface-container-lowest/40 flex flex-col gap-3">
+<div class="flex items-center gap-2 text-on-surface-variant font-body-md text-[12px]">
+<span class="material-symbols-outlined text-[15px] text-secondary">verified_user</span>
+<span>Funds are held in segregated client accounts with Tier-1 banking partners.</span>
+</div>
+<div class="flex items-center justify-end gap-3 pt-1">
+<button class="px-4 py-2 text-on-surface-variant hover:text-on-surface font-body-md text-[14px] transition-colors">
+            Cancel
+          </button>
+<button class="h-10 px-6 bg-primary-container text-on-primary-container font-label-md text-label-md uppercase tracking-wider font-semibold hover:opacity-90 flex items-center gap-2">
+<span>Continue</span>
+<span class="material-symbols-outlined text-[15px]">arrow_forward</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</body></html>

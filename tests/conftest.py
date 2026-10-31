@@ -1,30 +1,56 @@
-import pytest
-from fastapi.testclient import TestClient
+"""Shared test configuration.
+
+All tests run against an in-memory mongomock database. Nothing here touches the
+MongoDB configured in .env, so the suite is safe to run on any machine.
+"""
 import sys
-sys.path.insert(0, '/home/taliban/websites/tedbroker.com/.worktrees/plan-tagging')
-from main import app
-from app.auth import create_access_token, get_password_hash
-from app.database import get_collection
-from bson import ObjectId
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[1]
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
+
+import mongomock  # noqa: E402
+import pytest  # noqa: E402
+
+import app.database as database  # noqa: E402
+
+# Install the mock before anything calls get_database().
+database.client = mongomock.MongoClient()
+database.db = database.client["tedbroker_test"]
+
+from bson import ObjectId  # noqa: E402
+from fastapi.testclient import TestClient  # noqa: E402
+
+from app.auth import create_access_token, get_password_hash  # noqa: E402
+from app.database import get_collection  # noqa: E402
+
+
+@pytest.fixture
+def fresh_db():
+    """Give a test an empty database and restore the shared one afterwards."""
+    previous = database.db
+    database.db = database.client[f"tedbroker_test_{ObjectId()}"]
+    try:
+        yield database.db
+    finally:
+        database.client.drop_database(database.db.name)
+        database.db = previous
 
 
 @pytest.fixture(scope="session")
 def client():
-    """Test client fixture"""
+    """Test client. Not used as a context manager, so startup jobs do not run."""
+    from main import app
     return TestClient(app)
 
 
 @pytest.fixture(scope="session")
 def admin_token(client):
-    """Create an admin user in DB and return a valid token"""
     admins = get_collection("admins")
-    
-    # Delete any existing test admin
     admins.delete_many({"username": "testadmin"})
-    
-    # Create test admin
     admin_id = ObjectId()
-    admin_dict = {
+    admins.insert_one({
         "_id": admin_id,
         "username": "testadmin",
         "email": "testadmin@test.com",
@@ -34,35 +60,18 @@ def admin_token(client):
         "is_active": True,
         "created_at": None,
         "updated_at": None,
-        "last_login": None
-    }
-    admins.insert_one(admin_dict)
-    
-    # Create access token
-    access_token = create_access_token(
-        data={
-            "sub": "testadmin",
-            "user_id": str(admin_id),
-            "role": "admin"
-        }
-    )
-    yield access_token
-    
-    # Cleanup
+        "last_login": None,
+    })
+    yield create_access_token(data={"sub": "testadmin", "user_id": str(admin_id), "role": "admin"})
     admins.delete_many({"username": "testadmin"})
 
 
 @pytest.fixture(scope="session")
 def user_token(client):
-    """Create a regular user in DB and return a valid token"""
     users = get_collection("users")
-    
-    # Delete any existing test user
     users.delete_many({"email": "testuser@test.com"})
-    
-    # Create test user
     user_id = ObjectId()
-    user_dict = {
+    users.insert_one({
         "_id": user_id,
         "username": "testuser",
         "email": "testuser@test.com",
@@ -74,20 +83,6 @@ def user_token(client):
         "access_granted": True,
         "two_fa_enabled": False,
         "auth_provider": "local",
-        "created_at": None,
-        "updated_at": None
-    }
-    users.insert_one(user_dict)
-    
-    # Create access token
-    access_token = create_access_token(
-        data={
-            "sub": "testuser",
-            "user_id": str(user_id),
-            "role": "user"
-        }
-    )
-    yield access_token
-    
-    # Cleanup
+    })
+    yield create_access_token(data={"sub": "testuser", "user_id": str(user_id), "role": "user"})
     users.delete_many({"email": "testuser@test.com"})

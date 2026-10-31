@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>TED Brokers — Account Settings (Security)</title>
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&amp;family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&amp;family=Public+Sans:ital,wght@0,100..900;1,100..900&amp;family=Sora:wght@100..800&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "tertiary-fixed": "#72f8e7",
+            "secondary-fixed-dim": "#9fcbf2",
+            "tertiary": "#51dbcb",
+            "background": "#081424",
+            "surface-container-lowest": "#030e1e",
+            "surface-container-low": "#101c2c",
+            "outline-variant": "#5d3f3d",
+            "on-primary-fixed-variant": "#930013",
+            "on-error-container": "#ffdad6",
+            "secondary-fixed": "#cbe6ff",
+            "surface-dim": "#081424",
+            "on-background": "#d7e3fa",
+            "on-surface-variant": "#e6bdb9",
+            "on-tertiary-container": "#fafffd",
+            "primary-fixed": "#ffdad7",
+            "on-tertiary-fixed": "#00201d",
+            "surface-variant": "#2a3547",
+            "on-tertiary": "#003732",
+            "surface-container-high": "#1f2a3b",
+            "on-tertiary-fixed-variant": "#005049",
+            "on-secondary": "#003450",
+            "on-surface": "#d7e3fa",
+            "primary-container": "#e3262f",
+            "surface": "#081424",
+            "on-primary-fixed": "#410004",
+            "inverse-on-surface": "#263142",
+            "tertiary-container": "#008479",
+            "on-primary-container": "#fffeff",
+            "primary-fixed-dim": "#ffb3ad",
+            "on-secondary-fixed": "#001e30",
+            "error": "#ffb4ab",
+            "primary": "#ffb3ad",
+            "secondary": "#9fcbf2",
+            "on-secondary-fixed-variant": "#184b6b",
+            "error-container": "#93000a",
+            "on-secondary-container": "#91bde3",
+            "secondary-container": "#1c4d6e",
+            "inverse-primary": "#c0001c",
+            "on-primary": "#68000a",
+            "inverse-surface": "#d7e3fa",
+            "on-error": "#690005",
+            "surface-tint": "#ffb3ad",
+            "surface-container-highest": "#2a3547",
+            "outline": "#ad8885",
+            "tertiary-fixed-dim": "#51dbcb",
+            "surface-container": "#152030",
+            "surface-bright": "#2e3a4b"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "space-md": "1rem",
+            "margin": "1.5rem",
+            "space-lg": "1.5rem",
+            "space-sm": "0.5rem",
+            "space-xs": "0.25rem",
+            "space-xl": "2rem",
+            "gutter": "1rem"
+          },
+          "fontFamily": {
+            "label-md": ["Public Sans", "sans-serif"],
+            "display-lg": ["Sora", "sans-serif"],
+            "headline-md": ["Sora", "sans-serif"],
+            "headline-lg": ["Sora", "sans-serif"],
+            "body-lg": ["DM Sans", "sans-serif"],
+            "data-mono": ["JetBrains Mono", "monospace"],
+            "body-md": ["DM Sans", "sans-serif"]
+          },
+          "fontSize": {
+            "label-md": ["12px", { "lineHeight": "16px", "letterSpacing": "0.12em", "fontWeight": "600" }],
+            "display-lg": ["72px", { "lineHeight": "80px", "letterSpacing": "-0.035em", "fontWeight": "700" }],
+            "headline-md": ["28px", { "lineHeight": "36px", "letterSpacing": "-0.015em", "fontWeight": "600" }],
+            "headline-lg": ["36px", { "lineHeight": "44px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+            "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+            "data-mono": ["14px", { "lineHeight": "20px", "fontWeight": "500" }],
+            "body-md": ["15px", { "lineHeight": "22px", "fontWeight": "400" }]
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      display: inline-block;
+      vertical-align: middle;
+      line-height: 1;
+    }
+    /* Custom subtle scrollbar */
+    ::-webkit-scrollbar {
+      width: 4px;
+      height: 4px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #081424;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #1c4d6e;
+    }
+  </style>
+</head>
+<body class="bg-background text-on-surface antialiased min-h-screen flex flex-col font-body-md select-none overflow-x-hidden">
+<!-- 1. Top Market Ticker Bar -->
+<aside class="w-full bg-surface-container-lowest border-b border-white/[0.08] px-margin py-1.5 flex items-center justify-between overflow-x-auto text-[11px] font-data-mono z-40 text-slate-300">
+<div class="flex items-center space-x-6 min-w-max">
+<div class="flex items-center space-x-2">
+<span class="text-slate-400">EUR/USD</span>
+<span class="text-white">1.0842</span>
+<span class="text-tertiary">▲ +0.21%</span>
+</div>
+<div class="h-3 w-px bg-white/[0.08]"></div>
+<div class="flex items-center space-x-2">
+<span class="text-slate-400">BTC/USD</span>
+<span class="text-white">67,412.00</span>
+<span class="text-tertiary">▲ +1.84%</span>
+</div>
+<div class="h-3 w-px bg-white/[0.08]"></div>
+<div class="flex items-center space-x-2">
+<span class="text-slate-400">ETH/USD</span>
+<span class="text-white">3,540.80</span>
+<span class="text-tertiary">▲ +2.11%</span>
+</div>
+<div class="h-3 w-px bg-white/[0.08]"></div>
+<div class="flex items-center space-x-2">
+<span class="text-slate-400">AAPL</span>
+<span class="text-white">228.14</span>
+<span class="text-error">▼ -0.42%</span>
+</div>
+<div class="h-3 w-px bg-white/[0.08]"></div>
+<div class="flex items-center space-x-2">
+<span class="text-slate-400">XAU/USD</span>
+<span class="text-white">2,384.10</span>
+<span class="text-tertiary">▲ +0.65%</span>
+</div>
+<div class="h-3 w-px bg-white/[0.08]"></div>
+<div class="flex items-center space-x-2">
+<span class="text-slate-400">SPX</span>
+<span class="text-white">5,567.19</span>
+<span class="text-tertiary">▲ +0.38%</span>
+</div>
+</div>
+<div class="flex items-center space-x-3 text-slate-400 pl-4 border-l border-white/[0.08] min-w-max">
+<span class="flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-tertiary animate-pulse"></span>FEED CONNECTED</span>
+<span class="text-slate-500">|</span>
+<span>SYDNEY OPEN</span>
+</div>
+</aside>
+<!-- 2. Top Bar Navigation (Shared Anchor: TopNavBar) -->
+<header class="w-full px-margin py-space-sm flex items-center justify-between border-b border-secondary-container bg-background z-30">
+<div class="flex items-center space-x-8">
+<!-- Brand Logo -->
+<a class="flex items-center space-x-2 group" href="#">
+<div class="bg-primary-container px-2 py-0.5 rounded text-white font-headline-md text-headline-md font-bold tracking-tight">
+          TED
+        </div>
+<span class="font-headline-md text-headline-md tracking-tight font-bold text-on-surface">
+          Brokers
+        </span>
+</a>
+<!-- Navigation Links from Shared Components JSON -->
+<nav class="hidden md:flex items-center space-x-6 font-label-md text-label-md tracking-wider">
+<a class="text-on-surface-variant hover:text-on-surface transition-colors duration-150" href="#">Markets</a>
+<a class="text-on-surface-variant hover:text-on-surface transition-colors duration-150" href="#">Copy Trading</a>
+<a class="text-on-surface-variant hover:text-on-surface transition-colors duration-150" href="#">Institutional</a>
+<a class="text-on-surface-variant hover:text-on-surface transition-colors duration-150" href="#">Company</a>
+<a class="text-on-surface-variant hover:text-on-surface transition-colors duration-150" href="#">Resources</a>
+</nav>
+</div>
+<!-- Center Search Bar -->
+<div class="hidden lg:flex items-center w-80 relative">
+<span class="absolute left-3 text-slate-400 material-symbols-outlined text-[18px]">search</span>
+<input class="w-full bg-surface-container-low border border-white/[0.08] rounded pl-9 pr-12 py-1.5 text-xs text-on-surface placeholder-slate-500 focus:outline-none focus:border-secondary-container" placeholder="Search markets, strategies, settings..." type="text"/>
+<kbd class="absolute right-2 text-[10px] font-data-mono bg-surface-container px-1.5 py-0.5 rounded text-slate-400 border border-white/[0.08]">⌘K</kbd>
+</div>
+<!-- Trailing Actions -->
+<div class="flex items-center space-x-4">
+<div class="flex items-center space-x-1 text-slate-300">
+<button class="p-1.5 hover:text-white transition-colors duration-150 flex items-center gap-1 font-label-md text-[11px]">
+<span class="material-symbols-outlined text-[18px]">language</span>
+<span>EN</span>
+</button>
+<button class="p-1.5 hover:text-white transition-colors duration-150">
+<span class="material-symbols-outlined text-[18px]">dark_mode</span>
+</button>
+<button class="p-1.5 hover:text-white transition-colors duration-150 relative">
+<span class="material-symbols-outlined text-[18px]">notifications</span>
+<span class="absolute top-1.5 right-1.5 w-1.5 h-1.5 bg-primary-container rounded-full"></span>
+</button>
+</div>
+<div class="h-4 w-px bg-white/[0.08]"></div>
+<button class="px-3 py-1.5 text-xs font-semibold text-white border border-white/[0.2] hover:border-white rounded transition-colors duration-150">
+        TED AI
+      </button>
+<button class="bg-primary-container hover:bg-inverse-primary text-white text-xs font-bold px-4 py-2 rounded flex items-center space-x-1.5 transition-colors duration-150 active:opacity-90">
+<span>+ DEPOSIT</span>
+</button>
+</div>
+</header>
+<!-- Main Body Shell: Left Rail + Main Canvas -->
+<div class="flex flex-1 w-full overflow-hidden">
+<!-- 3. Left Rail Navigation (width 240px, bg #11223A) -->
+<nav class="w-60 flex-shrink-0 bg-surface-container-low border-r border-white/[0.08] flex flex-col justify-between hidden md:flex">
+<div class="py-4 flex flex-col space-y-6 overflow-y-auto">
+<!-- Top Group -->
+<div class="space-y-0.5">
+<a class="flex items-center space-x-3 px-5 py-2 text-slate-400 hover:text-white hover:bg-white/[0.02] transition-colors text-xs font-medium" href="#">
+<span class="material-symbols-outlined text-[18px]">dashboard</span>
+<span>Overview</span>
+</a>
+<a class="flex items-center space-x-3 px-5 py-2 text-slate-400 hover:text-white hover:bg-white/[0.02] transition-colors text-xs font-medium" href="#">
+<span class="material-symbols-outlined text-[18px]">account_balance_wallet</span>
+<span>Wallet</span>
+</a>
+<a class="flex items-center space-x-3 px-5 py-2 text-slate-400 hover:text-white hover:bg-white/[0.02] transition-colors text-xs font-medium" href="#">
+<span class="material-symbols-outlined text-[18px]">pie_chart</span>
+<span>Portfolio</span>
+</a>
+<a class="flex items-center justify-between px-5 py-2 text-slate-400 hover:text-white hover:bg-white/[0.02] transition-colors text-xs font-medium" href="#">
+<div class="flex items-center space-x-3">
+<span class="material-symbols-outlined text-[18px]">groups</span>
+<span>Copy traders</span>
+</div>
+<span class="font-data-mono text-[10px] text-tertiary">3 LIVE</span>
+</a>
+</div>
+<!-- INVESTMENT PLANS -->
+<div class="space-y-1">
+<div class="px-5 text-[10px] font-label-md text-slate-400 tracking-wider">INVESTMENT PLANS</div>
+<a class="flex items-center space-x-3 px-5 py-1.5 text-slate-400 hover:text-white transition-colors text-xs" href="#">
+<span class="material-symbols-outlined text-[16px] text-slate-500">smart_toy</span>
+<span>Robo Advisor</span>
+</a>
+<a class="flex items-center space-x-3 px-5 py-1.5 text-slate-400 hover:text-white transition-colors text-xs" href="#">
+<span class="material-symbols-outlined text-[16px] text-slate-500">inventory_2</span>
+<span>ETF Baskets</span>
+</a>
+<a class="flex items-center space-x-3 px-5 py-1.5 text-slate-400 hover:text-white transition-colors text-xs" href="#">
+<span class="material-symbols-outlined text-[16px] text-slate-500">currency_exchange</span>
+<span>DeFi Yields</span>
+</a>
+<a class="flex items-center space-x-3 px-5 py-1.5 text-slate-400 hover:text-white transition-colors text-xs" href="#">
+<span class="material-symbols-outlined text-[16px] text-slate-500">stacked_line_chart</span>
+<span>Options Alpha</span>
+</a>
+<a class="flex items-center space-x-3 px-5 py-1.5 text-slate-400 hover:text-white transition-colors text-xs" href="#">
+<span class="material-symbols-outlined text-[16px] text-slate-500">toll</span>
+<span>ETH Staking</span>
+</a>
+</div>
+<!-- Social & News -->
+<div class="space-y-0.5 border-t border-white/[0.04] pt-3">
+<a class="flex items-center space-x-3 px-5 py-2 text-slate-400 hover:text-white transition-colors text-xs" href="#">
+<span class="material-symbols-outlined text-[18px]">forum</span>
+<span>Network feed</span>
+</a>
+<a class="flex items-center space-x-3 px-5 py-2 text-slate-400 hover:text-white transition-colors text-xs" href="#">
+<span class="material-symbols-outlined text-[18px]">share</span>
+<span>Referrals</span>
+</a>
+<a class="flex items-center space-x-3 px-5 py-2 text-slate-400 hover:text-white transition-colors text-xs" href="#">
+<span class="material-symbols-outlined text-[18px]">newspaper</span>
+<span>News &amp; Terminal</span>
+</a>
+</div>
+</div>
+<!-- Bottom Rail Profile & Settings Anchor -->
+<div class="border-t border-white/[0.08] pt-2 pb-4 space-y-1">
+<!-- Settings (CURRENT ACTIVE ITEM) -->
+<a class="flex items-center space-x-3 px-5 py-2.5 text-white font-medium text-xs bg-white/[0.03] border-l-2 border-[#E3262F]" href="#">
+<span class="material-symbols-outlined text-[18px] text-white">settings</span>
+<span>Settings</span>
+</a>
+<a class="flex items-center space-x-3 px-5 py-2 text-slate-400 hover:text-white transition-colors text-xs" href="#">
+<span class="material-symbols-outlined text-[18px]">help</span>
+<span>Help center</span>
+</a>
+<!-- User profile summary -->
+<div class="px-5 py-3 mt-1 flex items-center space-x-3 border-t border-white/[0.04]">
+<div class="w-8 h-8 rounded bg-surface-container-high border border-white/[0.1] flex items-center justify-center font-bold text-xs text-white">
+            DO
+          </div>
+<div class="flex flex-col min-w-0">
+<span class="text-xs font-semibold text-white truncate">Daniel Okafor</span>
+<span class="text-[10px] text-tertiary flex items-center gap-1 font-data-mono">
+<span>●</span> Verified · T-1
+            </span>
+</div>
+</div>
+</div>
+</nav>
+<!-- Main Content Canvas (Strictly NO CARDS, borderless editorial interface) -->
+<main class="flex-1 bg-surface overflow-y-auto px-6 lg:px-12 py-8">
+<!-- Top Title Header -->
+<div class="border-b border-white/[0.08] pb-6">
+<h1 class="font-headline-lg text-headline-lg font-bold text-white tracking-tight">
+          Settings
+        </h1>
+<p class="text-slate-400 text-sm mt-1">Manage credentials, perimeter security, and authenticated hardware terminals.</p>
+<!-- Category Horizontal Tabs -->
+<div class="flex items-center space-x-8 mt-8 text-sm">
+<a class="text-slate-400 hover:text-white pb-3 transition-colors" href="#">
+            Personal details
+          </a>
+<!-- Security ACTIVE Tab -->
+<a class="text-white font-bold pb-3 border-b-2 border-primary-container transition-colors" href="#">
+            Security
+          </a>
+<a class="text-slate-400 hover:text-white pb-3 transition-colors" href="#">
+            Preferences
+          </a>
+<a class="text-slate-400 hover:text-white pb-3 transition-colors" href="#">
+            Verification
+          </a>
+</div>
+</div>
+<!-- Security Tab Body: 2-Column Editorial Settings Form -->
+<div class="flex flex-col">
+<!-- Section 1: Security status -->
+<section class="py-8 border-b border-white/[0.08] grid grid-cols-1 md:grid-cols-12 gap-8 items-start">
+<div class="md:col-span-4">
+<h2 class="text-sm font-semibold text-white">Security status</h2>
+<p class="text-xs text-[#8B9BB4] mt-1 leading-relaxed">Overall protection level of your brokerage account.</p>
+</div>
+<div class="md:col-span-8 space-y-4">
+<!-- 4-segment progress line -->
+<div>
+<div class="flex items-center justify-between text-xs mb-2">
+<span class="text-white font-medium">Strong · 3 of 4 protections on</span>
+<span class="text-tertiary font-data-mono">75% SECURED</span>
+</div>
+<div class="grid grid-cols-4 gap-2 h-1.5 w-full">
+<div class="bg-tertiary rounded-full"></div>
+<div class="bg-tertiary rounded-full"></div>
+<div class="bg-tertiary rounded-full"></div>
+<div class="bg-slate-700 rounded-full"></div>
+</div>
+</div>
+<!-- Inline checklist -->
+<div class="flex flex-wrap items-center gap-x-6 gap-y-2 text-xs pt-1">
+<span class="text-white flex items-center gap-1.5">
+<span class="text-tertiary">✓</span> Email verified
+              </span>
+<span class="text-white flex items-center gap-1.5">
+<span class="text-tertiary">✓</span> 2FA enabled
+              </span>
+<span class="text-white flex items-center gap-1.5">
+<span class="text-tertiary">✓</span> Strong password
+              </span>
+<span class="text-slate-400 flex items-center gap-1.5">
+<span class="text-slate-500">○</span> Identity verification pending
+                <a class="text-[#FFB020] hover:underline ml-1 font-medium" href="#">Complete KYC →</a>
+</span>
+</div>
+</div>
+</section>
+<!-- Section 2: Two-factor authentication -->
+<section class="py-8 border-b border-white/[0.08] grid grid-cols-1 md:grid-cols-12 gap-8 items-start">
+<div class="md:col-span-4">
+<h2 class="text-sm font-semibold text-white">Two-factor authentication</h2>
+<p class="text-xs text-[#8B9BB4] mt-1 leading-relaxed">Enforce hardware or app-based OTP on sign in and withdrawals.</p>
+</div>
+<div class="md:col-span-8 space-y-5">
+<div class="flex items-center justify-between">
+<div class="flex flex-col">
+<span class="text-xs font-medium text-tertiary flex items-center gap-1.5">
+<span>●</span> Enabled via authenticator app
+                </span>
+<span class="text-xs text-[#8B9BB4] mt-0.5">Added 12 Aug 2026 · Authenticator (TOTP)</span>
+</div>
+<!-- Switch toggle ON (TED Red track with white knob) -->
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox"/>
+<div class="w-11 h-6 bg-slate-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary-container"></div>
+</label>
+</div>
+<!-- Actions -->
+<div class="flex items-center pt-2">
+<button class="border border-white/20 hover:border-white text-white px-4 py-2 text-xs font-medium rounded transition-colors duration-150">
+                Regenerate backup codes
+              </button>
+<button class="text-red-500 hover:underline text-xs font-medium ml-4 transition-colors">
+                Disable 2FA
+              </button>
+</div>
+</div>
+</section>
+<!-- Section 3: Password -->
+<section class="py-8 border-b border-white/[0.08] grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
+<div class="md:col-span-4">
+<h2 class="text-sm font-semibold text-white">Password</h2>
+<p class="text-xs text-[#8B9BB4] mt-1 leading-relaxed">Master passphrase for terminal access and API keys.</p>
+</div>
+<div class="md:col-span-8 flex items-center justify-between">
+<span class="text-xs text-[#8B9BB4] font-data-mono">Last changed 64 days ago</span>
+<button class="border border-white/20 hover:border-white text-white px-4 py-2 text-xs font-medium rounded transition-colors duration-150">
+              Change password
+            </button>
+</div>
+</section>
+<!-- Section 4: Email address -->
+<section class="py-8 border-b border-white/[0.08] grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
+<div class="md:col-span-4">
+<h2 class="text-sm font-semibold text-white">Email address</h2>
+<p class="text-xs text-[#8B9BB4] mt-1 leading-relaxed">Primary communication address for trade receipts and settlement.</p>
+</div>
+<div class="md:col-span-8 flex items-center justify-between">
+<div class="flex items-center space-x-3">
+<span class="text-sm text-white font-medium">daniel.okafor@gmail.com</span>
+<span class="text-xs text-tertiary flex items-center gap-1 font-data-mono">
+<span>●</span> Verified
+              </span>
+</div>
+<button class="border border-white/20 hover:border-white text-white px-4 py-2 text-xs font-medium rounded transition-colors duration-150">
+              Change email
+            </button>
+</div>
+</section>
+<!-- Section 5: Login history -->
+<section class="py-8 border-b border-white/[0.08] grid grid-cols-1 md:grid-cols-12 gap-8 items-start">
+<div class="md:col-span-4">
+<h2 class="text-sm font-semibold text-white">Login history</h2>
+<p class="text-xs text-[#8B9BB4] mt-1 leading-relaxed">Recent authenticated sessions and terminal connections.</p>
+</div>
+<!-- Flat ledger list (No cards, hairline rows) -->
+<div class="md:col-span-8 w-full overflow-x-auto">
+<table class="w-full text-left border-collapse text-xs">
+<thead>
+<tr class="border-b border-white/[0.08] text-slate-400 font-label-md text-[11px] tracking-wider uppercase">
+<th class="py-2.5 pr-4 font-semibold">Device &amp; Browser</th>
+<th class="py-2.5 px-4 font-semibold">Location</th>
+<th class="py-2.5 px-4 font-semibold">IP Address</th>
+<th class="py-2.5 px-4 font-semibold">Timestamp</th>
+<th class="py-2.5 pl-4 text-right font-semibold">Status / Action</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-white/[0.04]">
+<!-- Row 1 -->
+<tr class="group hover:bg-white/[0.01] transition-colors">
+<td class="py-3.5 pr-4 text-white font-medium flex items-center gap-2">
+<span class="material-symbols-outlined text-[16px] text-slate-400">laptop_mac</span>
+                    MacBook Pro · Chrome
+                  </td>
+<td class="py-3.5 px-4 text-slate-300">Lagos, NG</td>
+<td class="py-3.5 px-4 font-data-mono text-slate-400">102.89.44.12</td>
+<td class="py-3.5 px-4 text-slate-400">Now</td>
+<td class="py-3.5 pl-4 text-right">
+<span class="text-tertiary font-data-mono text-[11px]">● This device</span>
+</td>
+</tr>
+<!-- Row 2 -->
+<tr class="group hover:bg-white/[0.01] transition-colors">
+<td class="py-3.5 pr-4 text-white font-medium flex items-center gap-2">
+<span class="material-symbols-outlined text-[16px] text-slate-400">smartphone</span>
+                    iPhone 15 · Safari
+                  </td>
+<td class="py-3.5 px-4 text-slate-300">Lagos, NG</td>
+<td class="py-3.5 px-4 font-data-mono text-slate-400">102.89.44.18</td>
+<td class="py-3.5 px-4 text-slate-400">2h ago</td>
+<td class="py-3.5 pl-4 text-right">
+<button class="text-primary-container hover:underline font-medium text-xs">Sign out</button>
+</td>
+</tr>
+<!-- Row 3 -->
+<tr class="group hover:bg-white/[0.01] transition-colors">
+<td class="py-3.5 pr-4 text-white font-medium flex items-center gap-2">
+<span class="material-symbols-outlined text-[16px] text-slate-400">desktop_windows</span>
+                    Windows · Edge
+                  </td>
+<td class="py-3.5 px-4 text-slate-300">London, UK</td>
+<td class="py-3.5 px-4 font-data-mono text-slate-400">82.165.197.1</td>
+<td class="py-3.5 px-4 text-slate-400">3 days ago</td>
+<td class="py-3.5 pl-4 text-right space-x-2">
+<span class="text-[#FFB020] font-data-mono text-[11px]">● Unrecognized</span>
+<button class="text-primary-container hover:underline font-medium text-xs">Sign out</button>
+</td>
+</tr>
+<!-- Row 4 -->
+<tr class="group hover:bg-white/[0.01] transition-colors">
+<td class="py-3.5 pr-4 text-white font-medium flex items-center gap-2">
+<span class="material-symbols-outlined text-[16px] text-slate-400">smartphone</span>
+                    Android · Chrome
+                  </td>
+<td class="py-3.5 px-4 text-slate-300">Abuja, NG</td>
+<td class="py-3.5 px-4 font-data-mono text-slate-400">105.112.98.4</td>
+<td class="py-3.5 px-4 text-slate-400">9 days ago</td>
+<td class="py-3.5 pl-4 text-right">
+<button class="text-primary-container hover:underline font-medium text-xs">Sign out</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<!-- Section 6: Danger zone -->
+<section class="py-8 grid grid-cols-1 md:grid-cols-12 gap-8 items-start">
+<div class="md:col-span-4">
+<h2 class="text-sm font-semibold text-white">Danger zone</h2>
+<p class="text-xs text-[#8B9BB4] mt-1 leading-relaxed">Session termination and irreversible account operations.</p>
+</div>
+<div class="md:col-span-8 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+<button class="text-primary-container hover:underline font-medium text-xs text-left">
+              Sign out of all other sessions
+            </button>
+<button class="text-slate-500 hover:text-slate-300 text-xs transition-colors text-left">
+              Close account
+            </button>
+</div>
+</section>
+</div>
+</main>
+</div>
+<!-- Shared Anchor Component: Footer -->
+<footer class="w-full px-margin py-space-xl border-t border-secondary-container bg-surface-container-lowest flex flex-col gap-space-lg text-xs z-30">
+<div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+<div class="flex items-center space-x-2">
+<div class="bg-primary-container px-2 py-0.5 rounded text-white font-headline-md text-sm font-bold tracking-tight">
+          TED
+        </div>
+<span class="font-headline-md text-headline-md font-bold text-on-surface">
+          Brokers
+        </span>
+</div>
+<!-- Footer links from Shared Components JSON -->
+<nav class="flex flex-wrap gap-x-6 gap-y-2 font-body-md text-body-md text-on-surface-variant">
+<a class="hover:text-primary transition-colors duration-150" href="#">Execution Policy</a>
+<a class="hover:text-primary transition-colors duration-150" href="#">Risk Disclosure</a>
+<a class="hover:text-primary transition-colors duration-150" href="#">Terms of Service</a>
+<a class="hover:text-primary transition-colors duration-150" href="#">Regulatory Licenses</a>
+<a class="hover:text-primary transition-colors duration-150" href="#">Privacy Policy</a>
+<a class="hover:text-primary transition-colors duration-150" href="#">Institutional API</a>
+</nav>
+</div>
+<!-- Copyright Text from Shared Components JSON -->
+<p class="text-slate-500 font-body-md text-[13px] leading-relaxed max-w-5xl">
+      © 2024 TED Brokers Financial Ltd. All rights reserved. High Risk Investment Notice: FX, CFDs, and copy-trading derivatives involve substantial risk of loss.
+    </p>
+</footer>
+<!-- Floating Toast Notification (Bottom right) -->
+<aside class="fixed bottom-6 right-6 z-50 bg-[#11223A] border border-white/10 shadow-2xl rounded-md px-4 py-3 flex items-center gap-3 text-sm text-white" id="toast-notification">
+<span class="text-tertiary font-bold text-base">✓</span>
+<span class="text-xs font-medium">Backup codes copied to clipboard</span>
+<button class="text-slate-400 hover:text-white ml-2 text-base leading-none" onclick="document.getElementById('toast-notification').style.display='none'">
+      ×
+    </button>
+</aside>
+</body></html>

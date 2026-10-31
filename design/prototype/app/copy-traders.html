@@ -1,0 +1,721 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Copy traders — TED Brokers</title>
+  <meta name="theme-color" content="#0A1626">
+  <meta name="robots" content="noindex">
+  <link rel="icon" href="../assets/img/favicon.ico">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=JetBrains+Mono:wght@400;500;600&family=Sora:wght@300;600;700;800&display=swap">
+  <link rel="stylesheet" href="../assets/css/main.css">
+  <link rel="stylesheet" href="../assets/css/pages/copy-traders.css">
+  <script>document.documentElement.classList.add('js');try{var t=localStorage.getItem('ted:theme');if(t==='system')t=matchMedia('(prefers-color-scheme: light)').matches?'light':'dark';if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
+  <script type="module" src="../assets/js/main.js"></script>
+</head>
+<body class="app surface-ink">
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <!-- ===================== RAIL (shared across app pages) ===================== -->
+  <aside class="rail" id="rail" aria-label="Dashboard">
+    <div class="rail__brand">
+      <a class="wordmark" href="index.html" aria-label="TED Brokers dashboard">
+        <span class="wordmark__ted">TED</span><span class="wordmark__brokers">Br<svg class="wordmark__o" viewBox="0 0 20 20" aria-hidden="true"><g fill="currentColor"><circle cx="10" cy="2" r="1.6"/><circle cx="15.2" cy="4.1" r="1.4" opacity=".8"/><circle cx="17.9" cy="9.4" r="1.6"/><circle cx="16.3" cy="14.8" r="1.4" opacity=".8"/><circle cx="11.2" cy="17.9" r="1.6"/><circle cx="5.6" cy="16.4" r="1.4" opacity=".7"/><circle cx="2.2" cy="11.6" r="1.6"/><circle cx="3" cy="6" r="1.4" opacity=".8"/><circle cx="6.6" cy="2.9" r="1.1" opacity=".6"/><circle cx="10" cy="10" r="1.9"/><circle cx="13.3" cy="9.2" r="1" opacity=".7"/><circle cx="7.4" cy="12" r="1" opacity=".7"/></g></svg>kers</span>
+      </a>
+    </div>
+    <nav class="rail__nav" aria-label="Dashboard sections">
+      <ul class="rail__list" role="list">
+        <li><a class="rail__link" href="index.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>Overview</a></li>
+        <li><a class="rail__link" href="wallet.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M3 7a2 2 0 0 1 2-2h13v4"/><path d="M3 7v11a2 2 0 0 0 2 2h15V9H5a2 2 0 0 1-2-2z"/><circle cx="16" cy="14.5" r="1"/></svg>Wallet</a></li>
+        <li><a class="rail__link" href="portfolio.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M21 12A9 9 0 1 1 12 3v9z"/><path d="M15 3.5A9 9 0 0 1 20.5 9H15z"/></svg>Portfolio</a></li>
+        <li><a class="rail__link" href="copy-traders.html" aria-current="page"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0"/><path d="M16 4.5a3.5 3.5 0 0 1 0 7M18 14.5a6.5 6.5 0 0 1 3.5 5.5"/></svg>Copy traders<span class="rail__aside rail__aside--live">3 live</span></a></li>
+      </ul>
+      <p class="rail__group-label" id="rail-plans">Investment plans</p>
+      <ul class="rail__list" role="list" aria-labelledby="rail-plans">
+        <li><a class="rail__link rail__link--sub" href="plans.html">Robo Advisor</a></li>
+        <li><a class="rail__link rail__link--sub" href="plans.html#etf">ETF automation</a></li>
+        <li><a class="rail__link rail__link--sub" href="plans.html#defi">DeFi</a></li>
+        <li><a class="rail__link rail__link--sub" href="plans.html#options">Options</a></li>
+        <li><a class="rail__link rail__link--sub" href="plans.html#staking">Staking<span class="rail__aside rail__aside--soon">soon</span></a></li>
+      </ul>
+      <p class="rail__group-label" id="rail-more">Community</p>
+      <ul class="rail__list" role="list" aria-labelledby="rail-more">
+        <li><a class="rail__link" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M3 12h4l3-8 4 16 3-8h4"/></svg>Network feed</a></li>
+        <li><a class="rail__link" href="referrals.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="18" cy="5" r="2.5"/><circle cx="6" cy="12" r="2.5"/><circle cx="18" cy="19" r="2.5"/><path d="M8.2 10.8l7.6-4.4M8.2 13.2l7.6 4.4"/></svg>Referrals</a></li>
+        <li><a class="rail__link" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M4 5h13v14H6a2 2 0 0 1-2-2z"/><path d="M17 9h3v8a2 2 0 0 1-2 2"/><path d="M7.5 9h6M7.5 13h6"/></svg>News</a></li>
+      </ul>
+    </nav>
+    <div class="rail__foot">
+      <ul class="rail__list" role="list">
+        <li><a class="rail__link" href="../help.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.6.3-1 .8-1 1.5V14"/><path d="M12 17h.01"/></svg>Help center</a></li>
+        <li><a class="rail__link" href="settings.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M12 2.5v3M12 18.5v3M4.2 4.2l2.1 2.1M17.7 17.7l2.1 2.1M2.5 12h3M18.5 12h3M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1"/></svg>Settings</a></li>
+      </ul>
+      <a class="rail__user" href="settings.html">
+        <span class="avatar">DO</span>
+        <span><span class="rail__user-name">Daniel Okafor</span><br><span class="rail__user-meta">● Verified</span></span>
+      </a>
+    </div>
+  </aside>
+  <button class="rail-scrim" type="button" tabindex="-1" aria-hidden="true"></button>
+
+  <div class="app__main">
+    <!-- ===================== TOP BAR (shared) ===================== -->
+    <header class="topbar">
+      <div class="topbar__bar">
+        <button class="icon-btn topbar__menu" type="button" data-rail-toggle aria-controls="rail" aria-expanded="false" aria-label="Open menu">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h10"/></svg>
+        </button>
+        <a class="wordmark topbar__brand" href="index.html" aria-label="TED Brokers dashboard"><span class="wordmark__ted">TED</span><span class="wordmark__brokers">Brokers</span></a>
+        <form class="search" role="search" action="copy-traders.html">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+          <label class="sr-only" for="q">Search</label>
+          <input id="q" name="q" type="search" placeholder="Search traders, plans, markets" autocomplete="off">
+          <kbd aria-hidden="true">⌘K</kbd>
+        </form>
+        <div class="topbar__actions">
+          <button class="lang-select" type="button" aria-label="Language: English">EN
+            <svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M2 3.5l3 3 3-3"/></svg>
+          </button>
+          <button class="icon-btn" type="button" data-theme-toggle aria-pressed="false" aria-label="Light theme">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4 8 8 0 1 0 20 14.5z"/></svg>
+          </button>
+          <button class="icon-btn" type="button" aria-label="Notifications, 2 unread">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M6 8a6 6 0 1 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.9 1.9 0 0 0 3.4 0"/></svg>
+            <span class="icon-btn__dot"></span>
+          </button>
+          <button class="btn btn--sm btn--outline" type="button" data-dialog-open="ted-ai">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true" style="color: var(--color-signal)"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/></svg>TED AI
+          </button>
+          <a class="btn btn--sm" href="wallet.html#deposit">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>Deposit
+          </a>
+        </div>
+      </div>
+      <div class="ticker ticker--sm ticker--app" data-component="ticker" role="region" aria-label="Market prices (indicative)">
+        <div class="ticker__track">
+          <ul class="ticker__list" role="list">
+            <li class="ticker__item"><span class="ticker__sym">EUR/USD</span><span class="ticker__px">1.0842</span><span class="delta" data-trend="up">+0.21%</span></li>
+            <li class="ticker__item"><span class="ticker__sym">BTC/USD</span><span class="ticker__px">67,412.00</span><span class="delta" data-trend="up">+1.84%</span></li>
+            <li class="ticker__item"><span class="ticker__sym">ETH/USD</span><span class="ticker__px">3,540.80</span><span class="delta" data-trend="up">+2.11%</span></li>
+            <li class="ticker__item"><span class="ticker__sym">AAPL</span><span class="ticker__px">228.14</span><span class="delta" data-trend="down">−0.42%</span></li>
+            <li class="ticker__item"><span class="ticker__sym">XAU/USD</span><span class="ticker__px">2,384.10</span><span class="delta" data-trend="up">+0.35%</span></li>
+            <li class="ticker__item"><span class="ticker__sym">SPX</span><span class="ticker__px">5,567.19</span><span class="delta" data-trend="up">+0.38%</span></li>
+            <li class="ticker__item"><span class="ticker__sym">GBP/USD</span><span class="ticker__px">1.2711</span><span class="delta" data-trend="down">−0.08%</span></li>
+          </ul>
+        </div>
+      </div>
+    </header>
+
+    <!-- ===================== PAGE CONTENT ===================== -->
+    <main class="app__content" id="main">
+      <div class="page-head">
+        <div>
+          <h1>Copy traders</h1>
+          <p class="page-head__meta">340 verified traders · Available balance <span class="page-head__strong">$6,420.00</span></p>
+        </div>
+      </div>
+
+      <section class="traders" aria-labelledby="traders-title" data-component="traders-filter">
+        <h2 class="sr-only" id="traders-title">Trader directory</h2>
+        <form class="filterbar" role="search" aria-label="Filter traders">
+          <div class="spec" role="group" aria-label="Specialization"><button class="spec__btn" type="button" value="all" aria-pressed="true">All</button><button class="spec__btn" type="button" value="forex" aria-pressed="false">Forex</button><button class="spec__btn" type="button" value="crypto" aria-pressed="false">Crypto</button><button class="spec__btn" type="button" value="stocks" aria-pressed="false">Stocks</button><button class="spec__btn" type="button" value="options" aria-pressed="false">Options</button><button class="spec__btn" type="button" value="commodities" aria-pressed="false">Commodities</button></div>
+          <div class="filterbar__field">
+            <label class="field__label" for="f-risk">Risk</label>
+            <div class="field__control"><select class="field__select" id="f-risk" name="risk">
+              <option value="any">Any</option>
+              <option value="low">Low 1–3</option>
+              <option value="med">Medium 4–6</option>
+              <option value="high">High 7–10</option>
+            </select></div>
+          </div>
+          <div class="filterbar__field">
+            <label class="field__label" for="f-win">Min. win rate</label>
+            <div class="field__control"><select class="field__select" id="f-win" name="win">
+              <option value="0">Any</option>
+              <option value="60">60%+</option>
+              <option value="70">70%+</option>
+              <option value="80">80%+</option>
+            </select></div>
+          </div>
+          <div class="filterbar__field">
+            <label class="field__label" for="f-sort">Sort by</label>
+            <div class="field__control"><select class="field__select" id="f-sort" name="sort">
+              <option value="return">12-mo return</option>
+              <option value="win">Win rate</option>
+              <option value="copiers">Copiers</option>
+              <option value="dd">Lowest drawdown</option>
+            </select></div>
+          </div>
+          <div class="filterbar__search field__control">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+            <label class="sr-only" for="f-q">Search traders by name or strategy</label>
+            <input class="field__input" id="f-q" name="q" type="search" placeholder="Filter by name or strategy" autocomplete="off">
+          </div>
+        </form>
+        <p class="traders__count" role="status" data-filter-count>Showing 8 of 8</p>
+
+        <div class="ledger-wrap" tabindex="0" role="region" aria-labelledby="traders-title">
+          <table class="ledger ledger--lg traders-ledger">
+            <caption class="sr-only">Verified traders. Returns, win rate and drawdown are past performance over 12 months.</caption>
+            <thead>
+              <tr>
+                <th scope="col">Trader</th>
+                <th scope="col" class="is-num">12-mo return</th>
+                <th scope="col" class="opt"><span class="sr-only">12-month trend</span></th>
+                <th scope="col" class="is-num">Win rate</th>
+                <th scope="col" class="is-num opt-sm">Max drawdown</th>
+                <th scope="col">Risk</th>
+                <th scope="col" class="is-num opt">Copiers</th>
+                <th scope="col" class="is-num">Min. to copy</th>
+                <th scope="col"><span class="sr-only">Action</span></th>
+              </tr>
+            </thead>
+            <tbody class="trader" data-name="Marcus Chen" data-spec="crypto" data-risk="6" data-win="68.1" data-return="52.7" data-copiers="2884" data-dd="17.6">
+              <tr data-expanded="true">
+                <td><div class="person"><span class="avatar avatar--amber" aria-hidden="true">MC</span><div><div class="person__name">Marcus Chen</div><div class="person__meta">Crypto · Momentum alpha</div></div></div></td>
+                <td class="is-num"><span class="delta" data-trend="up">+52.7%</span></td>
+                <td class="opt"><span class="spark" style="--spark-w:5rem" data-component="spark" data-series="walk:24,seed=8,drift=1,vol=1.5"></span></td>
+                <td class="is-num">68.1%</td>
+                <td class="is-num opt-sm">−17.6%</td>
+                <td><span class="riskbar" data-level="med" style="--risk:6"><span class="riskbar__track"></span>6/10<span class="sr-only"> · Medium</span></span></td>
+                <td class="is-num opt">2,884</td>
+                <td class="is-num">$1,000</td>
+                <td class="is-end"><button class="text-btn xp-btn" type="button" data-expand="traders" aria-controls="trader-marcus" aria-expanded="true" data-label-open="Hide" data-label-closed="Details"><span data-label>Hide</span><span class="sr-only"> for Marcus Chen</span><svg class="xp-btn__chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button></td>
+              </tr>
+              <tr class="ledger__detail" id="trader-marcus">
+                <td colspan="9">
+                  <div class="ledger__detail-inner trader-detail">
+                    <div class="trader-detail__col">
+                      <div class="trader-detail__head"><h3 class="stat__label">12-month equity</h3><span class="trader-detail__note">Past performance</span></div>
+                      <p class="trader-detail__big"><span class="mono">$15,270</span> <span class="delta" data-trend="up">+52.7%</span></p>
+                      <p class="trader-detail__sub">Growth of $10,000 · Nov 2025 – Oct 2026</p>
+                      <div class="chart trader-detail__chart" role="img" data-component="chart" data-series="walk:52,seed=108,drift=1,vol=1.5,start=10000,end=15270" data-format="currency" data-decimals="0" data-labels="Nov,Dec,Jan,Feb,Mar,Apr,May,Jun,Jul,Aug,Sep,Oct" data-xaxis="4" aria-label="Marcus Chen: growth of $10,000 over the last 12 months, ending at $15,270. Past performance. Use arrow keys to inspect values."></div>
+                    </div>
+                    <div class="trader-detail__col">
+                      <h3 class="stat__label">Strategy</h3>
+                      <p class="trader-detail__strategy">Systematic trend-following across the most liquid digital assets. Volatility-weighted position sizing with a 4-hour trailing stop on every entry.</p>
+                      <dl class="trader-detail__stats">
+                        <div><dt>AUM</dt><dd>$4.2M</dd></div>
+                        <div><dt>Avg. hold</dt><dd>2.4 days</dd></div>
+                        <div><dt>Trades / week</dt><dd>18</dd></div>
+                        <div><dt>Profitable months</dt><dd>9 / 12</dd></div>
+                      </dl>
+                    </div>
+                    <div class="trader-detail__col">
+                      <h3 class="stat__label">Recent trades</h3>
+                      <ul class="trader-detail__trades" role="list">
+                      <li><span class="mono">BTC/USD</span><span class="trader-detail__side">Buy</span><span class="delta" data-trend="up">+3.1%</span></li>
+                      <li><span class="mono">ETH/USD</span><span class="trader-detail__side">Sell</span><span class="delta" data-trend="up">+1.4%</span></li>
+                      <li><span class="mono">SOL/USD</span><span class="trader-detail__side">Buy</span><span class="delta" data-trend="down">−0.8%</span></li>
+                      </ul>
+                      <form class="copy-form" data-component="traders-copy" data-trader="Marcus Chen" data-first="Marcus" data-min="1000" data-available="6420" data-risk="6" data-dialog="copy-confirm" novalidate aria-label="Copy Marcus Chen">
+                        <div class="field">
+                          <div class="copy-form__row"><label class="field__label" for="amt-marcus">Allocation amount</label><span class="field__help">Available $6,420.00</span></div>
+                          <div class="field__control"><span class="field__affix">$</span><input class="field__input amount-input" id="amt-marcus" name="amount" type="number" inputmode="decimal" min="1000" step="any" value="1000" required autocomplete="off" aria-describedby="amt-marcus-help amt-marcus-err"><span class="field__affix">USD</span></div>
+                          <p class="field__help" id="amt-marcus-help">Minimum to copy Marcus: $1,000</p>
+                          <p class="field__error" id="amt-marcus-err"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7.5v5.5M12 16.5h.01"/></svg><span data-error-msg></span><a class="field__error-link" href="wallet.html#deposit" data-error-funds hidden>Add funds →</a></p>
+                        </div>
+                        <div class="field">
+                          <div class="copy-form__row"><label class="field__label" for="sl-marcus">Copy stop-loss</label><span class="copy-form__sl" data-sl-out aria-hidden="true">Stop copying at −15%</span></div>
+                          <input class="range" id="sl-marcus" name="stoploss" type="range" min="5" max="50" step="1" value="15" aria-valuetext="Stop copying at −15%" aria-describedby="sl-marcus-help">
+                          <div class="range-scale" aria-hidden="true"><span>−5%</span><span>−50%</span></div>
+                          <p class="field__help" id="sl-marcus-help">Copying stops automatically if this allocation falls by this much.</p>
+                        </div>
+                        <p class="copy-form__status" data-copy-status hidden><span class="tag tag--plain tag--gain">Copying Marcus</span></p>
+                        <button class="btn btn--block" type="submit"><span data-copy-label>Copy Marcus</span><svg class="btn__arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+                      </form>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+            <tbody class="trader" data-name="Kenji Watanabe" data-spec="crypto" data-risk="8" data-win="63.5" data-return="44.1" data-copiers="418" data-dd="22.3">
+              <tr>
+                <td><div class="person"><span class="avatar avatar--amber" aria-hidden="true">KW</span><div><div class="person__name">Kenji Watanabe</div><div class="person__meta">Crypto · High-volatility scalp</div></div></div></td>
+                <td class="is-num"><span class="delta" data-trend="up">+44.1%</span></td>
+                <td class="opt"><span class="spark" style="--spark-w:5rem" data-component="spark" data-series="walk:24,seed=61,drift=0.9,vol=2.4"></span></td>
+                <td class="is-num">63.5%</td>
+                <td class="is-num opt-sm">−22.3%</td>
+                <td><span class="riskbar" data-level="high" style="--risk:8"><span class="riskbar__track"></span>8/10<span class="sr-only"> · High</span></span></td>
+                <td class="is-num opt">418</td>
+                <td class="is-num">$2,000</td>
+                <td class="is-end"><button class="text-btn xp-btn" type="button" data-expand="traders" aria-controls="trader-kenji" aria-expanded="false" data-label-open="Hide" data-label-closed="Details"><span data-label>Details</span><span class="sr-only"> for Kenji Watanabe</span><svg class="xp-btn__chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button></td>
+              </tr>
+              <tr class="ledger__detail" id="trader-kenji" hidden>
+                <td colspan="9">
+                  <div class="ledger__detail-inner trader-detail">
+                    <div class="trader-detail__col">
+                      <div class="trader-detail__head"><h3 class="stat__label">12-month equity</h3><span class="trader-detail__note">Past performance</span></div>
+                      <p class="trader-detail__big"><span class="mono">$14,410</span> <span class="delta" data-trend="up">+44.1%</span></p>
+                      <p class="trader-detail__sub">Growth of $10,000 · Nov 2025 – Oct 2026</p>
+                      <div class="chart trader-detail__chart" role="img" data-component="chart" data-series="walk:52,seed=161,drift=0.9,vol=2.4,start=10000,end=14410" data-format="currency" data-decimals="0" data-labels="Nov,Dec,Jan,Feb,Mar,Apr,May,Jun,Jul,Aug,Sep,Oct" data-xaxis="4" aria-label="Kenji Watanabe: growth of $10,000 over the last 12 months, ending at $14,410. Past performance. Use arrow keys to inspect values."></div>
+                    </div>
+                    <div class="trader-detail__col">
+                      <h3 class="stat__label">Strategy</h3>
+                      <p class="trader-detail__strategy">Short-horizon crypto and FX scalping in the most volatile sessions. High trade count and deep drawdowns are part of the approach.</p>
+                      <dl class="trader-detail__stats">
+                        <div><dt>AUM</dt><dd>$0.9M</dd></div>
+                        <div><dt>Avg. hold</dt><dd>35 min</dd></div>
+                        <div><dt>Trades / week</dt><dd>120</dd></div>
+                        <div><dt>Profitable months</dt><dd>7 / 12</dd></div>
+                      </dl>
+                    </div>
+                    <div class="trader-detail__col">
+                      <h3 class="stat__label">Recent trades</h3>
+                      <ul class="trader-detail__trades" role="list">
+                      <li><span class="mono">BTC/USD</span><span class="trader-detail__side">Sell</span><span class="delta" data-trend="up">+1.2%</span></li>
+                      <li><span class="mono">ETH/USD</span><span class="trader-detail__side">Buy</span><span class="delta" data-trend="down">−2.1%</span></li>
+                      <li><span class="mono">USD/JPY</span><span class="trader-detail__side">Buy</span><span class="delta" data-trend="up">+0.6%</span></li>
+                      </ul>
+                      <form class="copy-form" data-component="traders-copy" data-trader="Kenji Watanabe" data-first="Kenji" data-min="2000" data-available="6420" data-risk="8" data-dialog="copy-confirm" novalidate aria-label="Copy Kenji Watanabe">
+                        <div class="field">
+                          <div class="copy-form__row"><label class="field__label" for="amt-kenji">Allocation amount</label><span class="field__help">Available $6,420.00</span></div>
+                          <div class="field__control"><span class="field__affix">$</span><input class="field__input amount-input" id="amt-kenji" name="amount" type="number" inputmode="decimal" min="2000" step="any" value="2000" required autocomplete="off" aria-describedby="amt-kenji-help amt-kenji-err"><span class="field__affix">USD</span></div>
+                          <p class="field__help" id="amt-kenji-help">Minimum to copy Kenji: $2,000</p>
+                          <p class="field__error" id="amt-kenji-err"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7.5v5.5M12 16.5h.01"/></svg><span data-error-msg></span><a class="field__error-link" href="wallet.html#deposit" data-error-funds hidden>Add funds →</a></p>
+                        </div>
+                        <div class="field">
+                          <div class="copy-form__row"><label class="field__label" for="sl-kenji">Copy stop-loss</label><span class="copy-form__sl" data-sl-out aria-hidden="true">Stop copying at −15%</span></div>
+                          <input class="range" id="sl-kenji" name="stoploss" type="range" min="5" max="50" step="1" value="15" aria-valuetext="Stop copying at −15%" aria-describedby="sl-kenji-help">
+                          <div class="range-scale" aria-hidden="true"><span>−5%</span><span>−50%</span></div>
+                          <p class="field__help" id="sl-kenji-help">Copying stops automatically if this allocation falls by this much.</p>
+                        </div>
+                        <p class="copy-form__status" data-copy-status hidden><span class="tag tag--plain tag--gain">Copying Kenji</span></p>
+                        <button class="btn btn--block" type="submit"><span data-copy-label>Copy Kenji</span><svg class="btn__arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+                      </form>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+            <tbody class="trader" data-name="Elena Vasquez" data-spec="forex" data-risk="4" data-win="76.4" data-return="38.2" data-copiers="1419" data-dd="8.1">
+              <tr>
+                <td><div class="person"><span class="avatar" aria-hidden="true">EV</span><div><div class="person__name">Elena Vasquez</div><div class="person__meta">Forex · London breakout</div></div></div></td>
+                <td class="is-num"><span class="delta" data-trend="up">+38.2%</span></td>
+                <td class="opt"><span class="spark" style="--spark-w:5rem" data-component="spark" data-series="walk:24,seed=3,drift=0.8,vol=1"></span></td>
+                <td class="is-num">76.4%</td>
+                <td class="is-num opt-sm">−8.1%</td>
+                <td><span class="riskbar" data-level="med" style="--risk:4"><span class="riskbar__track"></span>4/10<span class="sr-only"> · Medium</span></span></td>
+                <td class="is-num opt">1,419</td>
+                <td class="is-num">$500</td>
+                <td class="is-end"><button class="text-btn xp-btn" type="button" data-expand="traders" aria-controls="trader-elena" aria-expanded="false" data-label-open="Hide" data-label-closed="Details"><span data-label>Details</span><span class="sr-only"> for Elena Vasquez</span><svg class="xp-btn__chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button></td>
+              </tr>
+              <tr class="ledger__detail" id="trader-elena" hidden>
+                <td colspan="9">
+                  <div class="ledger__detail-inner trader-detail">
+                    <div class="trader-detail__col">
+                      <div class="trader-detail__head"><h3 class="stat__label">12-month equity</h3><span class="trader-detail__note">Past performance</span></div>
+                      <p class="trader-detail__big"><span class="mono">$13,820</span> <span class="delta" data-trend="up">+38.2%</span></p>
+                      <p class="trader-detail__sub">Growth of $10,000 · Nov 2025 – Oct 2026</p>
+                      <div class="chart trader-detail__chart" role="img" data-component="chart" data-series="walk:52,seed=103,drift=0.8,vol=1,start=10000,end=13820" data-format="currency" data-decimals="0" data-labels="Nov,Dec,Jan,Feb,Mar,Apr,May,Jun,Jul,Aug,Sep,Oct" data-xaxis="4" aria-label="Elena Vasquez: growth of $10,000 over the last 12 months, ending at $13,820. Past performance. Use arrow keys to inspect values."></div>
+                    </div>
+                    <div class="trader-detail__col">
+                      <h3 class="stat__label">Strategy</h3>
+                      <p class="trader-detail__strategy">Trades the London open on the major EUR and GBP pairs. Breakout entries with a fixed 1:2 risk–reward and no positions held overnight.</p>
+                      <dl class="trader-detail__stats">
+                        <div><dt>AUM</dt><dd>$2.8M</dd></div>
+                        <div><dt>Avg. hold</dt><dd>6.5 h</dd></div>
+                        <div><dt>Trades / week</dt><dd>14</dd></div>
+                        <div><dt>Profitable months</dt><dd>10 / 12</dd></div>
+                      </dl>
+                    </div>
+                    <div class="trader-detail__col">
+                      <h3 class="stat__label">Recent trades</h3>
+                      <ul class="trader-detail__trades" role="list">
+                      <li><span class="mono">EUR/USD</span><span class="trader-detail__side">Buy</span><span class="delta" data-trend="up">+0.8%</span></li>
+                      <li><span class="mono">GBP/USD</span><span class="trader-detail__side">Sell</span><span class="delta" data-trend="up">+0.5%</span></li>
+                      <li><span class="mono">EUR/JPY</span><span class="trader-detail__side">Buy</span><span class="delta" data-trend="down">−0.3%</span></li>
+                      </ul>
+                      <form class="copy-form" data-component="traders-copy" data-trader="Elena Vasquez" data-first="Elena" data-min="500" data-available="6420" data-risk="4" data-dialog="copy-confirm" novalidate aria-label="Copy Elena Vasquez">
+                        <div class="field">
+                          <div class="copy-form__row"><label class="field__label" for="amt-elena">Allocation amount</label><span class="field__help">Available $6,420.00</span></div>
+                          <div class="field__control"><span class="field__affix">$</span><input class="field__input amount-input" id="amt-elena" name="amount" type="number" inputmode="decimal" min="500" step="any" value="500" required autocomplete="off" aria-describedby="amt-elena-help amt-elena-err"><span class="field__affix">USD</span></div>
+                          <p class="field__help" id="amt-elena-help">Minimum to copy Elena: $500</p>
+                          <p class="field__error" id="amt-elena-err"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7.5v5.5M12 16.5h.01"/></svg><span data-error-msg></span><a class="field__error-link" href="wallet.html#deposit" data-error-funds hidden>Add funds →</a></p>
+                        </div>
+                        <div class="field">
+                          <div class="copy-form__row"><label class="field__label" for="sl-elena">Copy stop-loss</label><span class="copy-form__sl" data-sl-out aria-hidden="true">Stop copying at −15%</span></div>
+                          <input class="range" id="sl-elena" name="stoploss" type="range" min="5" max="50" step="1" value="15" aria-valuetext="Stop copying at −15%" aria-describedby="sl-elena-help">
+                          <div class="range-scale" aria-hidden="true"><span>−5%</span><span>−50%</span></div>
+                          <p class="field__help" id="sl-elena-help">Copying stops automatically if this allocation falls by this much.</p>
+                        </div>
+                        <p class="copy-form__status" data-copy-status hidden><span class="tag tag--plain tag--gain">Copying Elena</span></p>
+                        <button class="btn btn--block" type="submit"><span data-copy-label>Copy Elena</span><svg class="btn__arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+                      </form>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+            <tbody class="trader" data-name="Priya Nair" data-spec="options" data-risk="7" data-win="71.2" data-return="31.0" data-copiers="560" data-dd="12.5">
+              <tr>
+                <td><div class="person"><span class="avatar avatar--navy" aria-hidden="true">PN</span><div><div class="person__name">Priya Nair</div><div class="person__meta">Options · Defined-risk spreads</div></div></div></td>
+                <td class="is-num"><span class="delta" data-trend="up">+31.0%</span></td>
+                <td class="opt"><span class="spark" style="--spark-w:5rem" data-component="spark" data-series="walk:24,seed=73,drift=0.8,vol=1.6"></span></td>
+                <td class="is-num">71.2%</td>
+                <td class="is-num opt-sm">−12.5%</td>
+                <td><span class="riskbar" data-level="high" style="--risk:7"><span class="riskbar__track"></span>7/10<span class="sr-only"> · High</span></span></td>
+                <td class="is-num opt">560</td>
+                <td class="is-num">$1,500</td>
+                <td class="is-end"><button class="text-btn xp-btn" type="button" data-expand="traders" aria-controls="trader-priya" aria-expanded="false" data-label-open="Hide" data-label-closed="Details"><span data-label>Details</span><span class="sr-only"> for Priya Nair</span><svg class="xp-btn__chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button></td>
+              </tr>
+              <tr class="ledger__detail" id="trader-priya" hidden>
+                <td colspan="9">
+                  <div class="ledger__detail-inner trader-detail">
+                    <div class="trader-detail__col">
+                      <div class="trader-detail__head"><h3 class="stat__label">12-month equity</h3><span class="trader-detail__note">Past performance</span></div>
+                      <p class="trader-detail__big"><span class="mono">$13,100</span> <span class="delta" data-trend="up">+31.0%</span></p>
+                      <p class="trader-detail__sub">Growth of $10,000 · Nov 2025 – Oct 2026</p>
+                      <div class="chart trader-detail__chart" role="img" data-component="chart" data-series="walk:52,seed=173,drift=0.8,vol=1.6,start=10000,end=13100" data-format="currency" data-decimals="0" data-labels="Nov,Dec,Jan,Feb,Mar,Apr,May,Jun,Jul,Aug,Sep,Oct" data-xaxis="4" aria-label="Priya Nair: growth of $10,000 over the last 12 months, ending at $13,100. Past performance. Use arrow keys to inspect values."></div>
+                    </div>
+                    <div class="trader-detail__col">
+                      <h3 class="stat__label">Strategy</h3>
+                      <p class="trader-detail__strategy">Defined-risk spreads on US index ETFs around volatility events. Maximum loss on every position is known at entry.</p>
+                      <dl class="trader-detail__stats">
+                        <div><dt>AUM</dt><dd>$1.3M</dd></div>
+                        <div><dt>Avg. hold</dt><dd>11 days</dd></div>
+                        <div><dt>Trades / week</dt><dd>5</dd></div>
+                        <div><dt>Profitable months</dt><dd>9 / 12</dd></div>
+                      </dl>
+                    </div>
+                    <div class="trader-detail__col">
+                      <h3 class="stat__label">Recent trades</h3>
+                      <ul class="trader-detail__trades" role="list">
+                      <li><span class="mono">SPY 540P</span><span class="trader-detail__side">Sell</span><span class="delta" data-trend="up">+4.2%</span></li>
+                      <li><span class="mono">QQQ 470C</span><span class="trader-detail__side">Buy</span><span class="delta" data-trend="down">−1.8%</span></li>
+                      <li><span class="mono">IWM 210P</span><span class="trader-detail__side">Sell</span><span class="delta" data-trend="up">+2.0%</span></li>
+                      </ul>
+                      <form class="copy-form" data-component="traders-copy" data-trader="Priya Nair" data-first="Priya" data-min="1500" data-available="6420" data-risk="7" data-dialog="copy-confirm" novalidate aria-label="Copy Priya Nair">
+                        <div class="field">
+                          <div class="copy-form__row"><label class="field__label" for="amt-priya">Allocation amount</label><span class="field__help">Available $6,420.00</span></div>
+                          <div class="field__control"><span class="field__affix">$</span><input class="field__input amount-input" id="amt-priya" name="amount" type="number" inputmode="decimal" min="1500" step="any" value="1500" required autocomplete="off" aria-describedby="amt-priya-help amt-priya-err"><span class="field__affix">USD</span></div>
+                          <p class="field__help" id="amt-priya-help">Minimum to copy Priya: $1,500</p>
+                          <p class="field__error" id="amt-priya-err"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7.5v5.5M12 16.5h.01"/></svg><span data-error-msg></span><a class="field__error-link" href="wallet.html#deposit" data-error-funds hidden>Add funds →</a></p>
+                        </div>
+                        <div class="field">
+                          <div class="copy-form__row"><label class="field__label" for="sl-priya">Copy stop-loss</label><span class="copy-form__sl" data-sl-out aria-hidden="true">Stop copying at −15%</span></div>
+                          <input class="range" id="sl-priya" name="stoploss" type="range" min="5" max="50" step="1" value="15" aria-valuetext="Stop copying at −15%" aria-describedby="sl-priya-help">
+                          <div class="range-scale" aria-hidden="true"><span>−5%</span><span>−50%</span></div>
+                          <p class="field__help" id="sl-priya-help">Copying stops automatically if this allocation falls by this much.</p>
+                        </div>
+                        <p class="copy-form__status" data-copy-status hidden><span class="tag tag--plain tag--gain">Copying Priya</span></p>
+                        <button class="btn btn--block" type="submit"><span data-copy-label>Copy Priya</span><svg class="btn__arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+                      </form>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+            <tbody class="trader" data-name="Sofia Moretti" data-spec="stocks" data-risk="5" data-win="79.0" data-return="26.3" data-copiers="1120" data-dd="7.4">
+              <tr>
+                <td><div class="person"><span class="avatar" aria-hidden="true">SM</span><div><div class="person__name">Sofia Moretti</div><div class="person__meta">Stocks · Indices · S&amp;P &amp; DAX flow</div></div></div></td>
+                <td class="is-num"><span class="delta" data-trend="up">+26.3%</span></td>
+                <td class="opt"><span class="spark" style="--spark-w:5rem" data-component="spark" data-series="walk:24,seed=44,drift=0.7,vol=1"></span></td>
+                <td class="is-num">79.0%</td>
+                <td class="is-num opt-sm">−7.4%</td>
+                <td><span class="riskbar" data-level="med" style="--risk:5"><span class="riskbar__track"></span>5/10<span class="sr-only"> · Medium</span></span></td>
+                <td class="is-num opt">1,120</td>
+                <td class="is-num">$500</td>
+                <td class="is-end"><button class="text-btn xp-btn" type="button" data-expand="traders" aria-controls="trader-sofia" aria-expanded="false" data-label-open="Hide" data-label-closed="Details"><span data-label>Details</span><span class="sr-only"> for Sofia Moretti</span><svg class="xp-btn__chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button></td>
+              </tr>
+              <tr class="ledger__detail" id="trader-sofia" hidden>
+                <td colspan="9">
+                  <div class="ledger__detail-inner trader-detail">
+                    <div class="trader-detail__col">
+                      <div class="trader-detail__head"><h3 class="stat__label">12-month equity</h3><span class="trader-detail__note">Past performance</span></div>
+                      <p class="trader-detail__big"><span class="mono">$12,630</span> <span class="delta" data-trend="up">+26.3%</span></p>
+                      <p class="trader-detail__sub">Growth of $10,000 · Nov 2025 – Oct 2026</p>
+                      <div class="chart trader-detail__chart" role="img" data-component="chart" data-series="walk:52,seed=144,drift=0.7,vol=1,start=10000,end=12630" data-format="currency" data-decimals="0" data-labels="Nov,Dec,Jan,Feb,Mar,Apr,May,Jun,Jul,Aug,Sep,Oct" data-xaxis="4" aria-label="Sofia Moretti: growth of $10,000 over the last 12 months, ending at $12,630. Past performance. Use arrow keys to inspect values."></div>
+                    </div>
+                    <div class="trader-detail__col">
+                      <h3 class="stat__label">Strategy</h3>
+                      <p class="trader-detail__strategy">Index momentum on the S&amp;P 500 and DAX, entering on breadth confirmation and hedging overnight exposure with index ETFs.</p>
+                      <dl class="trader-detail__stats">
+                        <div><dt>AUM</dt><dd>$2.2M</dd></div>
+                        <div><dt>Avg. hold</dt><dd>3.3 days</dd></div>
+                        <div><dt>Trades / week</dt><dd>9</dd></div>
+                        <div><dt>Profitable months</dt><dd>10 / 12</dd></div>
+                      </dl>
+                    </div>
+                    <div class="trader-detail__col">
+                      <h3 class="stat__label">Recent trades</h3>
+                      <ul class="trader-detail__trades" role="list">
+                      <li><span class="mono">SPX</span><span class="trader-detail__side">Buy</span><span class="delta" data-trend="up">+0.7%</span></li>
+                      <li><span class="mono">DAX</span><span class="trader-detail__side">Buy</span><span class="delta" data-trend="up">+0.4%</span></li>
+                      <li><span class="mono">NDX</span><span class="trader-detail__side">Sell</span><span class="delta" data-trend="down">−0.5%</span></li>
+                      </ul>
+                      <form class="copy-form" data-component="traders-copy" data-trader="Sofia Moretti" data-first="Sofia" data-min="500" data-available="6420" data-risk="5" data-dialog="copy-confirm" novalidate aria-label="Copy Sofia Moretti">
+                        <div class="field">
+                          <div class="copy-form__row"><label class="field__label" for="amt-sofia">Allocation amount</label><span class="field__help">Available $6,420.00</span></div>
+                          <div class="field__control"><span class="field__affix">$</span><input class="field__input amount-input" id="amt-sofia" name="amount" type="number" inputmode="decimal" min="500" step="any" value="500" required autocomplete="off" aria-describedby="amt-sofia-help amt-sofia-err"><span class="field__affix">USD</span></div>
+                          <p class="field__help" id="amt-sofia-help">Minimum to copy Sofia: $500</p>
+                          <p class="field__error" id="amt-sofia-err"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7.5v5.5M12 16.5h.01"/></svg><span data-error-msg></span><a class="field__error-link" href="wallet.html#deposit" data-error-funds hidden>Add funds →</a></p>
+                        </div>
+                        <div class="field">
+                          <div class="copy-form__row"><label class="field__label" for="sl-sofia">Copy stop-loss</label><span class="copy-form__sl" data-sl-out aria-hidden="true">Stop copying at −15%</span></div>
+                          <input class="range" id="sl-sofia" name="stoploss" type="range" min="5" max="50" step="1" value="15" aria-valuetext="Stop copying at −15%" aria-describedby="sl-sofia-help">
+                          <div class="range-scale" aria-hidden="true"><span>−5%</span><span>−50%</span></div>
+                          <p class="field__help" id="sl-sofia-help">Copying stops automatically if this allocation falls by this much.</p>
+                        </div>
+                        <p class="copy-form__status" data-copy-status hidden><span class="tag tag--plain tag--gain">Copying Sofia</span></p>
+                        <button class="btn btn--block" type="submit"><span data-copy-label>Copy Sofia</span><svg class="btn__arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+                      </form>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+            <tbody class="trader" data-name="Aisha Rahman" data-spec="stocks" data-risk="3" data-win="81.9" data-return="21.4" data-copiers="932" data-dd="5.2">
+              <tr>
+                <td><div class="person"><span class="avatar avatar--navy" aria-hidden="true">AR</span><div><div class="person__name">Aisha Rahman</div><div class="person__meta">Stocks · Large-cap tech</div></div></div></td>
+                <td class="is-num"><span class="delta" data-trend="up">+21.4%</span></td>
+                <td class="opt"><span class="spark" style="--spark-w:5rem" data-component="spark" data-series="walk:24,seed=19,drift=0.7,vol=0.8"></span></td>
+                <td class="is-num">81.9%</td>
+                <td class="is-num opt-sm">−5.2%</td>
+                <td><span class="riskbar" data-level="low" style="--risk:3"><span class="riskbar__track"></span>3/10<span class="sr-only"> · Low</span></span></td>
+                <td class="is-num opt">932</td>
+                <td class="is-num">$250</td>
+                <td class="is-end"><button class="text-btn xp-btn" type="button" data-expand="traders" aria-controls="trader-aisha" aria-expanded="false" data-label-open="Hide" data-label-closed="Details"><span data-label>Details</span><span class="sr-only"> for Aisha Rahman</span><svg class="xp-btn__chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button></td>
+              </tr>
+              <tr class="ledger__detail" id="trader-aisha" hidden>
+                <td colspan="9">
+                  <div class="ledger__detail-inner trader-detail">
+                    <div class="trader-detail__col">
+                      <div class="trader-detail__head"><h3 class="stat__label">12-month equity</h3><span class="trader-detail__note">Past performance</span></div>
+                      <p class="trader-detail__big"><span class="mono">$12,140</span> <span class="delta" data-trend="up">+21.4%</span></p>
+                      <p class="trader-detail__sub">Growth of $10,000 · Nov 2025 – Oct 2026</p>
+                      <div class="chart trader-detail__chart" role="img" data-component="chart" data-series="walk:52,seed=119,drift=0.7,vol=0.8,start=10000,end=12140" data-format="currency" data-decimals="0" data-labels="Nov,Dec,Jan,Feb,Mar,Apr,May,Jun,Jul,Aug,Sep,Oct" data-xaxis="4" aria-label="Aisha Rahman: growth of $10,000 over the last 12 months, ending at $12,140. Past performance. Use arrow keys to inspect values."></div>
+                    </div>
+                    <div class="trader-detail__col">
+                      <h3 class="stat__label">Strategy</h3>
+                      <p class="trader-detail__strategy">Long-only large-cap technology and healthcare. Earnings-driven swing entries, with no single position above 8% of the book.</p>
+                      <dl class="trader-detail__stats">
+                        <div><dt>AUM</dt><dd>$3.1M</dd></div>
+                        <div><dt>Avg. hold</dt><dd>9 days</dd></div>
+                        <div><dt>Trades / week</dt><dd>4</dd></div>
+                        <div><dt>Profitable months</dt><dd>11 / 12</dd></div>
+                      </dl>
+                    </div>
+                    <div class="trader-detail__col">
+                      <h3 class="stat__label">Recent trades</h3>
+                      <ul class="trader-detail__trades" role="list">
+                      <li><span class="mono">NVDA</span><span class="trader-detail__side">Buy</span><span class="delta" data-trend="up">+2.4%</span></li>
+                      <li><span class="mono">MSFT</span><span class="trader-detail__side">Buy</span><span class="delta" data-trend="up">+1.1%</span></li>
+                      <li><span class="mono">UNH</span><span class="trader-detail__side">Sell</span><span class="delta" data-trend="down">−0.6%</span></li>
+                      </ul>
+                      <form class="copy-form" data-component="traders-copy" data-trader="Aisha Rahman" data-first="Aisha" data-min="250" data-available="6420" data-risk="3" data-dialog="copy-confirm" novalidate aria-label="Copy Aisha Rahman">
+                        <div class="field">
+                          <div class="copy-form__row"><label class="field__label" for="amt-aisha">Allocation amount</label><span class="field__help">Available $6,420.00</span></div>
+                          <div class="field__control"><span class="field__affix">$</span><input class="field__input amount-input" id="amt-aisha" name="amount" type="number" inputmode="decimal" min="250" step="any" value="250" required autocomplete="off" aria-describedby="amt-aisha-help amt-aisha-err"><span class="field__affix">USD</span></div>
+                          <p class="field__help" id="amt-aisha-help">Minimum to copy Aisha: $250</p>
+                          <p class="field__error" id="amt-aisha-err"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7.5v5.5M12 16.5h.01"/></svg><span data-error-msg></span><a class="field__error-link" href="wallet.html#deposit" data-error-funds hidden>Add funds →</a></p>
+                        </div>
+                        <div class="field">
+                          <div class="copy-form__row"><label class="field__label" for="sl-aisha">Copy stop-loss</label><span class="copy-form__sl" data-sl-out aria-hidden="true">Stop copying at −15%</span></div>
+                          <input class="range" id="sl-aisha" name="stoploss" type="range" min="5" max="50" step="1" value="15" aria-valuetext="Stop copying at −15%" aria-describedby="sl-aisha-help">
+                          <div class="range-scale" aria-hidden="true"><span>−5%</span><span>−50%</span></div>
+                          <p class="field__help" id="sl-aisha-help">Copying stops automatically if this allocation falls by this much.</p>
+                        </div>
+                        <p class="copy-form__status" data-copy-status hidden><span class="tag tag--plain tag--gain">Copying Aisha</span></p>
+                        <button class="btn btn--block" type="submit"><span data-copy-label>Copy Aisha</span><svg class="btn__arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+                      </form>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+            <tbody class="trader" data-name="Lukas Brandt" data-spec="commodities" data-risk="4" data-win="74.2" data-return="17.9" data-copiers="675" data-dd="9.8">
+              <tr>
+                <td><div class="person"><span class="avatar avatar--accent" aria-hidden="true">LB</span><div><div class="person__name">Lukas Brandt</div><div class="person__meta">Commodities · Energy &amp; metals</div></div></div></td>
+                <td class="is-num"><span class="delta" data-trend="up">+17.9%</span></td>
+                <td class="opt"><span class="spark" style="--spark-w:5rem" data-component="spark" data-series="walk:24,seed=27,drift=0.6,vol=1.1"></span></td>
+                <td class="is-num">74.2%</td>
+                <td class="is-num opt-sm">−9.8%</td>
+                <td><span class="riskbar" data-level="med" style="--risk:4"><span class="riskbar__track"></span>4/10<span class="sr-only"> · Medium</span></span></td>
+                <td class="is-num opt">675</td>
+                <td class="is-num">$500</td>
+                <td class="is-end"><button class="text-btn xp-btn" type="button" data-expand="traders" aria-controls="trader-lukas" aria-expanded="false" data-label-open="Hide" data-label-closed="Details"><span data-label>Details</span><span class="sr-only"> for Lukas Brandt</span><svg class="xp-btn__chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button></td>
+              </tr>
+              <tr class="ledger__detail" id="trader-lukas" hidden>
+                <td colspan="9">
+                  <div class="ledger__detail-inner trader-detail">
+                    <div class="trader-detail__col">
+                      <div class="trader-detail__head"><h3 class="stat__label">12-month equity</h3><span class="trader-detail__note">Past performance</span></div>
+                      <p class="trader-detail__big"><span class="mono">$11,790</span> <span class="delta" data-trend="up">+17.9%</span></p>
+                      <p class="trader-detail__sub">Growth of $10,000 · Nov 2025 – Oct 2026</p>
+                      <div class="chart trader-detail__chart" role="img" data-component="chart" data-series="walk:52,seed=127,drift=0.6,vol=1.1,start=10000,end=11790" data-format="currency" data-decimals="0" data-labels="Nov,Dec,Jan,Feb,Mar,Apr,May,Jun,Jul,Aug,Sep,Oct" data-xaxis="4" aria-label="Lukas Brandt: growth of $10,000 over the last 12 months, ending at $11,790. Past performance. Use arrow keys to inspect values."></div>
+                    </div>
+                    <div class="trader-detail__col">
+                      <h3 class="stat__label">Strategy</h3>
+                      <p class="trader-detail__strategy">Energy and precious-metals positions built around seasonal spreads and weekly inventory data. Hedged with options around reports.</p>
+                      <dl class="trader-detail__stats">
+                        <div><dt>AUM</dt><dd>$1.6M</dd></div>
+                        <div><dt>Avg. hold</dt><dd>4.1 days</dd></div>
+                        <div><dt>Trades / week</dt><dd>7</dd></div>
+                        <div><dt>Profitable months</dt><dd>9 / 12</dd></div>
+                      </dl>
+                    </div>
+                    <div class="trader-detail__col">
+                      <h3 class="stat__label">Recent trades</h3>
+                      <ul class="trader-detail__trades" role="list">
+                      <li><span class="mono">XAU/USD</span><span class="trader-detail__side">Buy</span><span class="delta" data-trend="up">+0.9%</span></li>
+                      <li><span class="mono">WTI</span><span class="trader-detail__side">Sell</span><span class="delta" data-trend="up">+1.7%</span></li>
+                      <li><span class="mono">XAG/USD</span><span class="trader-detail__side">Buy</span><span class="delta" data-trend="down">−0.4%</span></li>
+                      </ul>
+                      <form class="copy-form" data-component="traders-copy" data-trader="Lukas Brandt" data-first="Lukas" data-min="500" data-available="6420" data-risk="4" data-dialog="copy-confirm" novalidate aria-label="Copy Lukas Brandt">
+                        <div class="field">
+                          <div class="copy-form__row"><label class="field__label" for="amt-lukas">Allocation amount</label><span class="field__help">Available $6,420.00</span></div>
+                          <div class="field__control"><span class="field__affix">$</span><input class="field__input amount-input" id="amt-lukas" name="amount" type="number" inputmode="decimal" min="500" step="any" value="500" required autocomplete="off" aria-describedby="amt-lukas-help amt-lukas-err"><span class="field__affix">USD</span></div>
+                          <p class="field__help" id="amt-lukas-help">Minimum to copy Lukas: $500</p>
+                          <p class="field__error" id="amt-lukas-err"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7.5v5.5M12 16.5h.01"/></svg><span data-error-msg></span><a class="field__error-link" href="wallet.html#deposit" data-error-funds hidden>Add funds →</a></p>
+                        </div>
+                        <div class="field">
+                          <div class="copy-form__row"><label class="field__label" for="sl-lukas">Copy stop-loss</label><span class="copy-form__sl" data-sl-out aria-hidden="true">Stop copying at −15%</span></div>
+                          <input class="range" id="sl-lukas" name="stoploss" type="range" min="5" max="50" step="1" value="15" aria-valuetext="Stop copying at −15%" aria-describedby="sl-lukas-help">
+                          <div class="range-scale" aria-hidden="true"><span>−5%</span><span>−50%</span></div>
+                          <p class="field__help" id="sl-lukas-help">Copying stops automatically if this allocation falls by this much.</p>
+                        </div>
+                        <p class="copy-form__status" data-copy-status hidden><span class="tag tag--plain tag--gain">Copying Lukas</span></p>
+                        <button class="btn btn--block" type="submit"><span data-copy-label>Copy Lukas</span><svg class="btn__arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+                      </form>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+            <tbody class="trader" data-name="Omar Haddad" data-spec="forex" data-risk="2" data-win="84.3" data-return="12.6" data-copiers="1980" data-dd="4.1">
+              <tr>
+                <td><div class="person"><span class="avatar" aria-hidden="true">OH</span><div><div class="person__name">Omar Haddad</div><div class="person__meta">Forex · Carry &amp; mean reversion</div></div></div></td>
+                <td class="is-num"><span class="delta" data-trend="up">+12.6%</span></td>
+                <td class="opt"><span class="spark" style="--spark-w:5rem" data-component="spark" data-series="walk:24,seed=88,drift=0.6,vol=0.6"></span></td>
+                <td class="is-num">84.3%</td>
+                <td class="is-num opt-sm">−4.1%</td>
+                <td><span class="riskbar" data-level="low" style="--risk:2"><span class="riskbar__track"></span>2/10<span class="sr-only"> · Low</span></span></td>
+                <td class="is-num opt">1,980</td>
+                <td class="is-num">$100</td>
+                <td class="is-end"><button class="text-btn xp-btn" type="button" data-expand="traders" aria-controls="trader-omar" aria-expanded="false" data-label-open="Hide" data-label-closed="Details"><span data-label>Details</span><span class="sr-only"> for Omar Haddad</span><svg class="xp-btn__chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button></td>
+              </tr>
+              <tr class="ledger__detail" id="trader-omar" hidden>
+                <td colspan="9">
+                  <div class="ledger__detail-inner trader-detail">
+                    <div class="trader-detail__col">
+                      <div class="trader-detail__head"><h3 class="stat__label">12-month equity</h3><span class="trader-detail__note">Past performance</span></div>
+                      <p class="trader-detail__big"><span class="mono">$11,260</span> <span class="delta" data-trend="up">+12.6%</span></p>
+                      <p class="trader-detail__sub">Growth of $10,000 · Nov 2025 – Oct 2026</p>
+                      <div class="chart trader-detail__chart" role="img" data-component="chart" data-series="walk:52,seed=188,drift=0.6,vol=0.6,start=10000,end=11260" data-format="currency" data-decimals="0" data-labels="Nov,Dec,Jan,Feb,Mar,Apr,May,Jun,Jul,Aug,Sep,Oct" data-xaxis="4" aria-label="Omar Haddad: growth of $10,000 over the last 12 months, ending at $11,260. Past performance. Use arrow keys to inspect values."></div>
+                    </div>
+                    <div class="trader-detail__col">
+                      <h3 class="stat__label">Strategy</h3>
+                      <p class="trader-detail__strategy">Conservative carry and mean-reversion on the USD majors with tight stops. Small, frequent gains rather than large swings.</p>
+                      <dl class="trader-detail__stats">
+                        <div><dt>AUM</dt><dd>$3.6M</dd></div>
+                        <div><dt>Avg. hold</dt><dd>1.8 days</dd></div>
+                        <div><dt>Trades / week</dt><dd>6</dd></div>
+                        <div><dt>Profitable months</dt><dd>11 / 12</dd></div>
+                      </dl>
+                    </div>
+                    <div class="trader-detail__col">
+                      <h3 class="stat__label">Recent trades</h3>
+                      <ul class="trader-detail__trades" role="list">
+                      <li><span class="mono">USD/CHF</span><span class="trader-detail__side">Buy</span><span class="delta" data-trend="up">+0.3%</span></li>
+                      <li><span class="mono">AUD/USD</span><span class="trader-detail__side">Sell</span><span class="delta" data-trend="up">+0.2%</span></li>
+                      <li><span class="mono">EUR/USD</span><span class="trader-detail__side">Buy</span><span class="delta" data-trend="down">−0.1%</span></li>
+                      </ul>
+                      <form class="copy-form" data-component="traders-copy" data-trader="Omar Haddad" data-first="Omar" data-min="100" data-available="6420" data-risk="2" data-dialog="copy-confirm" novalidate aria-label="Copy Omar Haddad">
+                        <div class="field">
+                          <div class="copy-form__row"><label class="field__label" for="amt-omar">Allocation amount</label><span class="field__help">Available $6,420.00</span></div>
+                          <div class="field__control"><span class="field__affix">$</span><input class="field__input amount-input" id="amt-omar" name="amount" type="number" inputmode="decimal" min="100" step="any" value="100" required autocomplete="off" aria-describedby="amt-omar-help amt-omar-err"><span class="field__affix">USD</span></div>
+                          <p class="field__help" id="amt-omar-help">Minimum to copy Omar: $100</p>
+                          <p class="field__error" id="amt-omar-err"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7.5v5.5M12 16.5h.01"/></svg><span data-error-msg></span><a class="field__error-link" href="wallet.html#deposit" data-error-funds hidden>Add funds →</a></p>
+                        </div>
+                        <div class="field">
+                          <div class="copy-form__row"><label class="field__label" for="sl-omar">Copy stop-loss</label><span class="copy-form__sl" data-sl-out aria-hidden="true">Stop copying at −15%</span></div>
+                          <input class="range" id="sl-omar" name="stoploss" type="range" min="5" max="50" step="1" value="15" aria-valuetext="Stop copying at −15%" aria-describedby="sl-omar-help">
+                          <div class="range-scale" aria-hidden="true"><span>−5%</span><span>−50%</span></div>
+                          <p class="field__help" id="sl-omar-help">Copying stops automatically if this allocation falls by this much.</p>
+                        </div>
+                        <p class="copy-form__status" data-copy-status hidden><span class="tag tag--plain tag--gain">Copying Omar</span></p>
+                        <button class="btn btn--block" type="submit"><span data-copy-label>Copy Omar</span><svg class="btn__arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+                      </form>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+            <tbody class="traders-empty" data-filter-empty hidden>
+              <tr>
+                <td colspan="9">
+                  <div class="empty">
+                    <p class="empty__title">No traders match these filters</p>
+                    <p>Try a wider risk range, a lower win rate or a different search.</p>
+                    <button class="btn btn--sm btn--outline" type="button" data-filter-reset>Clear filters</button>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <dialog class="dialog" id="copy-confirm" aria-labelledby="copy-confirm-title" aria-describedby="copy-confirm-note">
+        <div class="dialog__head">
+          <h2 class="dialog__title" id="copy-confirm-title">Copy <span data-confirm="trader">Marcus Chen</span>?</h2>
+          <button class="icon-btn" type="button" data-dialog-close aria-label="Close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+        </div>
+        <div class="dialog__body">
+          <dl class="confirm-rows">
+            <div><dt>Allocation</dt><dd data-confirm="amount">$1,000.00</dd></div>
+            <div><dt>Copy stop-loss</dt><dd data-confirm="stop">Stop copying at −15%</dd></div>
+            <div><dt>Risk score</dt><dd data-confirm="risk">6/10 · Medium</dd></div>
+            <div><dt>Balance after</dt><dd data-confirm="after">$5,420.00</dd></div>
+          </dl>
+          <p class="fineprint" id="copy-confirm-note"><strong>Risk note.</strong> <span data-confirm="note">Your allocation will mirror this trader's positions in proportion. You can lose some or all of it. Past performance is not indicative of future results.</span></p>
+        </div>
+        <div class="dialog__foot">
+          <button class="btn btn--ghost" type="button" data-dialog-close>Cancel</button>
+          <button class="btn" type="button" data-confirm-submit autofocus>Start copying</button>
+        </div>
+      </dialog>
+
+      <footer class="app__foot"><p class="fineprint">Past performance is not indicative of future results. Copy trading involves risk, and figures shown are illustrative.</p></footer>
+    </main>
+
+  </div>
+
+  <!-- ===================== MOBILE TAB BAR + TED AI (shared) ===================== -->
+  <nav class="tabbar" aria-label="Quick navigation">
+    <a href="index.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1z"/></svg>Home</a>
+    <a href="wallet.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M3 7a2 2 0 0 1 2-2h13v4"/><path d="M3 7v11a2 2 0 0 0 2 2h15V9H5a2 2 0 0 1-2-2z"/></svg>Wallet</a>
+    <a href="copy-traders.html" aria-current="page"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0"/><path d="M16 4.5a3.5 3.5 0 0 1 0 7"/></svg>Traders</a>
+    <a href="plans.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M3 17l6-6 4 4 8-8"/><path d="M15 7h6v6"/></svg>Plans</a>
+    <button type="button" data-rail-toggle aria-controls="rail" aria-expanded="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>More</button>
+  </nav>
+  <button class="ai-fab" type="button" data-dialog-open="ted-ai"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/></svg>TED AI</button>
+
+  <dialog class="drawer" id="ted-ai" aria-labelledby="ted-ai-title">
+    <div class="drawer__inner">
+      <div class="drawer__head">
+        <h2 id="ted-ai-title" class="cluster" style="font-size:1.125rem; --cluster-gap: var(--space-2)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true" style="color: var(--color-signal)"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/></svg>TED AI</h2>
+        <button class="icon-btn" type="button" data-dialog-close aria-label="Close TED AI"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+      </div>
+      <div class="drawer__body" aria-live="polite">
+        <div class="ai-msg ai-msg--bot"><span class="ai-msg__who">TED AI · 09:41</span><p>Elena Vasquez opened a EUR/USD long. Your copy mirrored it at 1.0841 with a $42.10 allocation.</p></div>
+        <div class="ai-msg ai-msg--bot"><span class="ai-msg__who">Risk notice</span><p>Copying Aisha Rahman is paused because your 5% drawdown limit was reached. You can resume or adjust the limit from Copy traders.</p></div>
+        <div class="ai-msg ai-msg--user"><span class="ai-msg__who">You</span><p>How diversified is my portfolio?</p></div>
+        <div class="ai-msg ai-msg--bot"><span class="ai-msg__who">TED AI</span><p>You're spread across 4 asset classes. Crypto is 33% of your capital — above the 25% many beginners choose. Consider capping it in Copy traders.</p></div>
+      </div>
+      <form class="drawer__foot" data-demo-form="Message sent to TED AI">
+        <div class="field">
+          <label class="sr-only" for="ai-q">Ask TED AI</label>
+          <div class="field__control">
+            <input class="field__input" id="ai-q" name="q" placeholder="Ask about your portfolio…" required autocomplete="off">
+            <button class="icon-btn" type="submit" aria-label="Send"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4 12l16-8-6 16-2.5-6.5z"/></svg></button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </dialog>
+</body>
+</html>

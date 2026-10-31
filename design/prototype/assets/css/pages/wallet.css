@@ -1,0 +1,134 @@
+/* Wallet page + deposit/withdraw dialogs — page-only rules. Tokens only, logical properties. */
+@layer pages {
+  .wl-head-actions { display: flex; flex-wrap: wrap; gap: var(--space-3); }
+
+  /* ---------- Balance: big numeral + open columns with vertical hairlines ---------- */
+  .wl-balance { display: flex; flex-wrap: wrap; align-items: end; gap: var(--space-6); }
+  .wl-balance__main { flex: 1 1 20rem; }
+  .wl-balance__side { display: flex; flex-wrap: wrap; margin: 0; }
+  .wl-balance__side > div { display: grid; gap: var(--space-2); align-content: start; padding-inline: var(--space-6); border-inline-start: 1px solid var(--color-border); }
+  .wl-balance__side dd { margin: 0; display: grid; gap: var(--space-2); justify-items: start; }
+  .wl-balance__num { font: 500 clamp(1.5rem, 1.2rem + 1vw, 2rem)/1.05 var(--font-mono); letter-spacing: -0.03em; font-variant-numeric: tabular-nums; }
+  @media (width < 40rem) {
+    .wl-balance__side { inline-size: 100%; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); border-block-start: 1px solid var(--color-border); padding-block-start: var(--space-4); }
+    .wl-balance__side > div:first-child { padding-inline-start: 0; border-inline-start: 0; }
+    .wl-balance__side > div { padding-inline: var(--space-4) 0; }
+  }
+
+  /* ---------- Cash flow bars + legend ---------- */
+  .wl-legend { display: flex; flex-wrap: wrap; gap: var(--space-2) var(--space-5); font: 500 var(--text-xs)/1.4 var(--font-mono); color: var(--color-text-muted); }
+  .wl-legend__item { display: inline-flex; align-items: center; gap: var(--space-2); }
+  .wl-legend__item b { font-weight: 600; color: var(--color-text); }
+  .wl-legend__key { inline-size: 0.6rem; block-size: 0.6rem; border-radius: 1px; background: var(--chart-line); }
+  .wl-legend__key--out { background: var(--color-loss); }
+  .wl-bars-wrap { overflow-x: auto; overscroll-behavior-x: contain; padding-block-end: var(--space-2); }
+  .wl-bars-wrap:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 4px; }
+  .wl-bars-wrap .bars { --bars-h: 10rem; min-inline-size: 32rem; }
+
+  /* ---------- History ledger ---------- */
+  .wl-history { display: grid; gap: var(--space-4); }
+  .wl-panel:focus-visible { outline-offset: var(--space-2); }
+  .wl-desc { display: grid; gap: 2px; }
+  .wl-desc strong { font-weight: 600; white-space: nowrap; }
+  .wl-desc span { font-size: var(--text-xs); color: var(--color-text-muted); }
+  .wl-ref { font: 400 var(--text-xs) var(--font-mono); color: var(--color-text-muted); white-space: nowrap; }
+  .wl-void { color: var(--color-text-muted); text-decoration: line-through; }
+  .wl-empty > td { padding: 0; }
+
+  /* =====================================================================
+     Dialogs (the one elevated surface; hairlines only inside)
+     ===================================================================== */
+  .wl-dialog { inline-size: min(100% - 2rem, 38rem); }
+  .wl-dialog form { display: grid; }
+
+  /* Step indicator with red progress underline */
+  .wl-steps {
+    --step: 1;
+    position: relative;
+    display: grid; grid-template-columns: repeat(3, minmax(0, 1fr));
+    margin-inline: var(--space-6);
+    padding: 0;
+    list-style: none;
+    border-block-end: 2px solid var(--color-border);
+  }
+  .wl-steps li {
+    padding-block: var(--space-3);
+    font: 600 var(--text-label)/1.2 var(--font-mono); letter-spacing: .12em; text-transform: uppercase;
+    color: var(--color-text-muted);
+  }
+  .wl-steps li:nth-child(2) { text-align: center; }
+  .wl-steps li:last-child { text-align: end; }
+  .wl-steps li[aria-current="step"], .wl-steps li[data-done] { color: var(--color-text); }
+  .wl-steps::after {
+    content: ""; position: absolute; inset-inline-start: 0; inset-block-end: -2px; block-size: 2px;
+    inline-size: calc(100% * var(--step) / 3);
+    background: var(--color-accent);
+    transition: inline-size var(--duration-base) var(--ease-out);
+  }
+
+  .wl-step { display: grid; gap: var(--space-4); min-inline-size: 0; margin: 0; padding: 0; border: 0; }
+  .wl-step > legend { padding: 0; margin-block-end: var(--space-3); }
+  .wl-legend-label { font: 600 var(--text-label)/1.2 var(--font-mono); letter-spacing: .12em; text-transform: uppercase; color: var(--color-text-muted); }
+
+  .wl-amount .field__affix { font: 500 clamp(1.5rem, 1.1rem + 1.6vw, 2.25rem)/1 var(--font-mono); color: var(--color-text-muted); }
+  .wl-amount .field__affix--end { font-size: var(--text-small); color: var(--color-signal); letter-spacing: .08em; }
+  .wl-amount__foot { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: var(--space-2) var(--space-4); }
+  .wl-quick { display: flex; flex-wrap: wrap; gap: var(--space-1) var(--space-3); }
+  .wl-quick button {
+    min-block-size: 2.25rem; padding-inline: var(--space-1);
+    font: 500 var(--text-small) var(--font-mono);
+    color: var(--color-link);
+    text-decoration: underline; text-underline-offset: 0.25em; text-decoration-thickness: 1px;
+  }
+  .wl-quick button:hover { color: var(--color-text); text-decoration-thickness: 2px; }
+  .wl-quick button[aria-pressed="true"] { color: var(--color-text); font-weight: 600; text-decoration-color: var(--color-accent); text-decoration-thickness: 2px; }
+
+  /* Radio rows */
+  .wl-options { display: grid; border-block-start: 1px solid var(--color-border); }
+  .wl-option {
+    display: grid; grid-template-columns: auto auto minmax(0, 1fr) auto; align-items: center; gap: var(--space-3);
+    min-block-size: 3.5rem; padding-inline: var(--space-4);
+    border-block-end: 1px solid var(--color-border);
+    border-inline-start: 2px solid transparent;
+    cursor: pointer;
+    transition: background-color var(--duration-fast), border-color var(--duration-fast);
+  }
+  .wl-option:hover { background: color-mix(in oklch, var(--color-text) 3.5%, transparent); }
+  .wl-option:has(:checked) { border-inline-start-color: var(--color-accent); background: color-mix(in oklch, var(--color-text) 3%, transparent); }
+  .wl-option input { inline-size: 1.1rem; block-size: 1.1rem; margin: 0; }
+  .wl-option svg { inline-size: 1.25rem; block-size: 1.25rem; color: var(--color-text-muted); }
+  .wl-option:has(:checked) svg { color: var(--color-text); }
+  .wl-option__name { font-weight: 600; }
+  .wl-option__meta { font-size: var(--text-xs); color: var(--color-text-muted); text-align: end; }
+  @media (width < 30rem) {
+    .wl-option { grid-template-columns: auto auto minmax(0, 1fr); padding-block: var(--space-3); }
+    .wl-option__meta { grid-column: 3; text-align: start; }
+  }
+
+  .wl-detail { display: grid; gap: var(--space-3); padding-inline-start: var(--space-4); border-inline-start: 1px solid var(--color-border); }
+  .wl-detail dl { margin: 0; }
+  .wl-detail .copyline dd { text-align: end; }
+  .wl-detail .icon-btn { inline-size: 2.25rem; block-size: 2.25rem; }
+  .wl-detail .icon-btn svg { inline-size: 1rem; block-size: 1rem; }
+  .wl-address { word-break: break-all; }
+  .wl-ref-value { font-weight: 600; color: var(--color-text); }
+  .wl-note { display: flex; gap: var(--space-2); align-items: start; font-size: var(--text-small); color: var(--color-text-muted); }
+  .wl-note svg { inline-size: 1rem; block-size: 1rem; flex: none; margin-block-start: 0.2em; }
+  .wl-note--pending { color: var(--color-pending); }
+
+  /* Summary */
+  .wl-summary { margin: 0; border-block-start: 1px solid var(--color-border); }
+  .wl-summary > div { display: flex; justify-content: space-between; gap: var(--space-4); padding-block: var(--space-3); border-block-end: 1px solid var(--color-border); font-size: var(--text-small); }
+  .wl-summary dt { color: var(--color-text-muted); }
+  .wl-summary dd { margin: 0; font-family: var(--font-mono); font-variant-numeric: tabular-nums; text-align: end; }
+  .wl-summary__total dt { color: var(--color-text); font-weight: 600; }
+  .wl-summary__total dd { font-size: 1.25rem; font-weight: 600; }
+
+  .wl-foot-actions { display: flex; flex-wrap: wrap; gap: var(--space-2); margin-inline-start: auto; }
+  .wl-code .field__input { font-family: var(--font-mono); letter-spacing: .4em; }
+
+  @media (forced-colors: active) {
+    .wl-steps::after { background: Highlight; }
+    .wl-option:has(:checked) { border-inline-start-color: Highlight; }
+  }
+}

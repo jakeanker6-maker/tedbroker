@@ -1,0 +1,635 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Settings — TED Brokers</title>
+  <meta name="theme-color" content="#0A1626">
+  <meta name="robots" content="noindex">
+  <link rel="icon" href="../assets/img/favicon.ico">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=JetBrains+Mono:wght@400;500;600&family=Sora:wght@300;600;700;800&display=swap">
+  <link rel="stylesheet" href="../assets/css/main.css">
+  <link rel="stylesheet" href="../assets/css/pages/settings.css">
+  <script>document.documentElement.classList.add('js');try{var t=localStorage.getItem('ted:theme');if(t==='system')t=matchMedia('(prefers-color-scheme: light)').matches?'light':'dark';if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
+  <script type="module" src="../assets/js/main.js"></script>
+</head>
+<body class="app surface-ink">
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <!-- ===================== RAIL (shared across app pages) ===================== -->
+  <aside class="rail" id="rail" aria-label="Dashboard">
+    <div class="rail__brand">
+      <a class="wordmark" href="index.html" aria-label="TED Brokers dashboard">
+        <span class="wordmark__ted">TED</span><span class="wordmark__brokers">Br<svg class="wordmark__o" viewBox="0 0 20 20" aria-hidden="true"><g fill="currentColor"><circle cx="10" cy="2" r="1.6"/><circle cx="15.2" cy="4.1" r="1.4" opacity=".8"/><circle cx="17.9" cy="9.4" r="1.6"/><circle cx="16.3" cy="14.8" r="1.4" opacity=".8"/><circle cx="11.2" cy="17.9" r="1.6"/><circle cx="5.6" cy="16.4" r="1.4" opacity=".7"/><circle cx="2.2" cy="11.6" r="1.6"/><circle cx="3" cy="6" r="1.4" opacity=".8"/><circle cx="6.6" cy="2.9" r="1.1" opacity=".6"/><circle cx="10" cy="10" r="1.9"/><circle cx="13.3" cy="9.2" r="1" opacity=".7"/><circle cx="7.4" cy="12" r="1" opacity=".7"/></g></svg>kers</span>
+      </a>
+    </div>
+    <nav class="rail__nav" aria-label="Dashboard sections">
+      <ul class="rail__list" role="list">
+        <li><a class="rail__link" href="index.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>Overview</a></li>
+        <li><a class="rail__link" href="wallet.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M3 7a2 2 0 0 1 2-2h13v4"/><path d="M3 7v11a2 2 0 0 0 2 2h15V9H5a2 2 0 0 1-2-2z"/><circle cx="16" cy="14.5" r="1"/></svg>Wallet</a></li>
+        <li><a class="rail__link" href="portfolio.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M21 12A9 9 0 1 1 12 3v9z"/><path d="M15 3.5A9 9 0 0 1 20.5 9H15z"/></svg>Portfolio</a></li>
+        <li><a class="rail__link" href="copy-traders.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0"/><path d="M16 4.5a3.5 3.5 0 0 1 0 7M18 14.5a6.5 6.5 0 0 1 3.5 5.5"/></svg>Copy traders<span class="rail__aside rail__aside--live">3 live</span></a></li>
+      </ul>
+      <p class="rail__group-label" id="rail-plans">Investment plans</p>
+      <ul class="rail__list" role="list" aria-labelledby="rail-plans">
+        <li><a class="rail__link rail__link--sub" href="plans.html">Robo Advisor</a></li>
+        <li><a class="rail__link rail__link--sub" href="plans.html#etf">ETF automation</a></li>
+        <li><a class="rail__link rail__link--sub" href="plans.html#defi">DeFi</a></li>
+        <li><a class="rail__link rail__link--sub" href="plans.html#options">Options</a></li>
+        <li><a class="rail__link rail__link--sub" href="plans.html#staking">Staking<span class="rail__aside rail__aside--soon">soon</span></a></li>
+      </ul>
+      <p class="rail__group-label" id="rail-more">Community</p>
+      <ul class="rail__list" role="list" aria-labelledby="rail-more">
+        <li><a class="rail__link" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M3 12h4l3-8 4 16 3-8h4"/></svg>Network feed</a></li>
+        <li><a class="rail__link" href="referrals.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="18" cy="5" r="2.5"/><circle cx="6" cy="12" r="2.5"/><circle cx="18" cy="19" r="2.5"/><path d="M8.2 10.8l7.6-4.4M8.2 13.2l7.6 4.4"/></svg>Referrals</a></li>
+        <li><a class="rail__link" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M4 5h13v14H6a2 2 0 0 1-2-2z"/><path d="M17 9h3v8a2 2 0 0 1-2 2"/><path d="M7.5 9h6M7.5 13h6"/></svg>News</a></li>
+      </ul>
+    </nav>
+    <div class="rail__foot">
+      <ul class="rail__list" role="list">
+        <li><a class="rail__link" href="../help.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.6.3-1 .8-1 1.5V14"/><path d="M12 17h.01"/></svg>Help center</a></li>
+        <li><a class="rail__link" href="settings.html" aria-current="page"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M12 2.5v3M12 18.5v3M4.2 4.2l2.1 2.1M17.7 17.7l2.1 2.1M2.5 12h3M18.5 12h3M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1"/></svg>Settings</a></li>
+      </ul>
+      <a class="rail__user" href="settings.html">
+        <span class="avatar">DO</span>
+        <span><span class="rail__user-name">Daniel Okafor</span><br><span class="rail__user-meta">● Verified</span></span>
+      </a>
+    </div>
+  </aside>
+  <button class="rail-scrim" type="button" tabindex="-1" aria-hidden="true"></button>
+
+  <div class="app__main">
+    <!-- ===================== TOP BAR (shared) ===================== -->
+    <header class="topbar">
+      <div class="topbar__bar">
+        <button class="icon-btn topbar__menu" type="button" data-rail-toggle aria-controls="rail" aria-expanded="false" aria-label="Open menu">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h10"/></svg>
+        </button>
+        <a class="wordmark topbar__brand" href="index.html" aria-label="TED Brokers dashboard"><span class="wordmark__ted">TED</span><span class="wordmark__brokers">Brokers</span></a>
+        <form class="search" role="search" action="copy-traders.html">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+          <label class="sr-only" for="q">Search</label>
+          <input id="q" name="q" type="search" placeholder="Search traders, plans, markets" autocomplete="off">
+          <kbd aria-hidden="true">⌘K</kbd>
+        </form>
+        <div class="topbar__actions">
+          <button class="lang-select" type="button" aria-label="Language: English">EN
+            <svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M2 3.5l3 3 3-3"/></svg>
+          </button>
+          <button class="icon-btn" type="button" data-theme-toggle aria-pressed="false" aria-label="Light theme">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4 8 8 0 1 0 20 14.5z"/></svg>
+          </button>
+          <button class="icon-btn" type="button" aria-label="Notifications, 2 unread">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M6 8a6 6 0 1 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.9 1.9 0 0 0 3.4 0"/></svg>
+            <span class="icon-btn__dot"></span>
+          </button>
+          <button class="btn btn--sm btn--outline" type="button" data-dialog-open="ted-ai">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true" style="color: var(--color-signal)"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/></svg>TED AI
+          </button>
+          <a class="btn btn--sm" href="wallet.html#deposit">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>Deposit
+          </a>
+        </div>
+      </div>
+      <div class="ticker ticker--sm ticker--app" data-component="ticker" role="region" aria-label="Market prices (indicative)">
+        <div class="ticker__track">
+          <ul class="ticker__list" role="list">
+            <li class="ticker__item"><span class="ticker__sym">EUR/USD</span><span class="ticker__px">1.0842</span><span class="delta" data-trend="up">+0.21%</span></li>
+            <li class="ticker__item"><span class="ticker__sym">BTC/USD</span><span class="ticker__px">67,412.00</span><span class="delta" data-trend="up">+1.84%</span></li>
+            <li class="ticker__item"><span class="ticker__sym">ETH/USD</span><span class="ticker__px">3,540.80</span><span class="delta" data-trend="up">+2.11%</span></li>
+            <li class="ticker__item"><span class="ticker__sym">AAPL</span><span class="ticker__px">228.14</span><span class="delta" data-trend="down">−0.42%</span></li>
+            <li class="ticker__item"><span class="ticker__sym">XAU/USD</span><span class="ticker__px">2,384.10</span><span class="delta" data-trend="up">+0.35%</span></li>
+            <li class="ticker__item"><span class="ticker__sym">SPX</span><span class="ticker__px">5,567.19</span><span class="delta" data-trend="up">+0.38%</span></li>
+            <li class="ticker__item"><span class="ticker__sym">GBP/USD</span><span class="ticker__px">1.2711</span><span class="delta" data-trend="down">−0.08%</span></li>
+          </ul>
+        </div>
+      </div>
+    </header>
+
+
+    <!-- ===================== PAGE CONTENT ===================== -->
+    <main class="app__content" id="main">
+      <div class="page-head">
+        <div>
+          <h1>Settings</h1>
+          <p class="set-lead">Manage your profile, sign-in security, preferences and identity verification.</p>
+        </div>
+      </div>
+
+      <div>
+        <div class="tabs" role="tablist" aria-label="Settings sections" data-component="tabs">
+          <button class="tabs__tab" type="button" role="tab" id="set-tab-personal" aria-controls="set-panel-personal" aria-selected="false">Personal details</button>
+          <button class="tabs__tab" type="button" role="tab" id="set-tab-security" aria-controls="set-panel-security" aria-selected="true">Security</button>
+          <button class="tabs__tab" type="button" role="tab" id="set-tab-preferences" aria-controls="set-panel-preferences" aria-selected="false">Preferences</button>
+          <button class="tabs__tab" type="button" role="tab" id="set-tab-verification" aria-controls="set-panel-verification" aria-selected="false">Verification<small>1 step left</small></button>
+        </div>
+
+        <!-- ===================== PERSONAL DETAILS ===================== -->
+        <div class="set-panel" role="tabpanel" id="set-panel-personal" aria-labelledby="set-tab-personal" tabindex="0" hidden>
+          <form class="set-row" action="#" method="post" data-demo-form="Personal details saved" aria-labelledby="set-personal-title">
+            <div class="set-row__intro">
+              <h2 id="set-personal-title">Personal details</h2>
+              <p>Use your legal name and address exactly as they appear on your ID document.</p>
+            </div>
+            <div class="set-row__body">
+              <div class="set-fields">
+                <div class="field">
+                  <label class="field__label" for="pd-first">First name</label>
+                  <div class="field__control"><input class="field__input" id="pd-first" name="given-name" autocomplete="given-name" value="Daniel" required></div>
+                </div>
+                <div class="field">
+                  <label class="field__label" for="pd-last">Last name</label>
+                  <div class="field__control"><input class="field__input" id="pd-last" name="family-name" autocomplete="family-name" value="Okafor" required></div>
+                </div>
+                <div class="field">
+                  <label class="field__label" for="pd-user">Username</label>
+                  <div class="field__control"><span class="field__affix" aria-hidden="true">@</span><input class="field__input" id="pd-user" name="username" autocomplete="username" value="danielokafor" pattern="[A-Za-z0-9_.]{3,24}" aria-describedby="pd-user-help" required></div>
+                  <p class="field__help" id="pd-user-help">3–24 characters: letters, numbers, dots and underscores.</p>
+                </div>
+                <div class="field">
+                  <label class="field__label" for="pd-phone">Phone</label>
+                  <div class="field__control"><input class="field__input" id="pd-phone" name="tel" type="tel" autocomplete="tel" inputmode="tel" value="+234 803 555 0142"></div>
+                </div>
+                <div class="field">
+                  <label class="field__label" for="pd-country">Country of residence</label>
+                  <div class="field__control">
+                    <select class="field__select" id="pd-country" name="country" autocomplete="country">
+                      <option value="NG" selected>Nigeria</option>
+                      <option value="GH">Ghana</option>
+                      <option value="KE">Kenya</option>
+                      <option value="ZA">South Africa</option>
+                      <option value="AE">United Arab Emirates</option>
+                      <option value="GB">United Kingdom</option>
+                      <option value="DE">Germany</option>
+                      <option value="ES">Spain</option>
+                      <option value="FR">France</option>
+                      <option value="IN">India</option>
+                      <option value="BD">Bangladesh</option>
+                      <option value="BR">Brazil</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="field set-fields__wide">
+                  <label class="field__label" for="pd-address">Street address</label>
+                  <div class="field__control"><input class="field__input" id="pd-address" name="address-line1" autocomplete="address-line1" value="14 Admiralty Way, Lekki Phase 1"></div>
+                </div>
+                <div class="field">
+                  <label class="field__label" for="pd-city">City</label>
+                  <div class="field__control"><input class="field__input" id="pd-city" name="city" autocomplete="address-level2" value="Lagos"></div>
+                </div>
+                <div class="field">
+                  <label class="field__label" for="pd-postal">Postal code</label>
+                  <div class="field__control"><input class="field__input" id="pd-postal" name="postal-code" autocomplete="postal-code" value="106104"></div>
+                </div>
+              </div>
+              <div class="set-form-foot">
+                <button class="btn" type="submit">Save changes</button>
+                <p class="set-meta">Your email is managed under Security.</p>
+              </div>
+            </div>
+          </form>
+        </div>
+
+        <!-- ===================== SECURITY ===================== -->
+        <div class="set-panel" role="tabpanel" id="set-panel-security" aria-labelledby="set-tab-security" tabindex="0" data-component="set-security">
+          <section class="set-row" aria-labelledby="set-status-title">
+            <div class="set-row__intro">
+              <h2 id="set-status-title">Security status</h2>
+              <p>How well your account is protected right now.</p>
+            </div>
+            <div class="set-row__body">
+              <p class="set-strong" data-set-meter-text>Strong · 3 of 4 protections on</p>
+              <div class="meter set-meter" data-set-meter data-level="strong" aria-hidden="true"><span class="is-on"></span><span class="is-on"></span><span class="is-on"></span><span></span></div>
+              <ul class="set-checks" role="list" aria-label="Protections">
+                <li data-set-check="email" data-state="on"><span data-glyph aria-hidden="true">✓</span><span data-label>Email verified</span></li>
+                <li data-set-check="2fa" data-state="on"><span data-glyph aria-hidden="true">✓</span><span data-label>2FA enabled</span></li>
+                <li data-set-check="password" data-state="on"><span data-glyph aria-hidden="true">✓</span><span data-label>Strong password</span></li>
+                <li data-set-check="identity" data-state="off"><span data-glyph aria-hidden="true">○</span><span data-label>Identity verification pending</span>
+                  <a class="text-btn set-link-pending" href="#set-panel-verification" data-set-goto="set-tab-verification">Complete verification <span aria-hidden="true">→</span></a></li>
+              </ul>
+            </div>
+          </section>
+
+          <section class="set-row" aria-labelledby="set-2fa-title">
+            <div class="set-row__intro">
+              <h2 id="set-2fa-title">Two-factor authentication</h2>
+              <p>Ask for a one-time code from your authenticator app when you sign in or withdraw.</p>
+            </div>
+            <div class="set-row__body">
+              <div class="set-line">
+                <div class="set-line__main">
+                  <span class="tag tag--plain tag--gain" data-set-2fa-status>Enabled via authenticator app</span>
+                  <span class="set-meta" data-set-2fa-meta>Added 12 Aug 2026 · Authenticator (TOTP)</span>
+                </div>
+                <label class="set-switch" for="set-2fa"><span class="sr-only">Two-factor authentication</span><input class="switch" type="checkbox" role="switch" id="set-2fa" name="two-factor" data-set-2fa checked></label>
+              </div>
+              <div class="set-actions" data-set-2fa-only>
+                <button class="btn btn--sm btn--outline" type="button" data-copy="TED-4821-9KQ2 TED-7730-PL4X TED-1185-ZW9M TED-6402-HV3T TED-2957-RB8N TED-8814-JC6E TED-3069-MX1D TED-5541-QA7S" data-copy-message="Backup codes copied">Regenerate backup codes</button>
+                <button class="text-btn" type="button" data-set-2fa-disable>Disable 2FA</button>
+              </div>
+            </div>
+          </section>
+
+          <section class="set-row" aria-labelledby="set-pw-title">
+            <div class="set-row__intro">
+              <h2 id="set-pw-title">Password</h2>
+              <p>Used to sign in on the web and in the app.</p>
+            </div>
+            <div class="set-row__body">
+              <div class="set-line">
+                <p class="mono muted">Last changed 64 days ago</p>
+                <button class="btn btn--sm btn--outline" type="button" data-dialog-open="set-password-dialog">Change password</button>
+              </div>
+            </div>
+          </section>
+
+          <section class="set-row" aria-labelledby="set-email-title">
+            <div class="set-row__intro">
+              <h2 id="set-email-title">Email address</h2>
+              <p>Where we send trade confirmations, receipts and security alerts.</p>
+            </div>
+            <div class="set-row__body">
+              <div class="set-line">
+                <p class="cluster"><span>daniel.okafor@gmail.com</span><span class="tag tag--plain tag--gain">Verified</span></p>
+                <button class="btn btn--sm btn--outline" type="button" data-dialog-open="set-email-dialog">Change email</button>
+              </div>
+            </div>
+          </section>
+
+          <section class="set-row" aria-labelledby="set-logins-title">
+            <div class="set-row__intro">
+              <h2 id="set-logins-title">Login history</h2>
+              <p>Devices that signed in to your account recently. Sign out anything you don't recognise.</p>
+            </div>
+            <div class="set-row__body">
+              <div class="ledger-wrap" tabindex="0" role="region" aria-labelledby="set-logins-title">
+                <table class="ledger">
+                  <thead><tr><th scope="col">Device &amp; browser</th><th scope="col" class="opt-sm">Location</th><th scope="col" class="opt">IP address</th><th scope="col">Time</th><th scope="col" class="is-end">Status</th></tr></thead>
+                  <tbody data-set-sessions>
+                    <tr data-device="MacBook Pro · Chrome">
+                      <td><span class="set-device"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M5 6h14v9H5z"/><path d="M2.5 18.5h19"/></svg>MacBook Pro · Chrome</span></td>
+                      <td class="opt-sm nowrap">Lagos, NG</td>
+                      <td class="opt mono nowrap">102.89.44.12</td>
+                      <td class="nowrap">Now</td>
+                      <td class="is-end"><span class="tag tag--plain tag--gain">This device</span></td>
+                    </tr>
+                    <tr data-device="iPhone 15 · Safari">
+                      <td><span class="set-device"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><rect x="7" y="3" width="10" height="18" rx="2"/><path d="M11 18h2"/></svg>iPhone 15 · Safari</span></td>
+                      <td class="opt-sm nowrap">Lagos, NG</td>
+                      <td class="opt mono nowrap">102.89.44.18</td>
+                      <td class="nowrap">2h ago</td>
+                      <td class="is-end"><button class="text-btn" type="button" data-set-signout>Sign out<span class="sr-only"> iPhone 15 · Safari</span></button></td>
+                    </tr>
+                    <tr data-device="Windows · Edge">
+                      <td><span class="set-device"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="1.5"/><path d="M9 20h6M12 16v4"/></svg>Windows · Edge</span></td>
+                      <td class="opt-sm nowrap">London, UK</td>
+                      <td class="opt mono nowrap">82.165.197.1</td>
+                      <td class="nowrap">3 days ago</td>
+                      <td class="is-end"><span class="set-status"><span class="tag tag--plain tag--pending">Unrecognized</span><button class="text-btn" type="button" data-set-signout>Sign out<span class="sr-only"> Windows · Edge</span></button></span></td>
+                    </tr>
+                    <tr data-device="Android · Chrome">
+                      <td><span class="set-device"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><rect x="7" y="3" width="10" height="18" rx="2"/><path d="M11 18h2"/></svg>Android · Chrome</span></td>
+                      <td class="opt-sm nowrap">Abuja, NG</td>
+                      <td class="opt mono nowrap">105.112.98.4</td>
+                      <td class="nowrap">9 days ago</td>
+                      <td class="is-end"><button class="text-btn" type="button" data-set-signout>Sign out<span class="sr-only"> Android · Chrome</span></button></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <p class="fineprint">Locations are estimated from IP addresses. If you don't recognise a sign-in, sign it out and change your password.</p>
+            </div>
+          </section>
+
+          <section class="set-row" aria-labelledby="set-danger-title">
+            <div class="set-row__intro">
+              <h2 id="set-danger-title">Danger zone</h2>
+              <p>End sessions on other devices, or close your account.</p>
+            </div>
+            <div class="set-row__body">
+              <div class="set-danger">
+                <button class="text-btn" type="button" data-set-signout-all>Sign out of all other sessions</button>
+                <button class="text-btn text-btn--muted" type="button" data-dialog-open="set-close-dialog">Close account</button>
+              </div>
+            </div>
+          </section>
+        </div>
+
+        <!-- ===================== PREFERENCES ===================== -->
+        <div class="set-panel" role="tabpanel" id="set-panel-preferences" aria-labelledby="set-tab-preferences" tabindex="0" hidden data-component="set-prefs">
+          <form class="set-row" action="#" method="post" data-demo-form="Preferences saved" aria-labelledby="set-region-title">
+            <div class="set-row__intro">
+              <h2 id="set-region-title">Language &amp; region</h2>
+              <p>The language of the dashboard and how amounts are displayed.</p>
+            </div>
+            <div class="set-row__body">
+              <div class="set-fields">
+                <div class="field">
+                  <label class="field__label" for="pref-lang">Language</label>
+                  <div class="field__control">
+                    <select class="field__select" id="pref-lang" name="language">
+                      <option value="en" lang="en" selected>English</option>
+                      <option value="zh" lang="zh">中文</option>
+                      <option value="hi" lang="hi">हिन्दी</option>
+                      <option value="es" lang="es">Español</option>
+                      <option value="fr" lang="fr">Français</option>
+                      <option value="ar" lang="ar" dir="rtl">العربية</option>
+                      <option value="bn" lang="bn">বাংলা</option>
+                      <option value="ru" lang="ru">Русский</option>
+                      <option value="pt" lang="pt">Português</option>
+                      <option value="de" lang="de">Deutsch</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="field">
+                  <label class="field__label" for="pref-currency">Currency display</label>
+                  <div class="field__control">
+                    <select class="field__select" id="pref-currency" name="currency" aria-describedby="pref-currency-help">
+                      <option value="USD" selected>US dollar (USD)</option>
+                      <option value="EUR">Euro (EUR)</option>
+                      <option value="GBP">British pound (GBP)</option>
+                      <option value="NGN">Nigerian naira (NGN)</option>
+                      <option value="INR">Indian rupee (INR)</option>
+                      <option value="AED">UAE dirham (AED)</option>
+                    </select>
+                  </div>
+                  <p class="field__help" id="pref-currency-help">Display only. Your balances are held in USD.</p>
+                </div>
+              </div>
+              <div class="set-form-foot"><button class="btn" type="submit">Save preferences</button></div>
+            </div>
+          </form>
+
+          <section class="set-row" aria-labelledby="set-theme-title">
+            <div class="set-row__intro">
+              <h2 id="set-theme-title">Appearance</h2>
+              <p>Applies straight away on this device.</p>
+            </div>
+            <div class="set-row__body">
+              <fieldset class="set-radios">
+                <legend class="field__label">Theme</legend>
+                <label class="set-radio"><input type="radio" name="theme" value="system">System</label>
+                <label class="set-radio"><input type="radio" name="theme" value="dark" checked>Dark</label>
+                <label class="set-radio"><input type="radio" name="theme" value="light">Light</label>
+              </fieldset>
+            </div>
+          </section>
+
+          <section class="set-row" aria-labelledby="set-notify-title">
+            <div class="set-row__intro">
+              <h2 id="set-notify-title">Notifications</h2>
+              <p>Choose which emails and push notifications you get. Security alerts are always sent.</p>
+            </div>
+            <div class="set-row__body">
+              <ul class="set-toggles" role="list">
+                <li><div><label for="n-trade">Trade copied</label><small id="n-trade-d">When a trader you copy opens or closes a position</small></div><input class="switch" type="checkbox" role="switch" id="n-trade" name="notify-trades" aria-describedby="n-trade-d" data-set-notify="Trade copied" checked></li>
+                <li><div><label for="n-money">Deposits &amp; withdrawals</label><small id="n-money-d">When money arrives in or leaves your wallet</small></div><input class="switch" type="checkbox" role="switch" id="n-money" name="notify-money" aria-describedby="n-money-d" data-set-notify="Deposit and withdrawal" checked></li>
+                <li><div><label for="n-weekly">Weekly summary</label><small id="n-weekly-d">Your portfolio performance every Monday</small></div><input class="switch" type="checkbox" role="switch" id="n-weekly" name="notify-weekly" aria-describedby="n-weekly-d" data-set-notify="Weekly summary" checked></li>
+                <li><div><label for="n-news">Product news</label><small id="n-news-d">New features and plans, at most twice a month</small></div><input class="switch" type="checkbox" role="switch" id="n-news" name="notify-news" aria-describedby="n-news-d" data-set-notify="Product news"></li>
+              </ul>
+            </div>
+          </section>
+        </div>
+
+        <!-- ===================== VERIFICATION ===================== -->
+        <div class="set-panel" role="tabpanel" id="set-panel-verification" aria-labelledby="set-tab-verification" tabindex="0" hidden>
+          <section class="set-row" aria-labelledby="set-kyc-title">
+            <div class="set-row__intro">
+              <h2 id="set-kyc-title">Identity verification</h2>
+              <p>We're required to confirm who you are before you can withdraw. It usually takes a few minutes once your document is uploaded.</p>
+            </div>
+            <div class="set-row__body">
+              <ol class="set-kyc" role="list">
+                <li class="set-kyc__step" data-done>
+                  <span class="set-kyc__num" aria-hidden="true">✓</span>
+                  <div class="set-kyc__body">
+                    <h3 class="set-kyc__title">Personal info</h3>
+                    <p><span class="tag tag--plain tag--gain">Completed</span> <span class="set-meta">· 12 Aug 2026</span></p>
+                  </div>
+                </li>
+                <li class="set-kyc__step" data-done>
+                  <span class="set-kyc__num" aria-hidden="true">✓</span>
+                  <div class="set-kyc__body">
+                    <h3 class="set-kyc__title">Address</h3>
+                    <p><span class="tag tag--plain tag--gain">Completed</span> <span class="set-meta">· 12 Aug 2026</span></p>
+                  </div>
+                </li>
+                <li class="set-kyc__step" data-current>
+                  <span class="set-kyc__num" aria-hidden="true">03</span>
+                  <div class="set-kyc__body">
+                    <h3 class="set-kyc__title">ID document</h3>
+                    <p><span class="tag tag--plain tag--pending" data-set-kyc-status>Pending upload</span></p>
+                    <p class="set-meta">A passport, national ID card or driver's licence. Make sure all four corners are visible and the text is readable.</p>
+                    <form class="mt-4" action="#" method="post" enctype="multipart/form-data" data-component="set-kyc" data-max-mb="5" novalidate>
+                      <div class="field" data-set-file-field>
+                        <label class="set-drop" for="kyc-file" data-set-drop>
+                          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M12 16V4M7.5 8.5L12 4l4.5 4.5"/><path d="M4 15v3a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-3"/></svg>
+                          <span>Drop your file here or <strong>browse</strong></span>
+                          <span class="set-drop__file" data-set-file-name></span>
+                          <input class="sr-only" type="file" id="kyc-file" name="id-document" accept="image/*,application/pdf,.pdf" required aria-describedby="kyc-file-help kyc-file-error">
+                        </label>
+                        <p class="field__help" id="kyc-file-help">JPG, PNG, HEIC or PDF, up to 5 MB.</p>
+                        <p class="field__error" id="kyc-file-error"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7.5v5.5M12 16.5h.01"/></svg><span data-set-file-error></span></p>
+                      </div>
+                      <div class="set-form-foot"><button class="btn" type="submit">Submit for review</button></div>
+                    </form>
+                  </div>
+                </li>
+              </ol>
+            </div>
+          </section>
+        </div>
+      </div>
+
+      <footer class="app__foot"><p class="fineprint">Changes in this prototype are simulated and are not saved to your account.</p></footer>
+    </main>
+  </div>
+
+  <!-- ===================== MOBILE TAB BAR + TED AI (shared) ===================== -->
+  <nav class="tabbar" aria-label="Quick navigation">
+    <a href="index.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1z"/></svg>Home</a>
+    <a href="wallet.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M3 7a2 2 0 0 1 2-2h13v4"/><path d="M3 7v11a2 2 0 0 0 2 2h15V9H5a2 2 0 0 1-2-2z"/></svg>Wallet</a>
+    <a href="copy-traders.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0"/><path d="M16 4.5a3.5 3.5 0 0 1 0 7"/></svg>Traders</a>
+    <a href="plans.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M3 17l6-6 4 4 8-8"/><path d="M15 7h6v6"/></svg>Plans</a>
+    <button type="button" data-rail-toggle aria-controls="rail" aria-expanded="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>More</button>
+  </nav>
+  <button class="ai-fab" type="button" data-dialog-open="ted-ai"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/></svg>TED AI</button>
+
+  <dialog class="drawer" id="ted-ai" aria-labelledby="ted-ai-title">
+    <div class="drawer__inner">
+      <div class="drawer__head">
+        <h2 id="ted-ai-title" class="cluster" style="font-size:1.125rem; --cluster-gap: var(--space-2)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true" style="color: var(--color-signal)"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/></svg>TED AI</h2>
+        <button class="icon-btn" type="button" data-dialog-close aria-label="Close TED AI"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+      </div>
+      <div class="drawer__body" aria-live="polite">
+        <div class="ai-msg ai-msg--bot"><span class="ai-msg__who">TED AI · 09:41</span><p>Elena Vasquez opened a EUR/USD long. Your copy mirrored it at 1.0841 with a $42.10 allocation.</p></div>
+        <div class="ai-msg ai-msg--bot"><span class="ai-msg__who">Risk notice</span><p>Copying Aisha Rahman is paused because your 5% drawdown limit was reached. You can resume or adjust the limit from Copy traders.</p></div>
+        <div class="ai-msg ai-msg--user"><span class="ai-msg__who">You</span><p>How diversified is my portfolio?</p></div>
+        <div class="ai-msg ai-msg--bot"><span class="ai-msg__who">TED AI</span><p>You're spread across 4 asset classes. Crypto is 33% of your capital — above the 25% many beginners choose. Consider capping it in Copy traders.</p></div>
+      </div>
+      <form class="drawer__foot" data-demo-form="Message sent to TED AI">
+        <div class="field">
+          <label class="sr-only" for="ai-q">Ask TED AI</label>
+          <div class="field__control">
+            <input class="field__input" id="ai-q" name="q" placeholder="Ask about your portfolio…" required autocomplete="off">
+            <button class="icon-btn" type="submit" aria-label="Send"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4 12l16-8-6 16-2.5-6.5z"/></svg></button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </dialog>
+
+  <!-- ===================== SETTINGS DIALOGS ===================== -->
+  <dialog class="dialog" id="set-2fa-disable" aria-labelledby="set-2fa-disable-title">
+    <form action="#" method="post" data-set-otp="disable" novalidate>
+      <div class="dialog__head">
+        <h2 class="dialog__title" id="set-2fa-disable-title">Turn off two-factor authentication?</h2>
+        <button class="icon-btn" type="button" data-dialog-close aria-label="Close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+      </div>
+      <div class="dialog__body">
+        <p class="muted">Without 2FA, anyone with your password can sign in and request withdrawals. Enter the 6-digit code from your authenticator app to confirm.</p>
+        <div class="field set-code">
+          <label class="field__label" for="set-2fa-off-code">Authenticator code</label>
+          <div class="field__control"><input class="field__input" id="set-2fa-off-code" name="code" inputmode="numeric" autocomplete="one-time-code" pattern="[0-9]{6}" maxlength="6" required aria-describedby="set-2fa-off-error" placeholder="000000"></div>
+          <p class="field__error" id="set-2fa-off-error"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7.5v5.5M12 16.5h.01"/></svg>Enter the 6-digit code from your app.</p>
+        </div>
+      </div>
+      <div class="dialog__foot">
+        <button class="btn btn--outline" type="button" data-dialog-close>Keep 2FA on</button>
+        <button class="btn" type="submit">Turn off 2FA</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog class="dialog" id="set-2fa-enable" aria-labelledby="set-2fa-enable-title">
+    <form action="#" method="post" data-set-otp="enable" novalidate>
+      <div class="dialog__head">
+        <h2 class="dialog__title" id="set-2fa-enable-title">Set up two-factor authentication</h2>
+        <button class="icon-btn" type="button" data-dialog-close aria-label="Close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+      </div>
+      <div class="dialog__body">
+        <div class="set-qr">
+          <div class="set-qr__code" role="img" aria-label="QR code for your authenticator app (demo)" data-set-qr></div>
+          <ol class="set-qr__steps">
+            <li>Open an authenticator app such as Google Authenticator or 1Password.</li>
+            <li>Scan the QR code, or enter the key below.</li>
+            <li>Type the 6-digit code it shows.</li>
+          </ol>
+        </div>
+        <dl>
+          <div class="copyline">
+            <dt>Secret key</dt>
+            <dd><span class="set-secret">JBSW Y3DP EHPK 3PXP</span>
+              <button class="icon-btn" type="button" data-copy="JBSWY3DPEHPK3PXP" data-copy-message="Secret key copied" aria-label="Copy secret key"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h9"/></svg></button></dd>
+          </div>
+        </dl>
+        <div class="field set-code">
+          <label class="field__label" for="set-2fa-on-code">Authenticator code</label>
+          <div class="field__control"><input class="field__input" id="set-2fa-on-code" name="code" inputmode="numeric" autocomplete="one-time-code" pattern="[0-9]{6}" maxlength="6" required aria-describedby="set-2fa-on-error" placeholder="000000"></div>
+          <p class="field__error" id="set-2fa-on-error"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7.5v5.5M12 16.5h.01"/></svg>Enter the 6-digit code from your app.</p>
+        </div>
+      </div>
+      <div class="dialog__foot">
+        <button class="btn btn--outline" type="button" data-dialog-close>Cancel</button>
+        <button class="btn" type="submit">Turn on 2FA</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog class="dialog" id="set-password-dialog" aria-labelledby="set-password-title">
+    <form action="#" method="post" data-demo-form="Password updated">
+      <div class="dialog__head">
+        <h2 class="dialog__title" id="set-password-title">Change password</h2>
+        <button class="icon-btn" type="button" data-dialog-close aria-label="Close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+      </div>
+      <div class="dialog__body">
+        <input type="text" name="username" autocomplete="username" value="daniel.okafor@gmail.com" hidden>
+        <div class="field">
+          <label class="field__label" for="pw-current">Current password</label>
+          <div class="field__control">
+            <input class="field__input" id="pw-current" name="current-password" type="password" autocomplete="current-password" required>
+            <button class="icon-btn" type="button" data-component="password" aria-controls="pw-current" aria-pressed="false" aria-label="Show password"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg></button>
+          </div>
+        </div>
+        <div class="field">
+          <label class="field__label" for="pw-new">New password</label>
+          <div class="field__control">
+            <input class="field__input" id="pw-new" name="new-password" type="password" autocomplete="new-password" minlength="8" required data-meter="pw-meter" aria-describedby="pw-help pw-meter-label">
+            <button class="icon-btn" type="button" data-component="password" aria-controls="pw-new" aria-pressed="false" aria-label="Show password"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg></button>
+          </div>
+          <div class="meter mt-2" id="pw-meter" data-label="pw-meter-label" aria-hidden="true"><span></span><span></span><span></span><span></span></div>
+          <p class="field__help" id="pw-help">At least 8 characters. Longer, with mixed case, numbers and symbols, is stronger. <span id="pw-meter-label" aria-live="polite"></span></p>
+        </div>
+        <div class="field">
+          <label class="field__label" for="pw-confirm">Confirm new password</label>
+          <div class="field__control">
+            <input class="field__input" id="pw-confirm" name="confirm-password" type="password" autocomplete="new-password" minlength="8" required aria-describedby="pw-confirm-error">
+          </div>
+          <p class="field__error" id="pw-confirm-error"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7.5v5.5M12 16.5h.01"/></svg>Passwords don't match.</p>
+        </div>
+      </div>
+      <div class="dialog__foot">
+        <button class="btn btn--outline" type="button" data-dialog-close>Cancel</button>
+        <button class="btn" type="submit">Update password</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog class="dialog" id="set-email-dialog" aria-labelledby="set-email-dialog-title">
+    <form action="#" method="post" data-demo-form="Check your new inbox for a confirmation link">
+      <div class="dialog__head">
+        <h2 class="dialog__title" id="set-email-dialog-title">Change email address</h2>
+        <button class="icon-btn" type="button" data-dialog-close aria-label="Close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+      </div>
+      <div class="dialog__body">
+        <p class="muted">We'll send a confirmation link to the new address. Your current email (daniel.okafor@gmail.com) stays active until you confirm.</p>
+        <div class="field">
+          <label class="field__label" for="em-new">New email</label>
+          <div class="field__control"><input class="field__input" id="em-new" name="email" type="email" autocomplete="email" required></div>
+        </div>
+        <div class="field">
+          <label class="field__label" for="em-pw">Current password</label>
+          <div class="field__control"><input class="field__input" id="em-pw" name="current-password" type="password" autocomplete="current-password" required></div>
+        </div>
+      </div>
+      <div class="dialog__foot">
+        <button class="btn btn--outline" type="button" data-dialog-close>Cancel</button>
+        <button class="btn" type="submit">Send confirmation link</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog class="dialog" id="set-signout-dialog" aria-labelledby="set-signout-title" aria-describedby="set-signout-desc">
+    <div class="dialog__head">
+      <h2 class="dialog__title" id="set-signout-title">Sign out of all other sessions?</h2>
+      <button class="icon-btn" type="button" data-dialog-close aria-label="Close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+    </div>
+    <div class="dialog__body">
+      <p class="muted" id="set-signout-desc">Every device except this one will be signed out and will need your password and 2FA code to sign in again.</p>
+    </div>
+    <div class="dialog__foot">
+      <button class="btn btn--outline" type="button" data-dialog-close>Cancel</button>
+      <button class="btn" type="button" data-set-signout-all-confirm>Sign out other sessions</button>
+    </div>
+  </dialog>
+
+  <dialog class="dialog" id="set-close-dialog" aria-labelledby="set-close-title">
+    <form action="#" method="post" data-demo-form="Account closure requested. We'll email you to confirm.">
+      <div class="dialog__head">
+        <h2 class="dialog__title" id="set-close-title">Close your account</h2>
+        <button class="icon-btn" type="button" data-dialog-close aria-label="Close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+      </div>
+      <div class="dialog__body">
+        <p class="muted">Active copies are stopped and open positions are closed at the market price. Any remaining balance is returned to your verified withdrawal method. Closing can't be undone.</p>
+        <label class="check"><input type="checkbox" name="confirm-close" required>I understand that closing my account is permanent.</label>
+      </div>
+      <div class="dialog__foot">
+        <button class="btn btn--outline" type="button" data-dialog-close>Keep my account</button>
+        <button class="btn" type="submit">Close account</button>
+      </div>
+    </form>
+  </dialog>
+</body>
+</html>

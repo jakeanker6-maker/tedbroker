@@ -1,0 +1,300 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>TED Brokers — Copy the traders who win</title>
+  <meta name="description" content="Follow verified traders across forex, stocks, crypto and commodities. Every trade they make is mirrored in your account in real time.">
+  <meta name="theme-color" content="#0A1626">
+  <link rel="icon" href="assets/img/favicon.ico">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=JetBrains+Mono:wght@400;500;600&family=Sora:wght@300;600;700;800&display=swap">
+  <link rel="stylesheet" href="assets/css/main.css">
+  <link rel="stylesheet" href="assets/css/pages/home.css">
+  <script>document.documentElement.classList.add('js');try{var t=localStorage.getItem('ted:theme');if(t==='system')t=matchMedia('(prefers-color-scheme: light)').matches?'light':'dark';if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
+  <script type="module" src="assets/js/main.js"></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <!-- ============ Header ============ -->
+  <header class="site-header surface-ink">
+    <div class="container site-header__bar">
+      <a class="wordmark" href="index.html" aria-label="TED Brokers home">
+        <span class="wordmark__ted">TED</span><span class="wordmark__brokers">Br<svg class="wordmark__o" viewBox="0 0 20 20" aria-hidden="true"><g fill="currentColor"><circle cx="10" cy="2" r="1.6"/><circle cx="15.2" cy="4.1" r="1.4" opacity=".8"/><circle cx="17.9" cy="9.4" r="1.6"/><circle cx="16.3" cy="14.8" r="1.4" opacity=".8"/><circle cx="11.2" cy="17.9" r="1.6"/><circle cx="5.6" cy="16.4" r="1.4" opacity=".7"/><circle cx="2.2" cy="11.6" r="1.6"/><circle cx="3" cy="6" r="1.4" opacity=".8"/><circle cx="6.6" cy="2.9" r="1.1" opacity=".6"/><circle cx="10" cy="10" r="1.9"/><circle cx="13.3" cy="9.2" r="1" opacity=".7"/><circle cx="7.4" cy="12" r="1" opacity=".7"/></g></svg>kers</span>
+      </a>
+      <button class="icon-btn nav-toggle" type="button" data-nav-toggle aria-expanded="false" aria-controls="site-nav" aria-label="Menu">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h10"/></svg>
+      </button>
+      <nav class="site-nav" id="site-nav" aria-label="Main">
+        <ul class="site-nav__links" role="list">
+          <li><a href="index.html" aria-current="page">Home</a></li>
+          <li><a href="how-it-works.html">How it works</a></li>
+          <li><a href="traders.html">For traders</a></li>
+          <li><a href="about.html">Company</a></li>
+          <li><a href="help.html">Help</a></li>
+        </ul>
+        <div class="site-nav__actions">
+          <button class="lang-select" type="button" aria-label="Language: English">EN
+            <svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M2 3.5l3 3 3-3"/></svg>
+          </button>
+          <a class="site-nav__signin" href="login.html">Sign in</a>
+          <a class="btn btn--sm" href="register.html">Get started
+            <svg class="btn__arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </a>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <!-- ============ Hero ============ -->
+    <section class="hero surface-ink section" aria-labelledby="hero-title">
+      <div class="mesh" aria-hidden="true"><span></span></div>
+      <div class="grid-lines" aria-hidden="true"></div>
+      <div class="container hero__grid">
+        <div class="hero__copy">
+          <p class="overline overline--signal" data-reveal><span class="live-dot"></span> Live · <span data-count="2431">2,431</span> trades copied today</p>
+          <h1 class="display" id="hero-title" data-reveal style="--i:1">Copy the traders who <em>win.</em> <span class="nowrap">Automatically.</span></h1>
+          <p class="lead" data-reveal style="--i:2">Follow verified traders across forex, stocks, crypto and commodities. Every trade they make is mirrored in your account in real time — you stay in control of risk.</p>
+          <div class="hero__actions" data-reveal style="--i:3">
+            <a class="btn btn--lg" href="register.html">Start copying
+              <svg class="btn__arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            </a>
+            <a class="btn btn--lg btn--outline" href="how-it-works.html">See how it works</a>
+          </div>
+          <p class="hero__proof" data-reveal style="--i:4">
+            <span><b>340+</b> verified traders</span>
+            <span>Copy stop-loss on <b>every</b> copy</span>
+            <span><b>10</b> languages</span>
+          </p>
+        </div>
+
+        <div class="hero__visual" data-reveal style="--i:2">
+          <canvas class="dotfield" data-component="dotfield" data-mode="globe" aria-hidden="true"></canvas>
+          <div class="hero-live">
+            <div class="hero-live__head">
+              <span class="overline">Elena V. · equity, 30 days</span>
+              <span class="delta" data-trend="up">+24.5%</span>
+            </div>
+            <div class="chart" style="--chart-h: 9rem" role="img" data-component="chart" data-series="walk:40,seed=21,drift=.9,start=100,end=124.5" data-format="number" data-decimals="1" data-start="2026-09-28" data-series-name="Index" aria-label="Elena V. equity curve, up 24.5% over 30 days"></div>
+          </div>
+          <p class="hero-trader">
+            <span class="avatar">EV</span>
+            <span><strong>Elena Vasquez</strong> <span class="muted">Forex · London breakout</span></span>
+            <span class="delta" data-trend="up">38.2% YTD</span>
+            <span class="muted mono">1,419 copiers</span>
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ Ticker ============ -->
+    <div class="ticker surface-ink" data-component="ticker" role="region" aria-label="Market prices (indicative)">
+      <div class="ticker__track">
+        <ul class="ticker__list" role="list">
+          <li class="ticker__item"><span class="ticker__sym">EUR/USD</span><span class="ticker__px">1.0842</span><span class="delta" data-trend="up">+0.21%</span></li>
+          <li class="ticker__item"><span class="ticker__sym">BTC/USD</span><span class="ticker__px">67,412.00</span><span class="delta" data-trend="up">+1.84%</span></li>
+          <li class="ticker__item"><span class="ticker__sym">AAPL</span><span class="ticker__px">228.14</span><span class="delta" data-trend="down">−0.42%</span></li>
+          <li class="ticker__item"><span class="ticker__sym">XAU/USD</span><span class="ticker__px">2,384.10</span><span class="delta" data-trend="up">+0.35%</span></li>
+          <li class="ticker__item"><span class="ticker__sym">NAS100</span><span class="ticker__px">19,880.40</span><span class="delta" data-trend="up">+0.66%</span></li>
+          <li class="ticker__item"><span class="ticker__sym">ETH/USD</span><span class="ticker__px">3,540.80</span><span class="delta" data-trend="up">+2.11%</span></li>
+          <li class="ticker__item"><span class="ticker__sym">GBP/USD</span><span class="ticker__px">1.2711</span><span class="delta" data-trend="down">−0.08%</span></li>
+          <li class="ticker__item"><span class="ticker__sym">TSLA</span><span class="ticker__px">241.62</span><span class="delta" data-trend="down">−1.12%</span></li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- ============ Stats ============ -->
+    <section class="section section--tight surface-ink" aria-label="TED Brokers in numbers">
+      <div class="container">
+        <div class="stat-strip stat-strip--plain" style="--stat-min: 14rem">
+          <div class="stat" data-reveal><span class="stat__label">Active copiers</span><span class="stat__value stat__value--xl" data-count="10000" data-suffix="+">10,000+</span><span class="stat__meta">Across 4 continents</span></div>
+          <div class="stat" data-reveal style="--i:1"><span class="stat__label">Top-trader win rate*</span><span class="stat__value stat__value--xl gain" data-count="87" data-suffix="%">87%</span><span class="stat__meta">Trailing 12 months</span></div>
+          <div class="stat" data-reveal style="--i:2"><span class="stat__label">User rating</span><span class="stat__value stat__value--xl">4.8/5</span><span class="stat__meta">From verified users</span></div>
+          <div class="stat" data-reveal style="--i:3"><span class="stat__label">Support</span><span class="stat__value stat__value--xl">24/7</span><span class="stat__meta">Live chat in 10 languages</span></div>
+        </div>
+        <p class="fineprint mt-6">*Past performance of top-ranked traders. Not a guarantee of future results.</p>
+      </div>
+    </section>
+
+    <!-- ============ How it works ============ -->
+    <section class="section surface-paper" aria-labelledby="how-title">
+      <div class="container split" style="--split-cols: minmax(0, 5fr) minmax(0, 7fr)">
+        <div class="sticky stack" style="--stack-gap: var(--space-5)">
+          <p class="overline overline--accent">01 — How it works</p>
+          <h2 id="how-title" class="h-xl">How copy trading works.</h2>
+          <p class="lead">You don't need to analyse charts every morning. Connect with proven traders and mirror their moves — with limits you set.</p>
+          <a class="link-arrow link-arrow--accent" href="how-it-works.html">The full walkthrough
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+        </div>
+        <ol class="num-rows" role="list">
+          <li class="num-row"><span class="num-row__index" aria-hidden="true">01</span><div class="num-row__body"><h3 class="num-row__title">Create &amp; verify your account</h3><p class="num-row__text">Sign up in minutes, then complete identity verification so your account is ready to fund.</p></div></li>
+          <li class="num-row"><span class="num-row__index" aria-hidden="true">02</span><div class="num-row__body"><h3 class="num-row__title">Fund your wallet — bank, crypto or PayPal</h3><p class="num-row__text">Deposit by bank transfer, BTC, ETH or USDT, or PayPal. Fees and timings are shown before you confirm.</p></div></li>
+          <li class="num-row"><span class="num-row__index" aria-hidden="true">03</span><div class="num-row__body"><h3 class="num-row__title">Pick a trader by return, risk and style</h3><p class="num-row__text">Compare track records, maximum drawdown, win rate and a 1–10 risk score before you allocate.</p></div></li>
+          <li class="num-row"><span class="num-row__index" aria-hidden="true">04</span><div class="num-row__body"><h3 class="num-row__title">Copy automatically, stop anytime</h3><p class="num-row__text">Positions are mirrored in proportion to your allocation. Pause, set a copy stop-loss or stop copying with one click.</p></div></li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- ============ Top traders ============ -->
+    <section class="section surface-paper section--flush-top" aria-labelledby="top-title">
+      <div class="container">
+        <div class="section-head">
+          <div class="stack">
+            <p class="overline overline--accent">Leaderboard</p>
+            <h2 id="top-title">Top traders this month</h2>
+          </div>
+          <p class="overline">Ranked by risk-adjusted return · 12 months</p>
+        </div>
+        <div class="ledger-wrap" tabindex="0" role="region" aria-labelledby="top-title">
+          <table class="ledger ledger--lg ledger--on-paper">
+            <thead>
+              <tr><th scope="col">Trader</th><th scope="col" class="is-num">12-mo return</th><th scope="col"><span class="sr-only">Trend</span></th><th scope="col" class="is-num">Win rate</th><th scope="col">Risk</th><th scope="col" class="is-num">Copiers</th><th scope="col"><span class="sr-only">Action</span></th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><div class="person"><span class="avatar">EV</span><div><div class="person__name">Elena Vasquez</div><div class="person__meta">Forex · London breakout</div></div></div></td>
+                <td class="is-num"><span class="delta" data-trend="up">+38.2%</span></td>
+                <td><span class="spark" data-component="spark" data-series="walk:24,seed=3,drift=.8"></span></td>
+                <td class="is-num">76.4%</td>
+                <td><span class="riskbar" style="--risk:4"><span class="riskbar__track"></span>4/10</span></td>
+                <td class="is-num">1,419</td>
+                <td class="is-end"><a class="text-btn" href="register.html">Copy <span aria-hidden="true">→</span><span class="sr-only"> Elena Vasquez</span></a></td>
+              </tr>
+              <tr>
+                <td><div class="person"><span class="avatar avatar--amber">MC</span><div><div class="person__name">Marcus Chen</div><div class="person__meta">Crypto · Momentum alpha</div></div></div></td>
+                <td class="is-num"><span class="delta" data-trend="up">+52.7%</span></td>
+                <td><span class="spark" data-component="spark" data-series="walk:24,seed=8,drift=1.1,vol=1.6"></span></td>
+                <td class="is-num">68.1%</td>
+                <td><span class="riskbar" data-level="med" style="--risk:6"><span class="riskbar__track"></span>6/10</span></td>
+                <td class="is-num">2,884</td>
+                <td class="is-end"><a class="text-btn" href="register.html">Copy <span aria-hidden="true">→</span><span class="sr-only"> Marcus Chen</span></a></td>
+              </tr>
+              <tr>
+                <td><div class="person"><span class="avatar avatar--navy">AR</span><div><div class="person__name">Aisha Rahman</div><div class="person__meta">Stocks · Large-cap tech</div></div></div></td>
+                <td class="is-num"><span class="delta" data-trend="up">+21.4%</span></td>
+                <td><span class="spark" data-component="spark" data-series="walk:24,seed=14,drift=.6,vol=.6"></span></td>
+                <td class="is-num">81.9%</td>
+                <td><span class="riskbar" style="--risk:3"><span class="riskbar__track"></span>3/10</span></td>
+                <td class="is-num">932</td>
+                <td class="is-end"><a class="text-btn" href="register.html">Copy <span aria-hidden="true">→</span><span class="sr-only"> Aisha Rahman</span></a></td>
+              </tr>
+              <tr>
+                <td><div class="person"><span class="avatar">LB</span><div><div class="person__name">Lukas Brandt</div><div class="person__meta">Commodities · Energy &amp; gold</div></div></div></td>
+                <td class="is-num"><span class="delta" data-trend="up">+17.9%</span></td>
+                <td><span class="spark" data-component="spark" data-series="walk:24,seed=22,drift=.5"></span></td>
+                <td class="is-num">74.2%</td>
+                <td><span class="riskbar" style="--risk:4"><span class="riskbar__track"></span>4/10</span></td>
+                <td class="is-num">675</td>
+                <td class="is-end"><a class="text-btn" href="register.html">Copy <span aria-hidden="true">→</span><span class="sr-only"> Lukas Brandt</span></a></td>
+              </tr>
+              <tr>
+                <td><div class="person"><span class="avatar avatar--accent">SM</span><div><div class="person__name">Sofia Moretti</div><div class="person__meta">Indices · S&amp;P &amp; DAX flow</div></div></div></td>
+                <td class="is-num"><span class="delta" data-trend="up">+26.3%</span></td>
+                <td><span class="spark" data-component="spark" data-series="walk:24,seed=31,drift=.7"></span></td>
+                <td class="is-num">79.0%</td>
+                <td><span class="riskbar" data-level="med" style="--risk:5"><span class="riskbar__track"></span>5/10</span></td>
+                <td class="is-num">1,120</td>
+                <td class="is-end"><a class="text-btn" href="register.html">Copy <span aria-hidden="true">→</span><span class="sr-only"> Sofia Moretti</span></a></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="cluster mt-6" style="justify-content: space-between">
+          <p class="overline">Showing 5 of 340+ verified traders</p>
+          <a class="link-arrow" href="register.html">View the full trader directory
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ Risk ============ -->
+    <section class="section surface-ink risk" aria-labelledby="risk-title">
+      <canvas class="dotfield" data-component="dotfield" data-mode="field" data-density=".6" aria-hidden="true"></canvas>
+      <div class="container split" style="--split-align: center">
+        <div class="stack" style="--stack-gap: var(--space-5)">
+          <p class="overline overline--signal">Risk controls</p>
+          <h2 id="risk-title" class="h-xl">Risk managed, not ignored.</h2>
+          <p class="lead">High returns mean nothing if one bad position wipes out your balance. These limits are built into every copy.</p>
+          <dl class="risk-list">
+            <div><dt>Copy stop-loss <span class="tag tag--gain">Automatic</span></dt><dd>Set a maximum drawdown per trader. If it's reached, copying stops and positions close.</dd></div>
+            <div><dt>Allocation limits <span class="tag">Per trader</span></dt><dd>Cap how much of your wallet any single trader or plan can use.</dd></div>
+            <div><dt>Real-time monitoring <span class="tag tag--accent">Live</span></dt><dd>See every copied position as it opens and closes, and get alerted when a trader's behaviour changes.</dd></div>
+          </dl>
+        </div>
+        <div class="donut" data-component="donut" style="--donut-size: clamp(12rem, 20vw, 17rem)">
+          <div class="donut__ring" data-ring><div class="donut__center"><strong>4</strong><span>Asset classes</span></div></div>
+          <ul class="legend" role="list" aria-label="Example diversified allocation">
+            <li data-value="35" style="--c: var(--teal-300)">Forex <strong>35%</strong><span></span></li>
+            <li data-value="25" style="--c: var(--red-400)">Crypto <strong>25%</strong><span></span></li>
+            <li data-value="25" style="--c: var(--slate-200)">Stocks <strong>25%</strong><span></span></li>
+            <li data-value="15" style="--c: var(--amber-400)">Commodities <strong>15%</strong><span></span></li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ Testimonials ============ -->
+    <section class="section surface-ink" aria-labelledby="quotes-title" style="border-block-start: 1px solid var(--color-border)">
+      <div class="container">
+        <h2 id="quotes-title" class="overline" style="display:flex; justify-content:center">What copiers say</h2>
+        <div class="quote mt-6" data-component="quotes">
+          <figure data-slide>
+            <div class="quote__mark" aria-hidden="true">“</div>
+            <blockquote class="quote__text">I used to lose money trying to day-trade between meetings. Now I split my allocation across two traders and check in once a week.</blockquote>
+            <figcaption><div class="quote__by">Sarah M.</div><div class="quote__role">Copying since 2024</div></figcaption>
+          </figure>
+          <figure data-slide hidden>
+            <div class="quote__mark" aria-hidden="true">“</div>
+            <blockquote class="quote__text">The risk score and drawdown numbers made it easy to pick traders that match how much I'm willing to lose.</blockquote>
+            <figcaption><div class="quote__by">John D.</div><div class="quote__role">Copying since 2025</div></figcaption>
+          </figure>
+          <figure data-slide hidden>
+            <div class="quote__mark" aria-hidden="true">“</div>
+            <blockquote class="quote__text">Setting a copy stop-loss gave me the confidence to start. I can see every trade as it happens.</blockquote>
+            <figcaption><div class="quote__by">Michael T.</div><div class="quote__role">Copying since 2024</div></figcaption>
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ CTA ============ -->
+    <section class="cta-band" aria-labelledby="cta-title">
+      <div class="container cta-band__inner">
+        <div>
+          <p class="overline">Sign up in minutes</p>
+          <h2 id="cta-title" class="mt-4">Your first copied trade is minutes away.</h2>
+          <p>Create a free account, verify your identity and fund your wallet from $50.</p>
+        </div>
+        <a class="btn btn--lg btn--white" href="register.html">Create free account
+          <svg class="btn__arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+      </div>
+    </section>
+  </main>
+
+  <!-- ============ Footer ============ -->
+  <footer class="site-footer surface-ink">
+    <div class="container">
+      <div class="site-footer__top">
+        <div class="site-footer__brand">
+          <a class="wordmark" href="index.html" aria-label="TED Brokers home"><span class="wordmark__ted">TED</span><span class="wordmark__brokers">Brokers</span></a>
+          <p>Copy trading across forex, stocks, crypto and commodities — with the controls to manage your risk.</p>
+          <address class="site-footer__contact">330 Hudson Street, 12th Floor<br>New York, NY 10013<br><a href="tel:+13322208968">+1 (332) 220-8968</a></address>
+        </div>
+        <nav aria-labelledby="f-company"><h2 id="f-company">Company</h2><ul role="list"><li><a href="about.html">About us</a></li><li><a href="help.html#contact">Contact</a></li><li><a href="help.html">FAQs</a></li></ul></nav>
+        <nav aria-labelledby="f-resources"><h2 id="f-resources">Resources</h2><ul role="list"><li><a href="how-it-works.html">How it works</a></li><li><a href="traders.html">For traders</a></li><li><a href="help.html">Help center</a></li></ul></nav>
+        <nav aria-labelledby="f-legal"><h2 id="f-legal">Legal</h2><ul role="list"><li><a href="#">Privacy policy</a></li><li><a href="#">Terms &amp; conditions</a></li><li><a href="#">AML / KYC policy</a></li><li><a href="#">Risk disclosure</a></li></ul></nav>
+      </div>
+      <p class="fineprint site-footer__risk"><strong>Risk warning:</strong> Trading forex, cryptocurrencies, stocks and other financial instruments carries a high level of risk and may not be suitable for all investors. You could lose some or all of your capital. Copy trading does not constitute investment advice. Past performance of any trader is not a reliable indicator of future results.</p>
+      <div class="site-footer__bottom">
+        <span>© 2026 TED Brokers</span>
+        <ul class="site-footer__langs" role="list" aria-label="Language">
+          <li><a href="#" aria-current="true" lang="en">EN</a></li><li><a href="#" lang="es">ES</a></li><li><a href="#" lang="de">DE</a></li><li><a href="#" lang="fr">FR</a></li><li><a href="#" lang="pt">PT</a></li><li><a href="#" lang="ar">AR</a></li><li><a href="#" lang="zh">中文</a></li>
+        </ul>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>

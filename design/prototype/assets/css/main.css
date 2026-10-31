@@ -1,0 +1,12 @@
+/* TED Brokers — Market Pulse. Single entry stylesheet. */
+@import url("reset.css") layer(reset);
+@import url("tokens.css") layer(tokens);
+@import url("base.css") layer(base);
+@import url("layout.css") layer(layout);
+@import url("components.css") layer(components);
+@import url("public.css") layer(shell);
+@import url("app.css") layer(shell);
+@import url("utilities.css") layer(utilities);
+
+/* Page-specific stylesheets (assets/css/pages/*.css) wrap their rules in @layer pages. */
+@layer reset, tokens, base, layout, components, shell, pages, utilities;

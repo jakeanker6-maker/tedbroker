@@ -1,0 +1,909 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Copy Traders — TED Brokers Desktop Terminal</title>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Google Fonts: Sora, DM Sans, JetBrains Mono, Public Sans -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,700;1,9..40,400&amp;family=JetBrains+Mono:wght@300;400;500;600;700&amp;family=Public+Sans:wght@400;500;600;700&amp;family=Sora:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS with configuration plugin -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "primary-fixed-dim": "#ffb3ad",
+            "on-surface": "#d7e3fa",
+            "outline-variant": "#5d3f3d",
+            "surface-container-low": "#101c2c",
+            "secondary": "#9fcbf2",
+            "tertiary-container": "#008479",
+            "on-tertiary": "#003732",
+            "surface-container-lowest": "#030e1e",
+            "on-surface-variant": "#e6bdb9",
+            "on-primary-fixed": "#410004",
+            "surface-container-high": "#1f2a3b",
+            "surface-container": "#152030",
+            "secondary-fixed": "#cbe6ff",
+            "secondary-fixed-dim": "#9fcbf2",
+            "tertiary-fixed-dim": "#51dbcb",
+            "on-error-container": "#ffdad6",
+            "on-secondary": "#003450",
+            "surface": "#081424",
+            "on-secondary-fixed": "#001e30",
+            "primary-fixed": "#ffdad7",
+            "primary-container": "#e3262f",
+            "tertiary": "#51dbcb",
+            "inverse-primary": "#c0001c",
+            "surface-dim": "#081424",
+            "primary": "#ffb3ad",
+            "surface-variant": "#2a3547",
+            "error": "#ffb4ab",
+            "on-background": "#d7e3fa",
+            "outline": "#ad8885",
+            "error-container": "#93000a",
+            "on-primary-container": "#fffeff",
+            "on-error": "#690005",
+            "background": "#081424",
+            "on-secondary-fixed-variant": "#184b6b",
+            "surface-tint": "#ffb3ad",
+            "on-secondary-container": "#91bde3",
+            "inverse-surface": "#d7e3fa",
+            "on-primary-fixed-variant": "#930013",
+            "inverse-on-surface": "#263142",
+            "surface-bright": "#2e3a4b",
+            "on-tertiary-fixed-variant": "#005049",
+            "secondary-container": "#1c4d6e",
+            "surface-container-highest": "#2a3547",
+            "tertiary-fixed": "#72f8e7",
+            "on-tertiary-container": "#fafffd",
+            "on-primary": "#68000a",
+            "on-tertiary-fixed": "#00201d",
+            "brand-red": "#E3262F",
+            "brand-teal": "#2EE6D3",
+            "brand-amber": "#F59E0B",
+            "brand-loss": "#E5484D",
+            "hairline-dark": "#17273D",
+            "hairline-border": "#1F334E",
+            "ink-sidebar": "#11223A",
+            "ink-canvas": "#0A1626"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "space-sm": "0.5rem",
+            "space-xl": "2rem",
+            "space-md": "1rem",
+            "space-lg": "1.5rem",
+            "margin": "1.5rem",
+            "gutter": "1rem",
+            "space-xs": "0.25rem"
+          },
+          "fontFamily": {
+            "headline-lg": ["Sora", "sans-serif"],
+            "headline-md": ["Sora", "sans-serif"],
+            "body-md": ["DM Sans", "sans-serif"],
+            "body-lg": ["DM Sans", "sans-serif"],
+            "data-mono": ["JetBrains Mono", "monospace"],
+            "label-md": ["Public Sans", "sans-serif"],
+            "display-lg": ["Sora", "sans-serif"]
+          },
+          "fontSize": {
+            "headline-lg": ["36px", { "lineHeight": "44px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+            "headline-md": ["28px", { "lineHeight": "36px", "letterSpacing": "-0.015em", "fontWeight": "600" }],
+            "body-md": ["15px", { "lineHeight": "22px", "fontWeight": "400" }],
+            "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+            "data-mono": ["14px", { "lineHeight": "20px", "fontWeight": "500" }],
+            "label-md": ["12px", { "lineHeight": "16px", "letterSpacing": "0.12em", "fontWeight": "600" }],
+            "display-lg": ["72px", { "lineHeight": "80px", "letterSpacing": "-0.035em", "fontWeight": "700" }]
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    /* Custom terminal hairline details & slider */
+    input[type=range] {
+      -webkit-appearance: none;
+      background: #17273D;
+      height: 3px;
+    }
+    input[type=range]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 12px;
+      height: 12px;
+      border-radius: 0;
+      background: #E3262F;
+      cursor: pointer;
+    }
+    .material-symbols-outlined {
+      font-size: 18px;
+      line-height: 1;
+      display: inline-block;
+      vertical-align: middle;
+    }
+    /* Disable default table layout styling */
+    table {
+      border-collapse: collapse;
+    }
+  </style>
+</head>
+<body class="bg-[#0A1626] text-on-surface font-body-md antialiased min-h-screen overflow-x-hidden selection:bg-brand-red selection:text-white">
+<!-- Desktop App Shell Container -->
+<div class="flex min-h-screen w-full">
+<!-- LEFT RAIL NAVIGATION (240px wide, Ink-2 #11223A) -->
+<aside class="w-[240px] flex-shrink-0 bg-[#11223A] border-r border-[#17273D] flex flex-col justify-between z-30 select-none">
+<div>
+<!-- Wordmark / Brand Anchor -->
+<div class="h-16 px-5 flex items-center justify-between border-b border-[#17273D]">
+<div class="flex items-center gap-2"><span class="font-headline-md text-headline-md tracking-tight font-bold whitespace-nowrap"><span class="text-[#E3262F]">TED</span> <span class="text-white">Brokers</span></span></div>
+</div>
+<!-- Navigation Group -->
+<nav class="py-4 flex flex-col gap-0.5">
+<!-- Overview -->
+<a class="px-5 py-2.5 flex items-center gap-3 text-sm font-label-md text-gray-400 hover:text-white hover:bg-white/[0.02] transition-colors" href="#">
+<span class="material-symbols-outlined text-gray-400" data-icon="dashboard">dashboard</span>
+<span>Overview</span>
+</a>
+<!-- Wallet -->
+<a class="px-5 py-2.5 flex items-center gap-3 text-sm font-label-md text-gray-400 hover:text-white hover:bg-white/[0.02] transition-colors" href="#">
+<span class="material-symbols-outlined text-gray-400" data-icon="account_balance_wallet">account_balance_wallet</span>
+<span>Wallet</span>
+</a>
+<!-- Portfolio -->
+<a class="px-5 py-2.5 flex items-center gap-3 text-sm font-label-md text-gray-400 hover:text-white hover:bg-white/[0.02] transition-colors" href="#">
+<span class="material-symbols-outlined text-gray-400" data-icon="pie_chart">pie_chart</span>
+<span>Portfolio</span>
+</a>
+<!-- Copy Traders (ACTIVE STATE: red 2px inline-start bar #E3262F, text on-surface, active highlight) -->
+<a class="relative px-5 py-2.5 flex items-center justify-between text-sm font-label-md text-white bg-[#0A1626]/80 font-semibold" href="#">
+<div class="absolute left-0 top-0 bottom-0 w-[2px] bg-[#E3262F]"></div>
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-[#E3262F]" data-icon="groups">groups</span>
+<span>Copy traders</span>
+</div>
+<span class="text-xs font-data-mono text-[#2EE6D3] font-medium tracking-wider">3 LIVE</span>
+</a>
+<!-- Investment Plans Accordion / Dropdown -->
+<div class="mt-1">
+<div class="px-5 py-2.5 flex items-center justify-between text-sm font-label-md text-gray-400 hover:text-white cursor-pointer select-none">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-gray-400" data-icon="auto_graph">auto_graph</span>
+<span>Investment Plans</span>
+</div>
+<span class="material-symbols-outlined text-xs text-gray-500" data-icon="expand_more">expand_more</span>
+</div>
+<!-- Sub-items with hairline left guide -->
+<div class="ml-9 pl-3 border-l border-[#1F334E] flex flex-col gap-1.5 py-1 text-xs font-label-md text-gray-400">
+<a class="py-1 hover:text-white transition-colors" href="#">Robo Advisor</a>
+<a class="py-1 hover:text-white transition-colors" href="#">ETF Baskets</a>
+<a class="py-1 hover:text-white transition-colors" href="#">DeFi Yields</a>
+<a class="py-1 hover:text-white transition-colors" href="#">Options Alpha</a>
+<div class="flex items-center justify-between py-1 text-gray-500">
+<span>ETH Staking</span>
+<span class="text-xs font-data-mono text-gray-500">SOON</span>
+</div>
+</div>
+</div>
+<!-- Network feed -->
+<a class="px-5 py-2.5 flex items-center gap-3 text-sm font-label-md text-gray-400 hover:text-white hover:bg-white/[0.02] transition-colors mt-1" href="#">
+<span class="material-symbols-outlined text-gray-400" data-icon="hub">hub</span>
+<span>Network feed</span>
+</a>
+<!-- Referrals -->
+<a class="px-5 py-2.5 flex items-center gap-3 text-sm font-label-md text-gray-400 hover:text-white hover:bg-white/[0.02] transition-colors" href="#">
+<span class="material-symbols-outlined text-gray-400" data-icon="share">share</span>
+<span>Referrals</span>
+</a>
+<!-- News & Terminal -->
+<a class="px-5 py-2.5 flex items-center gap-3 text-sm font-label-md text-gray-400 hover:text-white hover:bg-white/[0.02] transition-colors" href="#">
+<span class="material-symbols-outlined text-gray-400" data-icon="terminal">terminal</span>
+<span>News &amp; Terminal</span>
+</a>
+</nav>
+</div>
+<!-- Bottom Rail items & User Profile -->
+<div class="border-t border-[#17273D] p-4 flex flex-col gap-3">
+<div class="flex items-center justify-between text-xs font-label-md text-gray-400 px-1">
+<a class="hover:text-white flex items-center gap-1.5 transition-colors" href="#">
+<span class="material-symbols-outlined text-sm" data-icon="help_outline">help_outline</span>
+            Help center
+          </a>
+<a class="hover:text-white flex items-center gap-1.5 transition-colors" href="#">
+<span class="material-symbols-outlined text-sm" data-icon="settings">settings</span>
+            Settings
+          </a>
+</div>
+<!-- User profile section -->
+<div class="pt-3 border-t border-[#17273D] flex items-center justify-between">
+<div class="flex items-center gap-2.5">
+<div class="w-8 h-8 rounded-full bg-[#1F334E] flex items-center justify-center font-data-mono text-xs font-bold text-white border border-[#2EE6D3]/40">
+              DO
+            </div>
+<div>
+<div class="text-xs font-medium text-white tracking-tight leading-snug">Daniel Okafor</div>
+<div class="flex items-center gap-1 text-[10px] font-data-mono text-[#2EE6D3]">
+<span class="inline-block w-1.5 h-1.5 rounded-full bg-[#2EE6D3]"></span>
+                Verified T-1
+              </div>
+</div>
+</div>
+<span class="material-symbols-outlined text-gray-500 cursor-pointer hover:text-white" data-icon="unfold_more">unfold_more</span>
+</div>
+</div>
+</aside>
+<!-- RIGHT MAIN WORKSPACE -->
+<div class="flex-1 flex flex-col min-w-0 bg-[#0A1626]">
+<!-- LIVE MARKET TICKER HEADER STRIP -->
+<div class="h-7 bg-[#060E1A] border-b border-[#17273D] flex items-center overflow-x-hidden whitespace-nowrap px-4 font-data-mono text-[11px] text-gray-400 select-none">
+<div class="flex items-center gap-6">
+<div class="flex items-center gap-1.5">
+<span class="text-gray-300 font-medium">EUR/USD</span>
+<span>1.0842</span>
+<span class="text-[#2EE6D3]">▲ +0.21%</span>
+</div>
+<span class="text-gray-700">|</span>
+<div class="flex items-center gap-1.5">
+<span class="text-gray-300 font-medium">BTC/USD</span>
+<span>67,412.00</span>
+<span class="text-[#2EE6D3]">▲ +1.84%</span>
+</div>
+<span class="text-gray-700">|</span>
+<div class="flex items-center gap-1.5">
+<span class="text-gray-300 font-medium">ETH/USD</span>
+<span>3,540.80</span>
+<span class="text-[#2EE6D3]">▲ +2.11%</span>
+</div>
+<span class="text-gray-700">|</span>
+<div class="flex items-center gap-1.5">
+<span class="text-gray-300 font-medium">AAPL</span>
+<span>228.14</span>
+<span class="text-[#E5484D]">▼ -0.42%</span>
+</div>
+<span class="text-gray-700">|</span>
+<div class="flex items-center gap-1.5">
+<span class="text-gray-300 font-medium">XAU/USD</span>
+<span>2,384.10</span>
+<span class="text-[#2EE6D3]">▲ +0.35%</span>
+</div>
+<span class="text-gray-700">|</span>
+<div class="flex items-center gap-1.5">
+<span class="text-gray-300 font-medium">NVDA</span>
+<span>128.90</span>
+<span class="text-[#2EE6D3]">▲ +3.41%</span>
+</div>
+<span class="text-gray-700">|</span>
+<div class="flex items-center gap-1.5">
+<span class="text-gray-300 font-medium">US10Y</span>
+<span>4.182</span>
+<span class="text-[#E5484D]">▼ -0.012</span>
+</div>
+</div>
+</div>
+<!-- MAIN APP TOP BAR -->
+<header class="h-14 px-8 border-b border-[#17273D] flex items-center justify-between bg-[#0A1626]/90 backdrop-blur-sm sticky top-0 z-20">
+<!-- Search Input with ⌘K Hint -->
+<div class="flex items-center gap-3 w-96 border-b border-[#1F334E] pb-1 pt-0.5 focus-within:border-[#E3262F] transition-colors">
+<span class="material-symbols-outlined text-gray-500 text-sm" data-icon="search">search</span>
+<input class="bg-transparent border-0 p-0 text-xs font-body-md text-white placeholder-gray-500 focus:ring-0 w-full outline-none" placeholder="Search verified leaders, asset tags, or instruments..." type="text"/>
+<kbd class="text-[10px] font-data-mono text-gray-500 border border-gray-700/60 px-1 py-0.5">⌘K</kbd>
+</div>
+<!-- Right utility cluster -->
+<div class="flex items-center gap-5">
+<!-- Language Selector -->
+<div class="flex items-center gap-1 text-xs font-data-mono text-gray-300 hover:text-white cursor-pointer">
+<span class="material-symbols-outlined text-sm" data-icon="language">language</span>
+<span>EN</span>
+<span class="material-symbols-outlined text-[10px] text-gray-500" data-icon="expand_more">expand_more</span>
+</div>
+<!-- Theme toggle -->
+<button class="text-gray-400 hover:text-white p-1" title="Theme">
+<span class="material-symbols-outlined text-sm" data-icon="dark_mode">dark_mode</span>
+</button>
+<!-- Notification bell with indicator dot -->
+<div class="relative cursor-pointer text-gray-400 hover:text-white p-1">
+<span class="material-symbols-outlined text-sm" data-icon="notifications">notifications</span>
+<span class="absolute top-1 right-1 w-1.5 h-1.5 bg-[#E3262F] rounded-full"></span>
+</div>
+<div class="h-4 w-[1px] bg-[#17273D]"></div>
+<!-- TED AI Outline Button -->
+<button class="h-9 px-3.5 border border-[#1F334E] hover:border-[#2EE6D3]/60 bg-transparent text-xs font-data-mono text-[#2EE6D3] flex items-center gap-2 hover:bg-[#2EE6D3]/5 transition-all">
+<span class="material-symbols-outlined text-xs" data-icon="psychology">psychology</span>
+<span>TED AI Terminal</span>
+</button>
+<!-- Solid Red CTA Button (+ Deposit) -->
+<button class="h-9 px-5 bg-[#E3262F] hover:bg-[#c0001c] active:opacity-90 text-xs font-label-md font-semibold text-white flex items-center gap-1.5 transition-all tracking-wider uppercase">
+<span>+ Deposit</span>
+</button>
+</div>
+</header>
+<!-- MAIN CONTENT VIEW CANVAS -->
+<main class="flex-1 px-8 py-7 overflow-y-auto">
+<!-- 1. Header Section -->
+<div class="mb-6 flex flex-col md:flex-row md:items-baseline justify-between gap-2">
+<div>
+<h1 class="font-headline-lg text-headline-lg font-bold text-white tracking-tight">Copy traders</h1>
+<p class="font-data-mono text-xs text-gray-400 mt-1">
+              340 verified traders · Available balance <span class="text-white font-medium">$6,420.00 USDC</span>
+</p>
+</div>
+<div class="flex items-center gap-3 text-xs font-data-mono text-gray-400">
+<span>SYNC: <span class="text-[#2EE6D3]">LD4 Equinix (0.8ms)</span></span>
+<span class="text-gray-700">·</span>
+<span>SLIPPAGE CAP: <span class="text-white">0.05%</span></span>
+</div>
+</div>
+<!-- 2. Filter & Control Bar (Strictly no card, no pill pills, underline style controls) -->
+<div class="flex flex-wrap items-center justify-between border-b border-[#1F334E] pb-3 mb-6 gap-y-3">
+<!-- Text Tabs with active red underline -->
+<div class="flex items-center gap-8 text-sm font-label-md">
+<button class="text-white font-semibold border-b-2 border-[#E3262F] pb-3 -mb-[13px] tracking-wide">
+              All
+            </button>
+<button class="text-gray-400 hover:text-white transition-colors pb-3 -mb-[13px] tracking-wide">
+              Forex
+            </button>
+<button class="text-gray-400 hover:text-white transition-colors pb-3 -mb-[13px] tracking-wide">
+              Crypto
+            </button>
+<button class="text-gray-400 hover:text-white transition-colors pb-3 -mb-[13px] tracking-wide">
+              Stocks
+            </button>
+<button class="text-gray-400 hover:text-white transition-colors pb-3 -mb-[13px] tracking-wide">
+              Options
+            </button>
+<button class="text-gray-400 hover:text-white transition-colors pb-3 -mb-[13px] tracking-wide">
+              Commodities
+            </button>
+</div>
+<!-- Underline-Style Dropdown Selects & Minimalist Search Field -->
+<div class="flex items-center gap-6">
+<!-- Dropdown: Risk -->
+<div class="flex items-center gap-1.5 pb-1 border-b border-[#2A3B52] cursor-pointer text-xs font-data-mono text-gray-300 hover:text-white hover:border-gray-400 transition-colors">
+<span class="text-gray-500">Risk:</span>
+<span>Any</span>
+<span class="material-symbols-outlined text-[10px] text-gray-500" data-icon="keyboard_arrow_down">keyboard_arrow_down</span>
+</div>
+<!-- Dropdown: Win rate -->
+<div class="flex items-center gap-1.5 pb-1 border-b border-[#2A3B52] cursor-pointer text-xs font-data-mono text-gray-300 hover:text-white hover:border-gray-400 transition-colors">
+<span class="text-gray-500">Win rate:</span>
+<span>60%+</span>
+<span class="material-symbols-outlined text-[10px] text-gray-500" data-icon="keyboard_arrow_down">keyboard_arrow_down</span>
+</div>
+<!-- Dropdown: Sort -->
+<div class="flex items-center gap-1.5 pb-1 border-b border-[#2A3B52] cursor-pointer text-xs font-data-mono text-gray-300 hover:text-white hover:border-gray-400 transition-colors">
+<span class="text-gray-500">Sort:</span>
+<span>12-mo return</span>
+<span class="material-symbols-outlined text-[10px] text-gray-500" data-icon="keyboard_arrow_down">keyboard_arrow_down</span>
+</div>
+<!-- Right-aligned search field -->
+<div class="flex items-center gap-2 border-b border-[#2A3B52] py-0.5 px-1 focus-within:border-white transition-colors">
+<span class="material-symbols-outlined text-xs text-gray-500" data-icon="search">search</span>
+<input class="bg-transparent border-0 p-0 text-xs font-data-mono text-white placeholder-gray-500 focus:ring-0 w-28 outline-none" placeholder="Filter leader..." type="text"/>
+</div>
+</div>
+</div>
+<!-- 3. Full-width Ledger Table (Zero Card, Hairline Dividers) -->
+<div class="w-full border-t border-[#17273D] text-left">
+<!-- Sticky / Clean Table Header -->
+<div class="grid grid-cols-12 px-4 py-3 bg-[#0A1626] border-b border-[#1E2D42] text-[11px] font-data-mono uppercase tracking-wider text-gray-400">
+<div class="col-span-3">TRADER &amp; STRATEGY</div>
+<div class="col-span-2 text-right">12-MO RETURN (12M)</div>
+<div class="col-span-1 text-right">WIN RATE</div>
+<div class="col-span-1 text-right">MAX DD</div>
+<div class="col-span-2 text-center">RISK SCORE</div>
+<div class="col-span-1 text-right">COPIERS</div>
+<div class="col-span-1 text-right">MIN. COPY</div>
+<div class="col-span-1 text-right">ACTION</div>
+</div>
+<!-- ROW 1: Elena Vasquez -->
+<div class="grid grid-cols-12 px-4 py-3.5 items-center border-b border-[#17273D] hover:bg-[#11223A]/40 transition-colors group">
+<!-- Trader -->
+<div class="col-span-3 flex items-center gap-3">
+<img class="w-9 h-9 object-cover rounded-none border border-[#1F334E] flex-shrink-0" data-alt="A refined corporate headshot portrait of Elena Vasquez in modern office lighting with navy professional suit against a neutral modern glass architectural backdrop." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDR8WkOYw2CzgUuLYkLn2QbzPfvSCt4Qei4skputSZ-NIh2ZLGSdIfnwRUc1lIk8YoNAfzdbTuC-noE9Xpzy_plnrzJp7xs1I5mj3hV37am96otTwqw7KD6VIxk82xe4pb3FW6mbbRdv_-jiptMHM5bYvnhy0qL3a4GRlf8GbPh9evjYxE53wazI0HcZiivORH-lmyxvK1Vw2iUfm-R-h84XLcfhQUxPBAx7wjUH1g1ol9HGiauPEjtmdtozwvTkCkfC-C3rp_TZOI"/>
+<div class="truncate">
+<div class="text-sm font-medium text-white group-hover:text-[#2EE6D3] transition-colors flex items-center gap-1.5">
+                  Elena Vasquez
+                  <span class="material-symbols-outlined text-[13px] text-[#2EE6D3]" data-icon="verified">verified</span>
+</div>
+<div class="text-xs font-body-md text-gray-400">Forex · London breakout</div>
+</div>
+</div>
+<!-- 12-Mo Return with Sparkline -->
+<div class="col-span-2 flex items-center justify-end gap-3 text-right">
+<span class="font-data-mono text-sm font-semibold text-[#2EE6D3]">+38.2%</span>
+<svg class="w-16 h-6 overflow-visible" fill="none" viewbox="0 0 70 24">
+<path d="M2 20 L14 17 L25 18 L38 12 L49 14 L58 7 L68 4" stroke="#2EE6D3" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></path>
+</svg>
+</div>
+<!-- Win Rate -->
+<div class="col-span-1 text-right font-data-mono text-sm text-gray-200">
+              76.4%
+            </div>
+<!-- Max DD -->
+<div class="col-span-1 text-right font-data-mono text-sm text-gray-300">
+              −8.1%
+            </div>
+<!-- Risk Score: 4/10 segmented bar -->
+<div class="col-span-2 flex flex-col items-center justify-center gap-1">
+<span class="text-xs font-data-mono text-gray-400">4 / 10</span>
+<div class="flex items-center gap-1">
+<span class="w-2 h-1 bg-[#2EE6D3]"></span>
+<span class="w-2 h-1 bg-[#2EE6D3]"></span>
+<span class="w-2 h-1 bg-[#2EE6D3]"></span>
+<span class="w-2 h-1 bg-[#2EE6D3]"></span>
+<span class="w-2 h-1 bg-[#1F334E]"></span>
+<span class="w-2 h-1 bg-[#1F334E]"></span>
+<span class="w-2 h-1 bg-[#1F334E]"></span>
+<span class="w-2 h-1 bg-[#1F334E]"></span>
+<span class="w-2 h-1 bg-[#1F334E]"></span>
+<span class="w-2 h-1 bg-[#1F334E]"></span>
+</div>
+</div>
+<!-- Copiers -->
+<div class="col-span-1 text-right font-data-mono text-sm text-gray-300">
+              1,419
+            </div>
+<!-- Min to Copy -->
+<div class="col-span-1 text-right font-data-mono text-sm text-gray-300">
+              $500
+            </div>
+<!-- Action -->
+<div class="col-span-1 text-right">
+<button class="text-xs font-label-md font-semibold text-[#E3262F] hover:text-[#ff6b72] hover:underline uppercase tracking-wider">
+                Copy →
+              </button>
+</div>
+</div>
+<!-- ROW 2: Marcus Chen (EXPANDED ROW WITH ACTIVE STATE) -->
+<div class="relative bg-[#11223A] border-y border-[#1E3048]">
+<!-- Red Indicator Bar (2px inline-start) -->
+<div class="absolute left-0 top-0 bottom-0 w-[2px] bg-[#E3262F]"></div>
+<!-- Row Summary Strip -->
+<div class="grid grid-cols-12 px-4 py-3.5 items-center">
+<!-- Trader -->
+<div class="col-span-3 flex items-center gap-3">
+<img class="w-9 h-9 object-cover rounded-none border border-[#E3262F]/60 flex-shrink-0" data-alt="A distinguished executive portrait of Marcus Chen wearing an open collar dark charcoal suit in a high-floor glass financial office with soft natural daylight." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA9UKENLeuvQLc6qofmlPJpULoazIHwt1nMkCw8ppmJAsbLmSX4H2IhzDOpWlsCaO6HucqGKparo2_HrVTDHyhmmvN2YApM0LLL9XvNVzim3NuApL_PbriS4ax9wpxoP1h-ll8oRRtiZ9Db8ZopWiUm1SdsUVc0BXFU212-iRt8Cosrtc_frqDSIUo4xHSZ47C1zvvmfieJh9_kPBIGNNM_EsjOu_bo36W-8WGR8PWTLb7rD3VibHHoojS0CTNv4rLmAgRipUlcjxU"/>
+<div class="truncate">
+<div class="text-sm font-medium text-white flex items-center gap-1.5">
+                    Marcus Chen
+                    <span class="material-symbols-outlined text-[13px] text-[#2EE6D3]" data-icon="verified">verified</span>
+</div>
+<div class="text-xs font-body-md text-gray-300">Crypto · Momentum Alpha</div>
+</div>
+</div>
+<!-- 12-Mo Return with Glowing Sparkline -->
+<div class="col-span-2 flex items-center justify-end gap-3 text-right">
+<span class="font-data-mono text-sm font-bold text-[#2EE6D3]">+52.7%</span>
+<svg class="w-16 h-6 overflow-visible" fill="none" viewbox="0 0 70 24">
+<path d="M2 22 L12 18 L24 19 L34 11 L46 13 L56 6 L68 2" stroke="#2EE6D3" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</div>
+<!-- Win Rate -->
+<div class="col-span-1 text-right font-data-mono text-sm text-white font-medium">
+                68.1%
+              </div>
+<!-- Max DD -->
+<div class="col-span-1 text-right font-data-mono text-sm text-gray-300">
+                −17.6%
+              </div>
+<!-- Risk Score: 6/10 segments -->
+<div class="col-span-2 flex flex-col items-center justify-center gap-1">
+<span class="text-xs font-data-mono text-amber-400">6 / 10 · Moderate</span>
+<div class="flex items-center gap-1">
+<span class="w-2 h-1 bg-[#2EE6D3]"></span>
+<span class="w-2 h-1 bg-[#2EE6D3]"></span>
+<span class="w-2 h-1 bg-[#2EE6D3]"></span>
+<span class="w-2 h-1 bg-[#2EE6D3]"></span>
+<span class="w-2 h-1 bg-brand-amber"></span>
+<span class="w-2 h-1 bg-brand-amber"></span>
+<span class="w-2 h-1 bg-[#1F334E]"></span>
+<span class="w-2 h-1 bg-[#1F334E]"></span>
+<span class="w-2 h-1 bg-[#1F334E]"></span>
+<span class="w-2 h-1 bg-[#1F334E]"></span>
+</div>
+</div>
+<!-- Copiers -->
+<div class="col-span-1 text-right font-data-mono text-sm text-gray-200">
+                2,884
+              </div>
+<!-- Min to Copy -->
+<div class="col-span-1 text-right font-data-mono text-sm text-gray-200">
+                $1,000
+              </div>
+<!-- Action Indicator -->
+<div class="col-span-1 text-right"><button class="text-xs font-label-md font-medium text-[#E3262F] hover:text-[#ff6b72] uppercase tracking-wider cursor-pointer flex items-center justify-end gap-1 ml-auto"><span>Collapse</span> <span>▴</span></button></div>
+</div>
+<!-- INLINE EXPANDED DRAWER PANEL (Marcus Chen Details) -->
+<div class="px-8 py-6 border-t border-[#1E3048] bg-[#0E1B2E]">
+<div class="grid grid-cols-12 gap-8">
+<!-- Left Column (40% width): 12-Month Equity Performance Curve -->
+<div class="col-span-12 lg:col-span-5 flex flex-col justify-between">
+<div>
+<div class="flex items-center justify-between mb-2">
+<span class="text-xs font-label-md uppercase tracking-wider text-gray-400">12-Month Equity Growth</span>
+<div class="text-[11px] font-data-mono text-[#2EE6D3] flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-[#2EE6D3] animate-pulse"></span>
+                        Peak Equity +54.2% · LD4 Synced
+                      </div>
+</div>
+<div class="font-headline-md text-headline-md font-bold text-white font-data-mono">
+                      $1,542,890.12 <span class="text-xs font-data-mono text-[#2EE6D3] font-normal">(+52.7%)</span>
+</div>
+</div>
+<!-- SVG Area Chart -->
+<div class="w-full h-44 my-3 relative">
+<svg class="w-full h-full" preserveaspectratio="none" viewbox="0 0 400 160">
+<defs>
+<lineargradient id="marcusGrad" x1="0" x2="0" y1="0" y2="1">
+<stop offset="0%" stop-color="#2EE6D3" stop-opacity="0.25"></stop>
+<stop offset="100%" stop-color="#2EE6D3" stop-opacity="0.0"></stop>
+</lineargradient>
+</defs>
+<!-- Subtle grid hairlines -->
+<line stroke="#17273D" stroke-dasharray="3 3" stroke-width="1" x1="0" x2="400" y1="40" y2="40"></line>
+<line stroke="#17273D" stroke-dasharray="3 3" stroke-width="1" x1="0" x2="400" y1="80" y2="80"></line>
+<line stroke="#17273D" stroke-dasharray="3 3" stroke-width="1" x1="0" x2="400" y1="120" y2="120"></line>
+<!-- Area Fill -->
+<path d="M 0 145 Q 40 135 80 115 T 160 100 T 240 60 T 320 40 T 400 20 L 400 160 L 0 160 Z" fill="url(#marcusGrad)"></path>
+<!-- Glowing Stroke -->
+<path d="M 0 145 Q 40 135 80 115 T 160 100 T 240 60 T 320 40 T 400 20" fill="none" stroke="#2EE6D3" stroke-width="2.5"></path>
+<!-- Peak marker point -->
+<circle cx="400" cy="20" fill="#E3262F" r="3.5" stroke="#ffffff" stroke-width="1.5"></circle>
+</svg>
+</div>
+<!-- X-Axis timeline ticks -->
+<div class="flex justify-between text-[10px] font-data-mono text-gray-500 border-t border-[#17273D] pt-1.5">
+<span>27 OCT '25</span>
+<span>JAN '26</span>
+<span>APR '26</span>
+<span>JUL '26</span>
+<span>OCT '26 (TODAY)</span>
+</div>
+</div>
+<!-- Middle Column (30% width, flanked by vertical hairlines): Bio & 2x2 Stats -->
+<div class="col-span-12 lg:col-span-3 border-t lg:border-t-0 lg:border-x border-[#1F334E] lg:px-6 flex flex-col justify-between py-2">
+<div>
+<div class="text-[11px] font-label-md uppercase tracking-wider text-gray-400 mb-2">Strategy Overview</div>
+<p class="text-xs font-body-md text-gray-300 leading-relaxed">
+                      Systematic trend-following across top liquid digital assets. Employs volatility parity allocation with strict 4-hour trailing stop execution via low-latency API.
+                    </p>
+</div>
+<!-- 2x2 stats matrix separated by subtle hairlines -->
+<div class="grid grid-cols-2 divide-x divide-y divide-[#17273D] border-y border-[#17273D] my-4"><div class="p-3"><div class="text-[10px] font-label-md uppercase tracking-wider text-gray-400">AUM</div><div class="text-sm font-data-mono font-semibold text-white mt-0.5">$4.2M</div></div><div class="p-3"><div class="text-[10px] font-label-md uppercase tracking-wider text-gray-400">Avg. Hold</div><div class="text-sm font-data-mono font-semibold text-white mt-0.5">2.4 days</div></div><div class="p-3"><div class="text-[10px] font-label-md uppercase tracking-wider text-gray-400">Trades/Week</div><div class="text-sm font-data-mono font-semibold text-white mt-0.5">18</div></div><div class="p-3"><div class="text-[10px] font-label-md uppercase tracking-wider text-gray-400">Profitable Mos</div><div class="text-sm font-data-mono font-semibold text-[#2EE6D3] mt-0.5">9 / 12</div></div></div>
+<div class="text-[11px] font-data-mono text-gray-400 flex items-center justify-between">
+<span>Base Currency: <span class="text-white">USDT</span></span>
+<span>Broker: <span class="text-white">TED Equinix</span></span>
+</div>
+</div>
+<!-- Right Column (30% width): Mini Ledger & Allocation Form -->
+<div class="col-span-12 lg:col-span-4 flex flex-col justify-between gap-4">
+<!-- Recent Trades mini ledger -->
+<div>
+<div class="text-[11px] font-label-md uppercase tracking-wider text-gray-400 mb-2 flex items-center justify-between">
+<span>Recent Executed Orders</span>
+<span class="text-[10px] text-gray-500 font-data-mono">LIVE FEED</span>
+</div>
+<div class="divide-y divide-[#17273D] border-y border-[#17273D] text-xs font-data-mono"><div class="py-2 flex items-center justify-between"><span class="text-white">BTC/USD · Buy</span><span class="text-[#2EE6D3]">▲ +3.1%</span></div><div class="py-2 flex items-center justify-between"><span class="text-white">ETH/USD · Sell</span><span class="text-[#2EE6D3]">▲ +1.4%</span></div><div class="py-2 flex items-center justify-between"><span class="text-white">SOL/USD · Buy</span><span class="text-[#E5484D]">▼ −0.8%</span></div></div>
+</div>
+<!-- Quick Allocation Form -->
+<div class="border-t border-[#1F334E] pt-3">
+<div class="flex items-center justify-between mb-1">
+<span class="text-[10px] font-label-md uppercase tracking-wider text-gray-400">Allocation Amount</span>
+<span class="text-[10px] font-data-mono text-gray-500">Max: $6,420.00</span>
+</div>
+<div class="flex items-center border-b border-[#2A3B52] pb-1 mb-3 focus-within:border-[#E3262F]">
+<span class="font-data-mono text-sm text-gray-400 mr-1">$</span>
+<input class="bg-transparent border-0 p-0 text-sm font-data-mono font-semibold text-white focus:ring-0 w-full outline-none" type="text" value="1,000"/>
+<span class="font-data-mono text-xs text-gray-400">USDC</span>
+</div>
+<!-- Stop Copying Threshold Slider -->
+<div class="mb-4">
+<div class="flex justify-between text-[11px] font-data-mono text-gray-400 mb-1">
+<span>Max Drawdown Cutoff</span>
+<span class="text-amber-400">−15.0%</span>
+</div>
+<input class="w-full cursor-pointer" max="30" min="5" type="range" value="15"/>
+</div>
+<!-- Buttons -->
+<div class="flex items-center gap-3">
+<button class="flex-1 h-10 bg-[#E3262F] hover:bg-[#c0001c] active:opacity-90 text-xs font-label-md font-semibold text-white tracking-wider uppercase transition-colors">
+                        Copy Marcus →
+                      </button>
+<button class="h-10 px-3 text-xs font-label-md text-gray-400 hover:text-white transition-colors border-b border-transparent hover:border-gray-400">
+                        Full profile ↗
+                      </button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- ROW 3: Aisha Rahman -->
+<div class="grid grid-cols-12 px-4 py-3.5 items-center border-b border-[#17273D] hover:bg-[#11223A]/40 transition-colors group">
+<!-- Trader -->
+<div class="col-span-3 flex items-center gap-3">
+<img class="w-9 h-9 object-cover rounded-none border border-[#1F334E] flex-shrink-0" data-alt="A smiling corporate headshot of Aisha Rahman dressed in sharp professional business attire against modern glass office partitions and bookshelves." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA8Gutj6rwTqJHTQ-7Z3hJfD2sjxiCEo2oxFrdVbHxCh9u_PMpdPGFKiL9Nu9C4r7k81xaC-ql6WTA1uP4Ur2v4OLnQy2DjftdJ-MoQ3CoxNCplRXqIVmesLw4UZQrRmZFtyI7Y7cuTrR8snrXqyWUimtWdBAAV_2eQjJcwJlYugMQqzsYCwdqQgeT0ICiUoyLdZ33lNx8wq-ahPBDEWRKAoWUec6Mvzpy8xH4i7ZSjFz-uUdDfjAR632fWKYU2gOBwZmilMjpNLeA"/>
+<div class="truncate">
+<div class="text-sm font-medium text-white group-hover:text-[#2EE6D3] transition-colors flex items-center gap-1.5">
+                  Aisha Rahman
+                  <span class="material-symbols-outlined text-[13px] text-[#2EE6D3]" data-icon="verified">verified</span>
+</div>
+<div class="text-xs font-body-md text-gray-400">Stocks · Large-Cap Tech</div>
+</div>
+</div>
+<!-- 12-Mo Return with Steady Sparkline -->
+<div class="col-span-2 flex items-center justify-end gap-3 text-right">
+<span class="font-data-mono text-sm font-semibold text-[#2EE6D3]">+21.4%</span>
+<svg class="w-16 h-6 overflow-visible" fill="none" viewbox="0 0 70 24">
+<path d="M2 18 L15 16 L28 14 L40 12 L52 10 L68 6" stroke="#2EE6D3" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></path>
+</svg>
+</div>
+<!-- Win Rate -->
+<div class="col-span-1 text-right font-data-mono text-sm text-gray-200">
+              81.9%
+            </div>
+<!-- Max DD -->
+<div class="col-span-1 text-right font-data-mono text-sm text-gray-300">
+              −5.2%
+            </div>
+<!-- Risk Score: 3/10 segments -->
+<div class="col-span-2 flex flex-col items-center justify-center gap-1">
+<span class="text-xs font-data-mono text-gray-400">3 / 10 · Low</span>
+<div class="flex items-center gap-1">
+<span class="w-2 h-1 bg-[#2EE6D3]"></span>
+<span class="w-2 h-1 bg-[#2EE6D3]"></span>
+<span class="w-2 h-1 bg-[#2EE6D3]"></span>
+<span class="w-2 h-1 bg-[#1F334E]"></span>
+<span class="w-2 h-1 bg-[#1F334E]"></span>
+<span class="w-2 h-1 bg-[#1F334E]"></span>
+<span class="w-2 h-1 bg-[#1F334E]"></span>
+<span class="w-2 h-1 bg-[#1F334E]"></span>
+<span class="w-2 h-1 bg-[#1F334E]"></span>
+<span class="w-2 h-1 bg-[#1F334E]"></span>
+</div>
+</div>
+<!-- Copiers -->
+<div class="col-span-1 text-right font-data-mono text-sm text-gray-300">
+              932
+            </div>
+<!-- Min to Copy -->
+<div class="col-span-1 text-right font-data-mono text-sm text-gray-300">
+              $250
+            </div>
+<!-- Action -->
+<div class="col-span-1 text-right">
+<button class="text-xs font-label-md font-semibold text-[#E3262F] hover:text-[#ff6b72] hover:underline uppercase tracking-wider">
+                Copy →
+              </button>
+</div>
+</div>
+<!-- ROW 4: Lukas Brandt -->
+<div class="grid grid-cols-12 px-4 py-3.5 items-center border-b border-[#17273D] hover:bg-[#11223A]/40 transition-colors group">
+<!-- Trader -->
+<div class="col-span-3 flex items-center gap-3">
+<div class="w-9 h-9 bg-[#17273D] border border-[#1F334E] flex items-center justify-center font-data-mono text-xs font-bold text-gray-200 flex-shrink-0">
+                LB
+              </div>
+<div class="truncate">
+<div class="text-sm font-medium text-white group-hover:text-[#2EE6D3] transition-colors flex items-center gap-1.5">
+                  Lukas Brandt
+                  <span class="material-symbols-outlined text-[13px] text-gray-500" data-icon="verified">verified</span>
+</div>
+<div class="text-xs font-body-md text-gray-400">Commodities · Energy &amp; Gold</div>
+</div>
+</div>
+<!-- 12-Mo Return with Sparkline -->
+<div class="col-span-2 flex items-center justify-end gap-3 text-right">
+<span class="font-data-mono text-sm font-semibold text-[#2EE6D3]">+17.9%</span>
+<svg class="w-16 h-6 overflow-visible" fill="none" viewbox="0 0 70 24">
+<path d="M2 19 L16 17 L26 21 L40 14 L54 16 L68 9" stroke="#2EE6D3" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></path>
+</svg>
+</div>
+<!-- Win Rate -->
+<div class="col-span-1 text-right font-data-mono text-sm text-gray-200">
+              74.2%
+            </div>
+<!-- Max DD -->
+<div class="col-span-1 text-right font-data-mono text-sm text-gray-300">
+              −9.8%
+            </div>
+<!-- Risk Score: 4/10 -->
+<div class="col-span-2 flex flex-col items-center justify-center gap-1">
+<span class="text-xs font-data-mono text-gray-400">4 / 10</span>
+<div class="flex items-center gap-1">
+<span class="w-2 h-1 bg-[#2EE6D3]"></span>
+<span class="w-2 h-1 bg-[#2EE6D3]"></span>
+<span class="w-2 h-1 bg-[#2EE6D3]"></span>
+<span class="w-2 h-1 bg-[#2EE6D3]"></span>
+<span class="w-2 h-1 bg-[#1F334E]"></span>
+<span class="w-2 h-1 bg-[#1F334E]"></span>
+<span class="w-2 h-1 bg-[#1F334E]"></span>
+<span class="w-2 h-1 bg-[#1F334E]"></span>
+<span class="w-2 h-1 bg-[#1F334E]"></span>
+<span class="w-2 h-1 bg-[#1F334E]"></span>
+</div>
+</div>
+<!-- Copiers -->
+<div class="col-span-1 text-right font-data-mono text-sm text-gray-300">
+              675
+            </div>
+<!-- Min to Copy -->
+<div class="col-span-1 text-right font-data-mono text-sm text-gray-300">
+              $500
+            </div>
+<!-- Action -->
+<div class="col-span-1 text-right">
+<button class="text-xs font-label-md font-semibold text-[#E3262F] hover:text-[#ff6b72] hover:underline uppercase tracking-wider">
+                Copy →
+              </button>
+</div>
+</div>
+<!-- ROW 5: Sofia Moretti -->
+<div class="grid grid-cols-12 px-4 py-3.5 items-center border-b border-[#17273D] hover:bg-[#11223A]/40 transition-colors group">
+<!-- Trader -->
+<div class="col-span-3 flex items-center gap-3">
+<div class="w-9 h-9 bg-[#17273D] border border-[#1F334E] flex items-center justify-center font-data-mono text-xs font-bold text-[#2EE6D3] flex-shrink-0">
+                SM
+              </div>
+<div class="truncate">
+<div class="text-sm font-medium text-white group-hover:text-[#2EE6D3] transition-colors flex items-center gap-1.5">
+                  Sofia Moretti
+                  <span class="material-symbols-outlined text-[13px] text-[#2EE6D3]" data-icon="verified">verified</span>
+</div>
+<div class="text-xs font-body-md text-gray-400">Indices · S&amp;P &amp; DAX Flow</div>
+</div>
+</div>
+<!-- 12-Mo Return with Sparkline -->
+<div class="col-span-2 flex items-center justify-end gap-3 text-right">
+<span class="font-data-mono text-sm font-semibold text-[#2EE6D3]">+26.3%</span>
+<svg class="w-16 h-6 overflow-visible" fill="none" viewbox="0 0 70 24">
+<path d="M2 20 L15 15 L28 17 L42 11 L55 13 L68 7" stroke="#2EE6D3" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></path>
+</svg>
+</div>
+<!-- Win Rate -->
+<div class="col-span-1 text-right font-data-mono text-sm text-gray-200">
+              79.0%
+            </div>
+<!-- Max DD -->
+<div class="col-span-1 text-right font-data-mono text-sm text-gray-300">
+              −7.4%
+            </div>
+<!-- Risk Score: 5/10 -->
+<div class="col-span-2 flex flex-col items-center justify-center gap-1">
+<span class="text-xs font-data-mono text-gray-400">5 / 10 · Balanced</span>
+<div class="flex items-center gap-1">
+<span class="w-2 h-1 bg-[#2EE6D3]"></span>
+<span class="w-2 h-1 bg-[#2EE6D3]"></span>
+<span class="w-2 h-1 bg-[#2EE6D3]"></span>
+<span class="w-2 h-1 bg-[#2EE6D3]"></span>
+<span class="w-2 h-1 bg-[#2EE6D3]"></span>
+<span class="w-2 h-1 bg-[#1F334E]"></span>
+<span class="w-2 h-1 bg-[#1F334E]"></span>
+<span class="w-2 h-1 bg-[#1F334E]"></span>
+<span class="w-2 h-1 bg-[#1F334E]"></span>
+<span class="w-2 h-1 bg-[#1F334E]"></span>
+</div>
+</div>
+<!-- Copiers -->
+<div class="col-span-1 text-right font-data-mono text-sm text-gray-300">
+              1,120
+            </div>
+<!-- Min to Copy -->
+<div class="col-span-1 text-right font-data-mono text-sm text-gray-300">
+              $500
+            </div>
+<!-- Action -->
+<div class="col-span-1 text-right">
+<button class="text-xs font-label-md font-semibold text-[#E3262F] hover:text-[#ff6b72] hover:underline uppercase tracking-wider">
+                Copy →
+              </button>
+</div>
+</div>
+<!-- ROW 6: Kenji Watanabe -->
+<div class="grid grid-cols-12 px-4 py-3.5 items-center border-b border-[#17273D] hover:bg-[#11223A]/40 transition-colors group">
+<!-- Trader -->
+<div class="col-span-3 flex items-center gap-3">
+<img class="w-9 h-9 object-cover rounded-none border border-[#1F334E] flex-shrink-0" data-alt="An executive portrait of senior trader Kenji Watanabe dressed in a bespoke dark navy suit with an architectural corporate window view in the background." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAXTTv_RaYMiqrW-kmIvGSxUgqCAbC1uRLilny9dSkVYxdWYPhBHhLn_GWIAvBHv7mRFEPovdcfOoqSMS6qqNba8kZJ6ul18KQ8ZhK0H4FNl_S8bbQG3XM9yoCU3tiC5E1ZNorizaPAzjMxqriyBALIjdBiHcMTfj2A2AYiIKa-pbZKvNd-2GBqo7NGtfM2T1Hf7JLRCrkMqYMlZXsUHoxVylcMrtBZVNCBo25alew9Z_hwsxcqA6fskvPQp-urLQU1upbuTlpCiys"/>
+<div class="truncate">
+<div class="text-sm font-medium text-white group-hover:text-[#2EE6D3] transition-colors flex items-center gap-1.5">
+                  Kenji Watanabe
+                  <span class="material-symbols-outlined text-[13px] text-[#2EE6D3]" data-icon="verified">verified</span>
+</div>
+<div class="text-xs font-body-md text-gray-400">Crypto &amp; FX · High Volatility Scalp</div>
+</div>
+</div>
+<!-- 12-Mo Return with Sharp Swing Sparkline -->
+<div class="col-span-2 flex items-center justify-end gap-3 text-right">
+<span class="font-data-mono text-sm font-semibold text-[#2EE6D3]">+44.1%</span>
+<svg class="w-16 h-6 overflow-visible" fill="none" viewbox="0 0 70 24">
+<path d="M2 22 L12 8 L22 18 L34 4 L48 16 L58 10 L68 3" stroke="#2EE6D3" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></path>
+</svg>
+</div>
+<!-- Win Rate -->
+<div class="col-span-1 text-right font-data-mono text-sm text-gray-200">
+              63.5%
+            </div>
+<!-- Max DD (Amber Alert text) -->
+<div class="col-span-1 text-right font-data-mono text-sm text-brand-amber font-medium">
+              −22.3%
+            </div>
+<!-- Risk Score: 8/10 (High Risk amber segments) -->
+<div class="col-span-2 flex flex-col items-center justify-center gap-1">
+<span class="text-xs font-data-mono text-brand-amber">8 / 10 · Aggressive</span>
+<div class="flex items-center gap-1">
+<span class="w-2 h-1 bg-[#2EE6D3]"></span>
+<span class="w-2 h-1 bg-[#2EE6D3]"></span>
+<span class="w-2 h-1 bg-[#2EE6D3]"></span>
+<span class="w-2 h-1 bg-[#2EE6D3]"></span>
+<span class="w-2 h-1 bg-brand-amber"></span>
+<span class="w-2 h-1 bg-brand-amber"></span>
+<span class="w-2 h-1 bg-brand-loss"></span>
+<span class="w-2 h-1 bg-brand-loss"></span>
+<span class="w-2 h-1 bg-[#1F334E]"></span>
+<span class="w-2 h-1 bg-[#1F334E]"></span>
+</div>
+</div>
+<!-- Copiers -->
+<div class="col-span-1 text-right font-data-mono text-sm text-gray-300">
+              418
+            </div>
+<!-- Min to Copy -->
+<div class="col-span-1 text-right font-data-mono text-sm text-gray-300">
+              $2,000
+            </div>
+<!-- Action -->
+<div class="col-span-1 text-right">
+<button class="text-xs font-label-md font-semibold text-[#E3262F] hover:text-[#ff6b72] hover:underline uppercase tracking-wider">
+                Copy →
+              </button>
+</div>
+</div>
+</div>
+<!-- 4. Footer & Table Bottom Controls -->
+<div class="mt-6 flex flex-col md:flex-row items-center justify-between gap-4 border-t border-[#17273D] pt-4 pb-8">
+<div class="flex items-center gap-4 text-xs font-data-mono">
+<span class="text-gray-400">Showing 1–6 of 340 verified leaders</span>
+<span class="text-gray-700">|</span>
+<button class="text-white hover:text-[#2EE6D3] flex items-center gap-1 underline underline-offset-4 decoration-gray-600 transition-colors">
+              Load more 334 traders
+              <span class="material-symbols-outlined text-xs" data-icon="south">south</span>
+</button>
+</div>
+<div class="flex items-center gap-2 text-xs font-data-mono text-gray-500">
+<span>Latency SLA: 99.999%</span>
+<span>·</span>
+<span>Auto-Hedging Active</span>
+<span>·</span>
+<span>Broker Node: EU-WEST-1</span>
+</div>
+</div>
+<!-- High Risk Investment Disclaimer -->
+<div class="border-t border-[#17273D] pt-5 text-[11px] font-body-md text-gray-500 leading-relaxed max-w-5xl"><p>Past performance is not indicative of future results. High Risk Investment Notice: FX, CFDs, and copy-trading derivatives involve substantial risk of loss. You should consider whether you understand how derivative contracts and automated allocation models work, and whether you can afford to take the high risk of losing your deposited margin. TED Brokers does not provide investment advice.</p></div>
+</main>
+<!-- BASE FOOTER (Shared Component Anchor) -->
+<footer class="w-full px-8 py-4 border-t border-[#17273D] bg-[#030e1e] flex flex-col sm:flex-row items-center justify-between text-xs text-gray-400 gap-2 font-body-md">
+<div>
+          © 2024 TED Brokers Financial Ltd. All rights reserved. High Risk Investment Notice: FX, CFDs, and copy-trading derivatives involve substantial risk of loss.
+        </div>
+<div class="flex items-center gap-5 text-gray-400 text-xs font-label-md">
+<a class="hover:text-[#2EE6D3] transition-colors" href="#">Execution Policy</a>
+<a class="hover:text-[#2EE6D3] transition-colors" href="#">Risk Disclosure</a>
+<a class="hover:text-[#2EE6D3] transition-colors" href="#">Terms of Service</a>
+<a class="hover:text-[#2EE6D3] transition-colors" href="#">Institutional API</a>
+</div>
+</footer>
+</div>
+</div>
+</body></html>
