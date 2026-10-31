@@ -37,7 +37,7 @@ FONT_TEXT = "'DM Sans','Helvetica Neue',Helvetica,Arial,sans-serif"
 FONT_MONO = "'JetBrains Mono','SFMono-Regular',Menlo,Consolas,'Courier New',monospace"
 
 SUPPORT_EMAIL = "support@tedbrokers.com"
-SITE_URL = "https://copytradingbroker.io"
+SITE_URL = "https://tedbrokers.com"
 COPYRIGHT_YEAR = 2026
 
 RISK_NOTE = (
@@ -306,7 +306,7 @@ def login_notification(
         + _notice(
             "Not you?",
             f'Change your password now at <a href="{SITE_URL}/change-password" style="color:{RED_TEXT};">'
-            "copytradingbroker.io</a> and contact support.",
+            "tedbrokers.com</a> and contact support.",
         )
     )
     html = _layout(
