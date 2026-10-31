@@ -119,6 +119,25 @@ def after_fill(fill: Dict) -> None:
         _link_inc(link_id, proceeds, f"proceeds:{fill['_id']}")
 
 
+# ------------------------------------------------------------------ balance check
+def copy_imbalances() -> List[Dict]:
+    """Accounts whose reserved cash does not equal the cash held in their copy links.
+    Every link's cash is reserved on the ledger (allocate reserves it), so the two must match."""
+    users_col = get_collection(USERS_COLLECTION)
+    out = []
+    for uid in links().distinct("user_id"):
+        try:
+            user = users_col.find_one({"_id": ObjectId(uid)}) or {}
+        except Exception:
+            continue
+        link_cash = sum(int(l.get("cash_cents", 0)) for l in links().find({"user_id": uid}))
+        reserved = int(user.get("reserved_cents", 0))
+        if link_cash != reserved:
+            out.append({"user_id": uid, "reserved_cents": reserved, "link_cash_cents": link_cash,
+                        "gap_cents": link_cash - reserved})
+    return out
+
+
 # ------------------------------------------------------------------ links
 def trader_doc(trader_id: str) -> Dict:
     t = traders().find_one({"_id": ObjectId(trader_id)}) if ObjectId.is_valid(trader_id) else None

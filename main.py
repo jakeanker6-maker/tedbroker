@@ -132,6 +132,16 @@ async def startup_db_client():
     ledger.ensure_indexes()
     asyncio.create_task(run_ledger_maintenance())
 
+    # Copy-trading balance check: warn (never block startup) if link cash and reserved cash disagree.
+    try:
+        from app.trading import copy_engine as _copy_engine
+        for row in _copy_engine.copy_imbalances():
+            print(f"[copy-balance] WARNING user {row['user_id']}: reserved {row['reserved_cents']} "
+                  f"vs copy-link cash {row['link_cash_cents']} (gap {row['gap_cents']} cents). "
+                  f"Run scripts/reconcile_copy.py.")
+    except Exception as exc:
+        print(f"[copy-balance] check skipped: {exc}")
+
     # Live account events (balance changes) and real-time market data feeds.
     events.bind_loop(asyncio.get_running_loop())
     ledger.add_listener(events.on_ledger_entry)
