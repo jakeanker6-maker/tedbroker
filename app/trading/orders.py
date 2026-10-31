@@ -763,6 +763,11 @@ def _execute(order: Dict, price: Decimal, quote: Dict, kind: str = "trade", no_f
         "settles_at": _naive(instruments.settlement_time(ac)), "source": order.get("source", "manual"),
         "allow_borrow": bool(order.get("allow_borrow")), "status": "pending", "ts": ts,
     }
+    # A fill that failed to post stays pending. Never stack a second fill on the same order
+    # while one is pending; the next pass re-applies the existing one instead.
+    pending = fills_col().find_one({"order_id": order["_id"], "status": "pending"})
+    if pending:
+        return apply_fill(pending)
     fills_col().insert_one(fill)
     return apply_fill(fill)
 
