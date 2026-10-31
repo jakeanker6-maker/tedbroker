@@ -1,0 +1,194 @@
+/* Copy traders — page-only rules. Hairlines and open columns; no containers. */
+@layer pages {
+  .page-head__strong { color: var(--color-text); }
+
+  /* ---------- Filter bar: one line on wide screens, wraps below ---------- */
+  .traders { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--space-4); }
+  .filterbar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: end;
+    gap: var(--space-3) var(--space-5);
+    padding-block-end: var(--space-3);
+    border-block-end: 1px solid var(--color-border);
+  }
+
+  /* Specialization: text tabs with an underline (aria-pressed), not pills */
+  .spec {
+    display: flex;
+    gap: var(--space-4);
+    max-inline-size: 100%;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .spec__btn {
+    position: relative;
+    min-block-size: 2.75rem;
+    padding-block: var(--space-2);
+    font-weight: 500;
+    font-size: 0.9375rem;
+    color: var(--color-text-muted);
+    white-space: nowrap;
+    transition: color var(--duration-fast);
+  }
+  .spec__btn:hover { color: var(--color-text); }
+  .spec__btn[aria-pressed="true"] { color: var(--color-text); font-weight: 600; }
+  .spec__btn::after {
+    content: "";
+    position: absolute;
+    inset-inline: 0;
+    inset-block-end: 0;
+    block-size: 2px;
+    background: var(--color-accent);
+    transform: scaleX(0);
+    transition: transform var(--duration-base) var(--ease-out);
+  }
+  .spec__btn[aria-pressed="true"]::after { transform: scaleX(1); }
+
+  /* Underline selects with an inline label */
+  .filterbar__field { display: flex; align-items: center; gap: var(--space-2); }
+  .filterbar__field .field__control { border-block-end-color: var(--color-border); }
+  .filterbar__field .field__select {
+    field-sizing: content;
+    min-block-size: 2.75rem;
+    padding-inline-end: var(--space-1);
+    font-size: var(--text-small);
+    font-weight: 500;
+  }
+  .filterbar__search {
+    flex: 1 1 11rem;
+    min-inline-size: min(11rem, 100%);
+    max-inline-size: 18rem;
+    margin-inline-start: auto;
+    border-block-end-color: var(--color-border);
+    color: var(--color-text-muted);
+  }
+  .filterbar__search:focus-within { color: var(--color-text); }
+  .filterbar__search svg { inline-size: 1rem; block-size: 1rem; flex: none; }
+  .filterbar__search .field__input { min-block-size: 2.75rem; font-size: var(--text-small); }
+
+  @media (width < 48rem) {
+    .filterbar { gap: var(--space-2) var(--space-4); }
+    .spec { flex: 1 0 100%; }
+    .filterbar__search { flex-basis: 100%; max-inline-size: none; margin-inline-start: 0; }
+  }
+
+  .traders__count { font: 500 var(--text-xs) var(--font-mono); color: var(--color-text-muted); }
+
+  /* ---------- Ledger ---------- */
+  .traders-ledger .riskbar { min-inline-size: 7.5rem; }
+  /* main.js toggles data-expanded as a boolean attribute; match any value (see shared fix note). */
+  .traders-ledger .ledger__detail > td { padding-block: 0; }
+  .traders-ledger tbody tr[data-expanded] { background: var(--color-surface); }
+  .traders-ledger tbody tr[data-expanded] td:first-child { box-shadow: inset 2px 0 0 var(--color-accent); }
+  [dir="rtl"] .traders-ledger tbody tr[data-expanded] td:first-child { box-shadow: inset -2px 0 0 var(--color-accent); }
+  .traders-empty tr:hover { background: transparent; }
+  .traders-empty tr td:first-child, .traders-empty tr:hover td:first-child { box-shadow: none; }
+
+  .xp-btn { min-block-size: 2.75rem; }
+  .xp-btn__chev { inline-size: 1em; block-size: 1em; transition: rotate var(--duration-base) var(--ease-out); }
+  .xp-btn[aria-expanded="true"] { color: var(--color-text); }
+  .xp-btn[aria-expanded="true"] .xp-btn__chev { rotate: 180deg; }
+
+  /* ---------- Detail row: three open columns ---------- */
+  /* Stay in view when the table scrolls sideways on small screens. */
+  .traders-ledger .ledger__detail-inner {
+    position: sticky;
+    inset-inline-start: 0;
+    inline-size: 100cqi;
+    padding: var(--space-5) var(--space-4);
+  }
+  .trader-detail { display: grid; gap: var(--space-6); grid-template-columns: minmax(0, 1fr); }
+  @container (40rem <= width < 56rem) {
+    .trader-detail { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .trader-detail__col:first-child { grid-column: 1 / -1; }
+  }
+  @container (36rem <= width < 76rem) {
+    .traders-ledger tbody > tr:not(.ledger__detail) > :nth-child(3), .traders-ledger thead th:nth-child(3) { display: none; }
+    .traders-ledger :is(th, td) { padding-inline: var(--space-3); }
+  }
+  @container (width < 36rem) {
+    .traders-ledger :is(th, td) { padding-inline: var(--space-2); }
+    .traders-ledger .person { min-inline-size: 10rem; }
+  }
+  @container (width >= 56rem) {
+    .traders-ledger .ledger__detail-inner { padding: var(--space-6); }
+    .trader-detail { grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr) minmax(0, 1fr); gap: 0; }
+    .trader-detail__col + .trader-detail__col { padding-inline-start: var(--space-6); border-inline-start: 1px solid var(--color-border); }
+    .trader-detail__col:not(:last-child) { padding-inline-end: var(--space-6); }
+  }
+  .trader-detail__col { display: grid; gap: var(--space-4); align-content: start; min-inline-size: 0; }
+  .trader-detail__head { display: flex; justify-content: space-between; align-items: baseline; gap: var(--space-3); }
+  .trader-detail__note { font: 500 var(--text-label) var(--font-mono); letter-spacing: .1em; text-transform: uppercase; color: var(--color-signal); }
+  .trader-detail__big { display: flex; flex-wrap: wrap; align-items: baseline; gap: var(--space-3); }
+  .trader-detail__big .mono { font-size: clamp(1.75rem, 1.4rem + 1.2vw, 2.5rem); font-weight: 500; letter-spacing: -0.04em; line-height: 1; }
+  .trader-detail__sub { font-size: var(--text-xs); color: var(--color-text-muted); }
+  .trader-detail__chart { --chart-h: 12rem; }
+  .trader-detail__strategy { color: var(--color-text-muted); font-size: var(--text-small); line-height: 1.65; max-inline-size: 34rem; }
+
+  /* 2×2 stats: hairlines only */
+  .trader-detail__stats { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); border-block-start: 1px solid var(--color-border); }
+  .trader-detail__stats > div {
+    display: grid;
+    gap: var(--space-1);
+    padding-block: var(--space-3);
+    padding-inline-end: var(--space-3);
+    border-block-end: 1px solid var(--color-border);
+  }
+  .trader-detail__stats > div:nth-child(even) { padding-inline-start: var(--space-4); border-inline-start: 1px solid var(--color-border); }
+  .trader-detail__stats dt { font: 600 var(--text-label)/1.2 var(--font-mono); letter-spacing: .12em; text-transform: uppercase; color: var(--color-text-muted); }
+  .trader-detail__stats dd { font: 500 1.25rem/1.2 var(--font-mono); letter-spacing: -0.02em; font-variant-numeric: tabular-nums; }
+
+  /* Recent trades: hairline rows */
+  .trader-detail__trades { border-block-start: 1px solid var(--color-border); }
+  .trader-detail__trades li {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto auto;
+    align-items: baseline;
+    gap: var(--space-4);
+    padding-block: var(--space-2);
+    border-block-end: 1px solid var(--color-border);
+    font-size: var(--text-small);
+  }
+  .trader-detail__side { font: 500 var(--text-xs) var(--font-mono); color: var(--color-text-muted); }
+
+  /* ---------- Copy form ---------- */
+  .copy-form { display: grid; gap: var(--space-5); padding-block-start: var(--space-2); }
+  .copy-form__row { display: flex; justify-content: space-between; align-items: baseline; gap: var(--space-3); }
+  .copy-form__sl { font: 600 var(--text-small) var(--font-mono); color: var(--color-pending); white-space: nowrap; }
+  .copy-manage { display: grid; gap: var(--space-4); }
+  .copy-manage__stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(7.5rem, 1fr)); gap: var(--space-3) var(--space-4); margin: 0; }
+  .copy-manage__stats dt { font-size: var(--text-xs); color: var(--color-text-muted); }
+  .copy-manage__stats dd { margin: 0; font-weight: 600; }
+  .copy-manage__stats .gain { color: var(--color-gain); }
+  .copy-manage__stats .loss { color: var(--color-loss); }
+  .copy-manage__actions { display: flex; flex-wrap: wrap; gap: var(--space-2); }
+  .copy-manage__actions .btn { min-block-size: 2.75rem; }
+  .copy-form__status { margin-block-end: calc(var(--space-2) * -1); }
+  .amount-input { font-family: var(--font-mono); font-variant-numeric: tabular-nums; font-size: 1.25rem; appearance: textfield; }
+  .amount-input::-webkit-inner-spin-button, .amount-input::-webkit-outer-spin-button { appearance: none; margin: 0; }
+
+  /* "Insufficient balance": pending (amber) rather than loss, with the Add funds link */
+  .field[data-error="funds"] .field__control { border-color: var(--color-pending); box-shadow: 0 1px 0 0 var(--color-pending); }
+  .field[data-error="funds"] .field__error { color: var(--color-pending); }
+  .field__error { flex-wrap: wrap; }
+  .field__error-link { color: inherit; font-weight: 600; text-underline-offset: .2em; }
+
+  /* ---------- Confirm dialog ---------- */
+  .confirm-rows { border-block-start: 1px solid var(--color-border); }
+  .confirm-rows > div {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: var(--space-4);
+    padding-block: var(--space-3);
+    border-block-end: 1px solid var(--color-border);
+  }
+  .confirm-rows dt { font: 600 var(--text-label)/1.2 var(--font-mono); letter-spacing: .12em; text-transform: uppercase; color: var(--color-text-muted); }
+  .confirm-rows dd { font: 500 1rem var(--font-mono); font-variant-numeric: tabular-nums; text-align: end; }
+  .confirm-rows dd[data-confirm="stop"] { color: var(--color-pending); }
+
+  @media (forced-colors: active) {
+    .spec__btn::after { background: CanvasText; }
+  }
+}

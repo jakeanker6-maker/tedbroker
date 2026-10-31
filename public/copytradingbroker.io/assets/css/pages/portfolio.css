@@ -1,0 +1,106 @@
+/* Portfolio page — page-only rules. Tokens only, logical properties. */
+@layer pages {
+  /* ---------- Head: title + range select ---------- */
+  .pf-range { inline-size: min(100%, 13rem); }
+  .pf-range .field__select { font: 500 var(--text-small) var(--font-mono); min-block-size: 2.5rem; }
+
+  .pf-panel { display: grid; grid-template-columns: minmax(0, 1fr); gap: clamp(2.5rem, 2rem + 2vw, 3.5rem); }
+  .pf-panel:focus-visible { outline-offset: var(--space-3); }
+
+  .pf-strip { --stat-min: 11rem; }
+
+  /* ---------- Chart + inline legend ---------- */
+  .pf-chart { --chart-h: clamp(14rem, 22vw, 20rem); }
+  .pf-legend {
+    display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-2) var(--space-5);
+    font: 500 var(--text-xs)/1.4 var(--font-mono); color: var(--color-text-muted);
+  }
+  .pf-legend__item { display: inline-flex; align-items: center; gap: var(--space-2); }
+  .pf-legend__key { inline-size: 1.25rem; block-size: 0; border-block-start: 2px solid var(--chart-line); }
+  .pf-legend__key--dash { border-block-start: 1.5px dashed var(--color-text-muted); }
+
+  /* ---------- Monthly bars: scroll on narrow screens rather than crush labels ---------- */
+  .pf-bars-wrap { overflow-x: auto; overscroll-behavior-x: contain; padding-block-end: var(--space-2); }
+  .pf-bars-wrap:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 4px; }
+  .pf-bars-wrap .bars { --bars-h: 9rem; min-inline-size: 34rem; }
+
+  /* ---------- Investments + breakdown split ---------- */
+  .pf-cols { --cols: minmax(0, 5fr) minmax(18rem, 2fr); }
+  .pf-ledger :is(th, td) { padding-inline: var(--space-3); }
+  .pf-name { display: grid; gap: 2px; white-space: nowrap; }
+  .pf-name strong { font-weight: 600; }
+  .pf-name span { font: 400 var(--text-xs)/1.3 var(--font-mono); color: var(--color-text-muted); }
+  .pf-pct { font-size: var(--text-xs); color: var(--color-text-muted); margin-inline-start: var(--space-1); }
+  @container (width < 44rem) { .pf-pct { display: none; } }
+  .pf-ledger-foot { display: flex; flex-wrap: wrap; justify-content: space-between; gap: var(--space-3); padding-block-start: var(--space-4); font: 500 var(--text-xs) var(--font-mono); color: var(--color-text-muted); }
+
+  /* ---------- Horizontal bar rows (asset classes, per-trader comparison) ---------- */
+  .pf-hbars { list-style: none; padding: 0; display: grid; }
+  .pf-hbar {
+    display: grid; grid-template-columns: minmax(0, 1fr) auto auto; align-items: baseline;
+    gap: var(--space-2) var(--space-4);
+    padding-block: var(--space-3);
+    border-block-end: 1px solid var(--color-border);
+    font-size: var(--text-small);
+  }
+  .pf-hbar__pct { font: 600 var(--text-small) var(--font-mono); font-variant-numeric: tabular-nums; }
+  .pf-hbar__amt { font: 500 var(--text-xs) var(--font-mono); font-variant-numeric: tabular-nums; color: var(--color-text-muted); min-inline-size: 6.5rem; text-align: end; }
+  .pf-hbar__track { grid-column: 1 / -1; block-size: 3px; background: var(--color-border); }
+  .pf-hbar__fill {
+    display: block; block-size: 100%; inline-size: var(--w, 0%);
+    background: var(--_c, var(--chart-line));
+    transform-origin: left;
+    transition: transform var(--duration-slow) var(--ease-out);
+    transition-delay: calc(var(--i, 0) * 80ms);
+  }
+  [dir="rtl"] .pf-hbar__fill { transform-origin: right; }
+  .js .pf-hbars[data-reveal] .pf-hbar__fill { transform: scaleX(0); }
+  .js .pf-hbars[data-reveal].is-visible .pf-hbar__fill { transform: scaleX(1); }
+  /* The list itself should not slide in; only its bars grow. */
+  .js .pf-hbars[data-reveal] { opacity: 1; translate: none; }
+
+  /* ---------- Risk: gauge + 2×2 open grid ---------- */
+  .pf-gauge { display: grid; grid-template-columns: 8.5rem minmax(0, 1fr); gap: var(--space-5); align-items: center; }
+  .pf-gauge__dial { position: relative; }
+  .pf-gauge__dial svg { display: block; inline-size: 100%; block-size: auto; overflow: visible; }
+  .pf-gauge__value { display: block; margin-block-start: var(--space-2); text-align: center; font: 600 1.5rem/1 var(--font-mono); letter-spacing: -0.03em; }
+  .pf-gauge { --_c: var(--color-gain); }
+  .pf-gauge[data-level="med"] { --_c: var(--color-pending); }
+  .pf-gauge[data-level="high"] { --_c: var(--color-loss); }
+  .pf-gauge__track { fill: none; stroke: var(--color-border); stroke-width: 8; stroke-linecap: round; }
+  .pf-gauge__arc { fill: none; stroke: var(--_c); stroke-width: 8; stroke-linecap: round; }
+  .pf-gauge__tick { stroke: var(--color-border-strong); stroke-width: 1; }
+  .pf-gauge__needle line { stroke: var(--color-text); stroke-width: 2; stroke-linecap: round; }
+  .pf-gauge__needle circle { fill: var(--color-text); }
+  .pf-gauge__title { font: 600 1.0625rem/1.3 var(--font-display); }
+  .pf-gauge__title .num { font-weight: 500; }
+
+  .pf-risk { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); margin: 0; }
+  .pf-risk > div { display: grid; gap: var(--space-1); padding: var(--space-4) var(--space-4) var(--space-4) 0; border-block-start: 1px solid var(--color-border); }
+  .pf-risk > div:nth-child(even) { padding-inline-start: var(--space-4); border-inline-start: 1px solid var(--color-border); }
+  .pf-risk dt { font: 600 var(--text-label)/1.2 var(--font-mono); letter-spacing: .12em; text-transform: uppercase; color: var(--color-text-muted); }
+  .pf-risk dd { margin: 0; font: 500 1.5rem/1.1 var(--font-mono); letter-spacing: -0.02em; font-variant-numeric: tabular-nums; }
+  .pf-risk dd small { display: block; margin-block-start: var(--space-1); font: 400 var(--text-xs)/1.3 var(--font-text); letter-spacing: 0; color: var(--color-text-muted); }
+
+  /* ---------- Active copies ---------- */
+  .pf-actions { display: inline-flex; gap: var(--space-4); justify-content: end; }
+  .pf-actions .text-btn { min-block-size: 2.75rem; }
+
+  @media (forced-colors: active) {
+    .pf-hbar__fill { background: CanvasText; }
+    .pf-gauge__arc { stroke: Highlight; }
+  }
+
+  /* unified portfolio (Phase 5) */
+  .pf-head-actions { display: flex; gap: var(--space-2); flex-wrap: wrap; }
+  .pf-equity { block-size: clamp(14rem, 32vh, 22rem); margin-block-start: var(--space-4); }
+  .pf-filter { flex-wrap: wrap; max-inline-size: 100%; }
+  .pf-filter .seg__btn, [data-pf-range] .seg__btn { min-block-size: 2.75rem; }
+  .pf-ledger .gain { color: var(--color-gain); }
+  .pf-ledger .loss { color: var(--color-loss); }
+  .pf-ledger .pf-pct { display: block; font-size: var(--text-xs); color: var(--color-text-muted); }
+  .stat__value.gain { color: var(--color-gain); }
+  .stat__value.loss { color: var(--color-loss); }
+  [data-pf-change].gain { color: var(--color-gain); }
+  [data-pf-change].loss { color: var(--color-loss); }
+}

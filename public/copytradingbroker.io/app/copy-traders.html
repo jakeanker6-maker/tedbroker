@@ -1,0 +1,326 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+  <script>if('scrollRestoration' in history)history.scrollRestoration='manual';var __top=function(){if(location.hash){var __t=document.getElementById(decodeURIComponent(location.hash.slice(1)));if(__t){__t.scrollIntoView();return}}scrollTo(0,0)};__top();addEventListener('load',__top);addEventListener('pageshow',function(e){if(e.persisted)__top()})</script>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Copy traders — TED Brokers</title>
+  <meta name="theme-color" content="#0A1626">
+  <meta name="robots" content="noindex">
+  <link rel="icon" href="../assets/img/favicon.ico">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=JetBrains+Mono:wght@400;500;600&family=Sora:wght@300;600;700;800&display=swap">
+  <link rel="stylesheet" href="../assets/css/main.css?v=2">
+  <link rel="stylesheet" href="../assets/css/live.css?v=2">
+  <link rel="stylesheet" href="../assets/css/pages/copy-traders.css?v=4">
+  <script>document.documentElement.classList.add('js');try{var t=localStorage.getItem('ted:theme');if(t==='system')t=matchMedia('(prefers-color-scheme: light)').matches?'light':'dark';if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
+  <script type="module" src="../assets/js/main.js?v=3"></script>
+</head>
+<body class="app surface-ink">
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <!-- ===================== RAIL (shared across app pages) ===================== -->
+  <aside class="rail" id="rail" aria-label="Dashboard">
+    <div class="rail__brand">
+      <a class="wordmark" href="index.html" aria-label="TED Brokers dashboard">
+        <span class="wordmark__ted">TED</span><span class="wordmark__brokers">Br<svg class="wordmark__o" viewBox="0 0 20 20" aria-hidden="true"><g fill="currentColor"><circle cx="10" cy="2" r="1.6"/><circle cx="15.2" cy="4.1" r="1.4" opacity=".8"/><circle cx="17.9" cy="9.4" r="1.6"/><circle cx="16.3" cy="14.8" r="1.4" opacity=".8"/><circle cx="11.2" cy="17.9" r="1.6"/><circle cx="5.6" cy="16.4" r="1.4" opacity=".7"/><circle cx="2.2" cy="11.6" r="1.6"/><circle cx="3" cy="6" r="1.4" opacity=".8"/><circle cx="6.6" cy="2.9" r="1.1" opacity=".6"/><circle cx="10" cy="10" r="1.9"/><circle cx="13.3" cy="9.2" r="1" opacity=".7"/><circle cx="7.4" cy="12" r="1" opacity=".7"/></g></svg>kers</span>
+      </a>
+      <button class="icon-btn rail__collapse" type="button" data-rail-collapse aria-controls="rail" aria-expanded="true" aria-label="Collapse menu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></button>
+    </div>
+    <nav class="rail__nav" aria-label="Dashboard sections">
+      <ul class="rail__list" role="list">
+        <li><a class="rail__link" href="index.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>Overview</a></li>
+        <li><a class="rail__link" href="trade.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M4 19V5M4 19h16"/><path d="M7 15l4-5 3 3 5-7"/><path d="M15 6h4v4"/></svg>Trade</a></li>
+        <li><a class="rail__link" href="screener.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M3 5h18l-7 8v6l-4-2v-4z"/></svg>Screener</a></li>
+        <li><a class="rail__link" href="wallet.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M3 7a2 2 0 0 1 2-2h13v4"/><path d="M3 7v11a2 2 0 0 0 2 2h15V9H5a2 2 0 0 1-2-2z"/><circle cx="16" cy="14.5" r="1"/></svg>Wallet</a></li>
+        <li><a class="rail__link" href="portfolio.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M21 12A9 9 0 1 1 12 3v9z"/><path d="M15 3.5A9 9 0 0 1 20.5 9H15z"/></svg>Portfolio</a></li>
+        <li><a class="rail__link" href="documents.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M6 3h8l4 4v14H6z"/><path d="M14 3v4h4M9 12h6M9 16h6"/></svg>Documents</a></li>
+        <li><a class="rail__link" href="copy-traders.html" aria-current="page"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0"/><path d="M16 4.5a3.5 3.5 0 0 1 0 7M18 14.5a6.5 6.5 0 0 1 3.5 5.5"/></svg>Copy traders<span class="rail__aside rail__aside--live" hidden></span></a></li>
+      </ul>
+      <p class="rail__group-label" id="rail-plans">Investment plans</p>
+      <ul class="rail__list" role="list" aria-labelledby="rail-plans">
+        <li><a class="rail__link rail__link--sub" href="plans.html">Robo Advisor</a></li>
+        <li><a class="rail__link rail__link--sub" href="plans.html#etf">ETF automation</a></li>
+        <li><a class="rail__link rail__link--sub" href="plans.html#defi">DeFi</a></li>
+        <li><a class="rail__link rail__link--sub" href="plans.html#options">Options</a></li>
+        <li><a class="rail__link rail__link--sub" href="plans.html#staking">Staking<span class="rail__aside rail__aside--soon">soon</span></a></li>
+      </ul>
+      <p class="rail__group-label" id="rail-more">Community</p>
+      <ul class="rail__list" role="list" aria-labelledby="rail-more">
+        <li><a class="rail__link" href="network.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M3 12h4l3-8 4 16 3-8h4"/></svg>Network feed</a></li>
+        <li><a class="rail__link" href="referrals.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="18" cy="5" r="2.5"/><circle cx="6" cy="12" r="2.5"/><circle cx="18" cy="19" r="2.5"/><path d="M8.2 10.8l7.6-4.4M8.2 13.2l7.6 4.4"/></svg>Referrals</a></li>
+        <li><a class="rail__link" href="news.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M4 5h13v14H6a2 2 0 0 1-2-2z"/><path d="M17 9h3v8a2 2 0 0 1-2 2"/><path d="M7.5 9h6M7.5 13h6"/></svg>News</a></li>
+      </ul>
+    </nav>
+    <div class="rail__foot">
+      <ul class="rail__list" role="list">
+        <li><a class="rail__link" href="../help.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.6.3-1 .8-1 1.5V14"/><path d="M12 17h.01"/></svg>Help center</a></li>
+        <li><a class="rail__link" href="settings.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M12 2.5v3M12 18.5v3M4.2 4.2l2.1 2.1M17.7 17.7l2.1 2.1M2.5 12h3M18.5 12h3M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1"/></svg>Settings</a></li>
+      </ul>
+      <a class="rail__user" href="settings.html">
+        <span class="avatar" aria-hidden="true"></span>
+        <span><span class="rail__user-name">Loading…</span><br><span class="rail__user-meta" hidden></span></span>
+      </a>
+    </div>
+  </aside>
+  <button class="rail-scrim" type="button" tabindex="-1" aria-hidden="true"></button>
+
+  <div class="app__main">
+    <!-- ===================== TOP BAR (shared) ===================== -->
+    <header class="topbar">
+      <div class="topbar__bar">
+        <button class="icon-btn topbar__menu" type="button" data-rail-toggle aria-controls="rail" aria-expanded="false" aria-label="Open menu">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h10"/></svg>
+        </button>
+        <a class="wordmark topbar__brand" href="index.html" aria-label="TED Brokers dashboard"><span class="wordmark__ted">TED</span><span class="wordmark__brokers">Brokers</span></a>
+        <form class="search" role="search" action="copy-traders.html">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+          <label class="sr-only" for="q">Search</label>
+          <input id="q" name="q" type="search" placeholder="Search traders, plans, markets" autocomplete="off">
+          <kbd aria-hidden="true">⌘K</kbd>
+        </form>
+        <div class="topbar__actions">
+          <button class="lang-select" type="button" aria-label="Language: English">EN
+            <svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M2 3.5l3 3 3-3"/></svg>
+          </button>
+          <button class="icon-btn" type="button" data-theme-toggle aria-pressed="false" aria-label="Light theme">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4 8 8 0 1 0 20 14.5z"/></svg>
+          </button>
+          <button class="icon-btn" type="button" aria-label="Notifications">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M6 8a6 6 0 1 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.9 1.9 0 0 0 3.4 0"/></svg>
+            <span class="icon-btn__dot" hidden></span>
+          </button>
+          <button class="btn btn--sm btn--outline" type="button" data-dialog-open="ted-ai">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true" style="color: var(--color-signal)"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/></svg>TED AI
+          </button>
+          <a class="btn btn--sm" href="wallet.html#deposit">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>Deposit
+          </a>
+        </div>
+      </div>
+      <div class="ticker ticker--sm ticker--app" role="region" aria-label="Market prices" data-market-tape aria-busy="true" style="--sk-min: 2.5rem">
+        <div class="ticker__track"><ul class="ticker__list" role="list"></ul></div>
+      </div>
+    </header>
+
+    <!-- ===================== PAGE CONTENT ===================== -->
+    <main class="app__content" id="main">
+      <div class="page-head">
+        <div>
+          <h1>Copy traders</h1>
+          <p class="page-head__meta">Loading traders… · Available balance <span class="page-head__strong">—</span></p>
+        </div>
+      </div>
+
+      <section class="traders" aria-labelledby="traders-title" data-component="traders-filter" data-skeleton aria-busy="true">
+        <h2 class="sr-only" id="traders-title">Trader directory</h2>
+        <form class="filterbar" role="search" aria-label="Filter traders">
+          <div class="spec" role="group" aria-label="Specialization"><button class="spec__btn" type="button" value="all" aria-pressed="true">All</button><button class="spec__btn" type="button" value="forex" aria-pressed="false">Forex</button><button class="spec__btn" type="button" value="crypto" aria-pressed="false">Crypto</button><button class="spec__btn" type="button" value="stocks" aria-pressed="false">Stocks</button><button class="spec__btn" type="button" value="options" aria-pressed="false">Options</button><button class="spec__btn" type="button" value="commodities" aria-pressed="false">Commodities</button></div>
+          <div class="filterbar__field">
+            <label class="field__label" for="f-risk">Risk</label>
+            <div class="field__control"><select class="field__select" id="f-risk" name="risk">
+              <option value="any">Any</option>
+              <option value="low">Low 1–3</option>
+              <option value="med">Medium 4–6</option>
+              <option value="high">High 7–10</option>
+            </select></div>
+          </div>
+          <div class="filterbar__field">
+            <label class="field__label" for="f-win">Min. win rate</label>
+            <div class="field__control"><select class="field__select" id="f-win" name="win">
+              <option value="0">Any</option>
+              <option value="60">60%+</option>
+              <option value="70">70%+</option>
+              <option value="80">80%+</option>
+            </select></div>
+          </div>
+          <div class="filterbar__field">
+            <label class="field__label" for="f-sort">Sort by</label>
+            <div class="field__control"><select class="field__select" id="f-sort" name="sort">
+              <option value="return">12-mo return</option>
+              <option value="win">Win rate</option>
+              <option value="copiers">Copiers</option>
+              <option value="dd">Lowest drawdown</option>
+            </select></div>
+          </div>
+          <div class="filterbar__search field__control">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+            <label class="sr-only" for="f-q">Search traders by name or strategy</label>
+            <input class="field__input" id="f-q" name="q" type="search" placeholder="Filter by name or strategy" autocomplete="off">
+          </div>
+        </form>
+        <p class="traders__count" role="status" data-filter-count>Loading traders…</p>
+
+        <div class="ledger-wrap" tabindex="0" role="region" aria-labelledby="traders-title">
+          <table class="ledger ledger--lg traders-ledger">
+            <caption class="sr-only">Traders available to copy. Performance is shown only for traders with a live track record.</caption>
+            <thead>
+              <tr>
+                <th scope="col">Trader</th>
+                <th scope="col" class="is-num">12-mo return</th>
+                <th scope="col" class="opt"><span class="sr-only">12-month trend</span></th>
+                <th scope="col" class="is-num">Win rate</th>
+                <th scope="col" class="is-num opt-sm">Max drawdown</th>
+                <th scope="col">Risk</th>
+                <th scope="col" class="is-num opt">Copiers</th>
+                <th scope="col" class="is-num">Min. to copy</th>
+                <th scope="col"><span class="sr-only">Action</span></th>
+              </tr>
+            </thead>
+            
+            
+            
+            
+            
+            
+            
+            
+            <template id="trader-row-template">
+<tbody class="trader" data-name="" data-spec="" data-risk="" data-win="" data-return="" data-copiers="" data-dd="">
+              <tr data-expanded="true">
+                <td><div class="person"><span class="avatar avatar--amber" aria-hidden="true">MC</span><div><div class="person__name">Marcus Chen</div><div class="person__meta">Crypto · Momentum alpha</div></div></div></td>
+                <td class="is-num"><span class="delta" data-trend="up">+52.7%</span></td>
+                <td class="opt"><span class="muted">—</span></td>
+                <td class="is-num">68.1%</td>
+                <td class="is-num opt-sm">−17.6%</td>
+                <td><span class="riskbar" data-level="med" style="--risk:6"><span class="riskbar__track"></span>6/10<span class="sr-only"> · Medium</span></span></td>
+                <td class="is-num opt">2,884</td>
+                <td class="is-num">$1,000</td>
+                <td class="is-end"><button class="text-btn xp-btn" type="button" data-expand="traders" aria-controls="trader-marcus" aria-expanded="true" data-label-open="Hide" data-label-closed="Details"><span data-label>Hide</span><span class="sr-only"> for Marcus Chen</span><svg class="xp-btn__chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button></td>
+              </tr>
+              <tr class="ledger__detail" id="trader-marcus">
+                <td colspan="9">
+                  <div class="ledger__detail-inner trader-detail">
+                    <div class="trader-detail__col">
+                      <div class="trader-detail__head"><h3 class="stat__label">12-month equity</h3><span class="trader-detail__note">Past performance</span></div>
+                      <p class="trader-detail__big"><span class="mono">$15,270</span> <span class="delta" data-trend="up">+52.7%</span></p>
+                      <p class="trader-detail__sub">Growth of $10,000 · Nov 2025 – Oct 2026</p>
+                      <div class="chart trader-detail__chart" role="img" data-component="chart" data-series="walk:52,seed=108,drift=1,vol=1.5,start=10000,end=15270" data-format="currency" data-decimals="0" data-labels="Nov,Dec,Jan,Feb,Mar,Apr,May,Jun,Jul,Aug,Sep,Oct" data-xaxis="4" aria-label="Marcus Chen: growth of $10,000 over the last 12 months, ending at $15,270. Past performance. Use arrow keys to inspect values."></div>
+                    </div>
+                    <div class="trader-detail__col">
+                      <h3 class="stat__label">Strategy</h3>
+                      <p class="trader-detail__strategy">Systematic trend-following across the most liquid digital assets. Volatility-weighted position sizing with a 4-hour trailing stop on every entry.</p>
+                      <dl class="trader-detail__stats">
+                        <div><dt>AUM</dt><dd>$4.2M</dd></div>
+                        <div><dt>Avg. hold</dt><dd>2.4 days</dd></div>
+                        <div><dt>Trades / week</dt><dd>18</dd></div>
+                        <div><dt>Profitable months</dt><dd>9 / 12</dd></div>
+                      </dl>
+                    </div>
+                    <div class="trader-detail__col">
+                      <h3 class="stat__label">Recent trades</h3>
+                      <ul class="trader-detail__trades" role="list">
+                      <li><span class="mono">BTC/USD</span><span class="trader-detail__side">Buy</span><span class="delta" data-trend="up">+3.1%</span></li>
+                      <li><span class="mono">ETH/USD</span><span class="trader-detail__side">Sell</span><span class="delta" data-trend="up">+1.4%</span></li>
+                      <li><span class="mono">SOL/USD</span><span class="trader-detail__side">Buy</span><span class="delta" data-trend="down">−0.8%</span></li>
+                      </ul>
+                      <form class="copy-form" data-template-form data-trader="Marcus Chen" data-first="Marcus" data-min="1000" data-available="6420" data-risk="6" data-dialog="copy-confirm" novalidate aria-label="Copy Marcus Chen">
+                        <div class="field">
+                          <div class="copy-form__row"><label class="field__label" for="amt-marcus">Allocation amount</label><span class="field__help">Available $6,420.00</span></div>
+                          <div class="field__control"><span class="field__affix">$</span><input class="field__input amount-input" id="amt-marcus" name="amount" type="number" inputmode="decimal" min="1000" step="any" value="1000" required autocomplete="off" aria-describedby="amt-marcus-help amt-marcus-err"><span class="field__affix">USD</span></div>
+                          <p class="field__help" id="amt-marcus-help">Minimum to copy Marcus: $1,000</p>
+                          <p class="field__error" id="amt-marcus-err"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7.5v5.5M12 16.5h.01"/></svg><span data-error-msg></span><a class="field__error-link" href="wallet.html#deposit" data-error-funds hidden>Add funds →</a></p>
+                        </div>
+                        <div class="field">
+                          <div class="copy-form__row"><label class="field__label" for="sl-marcus">Copy stop-loss</label><span class="copy-form__sl" data-sl-out aria-hidden="true">Stop copying at −15%</span></div>
+                          <input class="range" id="sl-marcus" name="stoploss" type="range" min="5" max="50" step="1" value="15" aria-valuetext="Stop copying at −15%" aria-describedby="sl-marcus-help">
+                          <div class="range-scale" aria-hidden="true"><span>−5%</span><span>−50%</span></div>
+                          <p class="field__help" id="sl-marcus-help">Copying stops automatically if this allocation falls by this much.</p>
+                        </div>
+                        <p class="copy-form__status" data-copy-status hidden><span class="tag tag--plain tag--gain">Copying Marcus</span></p>
+                        <button class="btn btn--block" type="submit"><span data-copy-label>Copy Marcus</span><svg class="btn__arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+                      </form>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+            </template>
+            <tbody class="traders-empty" data-filter-empty hidden>
+              <tr>
+                <td colspan="9">
+                  <div class="empty">
+                    <p class="empty__title">No traders match these filters</p>
+                    <p>Try a wider risk range, a lower win rate or a different search.</p>
+                    <button class="btn btn--sm btn--outline" type="button" data-filter-reset>Clear filters</button>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <dialog class="dialog" id="copy-confirm" aria-labelledby="copy-confirm-title" aria-describedby="copy-confirm-note">
+        <div class="dialog__head">
+          <h2 class="dialog__title" id="copy-confirm-title">Copy <span data-confirm="trader">—</span>?</h2>
+          <button class="icon-btn" type="button" data-dialog-close aria-label="Close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+        </div>
+        <div class="dialog__body">
+          <dl class="confirm-rows">
+            <div><dt>Allocation</dt><dd data-confirm="amount">—</dd></div>
+            <div><dt>Copy stop-loss</dt><dd data-confirm="stop">—</dd></div>
+            <div><dt>Risk score</dt><dd data-confirm="risk">—</dd></div>
+            <div><dt>Balance after</dt><dd data-confirm="after">—</dd></div>
+          </dl>
+          <p class="fineprint" id="copy-confirm-note"><strong>Risk note.</strong> <span data-confirm="note">Your allocation will mirror this trader's positions in proportion. You can lose some or all of it. Past performance is not indicative of future results.</span></p>
+        </div>
+        <div class="dialog__foot">
+          <button class="btn btn--ghost" type="button" data-dialog-close>Cancel</button>
+          <button class="btn" type="button" data-confirm-submit autofocus>Start copying</button>
+        </div>
+      </dialog>
+
+      <footer class="app__foot">
+        <p class="school-notice" role="note"><strong>School project notice:</strong> This platform is a student school project with simulated markets and simulated funds. It is not a real broker. Do not deposit real money on this platform.</p>
+        <p class="fineprint">Past performance is not indicative of future results. Copy trading involves risk.</p></footer>
+    </main>
+
+  </div>
+
+  <!-- ===================== MOBILE TAB BAR + TED AI (shared) ===================== -->
+  <nav class="tabbar" aria-label="Quick navigation">
+    <a href="index.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1z"/></svg>Home</a>
+    <a href="wallet.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M3 7a2 2 0 0 1 2-2h13v4"/><path d="M3 7v11a2 2 0 0 0 2 2h15V9H5a2 2 0 0 1-2-2z"/></svg>Wallet</a>
+    <a href="copy-traders.html" aria-current="page"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0"/><path d="M16 4.5a3.5 3.5 0 0 1 0 7"/></svg>Traders</a>
+    <a href="trade.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4 19V5M4 19h16"/><path d="M7 15l4-5 3 3 5-7"/></svg>Trade</a>
+    <button type="button" data-rail-toggle aria-controls="rail" aria-expanded="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>More</button>
+  </nav>
+  <button class="ai-fab" type="button" data-dialog-open="ted-ai"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/></svg>TED AI</button>
+
+  <dialog class="drawer ai-panel" id="ted-ai" aria-labelledby="ted-ai-title">
+    <div class="drawer__inner">
+      <div class="drawer__head">
+        <h2 id="ted-ai-title" class="ai-panel__title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true" style="color: var(--color-signal)"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/></svg>TED AI</h2>
+        <button class="icon-btn" type="button" data-dialog-close aria-label="Close TED AI"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+      </div>
+      <div class="drawer__body ai-chat" data-ai-log role="log" aria-live="polite" aria-label="TED AI conversation">
+        <div class="ai-empty" data-ai-empty>
+          <p class="ai-empty__lead">Ask about your portfolio, copy trades, wallet or plans.</p>
+          <ul class="ai-suggest" role="list">
+            <li><button class="btn btn--sm btn--outline" type="button" data-ai-suggest="How do I start copying a trader?">How do I start copying a trader?</button></li>
+            <li><button class="btn btn--sm btn--outline" type="button" data-ai-suggest="How does the Trading Hub work?">How does the Trading Hub work?</button></li>
+            <li><button class="btn btn--sm btn--outline" type="button" data-ai-suggest="How do deposits and withdrawals work?">How do deposits and withdrawals work?</button></li>
+          </ul>
+        </div>
+      </div>
+      <form class="drawer__foot ai-form" data-ai-form>
+        <div class="field">
+          <label class="sr-only" for="ai-q">Ask TED AI</label>
+          <div class="field__control">
+            <input class="field__input" id="ai-q" name="q" maxlength="2000" placeholder="Ask about your portfolio…" autocomplete="off">
+            <button class="icon-btn" type="submit" aria-label="Send"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4 12l16-8-6 16-2.5-6.5z"/></svg></button>
+          </div>
+        </div>
+        <p class="fineprint ai-status" data-ai-status aria-live="polite"></p>
+        <p class="fineprint">TED AI can make mistakes. It is not financial advice.</p>
+      </form>
+    </div>
+  </dialog>
+  <script type="module" src="../assets/js/live/copy-traders.js?v=4"></script>
+  <script type="module" src="../assets/js/live/ticker.js"></script>
+  <script type="module" src="../assets/js/live/ai-panel.js"></script>
+  <script type="module" src="../assets/js/live/header.js"></script>
+</body>
+</html>

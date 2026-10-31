@@ -1,6 +1,7 @@
 <!doctype html>
 <html lang="en" dir="ltr">
 <head>
+  <script>if('scrollRestoration' in history)history.scrollRestoration='manual';var __top=function(){if(location.hash){var __t=document.getElementById(decodeURIComponent(location.hash.slice(1)));if(__t){__t.scrollIntoView();return}}scrollTo(0,0)};__top();addEventListener('load',__top);addEventListener('pageshow',function(e){if(e.persisted)__top()})</script>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>TED Brokers — Professional trading platform</title>
@@ -13,37 +14,31 @@
   <link rel="stylesheet" href="assets/css/main.css">
   <link rel="stylesheet" href="assets/css/pages/home.css">
   <script>document.documentElement.classList.add('js');try{var t=localStorage.getItem('ted:theme');if(t==='system')t=matchMedia('(prefers-color-scheme: light)').matches?'light':'dark';if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
-  <script type="module" src="assets/js/main.js"></script>
+  <script type="module" src="assets/js/main.js?v=3"></script>
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
 
   <!-- ============ Header ============ -->
   <header class="site-header surface-ink">
-    <div class="container site-header__bar">
-      <a class="wordmark" href="index.html" aria-label="TED Brokers home">
+  <div class="container site-header__bar">
+    <a class="wordmark" href="index.html" aria-label="TED Brokers home">
         <span class="wordmark__ted">TED</span><span class="wordmark__brokers">Br<svg class="wordmark__o" viewBox="0 0 20 20" aria-hidden="true"><g fill="currentColor"><circle cx="10" cy="2" r="1.6"/><circle cx="15.2" cy="4.1" r="1.4" opacity=".8"/><circle cx="17.9" cy="9.4" r="1.6"/><circle cx="16.3" cy="14.8" r="1.4" opacity=".8"/><circle cx="11.2" cy="17.9" r="1.6"/><circle cx="5.6" cy="16.4" r="1.4" opacity=".7"/><circle cx="2.2" cy="11.6" r="1.6"/><circle cx="3" cy="6" r="1.4" opacity=".8"/><circle cx="6.6" cy="2.9" r="1.1" opacity=".6"/><circle cx="10" cy="10" r="1.9"/><circle cx="13.3" cy="9.2" r="1" opacity=".7"/><circle cx="7.4" cy="12" r="1" opacity=".7"/></g></svg>kers</span>
       </a>
-      <button class="icon-btn nav-toggle" type="button" data-nav-toggle aria-expanded="false" aria-controls="site-nav" aria-label="Menu">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h10"/></svg>
-      </button>
-      <nav class="site-nav" id="site-nav" aria-label="Main">
-        <ul class="site-nav__links" role="list">
-          <li><a href="index.html" aria-current="page">Home</a></li>
-          <li><a href="how_it_works.html">Trading platform</a></li>
-          <li><a href="traders.html">Copy trading</a></li>
-          <li><a href="about-us.html">Company</a></li>
-          <li><a href="help.html">Help</a></li>
-        </ul>
-        <div class="site-nav__actions">
-          <a class="site-nav__signin" href="login.html">Sign in</a>
-          <a class="btn btn--sm" href="register.html">Open an account
-            <svg class="btn__arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-          </a>
-        </div>
-      </nav>
-    </div>
-  </header>
+    <button class="icon-btn nav-toggle" type="button" data-nav-toggle aria-expanded="false" aria-controls="site-nav" aria-label="Menu">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h10"/></svg>
+    </button>
+    <nav class="site-nav" id="site-nav" aria-label="Main">
+      <ul class="site-nav__links" role="list"><li><a href="index.html" aria-current="page">Home</a></li><li><a href="how_it_works.html">Trading platform</a></li><li><a href="traders.html">Copy trading</a></li><li><a href="investors.html">Investors</a></li><li class="site-nav__group"><details><summary>Company<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></summary><ul class="site-nav__menu" role="list"><li><a href="about-us.html">About us</a></li><li><a href="faqs.html">FAQs</a></li><li><a href="contact-us.html">Contact us</a></li><li><a href="mobile-app.html">Mobile app</a></li></ul></details></li><li><a href="help.html">Help</a></li><li class="site-nav__group"><details><summary>Legal<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></summary><ul class="site-nav__menu" role="list"><li><a href="privacy-policy.html">Privacy policy</a></li><li><a href="legal/terms_conditions.html">Terms & conditions</a></li><li><a href="legal/aml_policy.html">AML policy</a></li><li><a href="legal/risk_closure.html">Risk disclosure</a></li></ul></details></li></ul>
+      <div class="site-nav__actions">
+        <a class="site-nav__signin" href="login.html">Sign in</a>
+        <a class="btn btn--sm" href="register.html">Open an account
+          <svg class="btn__arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </a>
+      </div>
+    </nav>
+  </div>
+</header>
 
   <main id="main">
     <!-- ============ Hero ============ -->
@@ -108,29 +103,74 @@
 
     <!-- ============ Platform ============ -->
     <section class="section surface-paper" aria-labelledby="platform-title">
-      <div class="container split" style="--split-cols: minmax(0, 5fr) minmax(0, 7fr)">
+    <div class="container split" style="--split-cols: minmax(0, 5fr) minmax(0, 7fr)">
         <div class="sticky stack" style="--stack-gap: var(--space-5)">
-          <p class="overline overline--accent">01 — Trading platform</p>
+          <p class="overline overline--accent">Trading platform</p>
             <h2 id="platform-title" class="h-xl">The tools active traders use, in one workspace.</h2>
           <p class="lead">Place orders, analyse markets, manage margin and review your portfolio without leaving the Trading Hub.</p>
           <a class="link-arrow link-arrow--accent" href="how_it_works.html">How the platform works
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
         </div>
-        <ol class="num-rows" role="list">
-          <li class="num-row"><span class="num-row__index" aria-hidden="true">01</span><div class="num-row__body"><h3 class="num-row__title">Order types for every plan</h3><p class="num-row__text">Market, limit, stop, stop-limit and trailing stop orders, dollar-amount orders for fractional shares, and extended-hours limit orders. Each order is previewed with its estimated cost and fees before you confirm.</p></div></li>
-          <li class="num-row"><span class="num-row__index" aria-hidden="true">02</span><div class="num-row__body"><h3 class="num-row__title">Options, including multi-leg strategies</h3><p class="num-row__text">Trade calls and puts on US stocks and ETFs. Place spreads, straddles, strangles, iron condors, butterflies, calendars, covered calls and collars as one order, with access set by your options approval level.</p></div></li>
-          <li class="num-row"><span class="num-row__index" aria-hidden="true">03</span><div class="num-row__body"><h3 class="num-row__title">Cash or margin accounts</h3><p class="num-row__text">Choose a cash account or a margin account. Margin accounts support short selling of stocks and ETFs, with initial and maintenance requirements shown before you trade.</p></div></li>
-          <li class="num-row"><span class="num-row__index" aria-hidden="true">04</span><div class="num-row__body"><h3 class="num-row__title">Research, alerts and screening</h3><p class="num-row__text">Live charts, watchlists, a stock and ETF screener, company profiles with news and earnings dates, and price or percentage-move alerts.</p></div></li>
-          <li class="num-row"><span class="num-row__index" aria-hidden="true">05</span><div class="num-row__body"><h3 class="num-row__title">Reporting and automated investing</h3><p class="num-row__text">Monthly statements, trade confirmations and realized gains reports with FIFO or average-cost basis. Invest in ETF model portfolios or set recurring weekly, biweekly or monthly purchases.</p></div></li>
+        <ol class="num-rows num-rows--plain" role="list">
+          <li class="num-row"><div class="num-row__body"><h3 class="num-row__title">Order types for every plan</h3><p class="num-row__text">Market, limit, stop, stop-limit and trailing stop orders, dollar-amount orders for fractional shares, and extended-hours limit orders. Each order is previewed with its estimated cost and fees before you confirm.</p></div></li>
+          <li class="num-row"><div class="num-row__body"><h3 class="num-row__title">Options, including multi-leg strategies</h3><p class="num-row__text">Trade calls and puts on US stocks and ETFs. Place spreads, straddles, strangles, iron condors, butterflies, calendars, covered calls and collars as one order, with access set by your options approval level.</p></div></li>
+          <li class="num-row"><div class="num-row__body"><h3 class="num-row__title">Cash or margin accounts</h3><p class="num-row__text">Choose a cash account or a margin account. Margin accounts support short selling of stocks and ETFs, with initial and maintenance requirements shown before you trade.</p></div></li>
+          <li class="num-row"><div class="num-row__body"><h3 class="num-row__title">Research, alerts and screening</h3><p class="num-row__text">Live charts, watchlists, a stock and ETF screener, company profiles with news and earnings dates, and price or percentage-move alerts.</p></div></li>
+          <li class="num-row"><div class="num-row__body"><h3 class="num-row__title">Reporting and automated investing</h3><p class="num-row__text">Monthly statements, trade confirmations and realized gains reports with FIFO or average-cost basis. Invest in ETF model portfolios or set recurring weekly, biweekly or monthly purchases.</p></div></li>
         </ol>
       </div>
     </section>
 
     <!-- ============ Copy trading (secondary) ============ -->
-    <section class="section surface-ink" aria-labelledby="copy-title">
-      <div class="container split" style="--split-cols: minmax(0, 5fr) minmax(0, 7fr)">
+    <section class="section photo-section photo-section--right surface-ink" aria-labelledby="copy-title">
+      <div class="photo-section__media copy-anim-wrap" data-illustration aria-hidden="true">
+        <svg class="copy-anim" viewBox="0 0 460 900" preserveAspectRatio="xMidYMid meet" focusable="false">
+          <polyline class="chart" pathLength="100" points="30,140 80,118 130,128 180,92 230,104 280,70 330,84 380,50 430,58" fill="none" style="stroke: var(--color-signal)" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
+          <text x="30" y="30" style="font-family: var(--font-mono); fill: var(--color-text-muted)" font-size="12" letter-spacing="2">PERFORMANCE</text>
+          <path id="copy-path-1" class="flow" d="M230 356 C230 470 85 470 85 600" fill="none" style="stroke: var(--color-signal)" stroke-opacity=".55" stroke-width="2"/>
+          <path id="copy-path-2" class="flow" d="M230 356 L230 600" fill="none" style="stroke: var(--color-signal)" stroke-opacity=".55" stroke-width="2"/>
+          <path id="copy-path-3" class="flow" d="M230 356 C230 470 375 470 375 600" fill="none" style="stroke: var(--color-signal)" stroke-opacity=".55" stroke-width="2"/>
+          <circle class="ring" cx="230" cy="300" r="56" fill="none" style="stroke: var(--color-signal)" stroke-width="2"/>
+          <circle cx="230" cy="300" r="56" style="fill: var(--ink-800); stroke: var(--color-signal)" stroke-width="2"/>
+          <text x="230" y="306" text-anchor="middle" style="font-family: var(--font-mono); fill: #EEF2F7" font-size="15" letter-spacing="1">STRATEGY</text>
+          <circle class="dot" r="5" style="fill: var(--color-signal)"><animateMotion dur="2.6s" repeatCount="indefinite" begin="indefinite"><mpath href="#copy-path-1"/></animateMotion></circle>
+          <circle class="dot" r="5" style="fill: var(--color-signal)"><animateMotion dur="2.9s" repeatCount="indefinite" begin="indefinite"><mpath href="#copy-path-2"/></animateMotion></circle>
+          <circle class="dot" r="5" style="fill: var(--color-signal)"><animateMotion dur="3.2s" repeatCount="indefinite" begin="indefinite"><mpath href="#copy-path-3"/></animateMotion></circle>
+          <g class="node" style="--d: .3s">
+            <rect x="20" y="600" width="130" height="190" rx="14" style="fill: var(--ink-800); stroke: var(--color-border)" stroke-width="1"/>
+            <text x="85" y="636" text-anchor="middle" style="font-family: var(--font-mono); fill: var(--color-text-muted)" font-size="12">ACCOUNT 1</text>
+            <text x="85" y="668" text-anchor="middle" style="fill: #EEF2F7" font-size="22" font-weight="600">40%</text>
+            <rect x="35" y="684" width="100" height="8" rx="4" style="fill: var(--ink-600)"/>
+            <rect class="bar-fill" x="35" y="684" width="40" height="8" rx="4" style="fill: var(--color-signal); --d: .5s"/>
+            <line x1="35" y1="724" x2="135" y2="724" stroke-dasharray="4 4" style="stroke: var(--color-accent)" stroke-width="1.5"/>
+            <text x="85" y="748" text-anchor="middle" style="fill: var(--color-text-muted)" font-size="11">Stop loss -15%</text>
+          </g>
+          <g class="node" style="--d: .5s">
+            <rect x="165" y="600" width="130" height="190" rx="14" style="fill: var(--ink-800); stroke: var(--color-border)" stroke-width="1"/>
+            <text x="230" y="636" text-anchor="middle" style="font-family: var(--font-mono); fill: var(--color-text-muted)" font-size="12">ACCOUNT 2</text>
+            <text x="230" y="668" text-anchor="middle" style="fill: #EEF2F7" font-size="22" font-weight="600">35%</text>
+            <rect x="180" y="684" width="100" height="8" rx="4" style="fill: var(--ink-600)"/>
+            <rect class="bar-fill" x="180" y="684" width="35" height="8" rx="4" style="fill: var(--color-signal); --d: .7s"/>
+            <line x1="180" y1="724" x2="280" y2="724" stroke-dasharray="4 4" style="stroke: var(--color-accent)" stroke-width="1.5"/>
+            <text x="230" y="748" text-anchor="middle" style="fill: var(--color-text-muted)" font-size="11">Stop loss -15%</text>
+          </g>
+          <g class="node" style="--d: .7s">
+            <rect x="310" y="600" width="130" height="190" rx="14" style="fill: var(--ink-800); stroke: var(--color-border)" stroke-width="1"/>
+            <text x="375" y="636" text-anchor="middle" style="font-family: var(--font-mono); fill: var(--color-text-muted)" font-size="12">ACCOUNT 3</text>
+            <text x="375" y="668" text-anchor="middle" style="fill: #EEF2F7" font-size="22" font-weight="600">25%</text>
+            <rect x="325" y="684" width="100" height="8" rx="4" style="fill: var(--ink-600)"/>
+            <rect class="bar-fill" x="325" y="684" width="25" height="8" rx="4" style="fill: var(--color-signal); --d: .9s"/>
+            <line x1="325" y1="724" x2="425" y2="724" stroke-dasharray="4 4" style="stroke: var(--color-accent)" stroke-width="1.5"/>
+            <text x="375" y="748" text-anchor="middle" style="fill: var(--color-text-muted)" font-size="11">Stop loss -15%</text>
+          </g>
+          <text x="230" y="830" text-anchor="middle" style="fill: var(--color-text-muted)" font-size="12">Trades mirrored in proportion</text>
+        </svg>
+      </div>
+      
+      <div class="container photo-section__content">
+        <div class="split photo-section__split">
         <div class="stack" style="--stack-gap: var(--space-5)">
-          <p class="overline overline--signal">02 — Copy trading (optional)</p>
+          <p class="overline overline--signal">Copy trading (optional)</p>
           <h2 id="copy-title" class="h-xl">Follow a strategy when you prefer.</h2>
           <p class="lead">Allocate part of your account to a strategy profile. Its trades are mirrored in proportion to your allocation, within the limits you set. Copy trading runs alongside your own trading and can be paused or stopped at any time.</p>
           <a class="link-arrow link-arrow--accent" href="traders.html">Copy trading details
@@ -156,13 +196,17 @@
           <p class="fineprint mt-5">Strategy profiles are shown without return figures. Copy trading involves risk, and past performance is not a reliable indicator of future results.</p>
         </div>
       </div>
+      </div>
     </section>
 
     <!-- ============ Markets and fees ============ -->
-    <section class="section surface-paper" aria-labelledby="markets-title">
-      <div class="container split" style="--split-cols: minmax(0, 5fr) minmax(0, 7fr)">
+    <section class="section photo-section photo-section--left surface-paper" aria-labelledby="markets-title">
+      <figure class="photo-section__media" aria-hidden="true"><img src="assets/images/people/businessman-markets.png" alt="" loading="lazy" decoding="async" style="object-position: center 20%"></figure>
+      
+      <div class="container photo-section__content">
+        <div class="split photo-section__split">
         <div class="stack" style="--stack-gap: var(--space-5)">
-          <p class="overline overline--accent">03 — Markets and pricing</p>
+          <p class="overline overline--accent">Markets and pricing</p>
           <h2 id="markets-title" class="h-xl">Clear markets. Clear costs.</h2>
           <p class="lead">Trade what you need from one account, with fees shown before you place an order.</p>
         </div>
@@ -190,12 +234,15 @@
           <p class="fineprint mt-5">Fees are shown in full in the order preview. Margin interest and borrowing costs are shown before you borrow.</p>
         </div>
       </div>
+      </div>
     </section>
 
     <!-- ============ Risk ============ -->
-    <section class="section surface-ink risk" aria-labelledby="risk-title">
+    <section class="section photo-section photo-section--right surface-ink risk" aria-labelledby="risk-title">
+      <figure class="photo-section__media" aria-hidden="true"><img src="assets/images/people/businessman-suit.png" alt="" loading="lazy" decoding="async" style="object-position: center 15%"></figure>
       <canvas class="dotfield" data-component="dotfield" data-mode="field" data-density=".6" aria-hidden="true"></canvas>
-      <div class="container split" style="--split-align: center">
+      <div class="container photo-section__content">
+        <div class="split photo-section__split">
         <div class="stack" style="--stack-gap: var(--space-5)">
           <p class="overline overline--signal">Risk controls</p>
           <h2 id="risk-title" class="h-xl">Risk managed, not ignored.</h2>
@@ -208,43 +255,55 @@
           </dl>
         </div>
       </div>
+      </div>
     </section>
 
     <!-- ============ Mobile app ============ -->
-    <section class="section surface-paper" aria-labelledby="app-title">
-      <div class="container split" style="--split-cols: minmax(0, 5fr) minmax(0, 7fr); --split-align: center">
-        <div class="stack" style="--stack-gap: var(--space-5)">
-          <p class="overline overline--accent">04 — Mobile app</p>
+    <section class="section surface-paper app-promo" data-app-promo aria-labelledby="app-title">
+      <figure class="app-promo__bg" aria-hidden="true"><img src="assets/images/people/trader-mobile.png" alt="" loading="lazy" decoding="async"></figure>
+      <div class="container app-promo__grid">
+        <div class="app-promo__media" aria-hidden="true">
+          <div class="app-phone app-promo__phone">
+            <div class="app-phone__screen">
+              <p class="app-phone__logo wordmark"><span class="wordmark__ted">TED</span><span class="wordmark__brokers">Br<svg class="wordmark__o" viewBox="0 0 20 20" aria-hidden="true"><g fill="currentColor"><circle cx="10" cy="2" r="1.6"/><circle cx="15.2" cy="4.1" r="1.4" opacity=".8"/><circle cx="17.9" cy="9.4" r="1.6"/><circle cx="16.3" cy="14.8" r="1.4" opacity=".8"/><circle cx="11.2" cy="17.9" r="1.6"/><circle cx="5.6" cy="16.4" r="1.4" opacity=".7"/><circle cx="2.2" cy="11.6" r="1.6"/><circle cx="3" cy="6" r="1.4" opacity=".8"/><circle cx="6.6" cy="2.9" r="1.1" opacity=".6"/><circle cx="10" cy="10" r="1.9"/><circle cx="13.3" cy="9.2" r="1" opacity=".7"/><circle cx="7.4" cy="12" r="1" opacity=".7"/></g></svg>kers</span></p>
+            </div>
+          </div>
+        </div>
+        <div class="app-promo__copy">
+          <p class="overline overline--accent">Mobile app</p>
           <h2 id="app-title" class="h-xl">Take TED Brokers with you.</h2>
           <p class="lead">Download the official TED Brokers app for iPhone or Android from the App Store or Google Play.</p>
           <a class="link-arrow link-arrow--accent" href="mobile-app.html">About the mobile app
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
         </div>
-        <div>
-          <div class="store-row">
-            <button class="store-btn" type="button" data-dialog-open="app-unavailable" aria-haspopup="dialog">
-              <svg class="store-btn__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12.152 6.896c-.948 0-2.415-1.078-3.96-1.04-2.04.027-3.91 1.183-4.961 3.014-2.117 3.675-.546 9.103 1.519 12.09 1.013 1.454 2.208 3.09 3.792 3.039 1.52-.065 2.09-.987 3.935-.987 1.831 0 2.35.987 3.96.948 1.637-.026 2.676-1.48 3.676-2.948 1.156-1.688 1.636-3.325 1.662-3.415-.039-.013-3.182-1.221-3.22-4.857-.026-3.04 2.48-4.494 2.597-4.559-1.429-2.09-3.623-2.324-4.39-2.376-2-.156-3.675 1.09-4.61 1.09zM15.53 3.83c.843-1.012 1.4-2.427 1.245-3.83-1.207.052-2.662.805-3.532 1.818-.78.896-1.454 2.338-1.273 3.714 1.338.104 2.715-.688 3.559-1.701"/></svg>
-              <span class="store-btn__text"><span class="store-btn__pre">Download on the</span><span class="store-btn__name">App Store</span></span>
-            </button>
-            <button class="store-btn" type="button" data-dialog-open="app-unavailable" aria-haspopup="dialog">
-              <svg class="store-btn__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M22.018 13.298l-3.919 2.218-3.515-3.493 3.543-3.521 3.891 2.202a1.49 1.49 0 0 1 0 2.594zM1.337.924a1.486 1.486 0 0 0-.112.568v21.017c0 .217.045.419.124.6l11.155-11.087L1.337.924zm12.207 10.065l3.258-3.238L3.45.195a1.466 1.466 0 0 0-.946-.179l11.04 10.973zm0 2.067l-11 10.933c.298.036.612-.016.906-.183l13.324-7.54-3.23-3.21z"/></svg>
-              <span class="store-btn__text"><span class="store-btn__pre">Get it on</span><span class="store-btn__name">Google Play</span></span>
-            </button>
-          </div>
+        <div class="app-promo__actions">
+            <div class="store-row">
+              <button class="store-btn" type="button" data-dialog-open="app-unavailable" aria-haspopup="dialog">
+                <svg class="store-btn__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12.152 6.896c-.948 0-2.415-1.078-3.96-1.04-2.04.027-3.91 1.183-4.961 3.014-2.117 3.675-.546 9.103 1.519 12.09 1.013 1.454 2.208 3.09 3.792 3.039 1.52-.065 2.09-.987 3.935-.987 1.831 0 2.35.987 3.96.948 1.637-.026 2.676-1.48 3.676-2.948 1.156-1.688 1.636-3.325 1.662-3.415-.039-.013-3.182-1.221-3.22-4.857-.026-3.04 2.48-4.494 2.597-4.559-1.429-2.09-3.623-2.324-4.39-2.376-2-.156-3.675 1.09-4.61 1.09zM15.53 3.83c.843-1.012 1.4-2.427 1.245-3.83-1.207.052-2.662.805-3.532 1.818-.78.896-1.454 2.338-1.273 3.714 1.338.104 2.715-.688 3.559-1.701"/></svg>
+                <span class="store-btn__text"><span class="store-btn__pre">Download on the</span><span class="store-btn__name">App Store</span></span>
+              </button>
+              <button class="store-btn" type="button" data-dialog-open="app-unavailable" aria-haspopup="dialog">
+                <svg class="store-btn__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M22.018 13.298l-3.919 2.218-3.515-3.493 3.543-3.521 3.891 2.202a1.49 1.49 0 0 1 0 2.594zM1.337.924a1.486 1.486 0 0 0-.112.568v21.017c0 .217.045.419.124.6l11.155-11.087L1.337.924zm12.207 10.065l3.258-3.238L3.45.195a1.466 1.466 0 0 0-.946-.179l11.04 10.973zm0 2.067l-11 10.933c.298.036.612-.016.906-.183l13.324-7.54-3.23-3.21z"/></svg>
+                <span class="store-btn__text"><span class="store-btn__pre">Get it on</span><span class="store-btn__name">Google Play</span></span>
+              </button>
+            </div>
         </div>
       </div>
     </section>
 
     <!-- ============ CTA ============ -->
     <section class="cta-band" aria-labelledby="cta-title">
+      <figure class="cta-band__photo" aria-hidden="true"><img src="assets/images/people/businessman-welcome.png" alt="" loading="lazy" decoding="async" style="object-position: center 20%"></figure>
       <div class="container cta-band__inner">
         <div>
           <p class="overline">Open an account</p>
           <h2 id="cta-title" class="mt-4">Start trading on the TED Brokers platform.</h2>
           <p>Create your account, verify your identity and fund it by bank transfer or cryptocurrency.</p>
         </div>
-        <a class="btn btn--lg btn--white" href="register.html">Open an account
+        <div class="cta-band__action">
+          <a class="btn btn--lg btn--white cta-band__button" href="register.html">Open an account
           <svg class="btn__arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+        </div>
       </div>
     </section>
   </main>
@@ -267,6 +326,79 @@
     </div>
   </dialog>
 
+  <!-- ============ Risk disclosure ============ -->
+  <section class="risk-disclosure surface-ink" aria-labelledby="rd-title">
+    <div class="container">
+      <details class="risk-disclosure__details" open>
+        <summary class="risk-disclosure__summary">
+          <span class="risk-disclosure__title" id="rd-title"><strong>Risk disclosure</strong> <span class="risk-disclosure__warn">Trading involves a high risk of loss. Expand to read the full risk disclosure.</span></span>
+          <svg class="risk-disclosure__chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" focusable="false"><path d="M6 9l6 6 6-6"/></svg>
+        </summary>
+        <div class="risk-disclosure__body">
+          <p class="risk-disclosure__lead">This disclosure describes the main risks of trading on the TED Brokers platform and the protections that do and do not apply. It is not investment, tax or legal advice. Read it together with the full <a href="legal/risk_closure.html">risk disclosure</a>, the <a href="legal/terms_conditions.html">terms and conditions</a> and the <a href="legal/aml_policy.html">AML / KYC policy</a>.</p>
+          <section class="risk-disclosure__section">
+            <h3 class="risk-disclosure__heading">Market risk</h3>
+            <p>The prices of stocks, ETFs, options and cryptocurrencies can rise or fall quickly and without warning. You can lose some or all of the money you invest. Prices shown on the platform may be delayed, and past performance is not a reliable guide to future results. Interest rate decisions, company news, economic data and events in the United States and abroad can all move prices against you.</p>
+          </section>
+          <section class="risk-disclosure__section">
+            <h3 class="risk-disclosure__heading">Leverage and margin risk</h3>
+            <p>A margin account lets you borrow against the securities in your account. Borrowing increases both gains and losses. Margin requirements follow Regulation T of the Federal Reserve Board and FINRA Rule 4210. If your equity falls below the maintenance requirement, you may receive a margin call with a short deadline. If the call is not met, positions may be sold without your consent, at prices that may be unfavourable to you. You can lose more than the cash you deposited. Withdrawals may be restricted while a margin call is open.</p>
+          </section>
+          <section class="risk-disclosure__section">
+            <h3 class="risk-disclosure__heading">Short selling risk</h3>
+            <p>Short selling means selling shares you have borrowed, in the hope of buying them back at a lower price. Losses are not limited, because a share price can rise without a ceiling. Short sales are subject to the locate requirements of Regulation SHO and to SEC Rule 201, which restricts short sales in a stock that has fallen sharply in a single day. Shares that are hard to borrow can carry a fee that rises over time, and they may become unavailable, which can force you to close the position early.</p>
+          </section>
+          <section class="risk-disclosure__section">
+            <h3 class="risk-disclosure__heading">Options risk</h3>
+            <p>Options can expire worthless, and the premium paid for a long option can be lost in full. Selling options can expose you to losses far larger than the premium received, including unlimited losses on uncovered calls. Multi leg strategies combine several contracts and carry risks that change as prices and time pass. Exercise and assignment can happen before expiry, particularly for American style options on stocks that pay dividends. Before you trade options, read the Options Clearing Corporation publication Characteristics and Risks of Standardized Options.</p>
+          </section>
+          <section class="risk-disclosure__section">
+            <h3 class="risk-disclosure__heading">Cryptocurrency risk</h3>
+            <p>Cryptocurrency prices are highly volatile and can fall to zero. Crypto assets are not backed by a government or central bank, and they are not legal tender in every country. Blockchain transactions usually cannot be reversed, and lost access credentials can make assets unrecoverable. Crypto assets are generally not covered by investor compensation schemes. Crypto assets cannot be sold short on the platform. Rules for crypto assets vary by jurisdiction and are changing, for example under the Markets in Crypto Assets Regulation in the European Union.</p>
+          </section>
+          <section class="risk-disclosure__section">
+            <h3 class="risk-disclosure__heading">Copy trading risk</h3>
+            <p>Copy trading mirrors the trades of a strategy profile in proportion to your allocation. Copied trades can lose money, and a copy can lose its whole allocation. Strategy profiles are shown without return figures, and no result is guaranteed. A copied account can behave differently from the strategy's history, and fills can differ from the prices the strategy achieved. A copy stop loss stops copying once the drawdown you set is reached, but it does not guarantee an exit at that level, because prices can gap. Copy trading is an optional feature and is not investment advice.</p>
+          </section>
+          <section class="risk-disclosure__section">
+            <h3 class="risk-disclosure__heading">Liquidity, execution and price risk</h3>
+            <p>Some instruments trade thinly, and a large order can move the price against you. Orders can fill at prices different from the price you saw, especially in fast markets, around news events or outside regular trading hours. A market order does not guarantee a price. A stop order becomes a market order when triggered and may fill well away from the stop price. Trading in extended hours carries wider spreads and lower liquidity. Some orders may not fill at all, or may expire under their time in force.</p>
+          </section>
+          <section class="risk-disclosure__section">
+            <h3 class="risk-disclosure__heading">Market data and technology risk</h3>
+            <p>Quotes may be delayed, and the platform labels delayed quotes. Market data can contain errors or be interrupted. Internet connections, devices, power supplies and third party services can fail, which may stop you from placing, changing or canceling orders. Cyber incidents, including phishing and account takeover, can cause losses. Keep your login details private and use the security features in your account settings.</p>
+          </section>
+          <section class="risk-disclosure__section">
+            <h3 class="risk-disclosure__heading">Funding, withdrawal and settlement risk</h3>
+            <p>Deposits and withdrawals are subject to review and approval, and funds can take time to appear in your account. Bank and cryptocurrency transfers can be delayed or lost if the details are wrong, and cryptocurrency transfers usually cannot be reversed. Stocks, ETFs and options settle one business day after the trade (T+1), and cryptocurrency trades settle immediately. Sale proceeds may not be available for withdrawal until settlement is complete. Funds held for open orders, copy allocations or pending withdrawals cannot be used for other purposes.</p>
+          </section>
+          <section class="risk-disclosure__section">
+            <h3 class="risk-disclosure__heading">Protection and compensation</h3>
+            <p>Cash and securities in your account may not be covered by investor compensation or deposit protection schemes, such as those in the United States, the United Kingdom or the European Union. Where cover exists, it may be limited in amount and scope. Losses caused by market movements or your own decisions are not reimbursed. Check which protection applies to your account before you deposit funds.</p>
+          </section>
+          <section class="risk-disclosure__section">
+            <h3 class="risk-disclosure__heading">Tax and reporting</h3>
+            <p>Gains and losses may be taxable in your country of residence. Statements and realized gains reports are provided to help you keep records and are not tax advice. Wash sale rules, short term and long term capital gains rules and reporting obligations apply in many jurisdictions. Consult a qualified tax adviser before you file.</p>
+          </section>
+          <section class="risk-disclosure__section">
+            <h3 class="risk-disclosure__heading">Regulatory references</h3>
+            <p>This disclosure refers to the following laws, rules and frameworks. Their requirements may apply differently to your account, and the platform terms explain how each one applies to you.</p>
+            <ul class="risk-disclosure__list">
+              <li>United States: Securities Exchange Act of 1934, Regulation T, Regulation SHO, SEC Rule 201, FINRA Rule 4210 on margin, FINRA Rule 2360 on options, and the Bank Secrecy Act on anti money laundering.</li>
+              <li>European Union: the Markets in Financial Instruments Directive II (MiFID II), the Markets in Crypto Assets Regulation (MiCA) and the Anti Money Laundering Directives.</li>
+              <li>United Kingdom: the Financial Services and Markets Act 2000 and the rules of the Financial Conduct Authority.</li>
+              <li>International: the Financial Action Task Force Recommendations on anti money laundering and countering the financing of terrorism.</li>
+            </ul>
+          </section>
+          <section class="risk-disclosure__section">
+            <h3 class="risk-disclosure__heading">Your responsibilities</h3>
+            <p>You decide whether trading is suitable for you. Consider your financial situation, experience, investment objectives and tolerance for loss before you trade. Only trade with money you can afford to lose. Review your orders, margin status and copy settings regularly. If you are unsure, seek independent financial advice.</p>
+          </section>
+          <p class="fineprint risk-disclosure__closing">By using the platform you confirm that you have read and understood this risk disclosure. The information here is general and may not cover every risk. It is not an offer, solicitation or recommendation to buy or sell any security or asset.</p>
+        </div>
+      </details>
+    </div>
+  </section>
   <!-- ============ Footer ============ -->
   <footer class="site-footer surface-ink">
     <div class="container">
@@ -280,11 +412,11 @@
         <nav aria-labelledby="f-resources"><h2 id="f-resources">Resources</h2><ul role="list"><li><a href="how_it_works.html">Trading platform</a></li><li><a href="traders.html">Copy trading</a></li><li><a href="mobile-app.html">Mobile app</a></li><li><a href="help.html">Help center</a></li></ul></nav>
         <nav aria-labelledby="f-legal"><h2 id="f-legal">Legal</h2><ul role="list"><li><a href="privacy-policy.html">Privacy policy</a></li><li><a href="legal/terms_conditions.html">Terms &amp; conditions</a></li><li><a href="legal/aml_policy.html">AML / KYC policy</a></li><li><a href="legal/risk_closure.html">Risk disclosure</a></li></ul></nav>
       </div>
-      <p class="fineprint site-footer__risk"><strong>Risk warning:</strong> Trading stocks, ETFs, options and cryptocurrencies carries a high level of risk and may not be suitable for all investors. You could lose some or all of your capital. Copy trading does not constitute investment advice. Past performance of any strategy is not a reliable indicator of future results.</p>
       <div class="site-footer__bottom">
         <span>© 2026 TED Brokers</span>
       </div>
     </div>
   </footer>
+  <script src="assets/js/nav-menus.js" defer></script>
 </body>
 </html>

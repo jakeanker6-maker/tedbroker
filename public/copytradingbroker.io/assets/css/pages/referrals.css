@@ -1,0 +1,112 @@
+/* Referrals page — page-only rules. Tokens only, logical properties. */
+@layer pages {
+  /* ---------- Split hero (no box) ---------- */
+  .ref-hero { --split-cols: minmax(0, 7fr) minmax(0, 5fr); --split-align: center; }
+  .ref-hero__title { font-size: clamp(2rem, 1.4rem + 2.2vw, 2.75rem); font-weight: 800; letter-spacing: -0.035em; line-height: 1.05; max-inline-size: 18ch; }
+  .ref-hero__copy { display: grid; gap: var(--space-5); align-content: start; }
+
+  .ref-link { display: flex; flex-wrap: wrap; align-items: end; gap: var(--space-4); max-inline-size: 40rem; }
+  .ref-link .field { flex: 1 1 18rem; }
+  .ref-link .field__input { font: 500 clamp(1.0625rem, 0.95rem + 0.6vw, 1.375rem)/1.2 var(--font-mono); letter-spacing: -0.01em; text-overflow: ellipsis; }
+
+  .ref-share { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-1); }
+  .ref-share__label { font: 600 var(--text-label)/1.2 var(--font-mono); letter-spacing: .14em; text-transform: uppercase; color: var(--color-text-muted); margin-inline-end: var(--space-2); }
+  .ref-share__list { display: flex; flex-wrap: wrap; gap: var(--space-1); list-style: none; padding: 0; }
+  .ref-share__link {
+    display: inline-grid; place-items: center;
+    inline-size: 2.75rem; block-size: 2.75rem;
+    border-radius: var(--radius-md);
+    color: var(--color-text-muted);
+    transition: color var(--duration-fast), background-color var(--duration-fast);
+  }
+  .ref-share__link svg { inline-size: 1.25rem; block-size: 1.25rem; }
+  .ref-share__link:hover { color: var(--color-text); background: color-mix(in oklch, var(--color-text) 7%, transparent); }
+  .ref-share__link[hidden] { display: none; }
+
+  .ref-net { position: relative; min-block-size: 22rem; }
+  .ref-net__caption {
+    position: absolute; inset-inline-start: 0; inset-block-end: 0;
+    display: flex; align-items: center; gap: var(--space-2);
+    font: 500 var(--text-xs)/1.2 var(--font-mono); letter-spacing: .06em; color: var(--color-text-muted);
+  }
+  .ref-net__caption strong { color: var(--color-text); font-weight: 600; }
+  .ref-net__caption .live-dot { color: var(--color-gain); }
+
+  /* ---------- How it works: one line, three stops, travelling dot ---------- */
+  .ref-steps {
+    --_dot: 0.5rem;
+    position: relative;
+    list-style: none; padding: 0;
+    display: grid; gap: var(--space-6);
+    grid-template-columns: minmax(0, 1fr);
+    padding-inline-start: var(--space-6);
+  }
+  .ref-steps__line {
+    position: absolute; inset-block: 0.75rem; inset-inline-start: 0.75rem;
+    inline-size: 1px; background: var(--color-border-strong);
+  }
+  .ref-steps__dot {
+    position: absolute; inset-inline-start: calc(var(--_dot) / -2 + 0.5px); inset-block-start: 0;
+    inline-size: var(--_dot); block-size: var(--_dot); border-radius: 50%;
+    background: var(--color-signal);
+    box-shadow: 0 0 0.75rem var(--color-signal);
+    animation: ref-travel-y 4.5s var(--ease-out) infinite;
+  }
+  @keyframes ref-travel-y {
+    0% { inset-block-start: 0; opacity: 0; }
+    10% { opacity: 1; }
+    90% { opacity: 1; }
+    100% { inset-block-start: calc(100% - var(--_dot)); opacity: 0; }
+  }
+  .ref-step { position: relative; display: grid; gap: var(--space-2); }
+  .ref-step__num {
+    position: absolute; inset-inline-start: calc(-1 * var(--space-6)); inset-block-start: 0;
+    display: grid; place-items: center; inline-size: 1.5rem; block-size: 1.5rem;
+    background: var(--color-bg);
+    border: 1px solid var(--color-border-strong); border-radius: var(--radius-sm);
+    font: 600 var(--text-label)/1 var(--font-mono); color: var(--color-text-muted);
+  }
+  .ref-step:first-child .ref-step__num { border-color: var(--color-accent); color: var(--color-accent-text); }
+  .ref-step:last-child .ref-step__num { border-color: var(--color-gain); color: var(--color-gain); }
+  .ref-step__title { font-size: 1.125rem; line-height: 1.5rem; }
+  .ref-step__text { color: var(--color-text-muted); font-size: var(--text-small); max-inline-size: 30ch; }
+
+  @media (width >= 48rem) {
+    .ref-steps { grid-template-columns: repeat(3, minmax(0, 1fr)); padding-inline-start: 0; padding-block-start: var(--space-6); }
+    .ref-steps__line { inset-block: 0.75rem auto; inset-inline: 0.75rem; inline-size: auto; block-size: 1px; }
+    .ref-steps__dot { inset-block-start: calc(var(--_dot) / -2 + 0.5px); inset-inline-start: 0; animation-name: ref-travel-x; }
+    .ref-step__num { inset-inline-start: 0; inset-block-start: calc(-1 * var(--space-6)); }
+  }
+  @keyframes ref-travel-x {
+    0% { inset-inline-start: 0; opacity: 0; }
+    10% { opacity: 1; }
+    90% { opacity: 1; }
+    100% { inset-inline-start: calc(100% - var(--_dot)); opacity: 0; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .ref-steps__dot { animation: none; }
+  }
+
+  /* ---------- Earnings bars ---------- */
+  .ref-total { font: 500 clamp(1.25rem, 1rem + 1vw, 1.75rem)/1 var(--font-mono); letter-spacing: -0.03em; }
+  .ref-bars-wrap { overflow-x: auto; overscroll-behavior-x: contain; padding-block-end: var(--space-2); }
+  .ref-bars-wrap:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 4px; }
+  .ref-bars-wrap .bars { --bars-h: 11rem; min-inline-size: 30rem; }
+
+  /* ---------- Filter (toggle buttons styled as tabs) ---------- */
+  .ref-filter { border-block-end: 0; padding-block-end: 1px; }
+  .ref-filter .tabs__tab[aria-pressed="true"] { color: var(--color-text); font-weight: 600; }
+  .ref-filter .tabs__tab[aria-pressed="true"]::after { transform: scaleX(1); }
+  .ref-head { align-items: end; padding-block-end: 0; }
+  .ref-head h2 { padding-block-end: var(--space-4); }
+
+  .ref-empty-row:hover { background: none; }
+  .ref-empty-row td { padding: 0; }
+  .ref-hint { display: flex; gap: var(--space-2); align-items: start; font-size: var(--text-small); color: var(--color-text-muted); }
+  .ref-hint svg { inline-size: 1rem; block-size: 1rem; flex: none; margin-block-start: 0.2rem; }
+
+  @media (forced-colors: active) {
+    .ref-steps__dot { background: Highlight; box-shadow: none; }
+    .ref-steps__line { background: CanvasText; }
+  }
+}

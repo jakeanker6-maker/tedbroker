@@ -1,6 +1,7 @@
 <!doctype html>
 <html lang="en" dir="ltr">
 <head>
+  <script>if('scrollRestoration' in history)history.scrollRestoration='manual';var __top=function(){if(location.hash){var __t=document.getElementById(decodeURIComponent(location.hash.slice(1)));if(__t){__t.scrollIntoView();return}}scrollTo(0,0)};__top();addEventListener('load',__top);addEventListener('pageshow',function(e){if(e.persisted)__top()})</script>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Copy trading — TED Brokers</title>
@@ -14,37 +15,31 @@
   <link rel="stylesheet" href="assets/css/pages/home.css">
   <link rel="stylesheet" href="assets/css/pages/traders.css">
   <script>document.documentElement.classList.add('js');try{var t=localStorage.getItem('ted:theme');if(t==='system')t=matchMedia('(prefers-color-scheme: light)').matches?'light':'dark';if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
-  <script type="module" src="assets/js/main.js"></script>
+  <script type="module" src="assets/js/main.js?v=3"></script>
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
 
   <!-- ============ Header ============ -->
   <header class="site-header surface-ink">
-    <div class="container site-header__bar">
-      <a class="wordmark" href="index.html" aria-label="TED Brokers home">
+  <div class="container site-header__bar">
+    <a class="wordmark" href="index.html" aria-label="TED Brokers home">
         <span class="wordmark__ted">TED</span><span class="wordmark__brokers">Br<svg class="wordmark__o" viewBox="0 0 20 20" aria-hidden="true"><g fill="currentColor"><circle cx="10" cy="2" r="1.6"/><circle cx="15.2" cy="4.1" r="1.4" opacity=".8"/><circle cx="17.9" cy="9.4" r="1.6"/><circle cx="16.3" cy="14.8" r="1.4" opacity=".8"/><circle cx="11.2" cy="17.9" r="1.6"/><circle cx="5.6" cy="16.4" r="1.4" opacity=".7"/><circle cx="2.2" cy="11.6" r="1.6"/><circle cx="3" cy="6" r="1.4" opacity=".8"/><circle cx="6.6" cy="2.9" r="1.1" opacity=".6"/><circle cx="10" cy="10" r="1.9"/><circle cx="13.3" cy="9.2" r="1" opacity=".7"/><circle cx="7.4" cy="12" r="1" opacity=".7"/></g></svg>kers</span>
       </a>
-      <button class="icon-btn nav-toggle" type="button" data-nav-toggle aria-expanded="false" aria-controls="site-nav" aria-label="Menu">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h10"/></svg>
-      </button>
-      <nav class="site-nav" id="site-nav" aria-label="Main">
-        <ul class="site-nav__links" role="list">
-          <li><a href="index.html">Home</a></li>
-          <li><a href="how_it_works.html">Trading platform</a></li>
-          <li><a href="traders.html" aria-current="page">Copy trading</a></li>
-          <li><a href="about-us.html">Company</a></li>
-          <li><a href="help.html">Help</a></li>
-        </ul>
-        <div class="site-nav__actions">
-          <a class="site-nav__signin" href="login.html">Sign in</a>
-          <a class="btn btn--sm" href="register.html">Open an account
-            <svg class="btn__arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-          </a>
-        </div>
-      </nav>
-    </div>
-  </header>
+    <button class="icon-btn nav-toggle" type="button" data-nav-toggle aria-expanded="false" aria-controls="site-nav" aria-label="Menu">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h10"/></svg>
+    </button>
+    <nav class="site-nav" id="site-nav" aria-label="Main">
+      <ul class="site-nav__links" role="list"><li><a href="index.html">Home</a></li><li><a href="how_it_works.html">Trading platform</a></li><li><a href="traders.html" aria-current="page">Copy trading</a></li><li><a href="investors.html">Investors</a></li><li class="site-nav__group"><details><summary>Company<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></summary><ul class="site-nav__menu" role="list"><li><a href="about-us.html">About us</a></li><li><a href="faqs.html">FAQs</a></li><li><a href="contact-us.html">Contact us</a></li><li><a href="mobile-app.html">Mobile app</a></li></ul></details></li><li><a href="help.html">Help</a></li><li class="site-nav__group"><details><summary>Legal<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></summary><ul class="site-nav__menu" role="list"><li><a href="privacy-policy.html">Privacy policy</a></li><li><a href="legal/terms_conditions.html">Terms & conditions</a></li><li><a href="legal/aml_policy.html">AML policy</a></li><li><a href="legal/risk_closure.html">Risk disclosure</a></li></ul></details></li></ul>
+      <div class="site-nav__actions">
+        <a class="site-nav__signin" href="login.html">Sign in</a>
+        <a class="btn btn--sm" href="register.html">Open an account
+          <svg class="btn__arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </a>
+      </div>
+    </nav>
+  </div>
+</header>
 
   <main id="main">
     <!-- ============ Hero ============ -->
@@ -207,6 +202,79 @@
     </section>
   </main>
 
+  <!-- ============ Risk disclosure ============ -->
+  <section class="risk-disclosure surface-ink" aria-labelledby="rd-title">
+    <div class="container">
+      <details class="risk-disclosure__details" open>
+        <summary class="risk-disclosure__summary">
+          <span class="risk-disclosure__title" id="rd-title"><strong>Risk disclosure</strong> <span class="risk-disclosure__warn">Trading involves a high risk of loss. Expand to read the full risk disclosure.</span></span>
+          <svg class="risk-disclosure__chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" focusable="false"><path d="M6 9l6 6 6-6"/></svg>
+        </summary>
+        <div class="risk-disclosure__body">
+          <p class="risk-disclosure__lead">This disclosure describes the main risks of trading on the TED Brokers platform and the protections that do and do not apply. It is not investment, tax or legal advice. Read it together with the full <a href="legal/risk_closure.html">risk disclosure</a>, the <a href="legal/terms_conditions.html">terms and conditions</a> and the <a href="legal/aml_policy.html">AML / KYC policy</a>.</p>
+          <section class="risk-disclosure__section">
+            <h3 class="risk-disclosure__heading">Market risk</h3>
+            <p>The prices of stocks, ETFs, options and cryptocurrencies can rise or fall quickly and without warning. You can lose some or all of the money you invest. Prices shown on the platform may be delayed, and past performance is not a reliable guide to future results. Interest rate decisions, company news, economic data and events in the United States and abroad can all move prices against you.</p>
+          </section>
+          <section class="risk-disclosure__section">
+            <h3 class="risk-disclosure__heading">Leverage and margin risk</h3>
+            <p>A margin account lets you borrow against the securities in your account. Borrowing increases both gains and losses. Margin requirements follow Regulation T of the Federal Reserve Board and FINRA Rule 4210. If your equity falls below the maintenance requirement, you may receive a margin call with a short deadline. If the call is not met, positions may be sold without your consent, at prices that may be unfavourable to you. You can lose more than the cash you deposited. Withdrawals may be restricted while a margin call is open.</p>
+          </section>
+          <section class="risk-disclosure__section">
+            <h3 class="risk-disclosure__heading">Short selling risk</h3>
+            <p>Short selling means selling shares you have borrowed, in the hope of buying them back at a lower price. Losses are not limited, because a share price can rise without a ceiling. Short sales are subject to the locate requirements of Regulation SHO and to SEC Rule 201, which restricts short sales in a stock that has fallen sharply in a single day. Shares that are hard to borrow can carry a fee that rises over time, and they may become unavailable, which can force you to close the position early.</p>
+          </section>
+          <section class="risk-disclosure__section">
+            <h3 class="risk-disclosure__heading">Options risk</h3>
+            <p>Options can expire worthless, and the premium paid for a long option can be lost in full. Selling options can expose you to losses far larger than the premium received, including unlimited losses on uncovered calls. Multi leg strategies combine several contracts and carry risks that change as prices and time pass. Exercise and assignment can happen before expiry, particularly for American style options on stocks that pay dividends. Before you trade options, read the Options Clearing Corporation publication Characteristics and Risks of Standardized Options.</p>
+          </section>
+          <section class="risk-disclosure__section">
+            <h3 class="risk-disclosure__heading">Cryptocurrency risk</h3>
+            <p>Cryptocurrency prices are highly volatile and can fall to zero. Crypto assets are not backed by a government or central bank, and they are not legal tender in every country. Blockchain transactions usually cannot be reversed, and lost access credentials can make assets unrecoverable. Crypto assets are generally not covered by investor compensation schemes. Crypto assets cannot be sold short on the platform. Rules for crypto assets vary by jurisdiction and are changing, for example under the Markets in Crypto Assets Regulation in the European Union.</p>
+          </section>
+          <section class="risk-disclosure__section">
+            <h3 class="risk-disclosure__heading">Copy trading risk</h3>
+            <p>Copy trading mirrors the trades of a strategy profile in proportion to your allocation. Copied trades can lose money, and a copy can lose its whole allocation. Strategy profiles are shown without return figures, and no result is guaranteed. A copied account can behave differently from the strategy's history, and fills can differ from the prices the strategy achieved. A copy stop loss stops copying once the drawdown you set is reached, but it does not guarantee an exit at that level, because prices can gap. Copy trading is an optional feature and is not investment advice.</p>
+          </section>
+          <section class="risk-disclosure__section">
+            <h3 class="risk-disclosure__heading">Liquidity, execution and price risk</h3>
+            <p>Some instruments trade thinly, and a large order can move the price against you. Orders can fill at prices different from the price you saw, especially in fast markets, around news events or outside regular trading hours. A market order does not guarantee a price. A stop order becomes a market order when triggered and may fill well away from the stop price. Trading in extended hours carries wider spreads and lower liquidity. Some orders may not fill at all, or may expire under their time in force.</p>
+          </section>
+          <section class="risk-disclosure__section">
+            <h3 class="risk-disclosure__heading">Market data and technology risk</h3>
+            <p>Quotes may be delayed, and the platform labels delayed quotes. Market data can contain errors or be interrupted. Internet connections, devices, power supplies and third party services can fail, which may stop you from placing, changing or canceling orders. Cyber incidents, including phishing and account takeover, can cause losses. Keep your login details private and use the security features in your account settings.</p>
+          </section>
+          <section class="risk-disclosure__section">
+            <h3 class="risk-disclosure__heading">Funding, withdrawal and settlement risk</h3>
+            <p>Deposits and withdrawals are subject to review and approval, and funds can take time to appear in your account. Bank and cryptocurrency transfers can be delayed or lost if the details are wrong, and cryptocurrency transfers usually cannot be reversed. Stocks, ETFs and options settle one business day after the trade (T+1), and cryptocurrency trades settle immediately. Sale proceeds may not be available for withdrawal until settlement is complete. Funds held for open orders, copy allocations or pending withdrawals cannot be used for other purposes.</p>
+          </section>
+          <section class="risk-disclosure__section">
+            <h3 class="risk-disclosure__heading">Protection and compensation</h3>
+            <p>Cash and securities in your account may not be covered by investor compensation or deposit protection schemes, such as those in the United States, the United Kingdom or the European Union. Where cover exists, it may be limited in amount and scope. Losses caused by market movements or your own decisions are not reimbursed. Check which protection applies to your account before you deposit funds.</p>
+          </section>
+          <section class="risk-disclosure__section">
+            <h3 class="risk-disclosure__heading">Tax and reporting</h3>
+            <p>Gains and losses may be taxable in your country of residence. Statements and realized gains reports are provided to help you keep records and are not tax advice. Wash sale rules, short term and long term capital gains rules and reporting obligations apply in many jurisdictions. Consult a qualified tax adviser before you file.</p>
+          </section>
+          <section class="risk-disclosure__section">
+            <h3 class="risk-disclosure__heading">Regulatory references</h3>
+            <p>This disclosure refers to the following laws, rules and frameworks. Their requirements may apply differently to your account, and the platform terms explain how each one applies to you.</p>
+            <ul class="risk-disclosure__list">
+              <li>United States: Securities Exchange Act of 1934, Regulation T, Regulation SHO, SEC Rule 201, FINRA Rule 4210 on margin, FINRA Rule 2360 on options, and the Bank Secrecy Act on anti money laundering.</li>
+              <li>European Union: the Markets in Financial Instruments Directive II (MiFID II), the Markets in Crypto Assets Regulation (MiCA) and the Anti Money Laundering Directives.</li>
+              <li>United Kingdom: the Financial Services and Markets Act 2000 and the rules of the Financial Conduct Authority.</li>
+              <li>International: the Financial Action Task Force Recommendations on anti money laundering and countering the financing of terrorism.</li>
+            </ul>
+          </section>
+          <section class="risk-disclosure__section">
+            <h3 class="risk-disclosure__heading">Your responsibilities</h3>
+            <p>You decide whether trading is suitable for you. Consider your financial situation, experience, investment objectives and tolerance for loss before you trade. Only trade with money you can afford to lose. Review your orders, margin status and copy settings regularly. If you are unsure, seek independent financial advice.</p>
+          </section>
+          <p class="fineprint risk-disclosure__closing">By using the platform you confirm that you have read and understood this risk disclosure. The information here is general and may not cover every risk. It is not an offer, solicitation or recommendation to buy or sell any security or asset.</p>
+        </div>
+      </details>
+    </div>
+  </section>
   <!-- ============ Footer ============ -->
   <footer class="site-footer surface-ink">
     <div class="container">
@@ -220,11 +288,11 @@
         <nav aria-labelledby="f-resources"><h2 id="f-resources">Resources</h2><ul role="list"><li><a href="how_it_works.html">Trading platform</a></li><li><a href="traders.html">Copy trading</a></li><li><a href="mobile-app.html">Mobile app</a></li><li><a href="help.html">Help center</a></li></ul></nav>
         <nav aria-labelledby="f-legal"><h2 id="f-legal">Legal</h2><ul role="list"><li><a href="privacy-policy.html">Privacy policy</a></li><li><a href="legal/terms_conditions.html">Terms &amp; conditions</a></li><li><a href="legal/aml_policy.html">AML / KYC policy</a></li><li><a href="legal/risk_closure.html">Risk disclosure</a></li></ul></nav>
       </div>
-      <p class="fineprint site-footer__risk"><strong>Risk warning:</strong> Trading stocks, ETFs, options and cryptocurrencies carries a high level of risk and may not be suitable for all investors. You could lose some or all of your capital. Copy trading does not constitute investment advice. Past performance of any strategy is not a reliable indicator of future results.</p>
       <div class="site-footer__bottom">
         <span>© 2026 TED Brokers</span>
       </div>
     </div>
   </footer>
+  <script src="assets/js/nav-menus.js" defer></script>
 </body>
 </html>

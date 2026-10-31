@@ -1,0 +1,493 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+  <script>if('scrollRestoration' in history)history.scrollRestoration='manual';var __top=function(){if(location.hash){var __t=document.getElementById(decodeURIComponent(location.hash.slice(1)));if(__t){__t.scrollIntoView();return}}scrollTo(0,0)};__top();addEventListener('load',__top);addEventListener('pageshow',function(e){if(e.persisted)__top()})</script>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Trade — TED Brokers</title>
+  <meta name="theme-color" content="#0A1626">
+  <meta name="robots" content="noindex">
+  <link rel="icon" href="../assets/img/favicon.ico">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=JetBrains+Mono:wght@400;500;600&family=Sora:wght@300;600;700;800&display=swap">
+  <link rel="stylesheet" href="../assets/css/main.css?v=2">
+  <link rel="stylesheet" href="../assets/css/live.css?v=2">
+  <link rel="stylesheet" href="../assets/css/pages/trade.css?v=5">
+  <script>document.documentElement.classList.add('js');try{var t=localStorage.getItem('ted:theme');if(t==='system')t=matchMedia('(prefers-color-scheme: light)').matches?'light':'dark';if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
+  <script type="module" src="../assets/js/main.js?v=3"></script>
+</head>
+<body class="app surface-ink">
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <!-- ===================== RAIL (shared across app pages) ===================== -->
+  <aside class="rail" id="rail" aria-label="Dashboard">
+    <div class="rail__brand">
+      <a class="wordmark" href="index.html" aria-label="TED Brokers dashboard">
+        <span class="wordmark__ted">TED</span><span class="wordmark__brokers">Br<svg class="wordmark__o" viewBox="0 0 20 20" aria-hidden="true"><g fill="currentColor"><circle cx="10" cy="2" r="1.6"/><circle cx="15.2" cy="4.1" r="1.4" opacity=".8"/><circle cx="17.9" cy="9.4" r="1.6"/><circle cx="16.3" cy="14.8" r="1.4" opacity=".8"/><circle cx="11.2" cy="17.9" r="1.6"/><circle cx="5.6" cy="16.4" r="1.4" opacity=".7"/><circle cx="2.2" cy="11.6" r="1.6"/><circle cx="3" cy="6" r="1.4" opacity=".8"/><circle cx="6.6" cy="2.9" r="1.1" opacity=".6"/><circle cx="10" cy="10" r="1.9"/><circle cx="13.3" cy="9.2" r="1" opacity=".7"/><circle cx="7.4" cy="12" r="1" opacity=".7"/></g></svg>kers</span>
+      </a>
+      <button class="icon-btn rail__collapse" type="button" data-rail-collapse aria-controls="rail" aria-expanded="true" aria-label="Collapse menu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></button>
+    </div>
+    <nav class="rail__nav" aria-label="Dashboard sections">
+      <ul class="rail__list" role="list">
+        <li><a class="rail__link" href="index.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>Overview</a></li>
+        <li><a class="rail__link" href="trade.html" aria-current="page"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M4 19V5M4 19h16"/><path d="M7 15l4-5 3 3 5-7"/><path d="M15 6h4v4"/></svg>Trade</a></li>
+        <li><a class="rail__link" href="screener.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M3 5h18l-7 8v6l-4-2v-4z"/></svg>Screener</a></li>
+        <li><a class="rail__link" href="wallet.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M3 7a2 2 0 0 1 2-2h13v4"/><path d="M3 7v11a2 2 0 0 0 2 2h15V9H5a2 2 0 0 1-2-2z"/><circle cx="16" cy="14.5" r="1"/></svg>Wallet</a></li>
+        <li><a class="rail__link" href="portfolio.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M21 12A9 9 0 1 1 12 3v9z"/><path d="M15 3.5A9 9 0 0 1 20.5 9H15z"/></svg>Portfolio</a></li>
+        <li><a class="rail__link" href="documents.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M6 3h8l4 4v14H6z"/><path d="M14 3v4h4M9 12h6M9 16h6"/></svg>Documents</a></li>
+        <li><a class="rail__link" href="copy-traders.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0"/><path d="M16 4.5a3.5 3.5 0 0 1 0 7M18 14.5a6.5 6.5 0 0 1 3.5 5.5"/></svg>Copy traders<span class="rail__aside rail__aside--live" hidden></span></a></li>
+      </ul>
+      <p class="rail__group-label" id="rail-plans">Investment plans</p>
+      <ul class="rail__list" role="list" aria-labelledby="rail-plans">
+        <li><a class="rail__link rail__link--sub" href="plans.html">Robo Advisor</a></li>
+        <li><a class="rail__link rail__link--sub" href="plans.html#etf">ETF automation</a></li>
+        <li><a class="rail__link rail__link--sub" href="plans.html#defi">DeFi</a></li>
+        <li><a class="rail__link rail__link--sub" href="plans.html#options">Options</a></li>
+        <li><a class="rail__link rail__link--sub" href="plans.html#staking">Staking<span class="rail__aside rail__aside--soon">soon</span></a></li>
+      </ul>
+      <p class="rail__group-label" id="rail-more">Community</p>
+      <ul class="rail__list" role="list" aria-labelledby="rail-more">
+        <li><a class="rail__link" href="network.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M3 12h4l3-8 4 16 3-8h4"/></svg>Network feed</a></li>
+        <li><a class="rail__link" href="referrals.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="18" cy="5" r="2.5"/><circle cx="6" cy="12" r="2.5"/><circle cx="18" cy="19" r="2.5"/><path d="M8.2 10.8l7.6-4.4M8.2 13.2l7.6 4.4"/></svg>Referrals</a></li>
+        <li><a class="rail__link" href="news.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M4 5h13v14H6a2 2 0 0 1-2-2z"/><path d="M17 9h3v8a2 2 0 0 1-2 2"/><path d="M7.5 9h6M7.5 13h6"/></svg>News</a></li>
+      </ul>
+    </nav>
+    <div class="rail__foot">
+      <ul class="rail__list" role="list">
+        <li><a class="rail__link" href="../help.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.6.3-1 .8-1 1.5V14"/><path d="M12 17h.01"/></svg>Help center</a></li>
+        <li><a class="rail__link" href="settings.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M12 2.5v3M12 18.5v3M4.2 4.2l2.1 2.1M17.7 17.7l2.1 2.1M2.5 12h3M18.5 12h3M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1"/></svg>Settings</a></li>
+      </ul>
+      <a class="rail__user" href="settings.html">
+        <span class="avatar" aria-hidden="true"></span>
+        <span><span class="rail__user-name">Loading…</span><br><span class="rail__user-meta" hidden></span></span>
+      </a>
+    </div>
+  </aside>
+  <button class="rail-scrim" type="button" tabindex="-1" aria-hidden="true"></button>
+
+  <div class="app__main">
+    <!-- ===================== TOP BAR (shared) ===================== -->
+    <header class="topbar">
+      <div class="topbar__bar">
+        <button class="icon-btn topbar__menu" type="button" data-rail-toggle aria-controls="rail" aria-expanded="false" aria-label="Open menu">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h10"/></svg>
+        </button>
+        <a class="wordmark topbar__brand" href="index.html" aria-label="TED Brokers dashboard"><span class="wordmark__ted">TED</span><span class="wordmark__brokers">Brokers</span></a>
+        <form class="search" role="search" action="copy-traders.html">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+          <label class="sr-only" for="q">Search</label>
+          <input id="q" name="q" type="search" placeholder="Search traders, plans, markets" autocomplete="off">
+          <kbd aria-hidden="true">⌘K</kbd>
+        </form>
+        <div class="topbar__actions">
+          <button class="lang-select" type="button" aria-label="Language: English">EN
+            <svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M2 3.5l3 3 3-3"/></svg>
+          </button>
+          <button class="icon-btn" type="button" data-theme-toggle aria-pressed="false" aria-label="Light theme">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4 8 8 0 1 0 20 14.5z"/></svg>
+          </button>
+          <button class="icon-btn" type="button" aria-label="Notifications">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M6 8a6 6 0 1 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.9 1.9 0 0 0 3.4 0"/></svg>
+            <span class="icon-btn__dot" hidden></span>
+          </button>
+          <button class="btn btn--sm btn--outline" type="button" data-dialog-open="ted-ai">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true" style="color: var(--color-signal)"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/></svg>TED AI
+          </button>
+          <a class="btn btn--sm" href="wallet.html#deposit">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>Deposit
+          </a>
+        </div>
+      </div>
+      <div class="ticker ticker--sm ticker--app" role="region" aria-label="Market prices" data-market-tape aria-busy="true" style="--sk-min: 2.5rem">
+        <div class="ticker__track"><ul class="ticker__list" role="list"></ul></div>
+      </div>
+    </header>
+
+    <!-- ===================== PAGE CONTENT ===================== -->
+    <main class="app__content th-page" id="main">
+      <div class="th-callband" data-margin-call role="status" hidden></div>
+
+      <div class="th">
+        <!-- ============ Watchlist rail ============ -->
+        <aside class="th-watch" aria-label="Watchlist and account">
+          <div class="th-search" data-symbol-search>
+            <label class="sr-only" for="th-q">Search symbols</label>
+            <div class="field__control">
+              <svg class="th-search__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+              <input class="field__input" id="th-q" type="text" role="combobox" enterkeyhint="search" aria-expanded="false" aria-controls="th-q-list"
+                     aria-autocomplete="list" autocomplete="off" spellcheck="false" placeholder="Search stocks, ETFs, crypto">
+              <kbd aria-hidden="true" title="Shortcut: Alt+F">⌥F</kbd>
+            </div>
+            <ul class="th-search__list" id="th-q-list" role="listbox" aria-label="Matching symbols" hidden></ul>
+          </div>
+
+          <div class="th-watch__head">
+            <label class="sr-only" for="th-wl">Watchlist</label>
+            <select class="field__select th-watch__select" id="th-wl" data-watchlist-select></select>
+            <button class="text-btn" type="button" data-watch-toggle aria-pressed="false">Add to watchlist</button>
+          </div>
+          <ul class="th-watch__list" role="list" data-watchlist aria-live="off"></ul>
+
+          <section class="th-acct" aria-labelledby="th-acct-title">
+            <h2 class="th-label" id="th-acct-title">Account <span data-acct-type class="th-acct__type"></span></h2>
+            <dl class="th-acct__list">
+              <div><dt>Account value</dt><dd class="mono" data-acct="total_value">—</dd></div>
+              <div><dt>Cash</dt><dd class="mono" data-acct="cash">—</dd></div>
+              <div><dt>Buying power</dt><dd class="mono" data-acct="buying_power">—</dd></div>
+              <div data-margin-only hidden><dt>Options BP</dt><dd class="mono" data-acct="option_bp">—</dd></div>
+              <div><dt>Crypto BP</dt><dd class="mono" data-acct="crypto_bp">—</dd></div>
+              <div data-margin-only hidden><dt>Margin used</dt><dd class="mono" data-acct="margin_debit">—</dd></div>
+              <div data-margin-only hidden><dt>Excess liquidity</dt><dd class="mono" data-acct="excess_liquidity">—</dd></div>
+              <div data-margin-only hidden><dt>Day trades left</dt><dd class="mono" data-acct="day_trades_left">—</dd></div>
+              <div><dt>Day P&amp;L</dt><dd class="mono" data-acct="day_pnl">—</dd></div>
+            </dl>
+            <p class="th-acct__links">
+              <a class="link-arrow" href="wallet.html#deposit">Deposit funds <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+              <a class="link-arrow" href="settings.html#trading" data-acct-upgrade>Account &amp; options level <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+            </p>
+          </section>
+        </aside>
+
+        <!-- ============ Workspace ============ -->
+        <section class="th-work" aria-labelledby="th-symbol">
+          <header class="th-quote" data-quote aria-busy="true">
+            <div class="th-quote__id">
+              <h1 class="th-quote__symbol" id="th-symbol" data-q="symbol">—</h1>
+              <p class="th-quote__name"><span data-q="name">Loading…</span> <span class="muted" data-q="exchange"></span></p>
+            </div>
+            <div class="th-quote__price">
+              <p class="th-quote__last mono" data-q="last" aria-live="off">—</p>
+              <p class="th-quote__change mono" data-q="change">—</p>
+            </div>
+            <dl class="th-quote__facts">
+              <div><dt>Bid</dt><dd class="mono" data-q="bid">—</dd></div>
+              <div><dt>Ask</dt><dd class="mono" data-q="ask">—</dd></div>
+              <div><dt>Open</dt><dd class="mono" data-q="open">—</dd></div>
+              <div><dt>High</dt><dd class="mono" data-q="high">—</dd></div>
+              <div><dt>Low</dt><dd class="mono" data-q="low">—</dd></div>
+              <div><dt>Prev close</dt><dd class="mono" data-q="prev_close">—</dd></div>
+            </dl>
+            <p class="th-quote__status">
+              <span class="tag tag--plain" data-q="session">—</span>
+              <span class="tag tag--plain" data-stream-status>Connecting</span>
+              <span class="tag tag--plain tag--pending" data-q="spread" hidden>Estimated spread</span>
+              <span class="tag tag--plain tag--pending" data-q="feed" hidden title="The live price stream is unavailable. Prices are refreshed every few seconds instead.">Delayed</span>
+              <span class="tag tag--plain muted" data-q="asof"></span>
+            </p>
+          </header>
+
+          <section class="th-chart" aria-labelledby="th-chart-title">
+            <h2 class="sr-only" id="th-chart-title">Price chart</h2>
+            <div class="th-chart__bar">
+              <div class="seg" role="group" aria-label="Chart range" data-range>
+                <button class="seg__btn" type="button" data-value="1D" aria-pressed="true">1D</button>
+                <button class="seg__btn" type="button" data-value="5D" aria-pressed="false">5D</button>
+                <button class="seg__btn" type="button" data-value="1M" aria-pressed="false">1M</button>
+                <button class="seg__btn" type="button" data-value="3M" aria-pressed="false">3M</button>
+                <button class="seg__btn" type="button" data-value="6M" aria-pressed="false">6M</button>
+                <button class="seg__btn" type="button" data-value="YTD" aria-pressed="false">YTD</button>
+                <button class="seg__btn" type="button" data-value="1Y" aria-pressed="false">1Y</button>
+                <button class="seg__btn" type="button" data-value="5Y" aria-pressed="false">5Y</button>
+              </div>
+              <div class="seg" role="group" aria-label="Chart style" data-chart-style>
+                <button class="seg__btn" type="button" data-value="area" aria-pressed="true">Line</button>
+                <button class="seg__btn" type="button" data-value="candle" aria-pressed="false">Candles</button>
+              </div>
+            </div>
+            <div class="th-chart__canvas" data-price-chart role="img" aria-label="Price chart"></div>
+            <p class="fineprint th-chart__note" data-chart-note></p>
+          </section>
+
+          <div class="tabs th-tabs" role="tablist" aria-label="Trading views" data-component="tabs" data-th-tabs>
+            <button class="tabs__tab" role="tab" id="tab-positions" aria-controls="panel-positions" aria-selected="true">Positions <small data-tab-count="positions">0</small></button>
+            <button class="tabs__tab" role="tab" id="tab-orders" aria-controls="panel-orders" aria-selected="false">Orders <small data-tab-count="orders">0</small></button>
+            <button class="tabs__tab" role="tab" id="tab-history" aria-controls="panel-history" aria-selected="false">History</button>
+            <button class="tabs__tab" role="tab" id="tab-company" aria-controls="panel-company" aria-selected="false">Company</button>
+            <button class="tabs__tab" role="tab" id="tab-options" aria-controls="panel-options" aria-selected="false">Options</button>
+            <button class="tabs__tab" role="tab" id="tab-baskets" aria-controls="panel-baskets" aria-selected="false">ETF baskets</button>
+            <button class="tabs__tab" role="tab" id="tab-alerts" aria-controls="panel-alerts" aria-selected="false">Alerts</button>
+            <button class="tabs__tab" role="tab" id="tab-recurring" aria-controls="panel-recurring" aria-selected="false">Recurring</button>
+            <button class="tabs__tab" role="tab" id="tab-activity" aria-controls="panel-activity" aria-selected="false">Activity</button>
+          </div>
+
+          <div role="tabpanel" id="panel-positions" aria-labelledby="tab-positions" tabindex="0">
+            <div class="ledger-wrap" tabindex="0" role="region" aria-label="Positions">
+              <table class="ledger th-table">
+                <thead><tr><th scope="col">Symbol</th><th scope="col" class="is-num">Qty</th><th scope="col" class="is-num">Avg cost</th><th scope="col" class="is-num">Last</th><th scope="col" class="is-num">Market value</th><th scope="col" class="is-num">Day P&amp;L</th><th scope="col" class="is-num">Total P&amp;L</th><th scope="col"><span class="sr-only">Actions</span></th></tr></thead>
+                <tbody data-positions></tbody>
+              </table>
+            </div>
+          </div>
+          <div role="tabpanel" id="panel-orders" aria-labelledby="tab-orders" tabindex="0" hidden>
+            <div class="ledger-wrap" tabindex="0" role="region" aria-label="Open orders">
+              <table class="ledger th-table">
+                <thead><tr><th scope="col">Placed</th><th scope="col">Order</th><th scope="col" class="is-num">Qty</th><th scope="col" class="is-num">Price</th><th scope="col">Status</th><th scope="col"><span class="sr-only">Actions</span></th></tr></thead>
+                <tbody data-open-orders></tbody>
+              </table>
+            </div>
+          </div>
+          <div role="tabpanel" id="panel-history" aria-labelledby="tab-history" tabindex="0" hidden>
+            <div class="ledger-wrap" tabindex="0" role="region" aria-label="Order history">
+              <table class="ledger th-table">
+                <thead><tr><th scope="col">Date</th><th scope="col">Order</th><th scope="col" class="is-num">Filled</th><th scope="col" class="is-num">Avg price</th><th scope="col" class="is-num">Fees</th><th scope="col">Status</th></tr></thead>
+                <tbody data-history></tbody>
+              </table>
+            </div>
+          </div>
+          <div role="tabpanel" id="panel-company" aria-labelledby="tab-company" tabindex="0" hidden>
+            <div data-company></div>
+          </div>
+          <div role="tabpanel" id="panel-options" aria-labelledby="tab-options" tabindex="0" hidden>
+            <div class="th-chain" data-chain>
+              <div class="th-chain__bar">
+                <div class="seg th-chain__expiries" role="group" aria-label="Expiration date" data-expiries></div>
+                <div class="seg" role="group" aria-label="Strikes shown" data-strike-count>
+                  <button class="seg__btn" type="button" data-value="10" aria-pressed="true">10</button>
+                  <button class="seg__btn" type="button" data-value="20" aria-pressed="false">20</button>
+                  <button class="seg__btn" type="button" data-value="all" aria-pressed="false">All</button>
+                </div>
+                <button class="btn btn--sm btn--outline" type="button" data-open-builder>Strategy builder</button>
+              </div>
+              <p class="fineprint" data-chain-note></p>
+              <div class="ledger-wrap th-chain__wrap" tabindex="0" role="region" aria-label="Options chain">
+                <table class="ledger th-chain__table">
+                  <thead>
+                    <tr><th scope="colgroup" colspan="5" class="th-chain__side" data-span>Calls</th><th scope="col" class="th-chain__strike-h">Strike</th><th scope="colgroup" colspan="5" class="th-chain__side" data-span>Puts</th></tr>
+                    <tr><th scope="col" class="is-num">Delta</th><th scope="col" class="is-num c-iv">IV</th><th scope="col" class="is-num c-vol">Vol / OI</th><th scope="col" class="is-num">Bid</th><th scope="col" class="is-num">Ask</th><th scope="col" class="is-num"><span class="sr-only">Strike</span></th><th scope="col" class="is-num">Bid</th><th scope="col" class="is-num">Ask</th><th scope="col" class="is-num c-vol">Vol / OI</th><th scope="col" class="is-num c-iv">IV</th><th scope="col" class="is-num">Delta</th></tr>
+                  </thead>
+                  <tbody data-chain-rows></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+          <div role="tabpanel" id="panel-baskets" aria-labelledby="tab-baskets" tabindex="0" hidden>
+            <div data-baskets></div>
+          </div>
+          <div role="tabpanel" id="panel-alerts" aria-labelledby="tab-alerts" tabindex="0" hidden>
+            <div data-alerts></div>
+          </div>
+          <div role="tabpanel" id="panel-recurring" aria-labelledby="tab-recurring" tabindex="0" hidden>
+            <div data-recurring></div>
+          </div>
+          <div role="tabpanel" id="panel-activity" aria-labelledby="tab-activity" tabindex="0" hidden>
+            <div class="ledger-wrap" tabindex="0" role="region" aria-label="Account activity">
+              <table class="ledger th-table">
+                <thead><tr><th scope="col">Date</th><th scope="col">Description</th><th scope="col">Type</th><th scope="col" class="is-num">Amount</th><th scope="col" class="is-num">Cash after</th></tr></thead>
+                <tbody data-activity></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- ============ Order ticket ============ -->
+        <aside class="th-ticket" id="ticket" aria-labelledby="ticket-title">
+          <form class="th-form" data-ticket novalidate>
+            <h2 class="th-label" id="ticket-title">Trade <span data-t="symbol">—</span></h2>
+            <div class="seg th-actions" role="radiogroup" aria-label="Action" data-actions></div>
+
+            <div class="field" data-field="qty">
+              <div class="th-field-head">
+                <label class="field__label" for="t-qty" data-qty-label>Shares</label>
+                <div class="seg th-unit" role="group" aria-label="Order in" data-unit>
+                  <button class="seg__btn" type="button" data-value="qty" aria-pressed="true">Shares</button>
+                  <button class="seg__btn" type="button" data-value="notional" aria-pressed="false">Dollars</button>
+                </div>
+              </div>
+              <div class="field__control"><input class="field__input mono" id="t-qty" name="qty" inputmode="decimal" autocomplete="off" aria-describedby="t-qty-help t-qty-err" required></div>
+              <p class="field__help" id="t-qty-help" data-qty-help></p>
+              <p class="field__error" id="t-qty-err" hidden></p>
+            </div>
+
+            <div class="field">
+              <label class="field__label" for="t-type">Order type</label>
+              <div class="field__control">
+                <select class="field__select" id="t-type" name="type">
+                  <option value="market">Market</option>
+                  <option value="limit">Limit</option>
+                  <option value="stop">Stop</option>
+                  <option value="stop_limit">Stop limit</option>
+                  <option value="trailing_stop">Trailing stop</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="field" data-field="limit_price" hidden>
+              <label class="field__label" for="t-limit">Limit price</label>
+              <div class="field__control"><span class="field__affix">$</span><input class="field__input mono" id="t-limit" name="limit_price" inputmode="decimal" autocomplete="off" aria-describedby="t-limit-err"></div>
+              <p class="field__error" id="t-limit-err" hidden></p>
+            </div>
+            <div class="field" data-field="stop_price" hidden>
+              <label class="field__label" for="t-stop">Stop price</label>
+              <div class="field__control"><span class="field__affix">$</span><input class="field__input mono" id="t-stop" name="stop_price" inputmode="decimal" autocomplete="off" aria-describedby="t-stop-err"></div>
+              <p class="field__error" id="t-stop-err" hidden></p>
+            </div>
+            <div class="field" data-field="trail" hidden>
+              <label class="field__label" for="t-trail">Trail (%)</label>
+              <div class="field__control"><input class="field__input mono" id="t-trail" name="trail_percent" inputmode="decimal" autocomplete="off" aria-describedby="t-trail-err"><span class="field__affix">%</span></div>
+              <p class="field__error" id="t-trail-err" hidden></p>
+            </div>
+
+            <div class="field" data-field="tif">
+              <label class="field__label" for="t-tif">Time in force</label>
+              <div class="field__control">
+                <select class="field__select" id="t-tif" name="tif">
+                  <option value="day">Day</option>
+                  <option value="gtc">Good til canceled</option>
+                  <option value="ioc">Immediate or cancel</option>
+                  <option value="fok">Fill or kill</option>
+                </select>
+              </div>
+            </div>
+            <label class="check th-ext" data-field="extended" hidden><input type="checkbox" name="extended_hours"> <span>Extended hours (4:00–9:30 am, 4:00–8:00 pm ET)</span></label>
+
+            <p class="th-locate tag tag--plain" data-locate hidden></p>
+
+            <dl class="th-est" data-estimate aria-live="polite">
+              <div><dt>Est. price</dt><dd class="mono" data-est="price">—</dd></div>
+              <div><dt data-est-label>Est. cost</dt><dd class="mono" data-est="total">—</dd></div>
+              <div><dt>Est. fees</dt><dd class="mono" data-est="fees">—</dd></div>
+              <div><dt>Buying power</dt><dd class="mono" data-est="bp">—</dd></div>
+              <div><dt>You own</dt><dd class="mono" data-est="owned">—</dd></div>
+            </dl>
+            <p class="field__error th-form__error" data-ticket-error role="alert" hidden></p>
+            <button class="btn btn--block" type="submit" data-review>Review order</button>
+            <p class="fineprint">Shortcuts: Alt+B buy, Alt+S sell, Alt+F find a symbol.</p>
+          </form>
+        </aside>
+      </div>
+
+      <!-- Mobile quick actions -->
+      <div class="th-mbar" data-mobile-bar>
+        <a class="btn btn--block" href="#ticket" data-mobile-action="buy">Buy</a>
+        <a class="btn btn--block btn--outline" href="#ticket" data-mobile-action="sell">Sell</a>
+      </div>
+
+      <!-- Order review -->
+      <dialog class="dialog th-review" id="order-review" aria-labelledby="review-title">
+        <form method="dialog" class="th-review__form">
+          <div class="dialog__head">
+            <h2 class="dialog__title" id="review-title">Review order</h2>
+            <button class="icon-btn" type="button" data-dialog-close aria-label="Close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+          </div>
+          <div class="dialog__body">
+            <p class="th-review__summary" data-review-summary></p>
+            <dl class="th-est" data-review-facts></dl>
+            <ul class="th-review__warnings" role="list" data-review-warnings></ul>
+          </div>
+          <div class="dialog__foot">
+            <button class="btn btn--ghost" type="button" data-dialog-close>Edit order</button>
+            <button class="btn" type="button" data-place>Place order</button>
+          </div>
+        </form>
+      </dialog>
+
+      <!-- Strategy builder -->
+      <dialog class="dialog th-builder" id="strategy-builder" aria-labelledby="builder-title">
+        <div class="dialog__head">
+          <h2 class="dialog__title" id="builder-title">Strategy builder</h2>
+          <button class="icon-btn" type="button" data-dialog-close aria-label="Close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+        </div>
+        <div class="dialog__body" data-builder>
+          <div class="th-builder__row">
+            <div class="field">
+              <label class="field__label" for="b-strategy">Strategy</label>
+              <div class="field__control">
+                <select class="field__select" id="b-strategy" data-b-strategy>
+                  <option value="bull_call">Bull call spread (vertical)</option>
+                  <option value="bear_put">Bear put spread (vertical)</option>
+                  <option value="bull_put">Bull put credit spread (vertical)</option>
+                  <option value="bear_call">Bear call credit spread (vertical)</option>
+                  <option value="long_straddle">Long straddle</option>
+                  <option value="long_strangle">Long strangle</option>
+                  <option value="iron_condor">Iron condor</option>
+                  <option value="butterfly">Call butterfly</option>
+                  <option value="calendar">Call calendar</option>
+                  <option value="covered_call">Covered call (buy-write)</option>
+                  <option value="collar">Collar</option>
+                </select>
+              </div>
+            </div>
+            <div class="field">
+              <label class="field__label" for="b-width">Strike width</label>
+              <div class="field__control"><select class="field__select" id="b-width" data-b-width></select></div>
+            </div>
+            <div class="field">
+              <label class="field__label" for="b-qty">Quantity</label>
+              <div class="field__control"><input class="field__input mono" id="b-qty" data-b-qty inputmode="numeric" value="1"></div>
+            </div>
+          </div>
+          <div class="ledger-wrap"><table class="ledger th-table"><thead><tr><th scope="col">Leg</th><th scope="col">Contract</th><th scope="col" class="is-num">Bid</th><th scope="col" class="is-num">Ask</th></tr></thead><tbody data-b-legs></tbody></table></div>
+          <div class="th-builder__stats">
+            <div><span class="th-label">Net</span><span class="mono th-builder__net" data-b-net>—</span></div>
+            <div><span class="th-label">Max profit</span><span class="mono" data-b-maxp>—</span></div>
+            <div><span class="th-label">Max loss</span><span class="mono" data-b-maxl>—</span></div>
+            <div><span class="th-label">Breakeven</span><span class="mono" data-b-be>—</span></div>
+            <div><span class="th-label">Buying power</span><span class="mono" data-b-req>—</span></div>
+          </div>
+          <div class="th-builder__chart" data-payoff-chart role="img" aria-label="Profit and loss at expiration"></div>
+          <div class="field">
+            <label class="field__label" for="b-limit">Net limit price (per share)</label>
+            <div class="field__control"><span class="field__affix">$</span><input class="field__input mono" id="b-limit" data-b-limit inputmode="decimal"><span class="field__affix" data-b-effect>debit</span></div>
+          </div>
+          <ul class="th-review__warnings" role="list" data-b-warnings></ul>
+        </div>
+        <div class="dialog__foot">
+          <p class="fineprint">Payoff at the first expiration, at current prices.</p>
+          <button class="btn" type="button" data-b-place>Place strategy</button>
+        </div>
+      </dialog>
+
+      <footer class="app__foot">
+        <p class="school-notice" role="note"><strong>School project notice:</strong> This platform is a student school project with simulated markets and simulated funds. It is not a real broker. Do not deposit real money on this platform.</p>
+        <p class="fineprint">Prices are real market data (Finnhub, Coinbase, Yahoo Finance); stock quotes may show an estimated bid/ask and option prices are a Yahoo Finance snapshot and may be delayed. Trading, margin and options involve risk.</p>
+      </footer>
+    </main>
+  </div>
+
+  <!-- ===================== MOBILE TAB BAR + TED AI (shared) ===================== -->
+  <nav class="tabbar" aria-label="Quick navigation">
+    <a href="index.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1z"/></svg>Home</a>
+    <a href="wallet.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M3 7a2 2 0 0 1 2-2h13v4"/><path d="M3 7v11a2 2 0 0 0 2 2h15V9H5a2 2 0 0 1-2-2z"/></svg>Wallet</a>
+    <a href="copy-traders.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0"/><path d="M16 4.5a3.5 3.5 0 0 1 0 7"/></svg>Traders</a>
+    <a href="trade.html" aria-current="page"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4 19V5M4 19h16"/><path d="M7 15l4-5 3 3 5-7"/></svg>Trade</a>
+    <button type="button" data-rail-toggle aria-controls="rail" aria-expanded="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>More</button>
+  </nav>
+  <button class="ai-fab" type="button" data-dialog-open="ted-ai"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/></svg>TED AI</button>
+
+  <dialog class="drawer ai-panel" id="ted-ai" aria-labelledby="ted-ai-title">
+    <div class="drawer__inner">
+      <div class="drawer__head">
+        <h2 id="ted-ai-title" class="ai-panel__title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true" style="color: var(--color-signal)"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/></svg>TED AI</h2>
+        <button class="icon-btn" type="button" data-dialog-close aria-label="Close TED AI"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+      </div>
+      <div class="drawer__body ai-chat" data-ai-log role="log" aria-live="polite" aria-label="TED AI conversation">
+        <div class="ai-empty" data-ai-empty>
+          <p class="ai-empty__lead">Ask about your portfolio, copy trades, wallet or plans.</p>
+          <ul class="ai-suggest" role="list">
+            <li><button class="btn btn--sm btn--outline" type="button" data-ai-suggest="How do I start copying a trader?">How do I start copying a trader?</button></li>
+            <li><button class="btn btn--sm btn--outline" type="button" data-ai-suggest="How does the Trading Hub work?">How does the Trading Hub work?</button></li>
+            <li><button class="btn btn--sm btn--outline" type="button" data-ai-suggest="How do deposits and withdrawals work?">How do deposits and withdrawals work?</button></li>
+          </ul>
+        </div>
+      </div>
+      <form class="drawer__foot ai-form" data-ai-form>
+        <div class="field">
+          <label class="sr-only" for="ai-q">Ask TED AI</label>
+          <div class="field__control">
+            <input class="field__input" id="ai-q" name="q" maxlength="2000" placeholder="Ask about your portfolio…" autocomplete="off">
+            <button class="icon-btn" type="submit" aria-label="Send"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4 12l16-8-6 16-2.5-6.5z"/></svg></button>
+          </div>
+        </div>
+        <p class="fineprint ai-status" data-ai-status aria-live="polite"></p>
+        <p class="fineprint">TED AI can make mistakes. It is not financial advice.</p>
+      </form>
+    </div>
+  </dialog>
+  <script src="../assets/vendor/lightweight-charts-4.2.3/lightweight-charts.standalone.production.js" defer></script>
+  <script type="module" src="../assets/js/live/trade.js?v=10"></script>
+  <script type="module" src="../assets/js/live/ticker.js"></script>
+  <script type="module" src="../assets/js/live/ai-panel.js"></script>
+  <script type="module" src="../assets/js/live/header.js"></script>
+</body>
+</html>

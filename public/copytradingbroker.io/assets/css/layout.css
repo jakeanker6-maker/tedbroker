@@ -32,6 +32,8 @@
 }
 
 .sticky { position: sticky; inset-block-start: calc(var(--topbar-h) + var(--space-6)); }
+/* Sticky columns carry the section colour so scrolling text never shows through or clashes */
+.sticky { background: var(--color-bg); }
 
 .section-head {
   display: flex;

@@ -1,0 +1,170 @@
+/* Support pages (Investors, FAQs, Contact us) — page-only rules. */
+@layer pages {
+  /* ---------- Section heads ---------- */
+  .support-head {
+    display: grid;
+    gap: var(--space-4);
+    max-inline-size: 46rem;
+    margin-block-end: var(--space-7);
+  }
+  .support-head > .lead { margin: 0; }
+
+  /* ---------- Feature grid: 1 column, 2 from 48rem, 3 from 64rem ---------- */
+  .support-grid {
+    display: grid;
+    gap: var(--space-5);
+    grid-template-columns: minmax(0, 1fr);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  @media (width >= 48rem) {
+    .support-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+  @media (width >= 64rem) {
+    .support-grid--3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .support-grid--3 > li { grid-column: auto; }
+  }
+  /* Three cards between 48rem and 64rem: the last card spans both columns instead of orphaning. */
+  @media (48rem <= width < 64rem) {
+    .support-grid--3 > li:last-child:nth-child(odd) { grid-column: 1 / -1; }
+  }
+
+  .support-card {
+    display: grid;
+    align-content: start;
+    gap: var(--space-3);
+    block-size: 100%;
+    padding: var(--space-6);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    background: var(--color-surface);
+  }
+  .support-card__icon {
+    inline-size: 2.5rem;
+    block-size: 2.5rem;
+    margin-block-end: var(--space-2);
+    color: var(--color-text);
+  }
+  .support-card__index {
+    font: 500 var(--text-small)/1 var(--font-mono);
+    letter-spacing: 0.08em;
+    color: var(--color-accent-text);
+  }
+  .support-card__title { font-size: var(--text-h3); }
+  .support-card__text { margin: 0; color: var(--color-text-muted); }
+
+  /* ---------- Split: copy + media (Investors) ---------- */
+  .support-split__copy > * + * { margin-block-start: var(--space-5); }
+  .support-split__copy > .support-tools { margin-block-start: var(--space-7); }
+  .support-tools {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    border-block-start: 1px solid var(--color-border);
+  }
+  .support-tool {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: var(--space-4);
+    padding-block: var(--space-5);
+    border-block-end: 1px solid var(--color-border);
+  }
+  .support-tool__icon {
+    display: grid;
+    place-items: center;
+    inline-size: 2.75rem;
+    block-size: 2.75rem;
+    border: 1px solid var(--color-border-strong);
+    border-radius: 50%;
+    color: var(--color-text);
+  }
+  .support-tool__icon svg { inline-size: 1.25rem; block-size: 1.25rem; }
+  .support-tool__title { font-size: var(--text-h3); }
+  .support-tool__text { margin: var(--space-2) 0 0; color: var(--color-text-muted); }
+
+  .support-figure { margin: 0; max-inline-size: 40rem; }
+  .support-figure img {
+    display: block;
+    inline-size: 100%;
+    block-size: auto;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    background: var(--color-surface);
+  }
+
+  /* ---------- FAQ accordion: full width, answers capped at about 70ch ---------- */
+  .support-faq summary h2 {
+    margin: 0;
+    font: inherit;
+    letter-spacing: inherit;
+    text-wrap: balance;
+  }
+  .support-faq .accordion__body { max-inline-size: 70ch; }
+  .support-faq .accordion__body > * + * { margin-block-start: var(--space-4); }
+
+  /* ---------- Contact: details + form split ---------- */
+  .support-contact { --split-cols: minmax(0, 5fr) minmax(0, 6fr); }
+
+  .support-channels {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    border-block-start: 1px solid var(--color-border);
+  }
+  .support-channel {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: var(--space-4);
+    align-items: start;
+    padding-block: var(--space-5);
+    border-block-end: 1px solid var(--color-border);
+  }
+  .support-channel__icon {
+    inline-size: 1.5rem;
+    block-size: 1.5rem;
+    margin-block-start: 0.15rem;
+    color: var(--color-text);
+  }
+  .support-channel__value {
+    margin: 0;
+    font-style: normal;
+    font-size: 1.0625rem;
+    line-height: 1.5;
+    color: var(--color-text);
+  }
+  .support-channel__value--mono { font-family: var(--font-mono); }
+  .support-channel__value a {
+    color: var(--color-text);
+    text-decoration-color: var(--color-border-strong);
+  }
+  .support-channel__value a:hover { text-decoration-color: currentColor; }
+
+  .support-form { display: grid; gap: var(--space-6); align-content: start; }
+  .support-form__row {
+    display: grid;
+    gap: var(--space-6);
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 14rem), 1fr));
+  }
+  .support-form__textarea {
+    min-block-size: 8rem;
+    padding-block: var(--space-3);
+    line-height: 1.5;
+    resize: vertical;
+  }
+  @supports (field-sizing: content) {
+    .support-form__textarea { field-sizing: content; }
+  }
+  .support-form__foot { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-4) var(--space-5); }
+
+  /* Inline errors appear after the user has interacted (no JavaScript needed). */
+  .support-form .field:has(:user-invalid) .field__control {
+    border-color: var(--color-loss);
+    box-shadow: 0 1px 0 0 var(--color-loss);
+  }
+  .support-form .field:has(:user-invalid) .field__error { display: flex; }
+
+  @media (forced-colors: active) {
+    .support-card, .support-figure img { border: 1px solid CanvasText; }
+  }
+}

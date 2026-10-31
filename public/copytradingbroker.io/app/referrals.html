@@ -1,0 +1,289 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+  <script>if('scrollRestoration' in history)history.scrollRestoration='manual';var __top=function(){if(location.hash){var __t=document.getElementById(decodeURIComponent(location.hash.slice(1)));if(__t){__t.scrollIntoView();return}}scrollTo(0,0)};__top();addEventListener('load',__top);addEventListener('pageshow',function(e){if(e.persisted)__top()})</script>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Referrals — TED Brokers</title>
+  <meta name="theme-color" content="#0A1626">
+  <meta name="robots" content="noindex">
+  <link rel="icon" href="../assets/img/favicon.ico">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=JetBrains+Mono:wght@400;500;600&family=Sora:wght@300;600;700;800&display=swap">
+  <link rel="stylesheet" href="../assets/css/main.css?v=2">
+  <link rel="stylesheet" href="../assets/css/live.css?v=2">
+  <link rel="stylesheet" href="../assets/css/pages/referrals.css">
+  <script>document.documentElement.classList.add('js');try{var t=localStorage.getItem('ted:theme');if(t==='system')t=matchMedia('(prefers-color-scheme: light)').matches?'light':'dark';if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
+  <script type="module" src="../assets/js/main.js?v=3"></script>
+</head>
+<body class="app surface-ink">
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <!-- ===================== RAIL (shared across app pages) ===================== -->
+  <aside class="rail" id="rail" aria-label="Dashboard">
+    <div class="rail__brand">
+      <a class="wordmark" href="index.html" aria-label="TED Brokers dashboard">
+        <span class="wordmark__ted">TED</span><span class="wordmark__brokers">Br<svg class="wordmark__o" viewBox="0 0 20 20" aria-hidden="true"><g fill="currentColor"><circle cx="10" cy="2" r="1.6"/><circle cx="15.2" cy="4.1" r="1.4" opacity=".8"/><circle cx="17.9" cy="9.4" r="1.6"/><circle cx="16.3" cy="14.8" r="1.4" opacity=".8"/><circle cx="11.2" cy="17.9" r="1.6"/><circle cx="5.6" cy="16.4" r="1.4" opacity=".7"/><circle cx="2.2" cy="11.6" r="1.6"/><circle cx="3" cy="6" r="1.4" opacity=".8"/><circle cx="6.6" cy="2.9" r="1.1" opacity=".6"/><circle cx="10" cy="10" r="1.9"/><circle cx="13.3" cy="9.2" r="1" opacity=".7"/><circle cx="7.4" cy="12" r="1" opacity=".7"/></g></svg>kers</span>
+      </a>
+      <button class="icon-btn rail__collapse" type="button" data-rail-collapse aria-controls="rail" aria-expanded="true" aria-label="Collapse menu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></button>
+    </div>
+    <nav class="rail__nav" aria-label="Dashboard sections">
+      <ul class="rail__list" role="list">
+        <li><a class="rail__link" href="index.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>Overview</a></li>
+        <li><a class="rail__link" href="trade.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M4 19V5M4 19h16"/><path d="M7 15l4-5 3 3 5-7"/><path d="M15 6h4v4"/></svg>Trade</a></li>
+        <li><a class="rail__link" href="screener.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M3 5h18l-7 8v6l-4-2v-4z"/></svg>Screener</a></li>
+        <li><a class="rail__link" href="wallet.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M3 7a2 2 0 0 1 2-2h13v4"/><path d="M3 7v11a2 2 0 0 0 2 2h15V9H5a2 2 0 0 1-2-2z"/><circle cx="16" cy="14.5" r="1"/></svg>Wallet</a></li>
+        <li><a class="rail__link" href="portfolio.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M21 12A9 9 0 1 1 12 3v9z"/><path d="M15 3.5A9 9 0 0 1 20.5 9H15z"/></svg>Portfolio</a></li>
+        <li><a class="rail__link" href="documents.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M6 3h8l4 4v14H6z"/><path d="M14 3v4h4M9 12h6M9 16h6"/></svg>Documents</a></li>
+        <li><a class="rail__link" href="copy-traders.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0"/><path d="M16 4.5a3.5 3.5 0 0 1 0 7M18 14.5a6.5 6.5 0 0 1 3.5 5.5"/></svg>Copy traders<span class="rail__aside rail__aside--live" hidden></span></a></li>
+      </ul>
+      <p class="rail__group-label" id="rail-plans">Investment plans</p>
+      <ul class="rail__list" role="list" aria-labelledby="rail-plans">
+        <li><a class="rail__link rail__link--sub" href="plans.html">Robo Advisor</a></li>
+        <li><a class="rail__link rail__link--sub" href="plans.html#etf">ETF automation</a></li>
+        <li><a class="rail__link rail__link--sub" href="plans.html#defi">DeFi</a></li>
+        <li><a class="rail__link rail__link--sub" href="plans.html#options">Options</a></li>
+        <li><a class="rail__link rail__link--sub" href="plans.html#staking">Staking<span class="rail__aside rail__aside--soon">soon</span></a></li>
+      </ul>
+      <p class="rail__group-label" id="rail-more">Community</p>
+      <ul class="rail__list" role="list" aria-labelledby="rail-more">
+        <li><a class="rail__link" href="network.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M3 12h4l3-8 4 16 3-8h4"/></svg>Network feed</a></li>
+        <li><a class="rail__link" href="referrals.html" aria-current="page"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="18" cy="5" r="2.5"/><circle cx="6" cy="12" r="2.5"/><circle cx="18" cy="19" r="2.5"/><path d="M8.2 10.8l7.6-4.4M8.2 13.2l7.6 4.4"/></svg>Referrals</a></li>
+        <li><a class="rail__link" href="news.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M4 5h13v14H6a2 2 0 0 1-2-2z"/><path d="M17 9h3v8a2 2 0 0 1-2 2"/><path d="M7.5 9h6M7.5 13h6"/></svg>News</a></li>
+      </ul>
+    </nav>
+    <div class="rail__foot">
+      <ul class="rail__list" role="list">
+        <li><a class="rail__link" href="../help.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.6.3-1 .8-1 1.5V14"/><path d="M12 17h.01"/></svg>Help center</a></li>
+        <li><a class="rail__link" href="settings.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M12 2.5v3M12 18.5v3M4.2 4.2l2.1 2.1M17.7 17.7l2.1 2.1M2.5 12h3M18.5 12h3M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1"/></svg>Settings</a></li>
+      </ul>
+      <a class="rail__user" href="settings.html">
+        <span class="avatar" aria-hidden="true"></span>
+        <span><span class="rail__user-name">Loading…</span><br><span class="rail__user-meta" hidden></span></span>
+      </a>
+    </div>
+  </aside>
+  <button class="rail-scrim" type="button" tabindex="-1" aria-hidden="true"></button>
+
+  <div class="app__main">
+    <!-- ===================== TOP BAR (shared) ===================== -->
+    <header class="topbar">
+      <div class="topbar__bar">
+        <button class="icon-btn topbar__menu" type="button" data-rail-toggle aria-controls="rail" aria-expanded="false" aria-label="Open menu">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h10"/></svg>
+        </button>
+        <a class="wordmark topbar__brand" href="index.html" aria-label="TED Brokers dashboard"><span class="wordmark__ted">TED</span><span class="wordmark__brokers">Brokers</span></a>
+        <form class="search" role="search" action="copy-traders.html">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+          <label class="sr-only" for="q">Search</label>
+          <input id="q" name="q" type="search" placeholder="Search traders, plans, markets" autocomplete="off">
+          <kbd aria-hidden="true">⌘K</kbd>
+        </form>
+        <div class="topbar__actions">
+          <button class="lang-select" type="button" aria-label="Language: English">EN
+            <svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M2 3.5l3 3 3-3"/></svg>
+          </button>
+          <button class="icon-btn" type="button" data-theme-toggle aria-pressed="false" aria-label="Light theme">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4 8 8 0 1 0 20 14.5z"/></svg>
+          </button>
+          <button class="icon-btn" type="button" aria-label="Notifications">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M6 8a6 6 0 1 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.9 1.9 0 0 0 3.4 0"/></svg>
+            <span class="icon-btn__dot" hidden></span>
+          </button>
+          <button class="btn btn--sm btn--outline" type="button" data-dialog-open="ted-ai">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true" style="color: var(--color-signal)"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/></svg>TED AI
+          </button>
+          <a class="btn btn--sm" href="wallet.html#deposit">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>Deposit
+          </a>
+        </div>
+      </div>
+      <div class="ticker ticker--sm ticker--app" role="region" aria-label="Market prices" data-market-tape aria-busy="true" style="--sk-min: 2.5rem">
+        <div class="ticker__track"><ul class="ticker__list" role="list"></ul></div>
+      </div>
+    </header>
+
+
+    <!-- ===================== PAGE CONTENT ===================== -->
+    <main class="app__content" id="main">
+      <!-- Split hero: copy + link on one side, live network on the other. No container. -->
+      <section class="split ref-hero" aria-labelledby="ref-title" data-skeleton aria-busy="true">
+        <div class="ref-hero__copy">
+          <p class="overline overline--accent">Referral program</p>
+          <h1 class="ref-hero__title" id="ref-title">Invite friends. Earn a bonus for every referral.</h1>
+          <p class="lead">Loading your referral bonus…</p>
+
+          <div class="ref-link">
+            <div class="field">
+              <label class="field__label" for="ref-link">Your referral link</label>
+              <div class="field__control">
+                <input class="field__input" id="ref-link" name="ref-link" type="text" value="" readonly aria-describedby="ref-link-help">
+              </div>
+            </div>
+            <button class="btn" type="button" data-copy="" data-copy-message="Referral link copied" disabled aria-describedby="ref-link-help">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h9"/></svg>Copy link
+            </button>
+          </div>
+          <p class="field__help" id="ref-link-help">Anyone who signs up with this link is added to your referrals.</p>
+
+          <div class="ref-share">
+            <span class="ref-share__label" id="ref-share-label">Share</span>
+            <ul class="ref-share__list" role="list" aria-labelledby="ref-share-label" hidden>
+              <li><a class="ref-share__link" href="https://twitter.com/intent/tweet?text=I%20copy%20traders%20on%20TED%20Brokers.%20Sign%20up%20with%20my%20link%3A&amp;url=https%3A%2F%2Ftedbrokers.com%2Fr%2FDANIEL-48211" target="_blank" rel="noopener noreferrer" aria-label="Share on X (opens in a new tab)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M4 4h4.5L20 20h-4.5z"/><path d="M19.5 4l-6.6 7.4M11.1 12.6L4.5 20"/></svg></a></li>
+              <li><a class="ref-share__link" href="https://wa.me/?text=I%20copy%20traders%20on%20TED%20Brokers.%20Sign%20up%20with%20my%20link%3A%20https%3A%2F%2Ftedbrokers.com%2Fr%2FDANIEL-48211" target="_blank" rel="noopener noreferrer" aria-label="Share on WhatsApp (opens in a new tab)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M3.5 20.5l1.3-4.3A8.5 8.5 0 1 1 8 19.4z"/><path d="M9 8.5c0 3.5 3 6.5 6.5 6.5l1-1.6-2-1-1 .9a4 4 0 0 1-2.3-2.3l.9-1-1-2z"/></svg></a></li>
+              <li><a class="ref-share__link" href="https://t.me/share/url?url=https%3A%2F%2Ftedbrokers.com%2Fr%2FDANIEL-48211&amp;text=I%20copy%20traders%20on%20TED%20Brokers.%20Sign%20up%20with%20my%20link%3A" target="_blank" rel="noopener noreferrer" aria-label="Share on Telegram (opens in a new tab)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M21 4L2.8 11.2l5.7 2.1L18 7l-7.4 7.6 6 5.4z"/><path d="M8.5 13.3V19l2.9-2.6"/></svg></a></li>
+              <li><a class="ref-share__link" href="mailto:?subject=Join%20me%20on%20TED%20Brokers&amp;body=I%20copy%20traders%20on%20TED%20Brokers.%20Sign%20up%20with%20my%20link%3A%20https%3A%2F%2Ftedbrokers.com%2Fr%2FDANIEL-48211" aria-label="Share by email"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3.5 6l8.5 7 8.5-7"/></svg></a></li>
+              <li><button class="ref-share__link" type="button" hidden data-component="ref-share"
+                          data-share-title="Join me on TED Brokers"
+                          data-share-text="I copy traders on TED Brokers. Sign up with my link:"
+                          data-share-url=""
+                          aria-label="More ways to share"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M12 15V3M7.5 7.5L12 3l4.5 4.5"/><path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-7"/></svg></button></li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="ref-net">
+          <canvas class="dotfield" data-component="dotfield" data-mode="network" data-seed="48" aria-hidden="true"></canvas>
+          <p class="ref-net__caption"><span class="live-dot" aria-hidden="true"></span><span>Loading your referrals…</span></p>
+        </div>
+      </section>
+
+      <section aria-label="Referral summary" data-skeleton aria-busy="true">
+        <div class="stat-strip">
+          <div class="stat">
+            <span class="stat__label">Total referrals</span>
+            <span class="stat__value">—</span>
+            <span class="stat__meta">All-time sign-ups</span>
+          </div>
+          <div class="stat">
+            <span class="stat__label">Active</span>
+            <span class="stat__value">—</span>
+            <span class="stat__meta">Made a first deposit</span>
+          </div>
+          <div class="stat">
+            <span class="stat__label">Earnings</span>
+            <span class="stat__value gain">—</span>
+            <span class="stat__meta">Paid to your wallet</span>
+          </div>
+          <div class="stat">
+            <span class="stat__label">Pending</span>
+            <span class="stat__value pending">—</span>
+            <span class="stat__meta">Paid when deposits settle</span>
+          </div>
+        </div>
+      </section>
+
+      <section aria-labelledby="ref-how-title" data-skeleton aria-busy="true">
+        <div class="block-head">
+          <h2 id="ref-how-title">How it works</h2>
+        </div>
+        <ol class="ref-steps mt-6" role="list">
+          <li class="ref-steps__line" aria-hidden="true"><span class="ref-steps__dot"></span></li>
+          <li class="ref-step">
+            <span class="ref-step__num" aria-hidden="true">01</span>
+            <h3 class="ref-step__title">Share your link</h3>
+            <p class="ref-step__text">Send your personal link by message, email or social post.</p>
+          </li>
+          <li class="ref-step">
+            <span class="ref-step__num" aria-hidden="true">02</span>
+            <h3 class="ref-step__title">Friend signs up &amp; deposits</h3>
+            <p class="ref-step__text">They create an account with your link and make a first deposit.</p>
+          </li>
+          <li class="ref-step">
+            <span class="ref-step__num" aria-hidden="true">03</span>
+            <h3 class="ref-step__title">You get the bonus</h3>
+            <p class="ref-step__text">The bonus is added to your wallet when they sign up with your link.</p>
+          </li>
+        </ol>
+      </section>
+
+      <section aria-labelledby="ref-earn-title" data-skeleton aria-busy="true">
+        <div class="block-head">
+          <h2 id="ref-earn-title">Monthly earnings <small></small></h2>
+          <p><span class="ref-total gain">—</span> <span class="mono muted">12 months</span></p>
+        </div>
+        <div class="ref-bars-wrap mt-5" tabindex="0" role="region" aria-label="Monthly referral earnings, scrollable">
+          <p class="muted" data-earn-loading>Loading your bonus history…</p>
+        </div>
+      </section>
+
+      <section aria-labelledby="ref-list-title" data-skeleton aria-busy="true">
+        <div class="block-head ref-head">
+          <h2 id="ref-list-title">Your referrals</h2>
+          <div class="tabs ref-filter" role="group" aria-label="Filter referrals by status">
+            <button class="tabs__tab" type="button" data-filter="all" aria-pressed="true">All<small>(24)</small></button>
+            <button class="tabs__tab" type="button" data-filter="active" aria-pressed="false">Active<small>(17)</small></button>
+            <button class="tabs__tab" type="button" data-filter="pending" aria-pressed="false">Pending<small>(5)</small></button>
+            <button class="tabs__tab" type="button" data-filter="inactive" aria-pressed="false">Inactive<small>(2)</small></button>
+          </div>
+        </div>
+        <p class="sr-only" data-ref-status aria-live="polite"></p>
+        <div class="ledger-wrap" tabindex="0" role="region" aria-labelledby="ref-list-title">
+          <table class="ledger">
+            <caption class="sr-only">Your most recent referrals</caption>
+            <thead><tr><th scope="col">Name</th><th scope="col" class="opt-sm">Joined</th><th scope="col">Status</th><th scope="col" class="is-num opt">First deposit</th><th scope="col" class="is-num">Your earnings</th></tr></thead>
+            <tbody>
+<tr class="ref-empty-row" data-ref-empty hidden>
+                <td colspan="5">
+                  <div class="empty">
+                    <p class="empty__title">No referrals in this view</p>
+                    <p>None of your recent sign-ups match this status. Try another filter.</p>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="ref-hint mt-4"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/></svg>Referrals appear here as soon as someone signs up with your link.</p>
+      </section>
+
+      <footer class="app__foot"><p class="fineprint">Referral bonuses are credited to your wallet when a friend signs up with your link. Trading involves risk; past performance is not indicative of future results.</p></footer>
+    </main>
+  </div>
+
+  <!-- ===================== MOBILE TAB BAR + TED AI (shared) ===================== -->
+  <nav class="tabbar" aria-label="Quick navigation">
+    <a href="index.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1z"/></svg>Home</a>
+    <a href="wallet.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M3 7a2 2 0 0 1 2-2h13v4"/><path d="M3 7v11a2 2 0 0 0 2 2h15V9H5a2 2 0 0 1-2-2z"/></svg>Wallet</a>
+    <a href="copy-traders.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0"/><path d="M16 4.5a3.5 3.5 0 0 1 0 7"/></svg>Traders</a>
+    <a href="trade.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4 19V5M4 19h16"/><path d="M7 15l4-5 3 3 5-7"/></svg>Trade</a>
+    <button type="button" data-rail-toggle aria-controls="rail" aria-expanded="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>More</button>
+  </nav>
+  <button class="ai-fab" type="button" data-dialog-open="ted-ai"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/></svg>TED AI</button>
+
+  <dialog class="drawer ai-panel" id="ted-ai" aria-labelledby="ted-ai-title">
+    <div class="drawer__inner">
+      <div class="drawer__head">
+        <h2 id="ted-ai-title" class="ai-panel__title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true" style="color: var(--color-signal)"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/></svg>TED AI</h2>
+        <button class="icon-btn" type="button" data-dialog-close aria-label="Close TED AI"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+      </div>
+      <div class="drawer__body ai-chat" data-ai-log role="log" aria-live="polite" aria-label="TED AI conversation">
+        <div class="ai-empty" data-ai-empty>
+          <p class="ai-empty__lead">Ask about your portfolio, copy trades, wallet or plans.</p>
+          <ul class="ai-suggest" role="list">
+            <li><button class="btn btn--sm btn--outline" type="button" data-ai-suggest="How do I start copying a trader?">How do I start copying a trader?</button></li>
+            <li><button class="btn btn--sm btn--outline" type="button" data-ai-suggest="How does the Trading Hub work?">How does the Trading Hub work?</button></li>
+            <li><button class="btn btn--sm btn--outline" type="button" data-ai-suggest="How do deposits and withdrawals work?">How do deposits and withdrawals work?</button></li>
+          </ul>
+        </div>
+      </div>
+      <form class="drawer__foot ai-form" data-ai-form>
+        <div class="field">
+          <label class="sr-only" for="ai-q">Ask TED AI</label>
+          <div class="field__control">
+            <input class="field__input" id="ai-q" name="q" maxlength="2000" placeholder="Ask about your portfolio…" autocomplete="off">
+            <button class="icon-btn" type="submit" aria-label="Send"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4 12l16-8-6 16-2.5-6.5z"/></svg></button>
+          </div>
+        </div>
+        <p class="fineprint ai-status" data-ai-status aria-live="polite"></p>
+        <p class="fineprint">TED AI can make mistakes. It is not financial advice.</p>
+      </form>
+    </div>
+  </dialog>
+  <script type="module" src="../assets/js/live/referrals.js"></script>
+  <script type="module" src="../assets/js/live/ticker.js"></script>
+  <script type="module" src="../assets/js/live/ai-panel.js"></script>
+  <script type="module" src="../assets/js/live/header.js"></script>
+</body>
+</html>

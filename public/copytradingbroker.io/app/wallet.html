@@ -1,0 +1,404 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+  <script>if('scrollRestoration' in history)history.scrollRestoration='manual';var __top=function(){if(location.hash){var __t=document.getElementById(decodeURIComponent(location.hash.slice(1)));if(__t){__t.scrollIntoView();return}}scrollTo(0,0)};__top();addEventListener('load',__top);addEventListener('pageshow',function(e){if(e.persisted)__top()})</script>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Wallet — TED Brokers</title>
+  <meta name="theme-color" content="#0A1626">
+  <meta name="robots" content="noindex">
+  <link rel="icon" href="../assets/img/favicon.ico">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=JetBrains+Mono:wght@400;500;600&family=Sora:wght@300;600;700;800&display=swap">
+  <link rel="stylesheet" href="../assets/css/main.css?v=2">
+  <link rel="stylesheet" href="../assets/css/live.css?v=2">
+  <link rel="stylesheet" href="../assets/css/pages/wallet.css?v=2">
+  <script>document.documentElement.classList.add('js');try{var t=localStorage.getItem('ted:theme');if(t==='system')t=matchMedia('(prefers-color-scheme: light)').matches?'light':'dark';if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
+  <script type="module" src="../assets/js/main.js?v=3"></script>
+</head>
+<body class="app surface-ink">
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <!-- ===================== RAIL (shared across app pages) ===================== -->
+  <aside class="rail" id="rail" aria-label="Dashboard">
+    <div class="rail__brand">
+      <a class="wordmark" href="index.html" aria-label="TED Brokers dashboard">
+        <span class="wordmark__ted">TED</span><span class="wordmark__brokers">Br<svg class="wordmark__o" viewBox="0 0 20 20" aria-hidden="true"><g fill="currentColor"><circle cx="10" cy="2" r="1.6"/><circle cx="15.2" cy="4.1" r="1.4" opacity=".8"/><circle cx="17.9" cy="9.4" r="1.6"/><circle cx="16.3" cy="14.8" r="1.4" opacity=".8"/><circle cx="11.2" cy="17.9" r="1.6"/><circle cx="5.6" cy="16.4" r="1.4" opacity=".7"/><circle cx="2.2" cy="11.6" r="1.6"/><circle cx="3" cy="6" r="1.4" opacity=".8"/><circle cx="6.6" cy="2.9" r="1.1" opacity=".6"/><circle cx="10" cy="10" r="1.9"/><circle cx="13.3" cy="9.2" r="1" opacity=".7"/><circle cx="7.4" cy="12" r="1" opacity=".7"/></g></svg>kers</span>
+      </a>
+      <button class="icon-btn rail__collapse" type="button" data-rail-collapse aria-controls="rail" aria-expanded="true" aria-label="Collapse menu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></button>
+    </div>
+    <nav class="rail__nav" aria-label="Dashboard sections">
+      <ul class="rail__list" role="list">
+        <li><a class="rail__link" href="index.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>Overview</a></li>
+        <li><a class="rail__link" href="trade.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M4 19V5M4 19h16"/><path d="M7 15l4-5 3 3 5-7"/><path d="M15 6h4v4"/></svg>Trade</a></li>
+        <li><a class="rail__link" href="screener.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M3 5h18l-7 8v6l-4-2v-4z"/></svg>Screener</a></li>
+        <li><a class="rail__link" href="wallet.html" aria-current="page"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M3 7a2 2 0 0 1 2-2h13v4"/><path d="M3 7v11a2 2 0 0 0 2 2h15V9H5a2 2 0 0 1-2-2z"/><circle cx="16" cy="14.5" r="1"/></svg>Wallet</a></li>
+        <li><a class="rail__link" href="portfolio.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M21 12A9 9 0 1 1 12 3v9z"/><path d="M15 3.5A9 9 0 0 1 20.5 9H15z"/></svg>Portfolio</a></li>
+        <li><a class="rail__link" href="documents.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M6 3h8l4 4v14H6z"/><path d="M14 3v4h4M9 12h6M9 16h6"/></svg>Documents</a></li>
+        <li><a class="rail__link" href="copy-traders.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0"/><path d="M16 4.5a3.5 3.5 0 0 1 0 7M18 14.5a6.5 6.5 0 0 1 3.5 5.5"/></svg>Copy traders<span class="rail__aside rail__aside--live" hidden></span></a></li>
+      </ul>
+      <p class="rail__group-label" id="rail-plans">Investment plans</p>
+      <ul class="rail__list" role="list" aria-labelledby="rail-plans">
+        <li><a class="rail__link rail__link--sub" href="plans.html">Robo Advisor</a></li>
+        <li><a class="rail__link rail__link--sub" href="plans.html#etf">ETF automation</a></li>
+        <li><a class="rail__link rail__link--sub" href="plans.html#defi">DeFi</a></li>
+        <li><a class="rail__link rail__link--sub" href="plans.html#options">Options</a></li>
+        <li><a class="rail__link rail__link--sub" href="plans.html#staking">Staking<span class="rail__aside rail__aside--soon">soon</span></a></li>
+      </ul>
+      <p class="rail__group-label" id="rail-more">Community</p>
+      <ul class="rail__list" role="list" aria-labelledby="rail-more">
+        <li><a class="rail__link" href="network.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M3 12h4l3-8 4 16 3-8h4"/></svg>Network feed</a></li>
+        <li><a class="rail__link" href="referrals.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="18" cy="5" r="2.5"/><circle cx="6" cy="12" r="2.5"/><circle cx="18" cy="19" r="2.5"/><path d="M8.2 10.8l7.6-4.4M8.2 13.2l7.6 4.4"/></svg>Referrals</a></li>
+        <li><a class="rail__link" href="news.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M4 5h13v14H6a2 2 0 0 1-2-2z"/><path d="M17 9h3v8a2 2 0 0 1-2 2"/><path d="M7.5 9h6M7.5 13h6"/></svg>News</a></li>
+      </ul>
+    </nav>
+    <div class="rail__foot">
+      <ul class="rail__list" role="list">
+        <li><a class="rail__link" href="../help.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.6.3-1 .8-1 1.5V14"/><path d="M12 17h.01"/></svg>Help center</a></li>
+        <li><a class="rail__link" href="settings.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M12 2.5v3M12 18.5v3M4.2 4.2l2.1 2.1M17.7 17.7l2.1 2.1M2.5 12h3M18.5 12h3M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1"/></svg>Settings</a></li>
+      </ul>
+      <a class="rail__user" href="settings.html">
+        <span class="avatar" aria-hidden="true"></span>
+        <span><span class="rail__user-name">Loading…</span><br><span class="rail__user-meta" hidden></span></span>
+      </a>
+    </div>
+  </aside>
+  <button class="rail-scrim" type="button" tabindex="-1" aria-hidden="true"></button>
+
+  <div class="app__main">
+    <!-- ===================== TOP BAR (shared) ===================== -->
+    <header class="topbar">
+      <div class="topbar__bar">
+        <button class="icon-btn topbar__menu" type="button" data-rail-toggle aria-controls="rail" aria-expanded="false" aria-label="Open menu">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h10"/></svg>
+        </button>
+        <a class="wordmark topbar__brand" href="index.html" aria-label="TED Brokers dashboard"><span class="wordmark__ted">TED</span><span class="wordmark__brokers">Brokers</span></a>
+        <form class="search" role="search" action="copy-traders.html">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+          <label class="sr-only" for="q">Search</label>
+          <input id="q" name="q" type="search" placeholder="Search traders, plans, markets" autocomplete="off">
+          <kbd aria-hidden="true">⌘K</kbd>
+        </form>
+        <div class="topbar__actions">
+          <button class="lang-select" type="button" aria-label="Language: English">EN
+            <svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M2 3.5l3 3 3-3"/></svg>
+          </button>
+          <button class="icon-btn" type="button" data-theme-toggle aria-pressed="false" aria-label="Light theme">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4 8 8 0 1 0 20 14.5z"/></svg>
+          </button>
+          <button class="icon-btn" type="button" aria-label="Notifications">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M6 8a6 6 0 1 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.9 1.9 0 0 0 3.4 0"/></svg>
+            <span class="icon-btn__dot" hidden></span>
+          </button>
+          <button class="btn btn--sm btn--outline" type="button" data-dialog-open="ted-ai">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true" style="color: var(--color-signal)"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/></svg>TED AI
+          </button>
+          <a class="btn btn--sm" href="wallet.html#deposit">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>Deposit
+          </a>
+        </div>
+      </div>
+      <div class="ticker ticker--sm ticker--app" role="region" aria-label="Market prices" data-market-tape aria-busy="true" style="--sk-min: 2.5rem">
+        <div class="ticker__track"><ul class="ticker__list" role="list"></ul></div>
+      </div>
+    </header>
+
+    <!-- ===================== PAGE CONTENT ===================== -->
+    <main class="app__content" id="main">
+      <div class="page-head">
+        <div>
+          <h1>Wallet</h1>
+          <p class="page-head__meta">USD account</p>
+        </div>
+        <div class="wl-head-actions">
+          <button class="btn" type="button" data-dialog-open="deposit">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>Deposit
+          </button>
+          <button class="btn btn--outline" type="button" data-dialog-open="withdraw">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 19V5M6 11l6-6 6 6"/></svg>Withdraw
+          </button>
+        </div>
+      </div>
+
+      <!-- Balance -->
+      <section class="wl-balance" aria-labelledby="bal-label" data-skeleton aria-busy="true">
+        <div class="wl-balance__main">
+          <p class="stat__label" id="bal-label">Cash balance</p>
+          <p class="hero-value__num mt-2" data-live-placeholder>—</p>
+          <p class="stat__meta mt-2" data-bal="buying-power">Buying power <strong class="mono" data-buying-power>—</strong> · ready to trade, copy traders or invest in plans.</p>
+        </div>
+        <dl class="wl-balance__side">
+          <div>
+            <dt class="stat__label">Available to withdraw</dt>
+            <dd><span class="wl-balance__num" data-bal="withdrawable">—</span><span class="stat__meta" data-bal="held">—</span></dd>
+          </div>
+          <div>
+            <dt class="stat__label">Pending deposit</dt>
+            <dd><span class="wl-balance__num pending" data-bal="pending-deposit">—</span><span class="tag tag--plain" data-bal="pending-deposit-tag">—</span></dd>
+          </div>
+          <div>
+            <dt class="stat__label">Pending withdrawal</dt>
+            <dd><span class="wl-balance__num" data-bal="pending-withdrawal">—</span><span class="stat__meta" data-bal="pending-withdrawal-meta">—</span></dd>
+          </div>
+        </dl>
+      </section>
+
+      <!-- Cash flow -->
+      <section aria-labelledby="flow-title" data-skeleton aria-busy="true">
+        <div class="block-head">
+          <h2 id="flow-title">Cash flow <small>last 90 days</small></h2>
+          <p class="wl-legend">
+            <span class="wl-legend__item"><span class="wl-legend__key" aria-hidden="true"></span>Inflows <b>—</b></span>
+            <span class="wl-legend__item"><span class="wl-legend__key wl-legend__key--out" aria-hidden="true"></span>Outflows <b>—</b></span>
+            <span class="wl-legend__item">Net <b>—</b></span>
+          </p>
+        </div>
+        <div class="wl-bars-wrap mt-5" tabindex="0" role="region" aria-label="Weekly net cash flow, scrollable">
+          <p class="muted" data-flow-loading>Loading your cash flow…</p>
+        </div>
+      </section>
+
+      <!-- Transaction history -->
+      <section class="wl-history" aria-labelledby="history-title" data-component="wallet-history" data-skeleton aria-busy="true">
+        <div class="block-head">
+          <h2 id="history-title">Transaction history</h2>
+          <p class="mono muted" data-history-count aria-live="polite">Loading…</p>
+        </div>
+        <div class="tabs" role="tablist" aria-label="Filter transactions" data-component="tabs">
+          <button class="tabs__tab" type="button" role="tab" id="wl-tab-all" aria-controls="wl-history-panel" aria-selected="true" data-filter="all">All<small>—</small></button>
+          <button class="tabs__tab" type="button" role="tab" id="wl-tab-deposit" aria-controls="wl-history-panel" aria-selected="false" data-filter="deposit">Deposits<small>—</small></button>
+          <button class="tabs__tab" type="button" role="tab" id="wl-tab-withdrawal" aria-controls="wl-history-panel" aria-selected="false" data-filter="withdrawal">Withdrawals<small>—</small></button>
+          <button class="tabs__tab" type="button" role="tab" id="wl-tab-trade" aria-controls="wl-history-panel" aria-selected="false" data-filter="trade">Trading<small>—</small></button>
+          <button class="tabs__tab" type="button" role="tab" id="wl-tab-copy" aria-controls="wl-history-panel" aria-selected="false" data-filter="copy">Copy trading<small>—</small></button>
+          <button class="tabs__tab" type="button" role="tab" id="wl-tab-plan" aria-controls="wl-history-panel" aria-selected="false" data-filter="plan">Plans<small>—</small></button>
+        </div>
+
+        <div class="wl-panel" role="tabpanel" id="wl-history-panel" aria-labelledby="wl-tab-all" tabindex="0">
+          <div class="ledger-wrap" tabindex="0" role="region" aria-labelledby="history-title">
+            <table class="ledger">
+              <thead>
+                <tr><th scope="col">Date</th><th scope="col">Description</th><th scope="col" class="opt">Reference</th><th scope="col">Status</th><th scope="col" class="is-num">Amount</th></tr>
+              </thead>
+              <tbody>
+                <tr class="wl-empty" data-history-empty hidden>
+                  <td colspan="5">
+                    <div class="empty">
+                      <p class="empty__title" data-history-empty-title>No transactions yet</p>
+                      <p>Entries appear here as soon as they’re created.</p>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <footer class="app__foot">
+        <p class="school-notice" role="note"><strong>School project notice:</strong> This platform is a student school project with simulated markets and simulated funds. It is not a real broker. Do not deposit real money on this platform.</p>
+        <p class="fineprint">Trading involves risk. Past performance is not indicative of future results.</p></footer>
+    </main>
+  </div>
+
+  <!-- ===================== MOBILE TAB BAR + TED AI (shared) ===================== -->
+  <nav class="tabbar" aria-label="Quick navigation">
+    <a href="index.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1z"/></svg>Home</a>
+    <a href="wallet.html" aria-current="page"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M3 7a2 2 0 0 1 2-2h13v4"/><path d="M3 7v11a2 2 0 0 0 2 2h15V9H5a2 2 0 0 1-2-2z"/></svg>Wallet</a>
+    <a href="copy-traders.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0"/><path d="M16 4.5a3.5 3.5 0 0 1 0 7"/></svg>Traders</a>
+    <a href="trade.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4 19V5M4 19h16"/><path d="M7 15l4-5 3 3 5-7"/></svg>Trade</a>
+    <button type="button" data-rail-toggle aria-controls="rail" aria-expanded="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>More</button>
+  </nav>
+  <button class="ai-fab" type="button" data-dialog-open="ted-ai"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/></svg>TED AI</button>
+
+  <dialog class="drawer ai-panel" id="ted-ai" aria-labelledby="ted-ai-title">
+    <div class="drawer__inner">
+      <div class="drawer__head">
+        <h2 id="ted-ai-title" class="ai-panel__title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true" style="color: var(--color-signal)"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/></svg>TED AI</h2>
+        <button class="icon-btn" type="button" data-dialog-close aria-label="Close TED AI"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+      </div>
+      <div class="drawer__body ai-chat" data-ai-log role="log" aria-live="polite" aria-label="TED AI conversation">
+        <div class="ai-empty" data-ai-empty>
+          <p class="ai-empty__lead">Ask about your portfolio, copy trades, wallet or plans.</p>
+          <ul class="ai-suggest" role="list">
+            <li><button class="btn btn--sm btn--outline" type="button" data-ai-suggest="How do I start copying a trader?">How do I start copying a trader?</button></li>
+            <li><button class="btn btn--sm btn--outline" type="button" data-ai-suggest="How does the Trading Hub work?">How does the Trading Hub work?</button></li>
+            <li><button class="btn btn--sm btn--outline" type="button" data-ai-suggest="How do deposits and withdrawals work?">How do deposits and withdrawals work?</button></li>
+          </ul>
+        </div>
+      </div>
+      <form class="drawer__foot ai-form" data-ai-form>
+        <div class="field">
+          <label class="sr-only" for="ai-q">Ask TED AI</label>
+          <div class="field__control">
+            <input class="field__input" id="ai-q" name="q" maxlength="2000" placeholder="Ask about your portfolio…" autocomplete="off">
+            <button class="icon-btn" type="submit" aria-label="Send"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4 12l16-8-6 16-2.5-6.5z"/></svg></button>
+          </div>
+        </div>
+        <p class="fineprint ai-status" data-ai-status aria-live="polite"></p>
+        <p class="fineprint">TED AI can make mistakes. It is not financial advice.</p>
+      </form>
+    </div>
+  </dialog>
+  <!-- ===================== DEPOSIT ===================== -->
+  <dialog class="dialog wl-dialog" id="deposit" aria-labelledby="dep-title">
+    <form data-deposit-form novalidate>
+      <div class="dialog__head">
+        <h2 class="dialog__title" id="dep-title">Deposit funds</h2>
+        <button class="icon-btn" type="button" data-dialog-close aria-label="Close deposit"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+      </div>
+
+      <ol class="wl-steps" role="list" data-steps style="--step: 1" aria-label="Deposit progress">
+        <li aria-current="step">1 Amount</li>
+        <li>2 Method</li>
+        <li>3 Confirm</li>
+      </ol>
+
+      <div class="dialog__body mt-5">
+        <fieldset class="wl-step" data-step="1">
+          <legend class="sr-only">Amount</legend>
+          <div class="field field--xl wl-amount">
+            <label class="field__label" for="dep-amount">Deposit amount (USD)</label>
+            <div class="field__control">
+              <span class="field__affix" aria-hidden="true">$</span>
+              <input class="field__input" id="dep-amount" name="amount" type="text" inputmode="decimal" autocomplete="off" placeholder="0" aria-describedby="dep-amount-help" autofocus>
+              <span class="field__affix field__affix--end" aria-hidden="true">USD</span>
+            </div>
+            <p class="field__error" id="dep-amount-error"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7.5v5.5M12 16.5h.01"/></svg><span data-error-msg></span></p>
+            <div class="wl-amount__foot">
+              <p class="field__help" id="dep-amount-help">Min $10 · Max $1,000,000</p>
+              <div class="wl-quick" role="group" aria-label="Quick amounts">
+                <button type="button" data-quick="100" aria-pressed="false">$100</button>
+                <button type="button" data-quick="500" aria-pressed="false">$500</button>
+                <button type="button" data-quick="1000" aria-pressed="false">$1,000</button>
+                <button type="button" data-quick="5000" aria-pressed="false">$5,000</button>
+              </div>
+            </div>
+          </div>
+        </fieldset>
+
+        <fieldset class="wl-step" data-step="2" hidden>
+          <legend class="wl-legend-label">Funding method</legend>
+          <div class="wl-options">
+            <label class="wl-option">
+              <input type="radio" name="method" value="bank" checked>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M3 9.5L12 4l9 5.5"/><path d="M5 10v8M9.5 10v8M14.5 10v8M19 10v8M3 20.5h18"/></svg>
+              <span class="wl-option__name">Bank transfer</span>
+              <span class="wl-option__meta" data-dep-bank-meta>Loading bank details…</span>
+            </label>
+            <label class="wl-option">
+              <input type="radio" name="method" value="crypto">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M9.5 7.5v9M9.5 8h3.8a2 2 0 0 1 0 4H9.5h4.3a2 2 0 0 1 0 4H9.5M11 6v2M11 16v2"/></svg>
+              <span class="wl-option__name">Cryptocurrency</span>
+              <span class="wl-option__meta" data-dep-crypto-meta>Loading deposit wallets…</span>
+            </label>
+          </div>
+
+          <div class="wl-detail" data-method-detail="bank">
+            <dl class="wl-detail__list">
+              <div class="copyline"><dt>Bank name</dt><dd><span data-dep-bank="bank_name">—</span></dd></div>
+              <div class="copyline"><dt>Account name</dt><dd><span data-dep-bank="account_name">—</span></dd></div>
+              <div class="copyline"><dt>Account number</dt><dd><span data-dep-bank="account_number">—</span></dd></div>
+              <div class="copyline"><dt>SWIFT / routing</dt><dd><span data-dep-bank="swift">—</span></dd></div>
+            </dl>
+            <p class="field__help">Your reference is shown after you confirm. Include it with your transfer.</p>
+          </div>
+
+          <div class="wl-detail" data-method-detail="crypto" hidden>
+            <div class="field">
+              <label class="field__label" for="dep-network">Network</label>
+              <div class="field__control"><select class="field__select" id="dep-network" name="network"></select></div>
+            </div>
+            <div class="copyline"><dt>Deposit address</dt><dd><span class="wl-address" data-dep-address>—</span> <button class="icon-btn" type="button" data-dep-address-copy data-copy="" aria-label="Copy deposit address"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h9"/></svg></button></dd></div>
+            <p class="wl-note wl-note--pending">Send only the selected asset on this network.</p>
+          </div>
+        </fieldset>
+
+        <fieldset class="wl-step" data-step="3" hidden>
+          <legend class="sr-only">Confirm</legend>
+          <dl class="wl-summary">
+            <div><dt>Amount</dt><dd data-sum="amount">$0.00</dd></div>
+            <div><dt>Method</dt><dd data-sum="method">—</dd></div>
+            <div><dt>Destination</dt><dd data-sum="destination">—</dd></div>
+          </dl>
+          <p class="fineprint">Your balance updates once the deposit is confirmed.</p>
+        </fieldset>
+      </div>
+
+      <div class="dialog__foot">
+        <button class="btn btn--ghost" type="button" data-dep-back>Cancel</button>
+        <button class="btn" type="submit" data-dep-next><span data-label>Continue</span></button>
+      </div>
+    </form>
+  </dialog>
+
+  <!-- ===================== WITHDRAW ===================== -->
+  <dialog class="dialog wl-dialog" id="withdraw" aria-labelledby="wd-title">
+    <form data-withdraw-form novalidate>
+      <div class="dialog__head">
+        <h2 class="dialog__title" id="wd-title">Withdraw funds</h2>
+        <button class="icon-btn" type="button" data-dialog-close aria-label="Close withdrawal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+      </div>
+
+      <div class="dialog__body">
+        <div data-wd-first>
+          <div class="field field--xl wl-amount">
+            <label class="field__label" for="wd-amount">Amount (USD)</label>
+            <div class="field__control">
+              <span class="field__affix" aria-hidden="true">$</span>
+              <input class="field__input" id="wd-amount" name="amount" type="text" inputmode="decimal" autocomplete="off" placeholder="0" aria-describedby="wd-amount-help">
+              <span class="field__affix field__affix--end" aria-hidden="true">USD</span>
+            </div>
+            <p class="field__error" id="wd-amount-error"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7.5v5.5M12 16.5h.01"/></svg><span data-error-msg></span></p>
+            <p class="field__help" id="wd-amount-help">Min $10</p>
+          </div>
+
+          <fieldset class="wl-step">
+            <legend class="wl-legend-label">Send to</legend>
+            <div class="wl-options">
+              <label class="wl-option">
+                <input type="radio" name="destination" value="bank" checked>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M3 9.5L12 4l9 5.5"/><path d="M5 10v8M9.5 10v8M14.5 10v8M19 10v8M3 20.5h18"/></svg>
+                <span class="wl-option__name">Bank transfer</span>
+                <span class="wl-option__meta">Processed to your bank details on file</span>
+              </label>
+              <label class="wl-option">
+                <input type="radio" name="destination" value="crypto">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M9.5 7.5v9M9.5 8h3.8a2 2 0 0 1 0 4H9.5h4.3a2 2 0 0 1 0 4H9.5M11 6v2M11 16v2"/></svg>
+                <span class="wl-option__name">Crypto wallet</span>
+                <span class="wl-option__meta" data-wd-crypto-meta>Loading saved addresses…</span>
+              </label>
+            </div>
+          </fieldset>
+
+          <div class="field" data-wd-crypto-field hidden>
+            <label class="field__label" for="wd-address">Saved crypto address</label>
+            <div class="field__control"><select class="field__select" id="wd-address" name="wallet_address"></select></div>
+            <p class="field__error" id="wd-address-error"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7.5v5.5M12 16.5h.01"/></svg><span data-error-msg></span></p>
+          </div>
+        </div>
+
+        <div class="field" data-wd-verify hidden>
+          <label class="field__label" for="wd-verify">Verification code</label>
+          <div class="field__control"><input class="field__input mono" id="wd-verify" name="verification_code" maxlength="8" autocomplete="one-time-code" autocapitalize="characters" spellcheck="false" aria-describedby="wd-verify-help"></div>
+          <p class="field__error" id="wd-verify-error"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7.5v5.5M12 16.5h.01"/></svg><span data-error-msg></span></p>
+          <p class="field__help" id="wd-verify-help">Enter the 8-character code issued for this request.</p>
+        </div>
+        <p class="field__help" data-wd-msg hidden>Your withdrawal request has been created and is awaiting its verification code.</p>
+      </div>
+
+      <div class="dialog__foot">
+        <p class="fineprint">Usually processed within 24 hours.</p>
+        <div class="wl-foot-actions">
+          <button class="btn btn--ghost" type="button" data-dialog-close>Cancel</button>
+          <button class="btn" type="submit" data-wd-submit>Request withdrawal</button>
+        </div>
+      </div>
+    </form>
+  </dialog>
+  <script type="module" src="../assets/js/live/wallet.js?v=4"></script>
+  <script type="module" src="../assets/js/live/ticker.js"></script>
+  <script type="module" src="../assets/js/live/ai-panel.js"></script>
+  <script type="module" src="../assets/js/live/header.js"></script>
+</body>
+</html>

@@ -39,3 +39,184 @@
   .risk-list dd { margin: 0; color: var(--color-text-muted); }
   .risk .legend li { grid-template-columns: auto 1fr auto; }
 }
+
+/* Mobile app promo: phone on the left, store buttons over a white fade */
+@layer pages {
+  .app-promo { overflow-x: clip; }
+  .app-promo__grid { display: grid; gap: var(--space-6); align-items: center; }
+  .app-promo__media { display: grid; place-items: center; min-block-size: 26rem; }
+  .app-promo__copy { display: grid; gap: var(--space-5); justify-items: start; }
+  .app-promo__actions { position: relative; isolation: isolate; justify-self: start; padding: var(--space-5) var(--space-6); }
+  .app-promo__actions::before {
+    content: ""; position: absolute; inset: -2.5rem -4rem; z-index: -1;
+    background: radial-gradient(closest-side, #fff 55%, rgb(255 255 255 / 0));
+    pointer-events: none;
+  }
+  @media (width >= 60rem) {
+    .app-promo__grid { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); grid-template-rows: auto auto; column-gap: var(--space-7); }
+    .app-promo__media { grid-column: 1; grid-row: 1 / span 2; place-items: center end; }
+    .app-promo__copy { grid-column: 2; grid-row: 1; align-self: end; }
+    .app-promo__actions { grid-column: 2; grid-row: 2; align-self: start; margin-inline-start: -14rem; }
+  }
+
+  .app-phone {
+    position: relative; inline-size: min(15rem, 70vw); aspect-ratio: 9 / 19;
+    padding: 0.55rem; border-radius: 2.6rem;
+    background: linear-gradient(160deg, #2b3649, #070d19 60%, #1a2333);
+    box-shadow: 0 1.5rem 3rem -1rem rgb(10 22 38 / .45), inset 0 0 0 1px rgb(255 255 255 / .08);
+  }
+  .app-phone::before {
+    content: ""; position: absolute; inset-block-start: 1rem; inset-inline-start: 50%; translate: -50% 0;
+    inline-size: 30%; block-size: 0.7rem; border-radius: 999px; background: #05080f; z-index: 2;
+  }
+  .app-phone__screen {
+    position: relative; overflow: hidden; block-size: 100%; border-radius: 2.05rem;
+    display: grid; place-items: center;
+    background: radial-gradient(circle at 50% 35%, #17315a, var(--ink-900) 72%);
+  }
+  .app-phone__screen::after { /* one-off light sweep across the screen */
+    content: ""; position: absolute; inset: 0; pointer-events: none;
+    background: linear-gradient(105deg, transparent 40%, rgb(255 255 255 / .18) 50%, transparent 60%);
+    translate: -100% 0;
+  }
+  .app-phone__logo { font-size: clamp(1.25rem, 1rem + 1vw, 1.6rem); margin: 0; color: #EEF2F7; }
+
+  /* Entry motion: runs once the section is 30% visible (main.js: initAppPromo) */
+  .js .app-promo__phone { translate: -150% 0; opacity: 0; transition: translate 1.1s var(--ease-out), opacity 0.6s var(--ease-out); }
+  .js .app-promo.is-in .app-promo__phone { translate: 0 0; opacity: 1; }
+  .js .app-promo .app-phone__logo .wordmark__ted,
+  .js .app-promo .app-phone__logo .wordmark__brokers { opacity: 0; }
+  .app-promo.is-in .app-phone__logo .wordmark__ted { animation: app-logo-rise 0.8s var(--ease-out) 0.85s both; }
+  .app-promo.is-in .app-phone__logo .wordmark__brokers { animation: app-logo-rise 0.8s var(--ease-out) 1.1s both; }
+  .app-promo.is-in .app-phone__logo .wordmark__o { animation: app-logo-spin 2.8s linear 1.9s infinite; }
+  .app-promo.is-in .app-phone__screen::after { animation: app-screen-sweep 1.4s var(--ease-out) 0.9s both; }
+
+  @keyframes app-logo-rise {
+    from { opacity: 0; translate: 0 0.5em; filter: blur(4px); }
+    to   { opacity: 1; translate: 0 0; filter: blur(0); }
+  }
+  @keyframes app-logo-spin { to { rotate: 360deg; } }
+  @keyframes app-screen-sweep { from { translate: -100% 0; } to { translate: 100% 0; } }
+
+  /* Without JS the phone and logo stay visible; reduced motion uses the global duration reset */
+  @media (prefers-reduced-motion: reduce) {
+    .js .app-promo__phone { translate: none; opacity: 1; transition: none; }
+    .js .app-promo .app-phone__logo .wordmark__ted, .js .app-promo .app-phone__logo .wordmark__brokers { opacity: 1; }
+    .app-promo.is-in .app-phone__logo .wordmark__ted, .app-promo.is-in .app-phone__logo .wordmark__brokers,
+    .app-promo.is-in .app-phone__logo .wordmark__o, .app-promo.is-in .app-phone__screen::after { animation: none; }
+  }
+}
+
+  /* Plain list (no numerals): drop the index column */
+  .num-rows--plain .num-row { grid-template-columns: minmax(0, 1fr); }
+
+/* Photography in the background: each photo sits behind its section content and fades into the section colour */
+@layer pages {
+  .section.photo-section { padding-block: 0; position: relative; isolation: isolate; overflow: hidden; }
+  .photo-section__media {
+    position: absolute; inset-block: 0; inline-size: 54%; margin: 0; z-index: -1; pointer-events: none;
+  }
+  .photo-section--left .photo-section__media { inset-inline-start: 0; }
+  .photo-section--right .photo-section__media { inset-inline-end: 0; }
+  .photo-section__media img {
+    position: absolute; inset: 0; inline-size: 100%; block-size: 100%; object-fit: cover; object-position: center bottom;
+    -webkit-mask-image: linear-gradient(to bottom, #000 72%, transparent 100%), linear-gradient(to right, #000 40%, transparent 100%);
+    -webkit-mask-composite: source-in;
+            mask-image: linear-gradient(to bottom, #000 72%, transparent 100%), linear-gradient(to right, #000 40%, transparent 100%);
+            mask-composite: intersect;
+  }
+  .photo-section--right .photo-section__media img {
+    -webkit-mask-image: linear-gradient(to bottom, #000 72%, transparent 100%), linear-gradient(to left, #000 40%, transparent 100%);
+            mask-image: linear-gradient(to bottom, #000 72%, transparent 100%), linear-gradient(to left, #000 40%, transparent 100%);
+  }
+  .photo-section__content { position: relative; z-index: 1; padding-block: clamp(4rem, 3rem + 4vw, 7rem); }
+  .photo-section__split { grid-template-columns: minmax(0, 1fr) !important; gap: var(--space-6); inline-size: min(100%, 44rem); }
+  .photo-section--left .photo-section__split { margin-inline-start: auto; }
+  .photo-section .dotfield { z-index: -1; }
+  .photo-section .sticky { position: static; }
+  .photo-section__split > * { min-inline-size: 0; }
+
+  @media (width < 60rem) {
+    .photo-section__media { inset-inline: 0; inline-size: 100%; opacity: 0.22; }
+    .photo-section__split { inline-size: 100%; }
+    .photo-section--left .photo-section__split { margin-inline-start: 0; }
+  }
+}
+
+/* Sticky text column is for desktop only; on phones it must scroll with its content */
+@layer pages {
+  @media (width < 60rem) { .sticky { position: static; } }
+}
+
+/* Call to action band: full height photo on the right, faded into the red gradient */
+@layer pages {
+  .cta-band { position: relative; overflow: hidden; }
+  .cta-band .container { position: relative; z-index: 1; }
+  .cta-band__photo { position: absolute; inset-block: 0; inset-inline-end: 0; margin: 0; z-index: 0; inline-size: 42%; }
+  .cta-band__photo img { position: absolute; inset: 0; inline-size: 100%; block-size: 100%; object-fit: cover; object-position: center bottom; -webkit-mask-image: linear-gradient(to bottom, #000 78%, transparent 100%); mask-image: linear-gradient(to bottom, #000 78%, transparent 100%); }
+  @media (width < 60rem) { .cta-band__photo { inline-size: 100%; opacity: 0.25; } }
+}
+
+/* Illustrative animation for the copy trading section (replaces the photo) */
+@layer pages {
+  .copy-anim-wrap { -webkit-mask-image: linear-gradient(to right, transparent 0%, #000 30%); mask-image: linear-gradient(to right, transparent 0%, #000 30%); }
+  .copy-anim { position: absolute; inset-block: 0; inset-inline: auto 0; inline-size: 80%; block-size: 100%; overflow: visible; }
+  .copy-anim .flow { stroke-dasharray: 6 10; }
+
+  /* Initial states (only when JavaScript runs, so the static figure shows without it) */
+  .js .copy-anim .chart { stroke-dasharray: 100; stroke-dashoffset: 100; }
+  .js .copy-anim .bar-fill { transform: scaleX(0); transform-box: fill-box; transform-origin: left center; }
+  .js .copy-anim .node { opacity: 0; }
+  .js .copy-anim .dot { opacity: 0; }
+
+  /* Play once the section is 30 percent visible (main.js: initAppPromo) */
+  .is-in .copy-anim .chart { animation: copy-draw 2.4s var(--ease-out) 0.2s forwards; }
+  .is-in .copy-anim .bar-fill { animation: copy-grow 1.1s var(--ease-out) var(--d, 0s) forwards; }
+  .is-in .copy-anim .node { animation: copy-fade 0.8s var(--ease-out) var(--d, 0s) forwards; }
+  .is-in .copy-anim .dot { opacity: 1; transition: opacity 0.4s; }
+  .is-in .copy-anim .flow { animation: copy-flow 1.6s linear infinite; }
+  .is-in .copy-anim .ring { transform-box: fill-box; transform-origin: center; animation: copy-pulse 2.8s ease-out infinite; }
+
+  @keyframes copy-draw { to { stroke-dashoffset: 0; } }
+  @keyframes copy-grow { to { transform: scaleX(1); } }
+  @keyframes copy-fade { to { opacity: 1; } }
+  @keyframes copy-flow { to { stroke-dashoffset: -32; } }
+  @keyframes copy-pulse { 0% { transform: scale(1); opacity: 0.7; } 100% { transform: scale(1.6); opacity: 0; } }
+
+  /* Reduced motion: final state, no moving parts */
+  @media (prefers-reduced-motion: reduce) {
+    .js .copy-anim .chart { stroke-dashoffset: 0; }
+    .js .copy-anim .bar-fill { transform: none; }
+    .js .copy-anim .node, .js .copy-anim .dot { opacity: 1; }
+    .copy-anim .dot, .copy-anim .ring { display: none; }
+    .copy-anim * { animation: none !important; }
+  }
+}
+
+/* Faded navy backdrop behind the CTA button (on a wrapper, so the button keeps its own fill) */
+@layer pages {
+  .cta-band__action { position: relative; isolation: isolate; }
+  .cta-band__action::before {
+    content: ""; position: absolute; inset: -3rem -4rem; z-index: -1; pointer-events: none;
+    background: radial-gradient(closest-side, rgb(10 22 38 / .85) 40%, rgb(10 22 38 / 0));
+  }
+}
+
+/* Faded background trader behind the mobile app section (left side, only slightly visible) */
+@layer pages {
+  .app-promo { position: relative; isolation: isolate; }
+  .app-promo__bg {
+    position: absolute; inset-block: 0; inset-inline-start: 0; inline-size: 46%; margin: 0; z-index: -1; pointer-events: none;
+  }
+  .app-promo__bg img {
+    position: absolute; inset: 0; inline-size: 100%; block-size: 100%; object-fit: contain; object-position: left bottom;
+    opacity: 0.16;
+    -webkit-mask-image: linear-gradient(to right, #000 55%, transparent 100%);
+            mask-image: linear-gradient(to right, #000 55%, transparent 100%);
+  }
+  .app-promo > .container { position: relative; z-index: 1; }
+  @media (width < 60rem) {
+    .app-promo__bg { inline-size: 100%; }
+    .app-promo__bg img { opacity: 0.1; object-position: center bottom; }
+  }
+}

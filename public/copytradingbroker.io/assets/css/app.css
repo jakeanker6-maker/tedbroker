@@ -207,3 +207,8 @@
   .rail, .app { transition: grid-template-columns var(--duration-base) var(--ease-out); }
 }
 @media (prefers-reduced-motion: reduce) { .rail, .app { transition: none; } }
+
+/* Phones: logo links are touch targets (min 44px high). */
+@media (width < 64rem) {
+  .topbar .wordmark, .rail__brand .wordmark { display: inline-flex; align-items: center; min-block-size: 2.75rem; }
+}

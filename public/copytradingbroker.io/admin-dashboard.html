@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <script>if('scrollRestoration' in history)history.scrollRestoration='manual';var __top=function(){if(location.hash){var __t=document.getElementById(decodeURIComponent(location.hash.slice(1)));if(__t){__t.scrollIntoView();return}}scrollTo(0,0)};__top();addEventListener('load',__top);addEventListener('pageshow',function(e){if(e.persisted)__top()})</script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard | TED Brokers</title>
@@ -302,7 +303,7 @@
             display: none;
         }
         .user-tab-content.active {
-            display: block;
+            display: block !important;
             animation: fadeIn 0.3s;
         }
         .login-history-item {
@@ -1008,6 +1009,9 @@
                         <button class="user-tab-btn" data-tab="login-history" onclick="switchUserTab('login-history')">
                             <i class="fas fa-history"></i> Login History
                         </button>
+                        <button class="user-tab-btn" data-tab="trading" onclick="switchUserTab('trading')">
+                            <i class="fas fa-chart-line"></i> Trading Hub
+                        </button>
                     </div>
                 </div>
 
@@ -1158,6 +1162,11 @@
                 </div>
 
                 <!-- Login History Tab -->
+                <!-- Trading Hub Tab (assets/js/admin-trading.js) -->
+                <div class="user-tab-content" id="user-tab-trading">
+                    <div id="admin-trading-root"><p style="color: #8b93a7;">Open this tab to load the user's trading account.</p></div>
+                </div>
+
                 <div class="user-tab-content" id="user-tab-login-history" style="display: none;">
                     <div style="background: #f7fafc; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
                         <h3 style="margin-bottom: 15px; color: #2D3748;">Login Statistics (Last 30 Days)</h3>
@@ -1820,6 +1829,7 @@
     </div>
 
     <script src="/assets/js/admin-dashboard.js"></script>
+    <script src="/assets/js/admin-trading.js?v=2"></script>
     <script src="/assets/js/admin-chat.js"></script>
     <!-- Chat Support Widget -->
     <script src="/assets/js/chat-events.js"></script>

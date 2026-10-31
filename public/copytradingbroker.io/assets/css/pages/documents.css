@@ -1,0 +1,19 @@
+/* Documents center (app/documents.html) */
+@layer pages {
+  .doc-gains__controls { display: flex; flex-wrap: wrap; gap: var(--space-3); align-items: center; }
+  .doc-inline { display: inline-flex; gap: var(--space-2); align-items: center; color: var(--color-text-muted); font-size: var(--text-small); }
+  .doc-inline .field__select { min-inline-size: 6rem; min-block-size: 2.75rem; }
+  .doc-gains__controls .seg__btn, .doc-gains__controls .btn { min-block-size: 2.75rem; }
+  .doc-sum { margin-block: var(--space-4); }
+  .doc-sum .gain, .doc-table .gain { color: var(--color-gain); }
+  .doc-sum .loss, .doc-table .loss { color: var(--color-loss); }
+  .doc-sym { display: grid; }
+  .doc-sym span { font-size: var(--text-xs); color: var(--color-text-muted); }
+  .doc-list { list-style: none; margin: 0; padding: 0; display: grid; max-block-size: 32rem; overflow: auto; }
+  .doc-item { display: flex; justify-content: space-between; align-items: center; gap: var(--space-3);
+    padding-block: var(--space-2); border-block-end: 1px solid var(--color-border); }
+  .doc-item .btn { min-block-size: 2.75rem; flex: none; }
+  [data-doc-gains] > .fineprint { margin-block-start: var(--space-3); }
+  .doc-inline .field__control { min-inline-size: 6.5rem; }
+  .doc-cols { margin-block-start: var(--space-7); }
+}

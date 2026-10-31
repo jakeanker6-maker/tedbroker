@@ -30,6 +30,17 @@ function initReveal() {
   targets.forEach((t) => io.observe(t));
 }
 
+/* ---------- Mobile app promo: play the entry animation once the section is visible ---------- */
+function initAppPromo() {
+  document.querySelectorAll('[data-app-promo], [data-illustration]').forEach((el) => {
+    onVisible(el, () => {
+      el.classList.add('is-in');
+      // start the SMIL motion paths (dots travelling along the connectors)
+      el.querySelectorAll('animateMotion').forEach((a) => a.beginElement?.());
+    }, 0.3);
+  });
+}
+
 /* ---------- Count-up numerals: <span data-count="48216.40" data-format="currency" data-decimals="2"> ---------- */
 function initCountUp() {
   for (const el of document.querySelectorAll('[data-count]')) {
@@ -99,15 +110,16 @@ function initRailCollapse() {
 function initRail() {
   const app = document.querySelector('.app');
   if (!app) return;
-  const toggle = app.querySelector('[data-rail-toggle]');
+  // Several controls open the rail: the top-bar menu button and the bottom bar's "More".
+  const toggles = [...app.querySelectorAll('[data-rail-toggle]')];
   const setOpen = (open) => {
     app.toggleAttribute('data-rail-open', open);
-    toggle?.setAttribute('aria-expanded', String(open));
+    toggles.forEach((t) => t.setAttribute('aria-expanded', String(open)));
     if (open) /** @type {HTMLElement|null} */ (app.querySelector('.rail a'))?.focus();
   };
-  toggle?.addEventListener('click', () => setOpen(!app.hasAttribute('data-rail-open')));
+  toggles.forEach((t) => t.addEventListener('click', () => setOpen(!app.hasAttribute('data-rail-open'))));
   app.querySelector('.rail-scrim')?.addEventListener('click', () => setOpen(false));
-  addEventListener('keydown', (e) => { if (e.key === 'Escape' && app.hasAttribute('data-rail-open')) { setOpen(false); /** @type {HTMLElement} */ (toggle)?.focus(); } });
+  addEventListener('keydown', (e) => { if (e.key === 'Escape' && app.hasAttribute('data-rail-open')) { setOpen(false); /** @type {HTMLElement|null} */ (toggles[0] || null)?.focus(); } });
 }
 
 /* ---------- Delegated actions: dialogs, theme, copy, expandable rows, demo forms ---------- */
@@ -210,6 +222,7 @@ initRail();
 initRailCollapse();
 initActions();
 initReveal();
+initAppPromo();
 initCountUp();
 initComponents();
 
