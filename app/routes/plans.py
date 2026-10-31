@@ -2,11 +2,17 @@ from fastapi import APIRouter, HTTPException, Depends
 from typing import List
 from bson import ObjectId
 
-from app.database import get_collection, INVESTMENT_PLANS_COLLECTION
+from app.database import get_collection, INVESTMENT_PLANS_COLLECTION, USER_INVESTMENTS_COLLECTION
 from app.schemas import InvestmentPlanResponse
 from app.auth import get_current_user_token
 
 router = APIRouter(prefix="/api/plans", tags=["investment_plans"])
+
+
+def live_subscribers(plan_id) -> int:
+    """Real number of active investments in this plan (the stored counter is not shown)."""
+    return get_collection(USER_INVESTMENTS_COLLECTION).count_documents(
+        {"plan_id": str(plan_id), "status": "active"})
 
 
 def plan_helper(plan) -> dict:
@@ -18,7 +24,7 @@ def plan_helper(plan) -> dict:
         "minimum_investment": plan["minimum_investment"],
         "holding_period_months": plan["holding_period_months"],
         "expected_return_percent": plan["expected_return_percent"],
-        "current_subscribers": plan["current_subscribers"],
+        "current_subscribers": live_subscribers(plan["_id"]),
         "is_active": plan.get("is_active", True),
         "tags": plan.get("tags", [])
     }

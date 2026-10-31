@@ -1,5 +1,5 @@
 from fastapi import FastAPI, HTTPException
-from fastapi.responses import HTMLResponse
+from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
 from starlette.middleware.base import BaseHTTPMiddleware
@@ -10,9 +10,24 @@ from slowapi.errors import RateLimitExceeded
 import asyncio
 
 from app.database import connect_to_mongo, close_mongo_connection
-from app.routes import auth, traders, plans, etf_plans, defi_plans, options_plans, wallet, referrals, admin, deposits, investments, news, crypto_wallets, withdrawals, chat, onboarding, notifications, language, pageview
+from app.routes import admin_trading, documents
+from app.routes import auth, traders, plans, etf_plans, defi_plans, options_plans, wallet, referrals, admin, deposits, investments, news, crypto_wallets, withdrawals, chat, onboarding, notifications, language, pageview, market, stream, trading, copy
 from app.rate_limiter import limiter
-from app.trade_scheduler import update_all_traders_trades, initialize_traders_trades, run_trade_scheduler
+from app.trade_scheduler import update_all_traders_trades  # noqa: F401  (kept for admin scripts)
+from app.trading import events, funding, ledger
+from app.market_data import feeds as market_feeds
+from app.trading import engine as trading_engine
+
+
+async def run_ledger_maintenance(interval_seconds: int = 300):
+    """Finish postings interrupted by a crash and release expired withdrawal holds."""
+    while True:
+        try:
+            await asyncio.to_thread(ledger.recover_pending)
+            await asyncio.to_thread(funding.expire_stale_withdrawals)
+        except Exception as exc:
+            print(f"ledger maintenance error: {exc}")
+        await asyncio.sleep(interval_seconds)
 
 app = FastAPI(
     title="TED Broker API",
@@ -24,13 +39,26 @@ app = FastAPI(
 app.state.limiter = limiter
 app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 
-# CORS middleware
+def cors_origins() -> list:
+    """The dashboard is served by this app (same origin), so CORS only matters for a separately
+    hosted front end. Set CORS_ORIGINS to a comma-separated list of site origins; the default
+    only allows local development hosts. Never `*`."""
+    raw = os.getenv("CORS_ORIGINS", "")
+    origins = [o.strip().rstrip("/") for o in raw.split(",") if o.strip() and o.strip() != "*"]
+    if not origins:
+        port = os.getenv("PORT", "8000")
+        origins = [f"http://localhost:{port}", f"http://127.0.0.1:{port}",
+                   "http://localhost:5500", "http://127.0.0.1:5500"]
+    return origins
+
+
+# CORS middleware. Auth is a Bearer token (not cookies), so credentials are not needed.
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # In production, replace with specific origins
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
+    allow_origins=cors_origins(),
+    allow_credentials=False,
+    allow_methods=["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+    allow_headers=["Authorization", "Content-Type", "Accept-Language", "X-Requested-With"],
 )
 
 class SecurityHeadersMiddleware(BaseHTTPMiddleware):
@@ -66,6 +94,7 @@ app.include_router(wallet.router)
 app.include_router(referrals.router)
 # Include admin routes
 app.include_router(admin.router)
+app.include_router(admin_trading.router)
 # Include deposits routes
 app.include_router(deposits.router)
 # Include investments routes
@@ -87,21 +116,40 @@ app.include_router(language.router)
 
 # Include pageview routes
 app.include_router(pageview.router)
+app.include_router(market.router)
+app.include_router(stream.router)
+app.include_router(trading.router)
+app.include_router(copy.router)
+app.include_router(documents.router)
 
 
 @app.on_event("startup")
 async def startup_db_client():
     """Initialize database connection on startup"""
     connect_to_mongo()
-    
-    await initialize_traders_trades()
-    
-    asyncio.create_task(run_trade_scheduler())
+
+    # Unified ledger: indexes + background maintenance.
+    ledger.ensure_indexes()
+    asyncio.create_task(run_ledger_maintenance())
+
+    # Live account events (balance changes) and real-time market data feeds.
+    events.bind_loop(asyncio.get_running_loop())
+    ledger.add_listener(events.on_ledger_entry)
+    if os.getenv("MARKET_FEEDS", "1") != "0":
+        await market_feeds.start()
+    if os.getenv("TRADING_ENGINE", "1") != "0":
+        await trading_engine.start()
+
+    # Trader activity comes from the trading bots (app/trading/bots.py, run by the engine),
+    # which place real simulated orders at live prices. The old random trade generator
+    # (app/trade_scheduler.py) is no longer started.
 
 
 @app.on_event("shutdown")
 async def shutdown_db_client():
     """Close database connection on shutdown"""
+    await trading_engine.stop()
+    await market_feeds.stop()
     close_mongo_connection()
 
 # Get the base directory - current folder is the root
@@ -115,9 +163,20 @@ if (BASE_DIR / "public" / "copytradingbroker.io").exists():
 elif (BASE_DIR / "public").exists():
     SITE_DIR = BASE_DIR / "public"
 
+class RevalidatingStaticFiles(StaticFiles):
+    """Static files that browsers must revalidate on every load (no-cache keeps the ETag
+    check, so unchanged files still come from the browser cache). Stops stale page modules
+    from running after a deploy."""
+
+    async def get_response(self, path, scope):
+        response = await super().get_response(path, scope)
+        response.headers["Cache-Control"] = "no-cache"
+        return response
+
+
 # Mount static files for assets (CSS, JS, images, etc)
 if (SITE_DIR / "assets").exists():
-    app.mount("/assets", StaticFiles(directory=str(SITE_DIR / "assets")), name="assets")
+    app.mount("/assets", RevalidatingStaticFiles(directory=str(SITE_DIR / "assets")), name="assets")
 
 if (SITE_DIR / "temp").exists():
     app.mount("/temp", StaticFiles(directory=str(SITE_DIR / "temp")), name="temp")
@@ -215,11 +274,33 @@ async def login():
     return read_html_file(SITE_DIR / "login.html")
 
 
-@app.get("/dashboard", response_class=HTMLResponse)
-@app.get("/dashboard.html", response_class=HTMLResponse)
+@app.get("/dashboard", include_in_schema=False)
+@app.get("/dashboard.html", include_in_schema=False)
 async def dashboard():
-    """Serve the dashboard page"""
-    return read_html_file(SITE_DIR / "dashboard.html")
+    """Send legacy dashboard traffic to the redesigned app."""
+    return RedirectResponse(url="/app/", status_code=307)
+
+
+APP_DIR = SITE_DIR / "app"
+APP_PAGES = {"index", "trade", "screener", "documents", "copy-traders", "wallet", "plans", "portfolio", "referrals", "settings", "network", "news"}
+
+
+@app.get("/app", include_in_schema=False)
+async def app_root_redirect():
+    return RedirectResponse(url="/app/", status_code=307)
+
+
+@app.get("/app/", response_class=HTMLResponse, include_in_schema=False)
+async def app_home():
+    return read_html_file(APP_DIR / "index.html")
+
+
+@app.get("/app/{page}", response_class=HTMLResponse, include_in_schema=False)
+async def app_page(page: str):
+    slug = page[:-5] if page.endswith(".html") else page
+    if slug not in APP_PAGES:
+        raise HTTPException(status_code=404, detail="Page not found")
+    return read_html_file(APP_DIR / f"{slug}.html")
 
 
 @app.get("/forgot-password", response_class=HTMLResponse)

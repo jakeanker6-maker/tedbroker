@@ -225,16 +225,22 @@ class ExpertTraderResponse(BaseModel):
     profile_photo: str
     description: str
     specialization: str
-    ytd_return: float
-    win_rate: float
-    copiers: int
+    # Performance fields are None unless the trader has a live track record (stats_live);
+    # None means "not available", never a placeholder number.
+    ytd_return: Optional[float] = None
+    win_rate: Optional[float] = None
+    copiers: Optional[int] = None
     minimum_copy_amount: float
-    assets_under_management: float = 0.0
-    max_drawdown: float = 0.0
-    risk_score: int = 5
+    assets_under_management: Optional[float] = None
+    max_drawdown: Optional[float] = None
+    risk_score: Optional[int] = None
     trades: List[Trade]
     recent_trades: List[RecentTrade] = []
     posts: List[TraderPost] = []
+    strategy_label: Optional[str] = None
+    stats_live: bool = False
+    stats_since: Optional[str] = None
+    closed_trades: int = 0
 
     class Config:
         from_attributes = True

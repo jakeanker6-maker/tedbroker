@@ -10,6 +10,7 @@ from pydantic import BaseModel
 from app.schemas import TransactionResponse
 from app.auth import get_current_user_token, verify_password
 from app.database import get_collection, USERS_COLLECTION, TRANSACTIONS_COLLECTION, DEPOSIT_REQUESTS_COLLECTION, WITHDRAWAL_REQUESTS_COLLECTION, BANK_ACCOUNTS_COLLECTION
+from app.trading import funding, ledger
 
 router = APIRouter(prefix="/api/wallet", tags=["Wallet"])
 
@@ -17,7 +18,7 @@ router = APIRouter(prefix="/api/wallet", tags=["Wallet"])
 class DepositRequest(BaseModel):
     amount: float
     payment_method: str
-    password: str
+    password: Optional[str] = None
     # Optional fields for different payment methods
     bank_name: Optional[str] = None
     reference_number: Optional[str] = None
@@ -28,7 +29,7 @@ class DepositRequest(BaseModel):
 class WithdrawalRequest(BaseModel):
     amount: float
     withdrawal_method: str
-    password: str
+    password: Optional[str] = None
     crypto_type: Optional[str] = None
     wallet_address: Optional[str] = None
 
@@ -45,7 +46,7 @@ def get_user_by_id(user_id: str):
 def generate_withdrawal_code() -> str:
     """Generate 8-digit alphanumeric withdrawal verification code"""
     characters = string.ascii_uppercase + string.digits
-    return ''.join(random.choices(characters, k=8))
+    return ''.join(secrets.choice(characters) for _ in range(8))
 
 
 @router.get("/transactions", response_model=List[TransactionResponse])
@@ -140,6 +141,7 @@ async def create_deposit(
 
     # Also create deposit request for admin dashboard
     deposit_request = {
+        "transaction_id": str(transaction["_id"]),  # lets approval update exactly this row
         "user_id": current_user["user_id"],
         "username": user.get("username", ""),
         "email": user.get("email", ""),
@@ -156,7 +158,7 @@ async def create_deposit(
     deposit_requests_col.insert_one(deposit_request)
 
     # Note: Wallet balance will be updated only when admin approves the deposit
-    current_balance = user.get("wallet_balance", 0.0)
+    current_balance = ledger.get_balances(current_user["user_id"])["cash_cents"] / 100
 
     return {
         "message": "Deposit request submitted successfully. Your funds will be available once confirmed on-chain.",
@@ -197,29 +199,25 @@ async def create_withdrawal(
             detail="User not found"
         )
 
-    # Verify password only for users who have passwords (non-OAuth users)
-    user_password = user.get("password")
-    if user_password and withdrawal_data.password:
-        # User has a password set, verify it
+    # Withdrawals are protected by the 8-character code plus admin approval. The
+    # wallet UI does not send a password, so it is only checked when one is supplied
+    # (users are stored with `hashed_password`; the old code read `password`, which
+    # never exists, so the check never ran).
+    stored_hash = user.get("hashed_password")
+    if withdrawal_data.password is not None and stored_hash:
         try:
-            if not verify_password(withdrawal_data.password, user_password):
-                raise HTTPException(
-                    status_code=status.HTTP_401_UNAUTHORIZED,
-                    detail="Invalid password"
-                )
+            valid = verify_password(withdrawal_data.password, stored_hash)
         except Exception:
-            # If password verification fails (e.g., invalid hash), reject
-            raise HTTPException(
-                status_code=status.HTTP_401_UNAUTHORIZED,
-                detail="Invalid password"
-            )
-    # For OAuth users without passwords, they're already authenticated via JWT, so allow withdrawal
+            valid = False
+        if not valid:
+            raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid password")
 
-    current_balance = user.get("wallet_balance", 0.0)
-    if current_balance < withdrawal_data.amount:
+    funding.expire_stale_withdrawals(current_user["user_id"])
+    withdrawable = funding.withdrawable_cents(current_user["user_id"]) / 100
+    if withdrawable < withdrawal_data.amount:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail=f"Insufficient funds. Current balance: ${current_balance:.2f}"
+            detail=f"Insufficient funds. Available to withdraw: ${withdrawable:.2f}"
         )
 
     reference_number = f"WTH-{secrets.token_hex(8).upper()}"
@@ -236,6 +234,18 @@ async def create_withdrawal(
 
     # Additional handling can be added here for other withdrawal methods
 
+    # Hold the funds first so they cannot be traded or withdrawn twice while the
+    # request is reviewed. The request id is generated up front so the hold is keyed to it.
+    wr_id = ObjectId()
+    try:
+        funding.hold_withdrawal(str(wr_id), current_user["user_id"], withdrawal_data.amount,
+                                withdrawal_data.withdrawal_method)
+    except ledger.InsufficientFunds as exc:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=f"Insufficient funds. Available to withdraw: ${exc.available_cents / 100:.2f}"
+        )
+
     transaction = {
         "user_id": current_user["user_id"],
         "transaction_type": "withdrawal",
@@ -249,11 +259,16 @@ async def create_withdrawal(
         "updated_at": datetime.utcnow(),
     }
 
-    result = transactions_col.insert_one(transaction)
+    try:
+        result = transactions_col.insert_one(transaction)
+    except Exception:
+        funding.release_withdrawal(str(wr_id), current_user["user_id"], "failed")
+        raise
     transaction["_id"] = result.inserted_id
 
     # Also create withdrawal request for admin dashboard with verification code
     withdrawal_request = {
+        "_id": wr_id,
         "user_id": current_user["user_id"],
         "username": user.get("username", ""),
         "email": user.get("email", ""),
@@ -278,7 +293,13 @@ async def create_withdrawal(
         "reviewed_at": None,
         "completed_at": None
     }
-    wr_result = withdrawal_requests_col.insert_one(withdrawal_request)
+    try:
+        wr_result = withdrawal_requests_col.insert_one(withdrawal_request)
+    except Exception:
+        funding.release_withdrawal(str(wr_id), current_user["user_id"], "failed")
+        transactions_col.update_one({"_id": transaction["_id"]}, {"$set": {"status": "failed"}})
+        raise
+    current_balance = ledger.get_balances(current_user["user_id"])["cash_cents"] / 100
 
     return {
         "message": "Withdrawal request submitted successfully. Your request will be processed confirmed on-chain.",
@@ -308,9 +329,39 @@ async def get_balance(current_user: dict = Depends(get_current_user_token)):
             detail="User not found"
         )
 
+    funding.expire_stale_withdrawals(current_user["user_id"])
+    from app.trading import portfolio
+    s = await portfolio.summary(current_user["user_id"])
+    # `balance` keeps its old meaning (total cash). The other fields are additive.
     return {
-        "balance": user.get("wallet_balance", 0.0)
+        "balance": float(s["cash"]),
+        "cash": float(s["cash"]),
+        "reserved": float(s["reserved"]),
+        "withdrawable": float(s["withdrawable"]),
+        "buying_power": float(s["buying_power"]),
+        "equity": float(s["equity"]),
+        "positions_value": float(s["positions_value"]),
+        "total_value": float(s["total_value"]),
+        "currency": "USD",
     }
+
+
+@router.get("/activity")
+async def get_activity(
+    limit: int = 50,
+    before: Optional[str] = None,
+    types: Optional[str] = None,
+    current_user: dict = Depends(get_current_user_token),
+):
+    """Unified cash activity from the ledger (deposits, withdrawals, plans, bonuses,
+    adjustments and, later, trades). Paginate with `before` = `next_before` from the
+    previous page."""
+    if before and not ObjectId.is_valid(before):
+        raise HTTPException(status_code=400, detail="Invalid 'before' cursor")
+    type_list = [t for t in (types or "").split(",") if t] or None
+    entries = ledger.list_entries(current_user["user_id"], limit=limit, before_id=before, types=type_list)
+    items = [ledger.serialize_entry(e) for e in entries]
+    return {"items": items, "next_before": items[-1]["id"] if len(items) == limit else None}
 
 
 @router.get("/deposit-bank-accounts")

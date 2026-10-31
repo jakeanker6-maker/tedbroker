@@ -8,7 +8,8 @@ load_dotenv()
 
 # MongoDB Configuration
 MONGODB_URL = os.getenv("MONGODB_URL", "mongodb://localhost:27017")
-DATABASE_NAME = os.getenv("DATABASE_NAME", "tedbroker")
+# .env uses MONGODB_DB; DATABASE_NAME is kept as a fallback for older setups.
+DATABASE_NAME = os.getenv("MONGODB_DB") or os.getenv("DATABASE_NAME", "tedbroker")
 
 # Global MongoDB client
 client = None
@@ -71,3 +72,6 @@ CHAT_CONVERSATIONS_COLLECTION = "chat_conversations"
 CHAT_MESSAGES_COLLECTION = "chat_messages"
 NOTIFICATIONS_COLLECTION = "notifications"
 TOKEN_BLACKLIST_COLLECTION = "token_blacklist"
+
+# Trading Hub / unified ledger
+LEDGER_ENTRIES_COLLECTION = "ledger_entries"

@@ -7,6 +7,7 @@ import secrets
 from app.database import get_collection, OPTIONS_PLANS_COLLECTION, USER_INVESTMENTS_COLLECTION, USERS_COLLECTION, TRANSACTIONS_COLLECTION
 from app.schemas import OptionsPlanResponse, InvestInPlanRequest
 from app.auth import get_current_user_token
+from app.trading import funding, ledger
 
 router = APIRouter(prefix="/api/options-plans", tags=["options_plans"])
 
@@ -107,13 +108,17 @@ async def activate_options_plan(
                 detail=f"Investment amount must be at least ${plan.get('minimum_investment', 0)}"
             )
 
-        # Check wallet balance
-        wallet_balance = user.get("wallet_balance", 0.0)
-        if wallet_balance < request.amount:
+        # Pay from available cash through the unified ledger (cash held for open
+        # orders or pending withdrawals cannot be spent).
+        investment_id = ObjectId()
+        try:
+            paid = funding.pay_for_plan(user_id, str(investment_id), request.amount, plan["name"])
+        except ledger.InsufficientFunds as exc:
             raise HTTPException(
                 status_code=400,
-                detail=f"Insufficient wallet balance. You have ${wallet_balance}, but need ${request.amount}"
+                detail=f"Insufficient wallet balance. You have ${exc.available_cents / 100:.2f} available, but need ${request.amount}"
             )
+        new_balance = paid["cash_after_cents"] / 100
 
         # Calculate dates
         start_date = datetime.utcnow()
@@ -134,14 +139,12 @@ async def activate_options_plan(
             "updated_at": start_date
         }
 
-        result = investments_collection.insert_one(investment_doc)
-
-        # Deduct from wallet balance
-        new_balance = wallet_balance - request.amount
-        users_collection.update_one(
-            {"_id": ObjectId(user_id)},
-            {"$set": {"wallet_balance": new_balance}}
-        )
+        investment_doc["_id"] = investment_id
+        try:
+            result = investments_collection.insert_one(investment_doc)
+        except Exception:
+            funding.refund_plan(user_id, str(investment_id), request.amount, plan["name"])
+            raise
 
         # Create transaction record
         transaction_doc = {

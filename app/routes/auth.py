@@ -71,7 +71,6 @@ def get_user_by_id(user_id: str):
 @limiter.limit(get_rate_limit("register"))
 async def register(request: Request, user_data: UserRegister):
     """Register a new user and send 2FA verification code"""
-    print(f"DEBUG: Received registration data: {user_data.model_dump()}")
     users = get_collection(USERS_COLLECTION)
 
     # Check if user already exists
@@ -130,7 +129,7 @@ async def register(request: Request, user_data: UserRegister):
     email_sent = email_service.send_2fa_code(
         to_email=user_dict["email"],
         code=code,
-        username=user_dict["full_name"]
+        username=user_dict["full_name"] or user_dict["username"]
     )
 
     if not email_sent:
@@ -1090,8 +1089,11 @@ async def google_login():
 
 
 @router.get("/google/callback")
-async def google_callback(code: str, request: Request):
-    """Handle Google OAuth callback"""
+async def google_callback(request: Request, code: Optional[str] = None, error: Optional[str] = None):
+    """Handle Google OAuth callback. Google sends `error` (not `code`) when the user cancels consent."""
+    if error or not code:
+        return RedirectResponse(url="/login?error=oauth_failed")
+
     try:
         # Exchange code for tokens
         token_url = "https://oauth2.googleapis.com/token"
@@ -1175,8 +1177,8 @@ async def google_callback(code: str, request: Request):
                 expires_delta=access_token_expires
             )
 
-            # Redirect to dashboard with token in URL fragment (not query param) to prevent server log leakage
-            redirect_url = f"/dashboard#token={access_token}"
+            # Redirect to the login page, which stores the token and routes on (fragment, not query string) (not query param) to prevent server log leakage
+            redirect_url = f"/login#token={access_token}"
             return RedirectResponse(url=redirect_url)
         else:
             # New user - create account
@@ -1254,14 +1256,14 @@ async def google_callback(code: str, request: Request):
                 expires_delta=access_token_expires
             )
 
-            # Redirect to dashboard with token in URL fragment (not query param) to prevent server log leakage
-            redirect_url = f"/dashboard#token={access_token}"
+            # Redirect to the login page, which stores the token and routes on (fragment, not query string) (not query param) to prevent server log leakage
+            redirect_url = f"/login#token={access_token}"
             return RedirectResponse(url=redirect_url)
 
     except Exception as e:
         print(f"Google OAuth error: {e}")
         # Redirect to login page with error
-        redirect_url = "/copytradingbroker.io/login.html?error=oauth_failed"
+        redirect_url = "/login?error=oauth_failed"
         return RedirectResponse(url=redirect_url)
 
 

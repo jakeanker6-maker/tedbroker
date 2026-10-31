@@ -17,6 +17,7 @@ from app.database import (
     USER_CRYPTO_ADDRESSES_COLLECTION, WITHDRAWAL_REQUESTS_COLLECTION,
     TRANSACTIONS_COLLECTION
 )
+from app.trading import funding, ledger
 
 router = APIRouter(prefix="/api/withdrawals", tags=["Withdrawals"])
 
@@ -24,7 +25,7 @@ router = APIRouter(prefix="/api/withdrawals", tags=["Withdrawals"])
 def generate_withdrawal_code() -> str:
     """Generate 8-digit alphanumeric withdrawal verification code"""
     characters = string.ascii_uppercase + string.digits
-    return ''.join(random.choices(characters, k=8))
+    return ''.join(secrets.choice(characters) for _ in range(8))
 
 
 def get_user_by_id(user_id: str):
@@ -497,12 +498,13 @@ async def create_withdrawal_request(
             detail="User not found"
         )
 
-    # Check user balance
-    current_balance = user.get("wallet_balance", 0.0)
-    if current_balance < withdrawal_data.amount:
+    # Check withdrawable cash (excludes funds held for orders / other withdrawals)
+    funding.expire_stale_withdrawals(current_user["user_id"])
+    withdrawable = funding.withdrawable_cents(current_user["user_id"]) / 100
+    if withdrawable < withdrawal_data.amount:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail=f"Insufficient funds. Current balance: ${current_balance:.2f}"
+            detail=f"Insufficient funds. Available to withdraw: ${withdrawable:.2f}"
         )
 
     # Get withdrawal account details
@@ -577,8 +579,20 @@ async def create_withdrawal_request(
     # Generate verification code
     verification_code = generate_withdrawal_code()
 
+    # Hold the funds while the request is verified and reviewed.
+    wr_id = ObjectId()
+    try:
+        funding.hold_withdrawal(str(wr_id), current_user["user_id"], withdrawal_data.amount,
+                                withdrawal_data.withdrawal_method)
+    except ledger.InsufficientFunds as exc:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=f"Insufficient funds. Available to withdraw: ${exc.available_cents / 100:.2f}"
+        )
+
     # Create withdrawal request
     withdrawal_request = {
+        "_id": wr_id,
         "user_id": current_user["user_id"],
         "username": user.get("username", ""),
         "email": user.get("email", ""),
@@ -600,7 +614,11 @@ async def create_withdrawal_request(
     }
 
     # Insert withdrawal request
-    result = withdrawal_requests_col.insert_one(withdrawal_request)
+    try:
+        result = withdrawal_requests_col.insert_one(withdrawal_request)
+    except Exception:
+        funding.release_withdrawal(str(wr_id), current_user["user_id"], "failed")
+        raise
     withdrawal_request["_id"] = result.inserted_id
 
     return {
@@ -723,8 +741,9 @@ async def verify_withdrawal_code(
             detail="This withdrawal request has already been processed"
         )
 
-    # Check if code expired
+    # Check if code expired (releases the held funds)
     if datetime.utcnow() > request["code_expires_at"]:
+        funding.expire_stale_withdrawals(current_user["user_id"])
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Verification code has expired. Please create a new withdrawal request."
@@ -732,9 +751,9 @@ async def verify_withdrawal_code(
 
     # Check max attempts (prevent brute force)
     if request.get("verification_attempts", 0) >= 5:
-        # Mark request as failed
-        withdrawal_requests_col.update_one(
-            {"_id": ObjectId(verification_data.request_id)},
+        # Mark request as failed and release the held funds
+        failed = withdrawal_requests_col.update_one(
+            {"_id": ObjectId(verification_data.request_id), "status": "pending_verification"},
             {
                 "$set": {
                     "status": "failed",
@@ -742,6 +761,8 @@ async def verify_withdrawal_code(
                 }
             }
         )
+        if failed.modified_count:
+            funding.release_withdrawal(verification_data.request_id, current_user["user_id"], "failed")
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Too many failed attempts. Please create a new withdrawal request."

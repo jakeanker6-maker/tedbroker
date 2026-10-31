@@ -152,15 +152,16 @@ class ReferralsService:
             "created_at": datetime.utcnow()
         }
 
-        referrals.insert_one(referral_record)
+        referral_result = referrals.insert_one(referral_record)
 
-        # Credit referrer's wallet with bonus
-        users.update_one(
-            {"_id": ObjectId(referrer_id)},
-            {
-                "$inc": {"wallet_balance": BASE_REFERRAL_BONUS},
-                "$set": {"updated_at": datetime.utcnow()}
-            }
+        # Credit referrer's wallet with the bonus through the unified ledger
+        # (one bonus per referred user, enforced by the idempotency key).
+        from app.trading import ledger
+        ledger.credit(
+            referrer_id, ledger.to_cents(BASE_REFERRAL_BONUS), type="referral_bonus",
+            idempotency_key=f"referral:{referred_user_id}",
+            ref_type="referral", ref_id=str(referral_result.inserted_id),
+            description="Referral bonus",
         )
 
         # Mark the referred user as having used a referral
@@ -215,7 +216,8 @@ class ReferralsService:
                     "full_name": referred_user.get("full_name", "Unknown"),
                     "joined_date": referral.get("created_at"),
                     "bonus_earned": referral.get("bonus_amount", 0),
-                    "status": referral.get("status", "completed")
+                    "status": referral.get("status", "completed"),
+                    "is_active": bool(referred_user.get("is_active", False))
                 })
 
         # Count active referrals (users who are still active)

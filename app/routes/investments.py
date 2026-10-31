@@ -1,4 +1,4 @@
-from fastapi import APIRouter, HTTPException, Depends
+from fastapi import APIRouter, HTTPException, Depends, Query
 from typing import List
 from bson import ObjectId
 from datetime import datetime, timedelta
@@ -7,6 +7,7 @@ import secrets
 from app.database import get_collection, INVESTMENT_PLANS_COLLECTION, USER_INVESTMENTS_COLLECTION, USERS_COLLECTION, TRANSACTIONS_COLLECTION
 from app.schemas import InvestInPlanRequest, UserInvestmentResponse, PortfolioSummary
 from app.auth import get_current_user_token
+from app.trading import funding, ledger
 
 router = APIRouter(prefix="/api/investments", tags=["investments"])
 
@@ -50,6 +51,65 @@ def calculate_current_value(investment: dict) -> tuple:
     return current_value, profit_loss, profit_loss_percent, days_elapsed, days_remaining
 
 
+HISTORY_RANGES = {"1W": 7, "1M": 30, "3M": 90, "1Y": 365, "ALL": None}
+
+
+def _plan_value_on(investment: dict, day) -> tuple:
+    """Plan value and amount invested on a given calendar day, using the same formula as calculate_current_value."""
+    start = investment["start_date"].date()
+    maturity = investment["maturity_date"].date()
+    amount = float(investment["amount_invested"])
+    if start > day:
+        return 0.0, 0.0
+    total_days = (maturity - start).days
+    elapsed = max(0, (day - start).days)
+    progress = min(elapsed / total_days, 1.0) if total_days > 0 else 0.0
+    final_value = amount * (1 + float(investment["expected_return_percent"]) / 100)
+    return amount + (final_value - amount) * progress, amount
+
+
+@router.get("/history")
+async def get_plan_value_history(
+    range_key: str = Query("1M", alias="range"),
+    current_user: dict = Depends(get_current_user_token)
+):
+    """
+    Modelled daily value of the user's plan investments over time.
+    This is not market data: each plan follows the platform's expected-return schedule.
+    """
+    key = range_key.upper()
+    if key not in HISTORY_RANGES:
+        raise HTTPException(status_code=400, detail="range must be one of 1W, 1M, 3M, 1Y, ALL")
+
+    investments_collection = get_collection(USER_INVESTMENTS_COLLECTION)
+    investments = list(investments_collection.find({"user_id": current_user["user_id"]}))
+    if not investments:
+        return {"modelled": True, "has_investments": False, "range": key, "points": []}
+
+    today = datetime.utcnow().date()
+    first_day = min(inv["start_date"].date() for inv in investments)
+    span = HISTORY_RANGES[key]
+    start_day = max(first_day, today - timedelta(days=span)) if span else first_day
+    total_span = (today - start_day).days
+    step = 1 if total_span <= 400 else 7
+
+    days = [start_day + timedelta(days=i) for i in range(0, total_span + 1, step)]
+    if days[-1] != today:
+        days.append(today)
+
+    points = []
+    for day in days:
+        value = 0.0
+        invested = 0.0
+        for inv in investments:
+            v, amt = _plan_value_on(inv, day)
+            value += v
+            invested += amt
+        points.append({"date": day.isoformat(), "value": round(value, 2), "invested": round(invested, 2)})
+
+    return {"modelled": True, "has_investments": True, "range": key, "points": points}
+
+
 @router.post("/invest")
 async def invest_in_plan(
     request: InvestInPlanRequest,
@@ -91,13 +151,17 @@ async def invest_in_plan(
                 detail=f"Investment amount must be at least ${plan['minimum_investment']}"
             )
 
-        # Check wallet balance
-        wallet_balance = user.get("wallet_balance", 0.0)
-        if wallet_balance < request.amount:
+        # Pay from available cash through the unified ledger (cash held for open
+        # orders or pending withdrawals cannot be spent).
+        investment_id = ObjectId()
+        try:
+            paid = funding.pay_for_plan(user_id, str(investment_id), request.amount, plan["name"])
+        except ledger.InsufficientFunds as exc:
             raise HTTPException(
                 status_code=400,
-                detail=f"Insufficient wallet balance. You have ${wallet_balance}, but need ${request.amount}"
+                detail=f"Insufficient wallet balance. You have ${exc.available_cents / 100:.2f} available, but need ${request.amount}"
             )
+        new_balance = paid["cash_after_cents"] / 100
 
         # Calculate dates
         start_date = datetime.utcnow()
@@ -118,14 +182,12 @@ async def invest_in_plan(
             "updated_at": start_date
         }
 
-        result = investments_collection.insert_one(investment_doc)
-
-        # Deduct from wallet balance
-        new_balance = wallet_balance - request.amount
-        users_collection.update_one(
-            {"_id": ObjectId(user_id)},
-            {"$set": {"wallet_balance": new_balance}}
-        )
+        investment_doc["_id"] = investment_id
+        try:
+            result = investments_collection.insert_one(investment_doc)
+        except Exception:
+            funding.refund_plan(user_id, str(investment_id), request.amount, plan["name"])
+            raise
 
         # Create transaction record
         transaction_doc = {

@@ -22,7 +22,7 @@ TED_BROKERS_CONTEXT = CONTEXT_FILE.read_text(encoding="utf-8") if CONTEXT_FILE.e
 
 # OpenRouter API configuration
 OPENROUTER_API_URL = "https://openrouter.ai/api/v1/chat/completions"
-OPENROUTER_MODEL = "nvidia/nemotron-3-super-120b-a12b:free"
+OPENROUTER_MODEL = "nvidia/nemotron-3-super-120b-a12b"
 OPENROUTER_FALLBACK_MODELS = [
     "google/gemma-4-31b-it:free",
 ]
@@ -400,6 +400,7 @@ IMPORTANT INSTRUCTIONS:
 5. Always guide users toward successful outcomes
 6. Use professional, friendly tone
 7. End responses with helpful suggestions
+8. You cannot see the user's account: no balances, holdings, trades, copies or plans are available to you. Never describe or estimate the user's own portfolio, balance or trades. Say you cannot see them and point the user to the Portfolio or Wallet page.
 
 TED BROKERS PLATFORM CONTEXT:
 {TED_BROKERS_CONTEXT}

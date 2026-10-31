@@ -22,6 +22,7 @@ from app.admin_service import admin_service
 from app.auth import create_access_token, get_current_user_token, ACCESS_TOKEN_EXPIRE_MINUTES
 from app.database import get_collection, USERS_COLLECTION, TRADERS_COLLECTION, INVESTMENT_PLANS_COLLECTION, ETF_PLANS_COLLECTION, DEFI_PLANS_COLLECTION, OPTIONS_PLANS_COLLECTION, DEPOSIT_REQUESTS_COLLECTION, TRANSACTIONS_COLLECTION, CRYPTO_WALLETS_COLLECTION, BANK_ACCOUNTS_COLLECTION, USER_BANK_ACCOUNTS_COLLECTION, USER_CRYPTO_ADDRESSES_COLLECTION, WITHDRAWAL_REQUESTS_COLLECTION, CHAT_CONVERSATIONS_COLLECTION, CHAT_MESSAGES_COLLECTION, NOTIFICATIONS_COLLECTION
 from app.schemas import Token, Trade, NotificationCreate, NotificationResponse
+from app.trading import funding, ledger
 import secrets
 
 router = APIRouter(prefix="/api/admin", tags=["Admin"])
@@ -285,16 +286,14 @@ async def get_all_users(
     """
     users = get_collection(USERS_COLLECTION)
 
-    # Build query
-    query = {}
+    # Build query (trading-bot system accounts are not customers: never list them)
+    query = {"is_system": {"$ne": True}}
     if search:
-        query = {
-            "$or": [
-                {"email": {"$regex": search, "$options": "i"}},
-                {"username": {"$regex": search, "$options": "i"}},
-                {"full_name": {"$regex": search, "$options": "i"}}
-            ]
-        }
+        query["$or"] = [
+            {"email": {"$regex": search, "$options": "i"}},
+            {"username": {"$regex": search, "$options": "i"}},
+            {"full_name": {"$regex": search, "$options": "i"}}
+        ]
 
     # Get total count
     total_count = users.count_documents(query)
@@ -700,34 +699,35 @@ async def update_user_balance(
                 detail="User not found"
             )
 
-        old_balance = user.get("wallet_balance", 0.0)
         reflect_on_portfolio = balance_data.get("reflect_on_portfolio", False)
         portfolio_updated = False
 
-        # Prepare update fields
-        update_fields = {
-            "wallet_balance": new_balance,
-            "updated_at": datetime.utcnow()
-        }
+        # Post the difference as a ledger adjustment so history stays complete.
+        balances = ledger.get_balances(user_id)
+        old_balance = balances["cash_cents"] / 100
+        delta = ledger.to_cents(new_balance) - balances["cash_cents"]
+        if delta != 0:
+            try:
+                ledger.post(
+                    user_id, type="adjustment", cash_delta_cents=delta,
+                    idempotency_key=f"admin-adjust:{ObjectId()}",
+                    ref_type="admin", ref_id=current_admin["user_id"],
+                    description=balance_data.get("reason") or "Balance adjustment by admin",
+                )
+            except ledger.InsufficientFunds:
+                raise HTTPException(
+                    status_code=status.HTTP_400_BAD_REQUEST,
+                    detail=f"Balance cannot go below funds currently held for pending withdrawals or orders "
+                           f"(${balances['reserved_cents'] / 100:,.2f})"
+                )
 
-        # If reflect_on_portfolio is checked, update copy_trading_allocation
         if reflect_on_portfolio:
-            # Update the copy trading allocation to reflect the new balance
-            # This represents the amount available for copy trading
-            update_fields["copy_trading_allocation"] = new_balance
-            portfolio_updated = True
-
-        # Update user balance
-        result = users.update_one(
-            {"_id": ObjectId(user_id)},
-            {"$set": update_fields}
-        )
-
-        if result.matched_count == 0:
-            raise HTTPException(
-                status_code=status.HTTP_404_NOT_FOUND,
-                detail="User not found"
+            # Legacy field shown on the dashboard as the copy trading allocation.
+            users.update_one(
+                {"_id": ObjectId(user_id)},
+                {"$set": {"copy_trading_allocation": new_balance, "updated_at": datetime.utcnow()}}
             )
+            portfolio_updated = True
 
         return {
             "message": "Balance updated successfully",
@@ -799,12 +799,14 @@ async def get_statistics(current_admin: dict = Depends(get_current_admin)):
     traders = get_collection(TRADERS_COLLECTION)
     plans = get_collection(INVESTMENT_PLANS_COLLECTION)
 
-    total_users = users.count_documents({})
-    active_users = users.count_documents({"is_active": True})
-    verified_users = users.count_documents({"is_verified": True})
+    customers = {"is_system": {"$ne": True}}
+    total_users = users.count_documents(customers)
+    active_users = users.count_documents({**customers, "is_active": True})
+    verified_users = users.count_documents({**customers, "is_verified": True})
 
-    # Calculate total wallet balance
+    # Calculate total wallet balance (customers only)
     pipeline = [
+        {"$match": customers},
         {"$group": {"_id": None, "total": {"$sum": "$wallet_balance"}}}
     ]
     result = list(users.aggregate(pipeline))
@@ -1033,6 +1035,12 @@ async def update_trader(
         "risk_score": trader_data.risk_score,
         "updated_at": datetime.utcnow()
     }
+
+    # Traders run by a trading bot have a live track record: performance fields are computed
+    # from real fills and snapshots (app/trading/bots.py) and cannot be typed in.
+    if trader.get("stats_live"):
+        for k in ("ytd_return", "win_rate", "copiers", "assets_under_management", "max_drawdown"):
+            update_dict.pop(k, None)
 
     # Update trader in database
     traders.update_one(
@@ -1401,6 +1409,41 @@ async def get_all_deposit_requests(
     }
 
 
+def _claim_request(collection, request_id: str, from_status: str, to_status: str) -> bool:
+    """Atomically move a request from one status to another. False if it was not in from_status."""
+    result = collection.update_one(
+        {"_id": ObjectId(request_id), "status": from_status},
+        {"$set": {"status": to_status, "updated_at": datetime.utcnow()}},
+    )
+    return result.modified_count == 1
+
+
+def _set_linked_transaction(transactions, request: dict, txn_type: str, new_status: str, description: str):
+    """Update the transactions row that belongs to a deposit/withdrawal request.
+
+    Uses the stored transaction_id. Requests created before transaction_id was stored
+    fall back to the oldest matching pending row (previously the first row with the
+    same amount and method was updated, which could pick the wrong one).
+    """
+    update = {"$set": {"status": new_status, "description": description, "updated_at": datetime.utcnow()}}
+    txn_id = request.get("transaction_id")
+    if txn_id:
+        transactions.update_one({"_id": ObjectId(txn_id)}, update)
+        return
+    candidate = transactions.find_one(
+        {
+            "user_id": request["user_id"],
+            "transaction_type": txn_type,
+            "amount": request["amount"],
+            "status": "pending",
+            "payment_method": request.get("payment_method") or request.get("withdrawal_method"),
+        },
+        sort=[("created_at", 1)],
+    )
+    if candidate:
+        transactions.update_one({"_id": candidate["_id"]}, update)
+
+
 @router.put("/deposit-requests/{request_id}/approve")
 async def approve_deposit_request(
     request_id: str,
@@ -1441,52 +1484,34 @@ async def approve_deposit_request(
             detail=f"Request already {deposit_request['status']}"
         )
 
-    # Update user wallet balance
     user_id = deposit_request["user_id"]
     amount = deposit_request["amount"]
 
+    # Claim the request atomically so two concurrent approvals cannot both run.
+    if not _claim_request(deposit_requests, request_id, "pending", "processing"):
+        raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="Request is already being processed")
+
+    # Credit through the unified ledger (idempotent on the request id).
     try:
-        user_result = users.update_one(
-            {"_id": ObjectId(user_id)},
-            {"$inc": {"wallet_balance": amount}}
-        )
-    except:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Invalid user ID"
-        )
+        entry = funding.credit_deposit(request_id, user_id, amount, deposit_request["payment_method"])
+    except Exception as exc:
+        _claim_request(deposit_requests, request_id, "processing", "pending")
+        if isinstance(exc, ledger.AccountNotFound):
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=f"Could not credit deposit: {exc}")
 
-    if user_result.matched_count == 0:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="User not found"
-        )
-
-    # Update the original pending transaction to approved status
-    # Find the pending transaction created when user submitted deposit
-    transactions.update_one(
-        {
-            "user_id": user_id,
-            "transaction_type": "deposit",
-            "amount": amount,
-            "status": "pending",
-            "payment_method": deposit_request["payment_method"]
-        },
-        {
-            "$set": {
-                "status": "approved",
-                "description": f"Deposit confirmed - {deposit_request['payment_method']}",
-                "updated_at": datetime.utcnow()
-            }
-        }
+    # Mark the transaction created with this request as approved.
+    _set_linked_transaction(
+        transactions, deposit_request, "deposit", "approved",
+        f"Deposit confirmed - {deposit_request['payment_method']}",
     )
 
-    # Update deposit request status
     deposit_requests.update_one(
         {"_id": ObjectId(request_id)},
         {
             "$set": {
                 "status": "approved",
+                "ledger_entry_id": str(entry["_id"]),
                 "reviewed_by": current_admin["user_id"],
                 "reviewed_at": datetime.utcnow(),
                 "updated_at": datetime.utcnow()
@@ -1555,28 +1580,14 @@ async def reject_deposit_request(
             detail=f"Request already {deposit_request['status']}"
         )
 
-    # Update the original pending transaction to rejected status
-    user_id = deposit_request["user_id"]
-    amount = deposit_request["amount"]
+    if not _claim_request(deposit_requests, request_id, "pending", "rejected"):
+        raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="Request is already being processed")
 
-    transactions.update_one(
-        {
-            "user_id": user_id,
-            "transaction_type": "deposit",
-            "amount": amount,
-            "status": "pending",
-            "payment_method": deposit_request["payment_method"]
-        },
-        {
-            "$set": {
-                "status": "rejected",
-                "description": f"Deposit rejected by admin - {deposit_request['payment_method']}",
-                "updated_at": datetime.utcnow()
-            }
-        }
+    _set_linked_transaction(
+        transactions, deposit_request, "deposit", "rejected",
+        f"Deposit rejected by admin - {deposit_request['payment_method']}",
     )
 
-    # Update deposit request status
     result = deposit_requests.update_one(
         {"_id": ObjectId(request_id)},
         {
@@ -2046,18 +2057,21 @@ async def approve_withdrawal_request(
             detail="User not found"
         )
 
-    current_balance = user.get("wallet_balance", 0.0)
-    if current_balance < amount:
+    if not _claim_request(withdrawal_requests, request_id, "pending", "processing"):
+        raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="Request is already being processed")
+
+    # Pay out through the ledger: uses the funds held when the request was made.
+    try:
+        funding.settle_withdrawal(request_id, user_id, amount, withdrawal_request["withdrawal_method"])
+    except ledger.InsufficientFunds as exc:
+        _claim_request(withdrawal_requests, request_id, "processing", "pending")
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail=f"Insufficient user balance. Current: ${current_balance:.2f}, Requested: ${amount:.2f}"
+            detail=f"Insufficient user balance. Available: ${exc.available_cents / 100:.2f}, Requested: ${amount:.2f}"
         )
-
-    # Deduct from user wallet balance
-    users.update_one(
-        {"_id": ObjectId(user_id)},
-        {"$inc": {"wallet_balance": -amount}}
-    )
+    except Exception as exc:
+        _claim_request(withdrawal_requests, request_id, "processing", "pending")
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=f"Could not complete withdrawal: {exc}")
 
     # Update or create transaction record
     transaction_id = withdrawal_request.get("transaction_id")
@@ -2162,6 +2176,12 @@ async def reject_withdrawal_request(
             detail=f"Request already {withdrawal_request['status']}"
         )
 
+    if not _claim_request(withdrawal_requests, request_id, "pending", "rejected"):
+        raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="Request is already being processed")
+
+    # Give the held funds back.
+    funding.release_withdrawal(request_id, withdrawal_request["user_id"], "rejected")
+
     # Update withdrawal request status
     result = withdrawal_requests.update_one(
         {"_id": ObjectId(request_id)},
@@ -2264,18 +2284,24 @@ async def complete_withdrawal_transaction(
             detail="User not found"
         )
 
-    current_balance = user.get("wallet_balance", 0.0)
-    if current_balance < amount:
+    if not _claim_request(transactions, transaction_id, "pending", "processing"):
+        raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="Transaction is already being processed")
+
+    # The linked withdrawal request (if any) owns the held funds; use its id as the
+    # ledger key so this endpoint and the request-approval endpoint can never both pay.
+    linked = withdrawal_requests.find_one({"transaction_id": transaction_id})
+    ledger_ref = str(linked["_id"]) if linked else f"txn-{transaction_id}"
+    try:
+        funding.settle_withdrawal(ledger_ref, user_id, amount, transaction["payment_method"])
+    except ledger.InsufficientFunds as exc:
+        _claim_request(transactions, transaction_id, "processing", "pending")
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail=f"Insufficient user balance. Current: ${current_balance:.2f}, Requested: ${amount:.2f}"
+            detail=f"Insufficient user balance. Available: ${exc.available_cents / 100:.2f}, Requested: ${amount:.2f}"
         )
-
-    # Deduct from user wallet balance
-    users.update_one(
-        {"_id": ObjectId(user_id)},
-        {"$inc": {"wallet_balance": -amount}}
-    )
+    except Exception as exc:
+        _claim_request(transactions, transaction_id, "processing", "pending")
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=f"Could not complete withdrawal: {exc}")
 
     # Update transaction status
     transactions.update_one(
@@ -2355,6 +2381,13 @@ async def reject_withdrawal_transaction(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail=f"Transaction already {transaction['status']}"
         )
+
+    if not _claim_request(transactions, transaction_id, "pending", "rejected"):
+        raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="Transaction is already being processed")
+
+    linked = withdrawal_requests.find_one({"transaction_id": transaction_id})
+    if linked:
+        funding.release_withdrawal(str(linked["_id"]), transaction["user_id"], "rejected")
 
     # Update transaction status
     transactions.update_one(

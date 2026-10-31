@@ -5,6 +5,8 @@ import os
 from datetime import datetime, timedelta
 import logging
 
+from app.routes.market import classify_article
+
 router = APIRouter(prefix="/api/news", tags=["news"])
 logger = logging.getLogger(__name__)
 
@@ -52,6 +54,8 @@ async def fetch_from_newsapi(category: str = 'all'):
 
         async with httpx.AsyncClient(timeout=10.0) as client:
             response = await client.get(url, params=params)
+            if response.status_code != 200:
+                logger.error(f"NewsAPI HTTP {response.status_code}: {response.text[:200]}")
             if response.status_code == 200:
                 data = response.json()
                 articles = []
@@ -63,7 +67,7 @@ async def fetch_from_newsapi(category: str = 'all'):
                         'imageUrl': article.get('urlToImage', 'https://via.placeholder.com/400x200?text=News'),
                         'source': article.get('source', {}).get('name', 'Unknown'),
                         'publishedAt': article.get('publishedAt', ''),
-                        'category': category if category != 'all' else 'markets',
+                        'category': classify_article(article.get('title'), article.get('description')) if category == 'all' else category,
                         'featured': False
                     })
                 return articles
@@ -257,17 +261,23 @@ async def get_news_articles(category: Optional[str] = 'all'):
             alphavantage_articles = await fetch_from_alphavantage()
             all_articles.extend(alphavantage_articles)
 
-            # If no articles from APIs, use fallback
-            if not all_articles:
-                all_articles = await get_fallback_news()
+            if all_articles:
+                news_cache['last_good'] = all_articles
+            elif news_cache.get('last_good'):
+                # Providers failed this round: keep serving the last real headlines.
+                all_articles = list(news_cache['last_good'])
+            else:
+                # Nothing real has ever been fetched: no sample headlines. Empty list; re-check soon.
+                all_articles = []
 
             # Mark first article as featured if none are featured
             if all_articles and not any(a.get('featured') for a in all_articles):
                 all_articles[0]['featured'] = True
 
-            # Update cache
+            # Update cache (samples expire after 60 seconds, real headlines after the normal window)
             news_cache['data'] = all_articles
             news_cache['timestamp'] = datetime.now()
+            news_cache['cache_duration'] = 60 if not all_articles else 300
 
         # Filter by category if specified
         if category and category != 'all':
@@ -278,9 +288,8 @@ async def get_news_articles(category: Optional[str] = 'all'):
 
     except Exception as e:
         logger.error(f"Error fetching news: {e}")
-        # Return fallback news on error
-        fallback = await get_fallback_news()
-        return {'success': True, 'articles': fallback, 'count': len(fallback), 'cached': False}
+        # Never substitute sample headlines: report the failure so the page says so.
+        raise HTTPException(status_code=503, detail="News is unavailable right now.")
 
 
 @router.get("/featured")

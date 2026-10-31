@@ -73,3 +73,6 @@ backblue.gif
 fade.gif
 cookies.txt
 .worktrees/
+
+# Local browser-automation output (screenshots, statements, snapshots)
+.playwright-mcp/
