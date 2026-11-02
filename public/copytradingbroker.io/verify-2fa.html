@@ -66,6 +66,7 @@
           <button class="btn btn--full" type="submit" id="verify-submit">Verify and sign in</button>
         </form>
 
+        <div class="captcha-box" id="captcha-resend"></div>
         <div class="verify-resend">
           <p class="muted">Didn't get the code? Check your spam folder, or</p>
           <button class="btn btn--ghost" type="button" id="resend-code" disabled>Resend code <span data-cooldown></span></button>
@@ -74,6 +75,6 @@
       </div>
     </section>
   </main>
-  <script src="assets/js/verify-2fa.js" defer></script>
+  <script type="module" src="assets/js/verify-2fa.js"></script>
 </body>
 </html>

@@ -6,6 +6,8 @@
  * The code is emailed on login (/api/auth/login sets requires_2fa). We do not
  * request a new code on page load; the user can resend after a cooldown.
  */
+import { mountCaptcha } from './lib/captcha.js';
+
 const RESEND_COOLDOWN = 30;
 const API = '/api';
 
@@ -15,6 +17,8 @@ const errorEl = /** @type {HTMLElement|null} */ (document.getElementById('verify
 const statusEl = /** @type {HTMLElement|null} */ (document.getElementById('verify-status'));
 const submitBtn = /** @type {HTMLButtonElement|null} */ (document.getElementById('verify-submit'));
 const resendBtn = /** @type {HTMLButtonElement|null} */ (document.getElementById('resend-code'));
+const resendCaptchaBox = document.getElementById('captcha-resend');
+const resendCaptcha = resendCaptchaBox ? mountCaptcha(resendCaptchaBox) : null;
 const cooldownEl = resendBtn?.querySelector('[data-cooldown]') || null;
 const emailEl = document.getElementById('verify-email');
 
@@ -137,12 +141,15 @@ resendBtn?.addEventListener('click', async () => {
   if (!email || !resendBtn) return;
   resendBtn.disabled = true;
   try {
+    const cap = resendCaptcha ? await resendCaptcha : null;
+    if (cap && !cap.ready()) { showError('Please complete the security check first.'); resendBtn.disabled = false; return; }
     const res = await fetch(`${API}/auth/resend-2fa`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 'Content-Type': 'application/json', ...(cap ? cap.header() : {}) },
       body: JSON.stringify({ email }),
     });
     const data = await res.json().catch(() => ({}));
+    cap?.reset();
     if (!res.ok) {
       showError(typeof data.detail === 'string' ? data.detail : 'Could not resend the code. Try again shortly.');
       resendBtn.disabled = false;

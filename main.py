@@ -78,6 +78,8 @@ app.add_middleware(SecurityHeadersMiddleware)
 
 # Include authentication routes
 app.include_router(auth.router)
+from app.captcha import router as captcha_router
+app.include_router(captcha_router)
 # Include traders routes
 app.include_router(traders.router)
 # Include investment plans routes

@@ -1,6 +1,7 @@
 // @ts-check
 import { saveToken, saveUser, clearSession } from './api.js';
 import { check, clearError, setError } from '../components/auth-form.js';
+import { mountCaptcha } from '../lib/captcha.js';
 
 const form = document.querySelector('form[data-auth="login"]');
 
@@ -8,6 +9,8 @@ if (form instanceof HTMLFormElement) {
   const email = /** @type {HTMLInputElement|null} */ (form.querySelector('input[name="email"], input[name="username"]'));
   const password = /** @type {HTMLInputElement|null} */ (form.querySelector('input[name="password"]'));
   const button = /** @type {HTMLButtonElement|null} */ (form.querySelector('[type="submit"]'));
+  const captchaBox = form.querySelector('[data-captcha]');
+  const captcha = captchaBox instanceof HTMLElement ? mountCaptcha(captchaBox) : null;
 
   const controls = () => [...form.querySelectorAll('input, select, textarea')]
     .filter((control) => !(control instanceof HTMLInputElement && ['hidden', 'submit', 'button'].includes(control.type)))
@@ -37,6 +40,8 @@ if (form instanceof HTMLFormElement) {
       return;
     }
 
+    const cap = captcha ? await captcha : null;
+    if (cap && !cap.ready()) { setError(password, 'Please complete the security check.'); password.focus(); return; }
     button?.setAttribute('aria-busy', 'true');
     button?.setAttribute('disabled', '');
     clearSession();
@@ -44,7 +49,7 @@ if (form instanceof HTMLFormElement) {
     try {
       const response = await fetch('/api/auth/login', {
         method: 'POST',
-        headers: { Accept: 'application/json', 'Content-Type': 'application/json' },
+        headers: { Accept: 'application/json', 'Content-Type': 'application/json', ...(cap ? cap.header() : {}) },
         body: JSON.stringify({ email: email.value.trim(), password: password.value }),
       });
 
@@ -52,6 +57,7 @@ if (form instanceof HTMLFormElement) {
       let data = null;
       try { data = await response.json(); } catch { data = null; }
 
+      cap?.reset();
       if (!response.ok) {
         const detail = Array.isArray(data?.detail)
           ? data.detail.map((item) => item.msg || String(item)).join('. ')

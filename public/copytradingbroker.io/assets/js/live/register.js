@@ -7,7 +7,11 @@
  */
 import { check, clearError, setError } from '../components/auth-form.js';
 
+import { mountCaptcha } from '../lib/captcha.js';
+
 const form = /** @type {HTMLFormElement|null} */ (document.querySelector('form[data-auth="register"]'));
+const captchaBox = form instanceof HTMLFormElement ? form.querySelector('[data-captcha]') : null;
+const captcha = captchaBox instanceof HTMLElement ? mountCaptcha(captchaBox) : null;
 const formError = /** @type {HTMLElement|null} */ (document.getElementById('register-error'));
 const PENDING_REFERRAL_KEY = 'ted:pending_referral';
 
@@ -107,15 +111,18 @@ if (form) {
     }
 
     // 3. Send
+    const cap = captcha ? await captcha : null;
+    if (cap && !cap.ready()) { showFormError('Please complete the security check.'); return; }
     if (submitBtn) { submitBtn.setAttribute('aria-busy', 'true'); submitBtn.disabled = true; }
     try {
       const res = await fetch('/api/auth/register', {
         method: 'POST',
-        headers: { Accept: 'application/json', 'Content-Type': 'application/json' },
+        headers: { Accept: 'application/json', 'Content-Type': 'application/json', ...(cap ? cap.header() : {}) },
         body: JSON.stringify(payload),
       });
       /** @type {any} */
       const data = await res.json().catch(() => ({}));
+      cap?.reset();
 
       if (!res.ok) {
         if (res.status === 429) {

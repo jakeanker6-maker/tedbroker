@@ -34,7 +34,7 @@
   <script>document.documentElement.classList.add('js');try{var t=localStorage.getItem('ted:theme');if(t==='system')t=matchMedia('(prefers-color-scheme: light)').matches?'light':'dark';if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
   <script type="module" src="assets/js/main.js?v=3"></script>
   <script type="module" src="assets/js/live/google.js"></script>
-  <script type="module" src="assets/js/live/register.js"></script>
+  <script type="module" src="assets/js/live/register.js?v=2"></script>
 </head>
 <body>
   <a class="skip-link" href="#signup-title">Skip to sign up</a>
@@ -209,6 +209,7 @@
           </div>
 
           <p class="field__error verify-error" id="register-error" role="alert" hidden></p>
+          <div class="captcha-box" data-captcha></div>
           <button class="btn btn--lg btn--block" type="submit">Create account <svg class="btn__arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
         </form>
 

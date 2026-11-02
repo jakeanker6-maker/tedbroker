@@ -123,3 +123,7 @@
     .auth__visual .auth-stats { display: none; }
   }
 }
+
+/* Cloudflare Turnstile widget on sign-in, sign-up, password reset and 2FA resend */
+.captcha-box { min-block-size: 4.25rem; margin-block: var(--space-4); display: flex; justify-content: center; }
+.captcha-box:empty { display: none; }

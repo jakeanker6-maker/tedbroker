@@ -6,6 +6,8 @@
  *  3. POST /api/auth/reset-password              {token, new_password, confirm_password}
  * The reset token lives in memory only. Resend re-runs step 1.
  */
+import { mountCaptcha } from './lib/captcha.js';
+
 const API = '/api';
 const COOLDOWN = 30;
 
@@ -15,6 +17,9 @@ const statusEl = $('reset-status');
 const otp = /** @type {HTMLInputElement[]} */ ([...document.querySelectorAll('#step-code .otp__input')]);
 const resendBtn = /** @type {HTMLButtonElement} */ ($('resend-code'));
 const cooldownEl = resendBtn.querySelector('[data-cooldown]');
+const emailCaptcha = mountCaptcha($('captcha-email'));
+/** Mounted when the code step is first shown (the container is hidden before that). */
+let resendCaptcha = null;
 
 /** @type {string} */ let email = '';
 /** @type {string} */ let resetToken = '';
@@ -39,10 +44,10 @@ function setError(id, msg) {
 function announce(msg) { statusEl.textContent = msg; }
 
 /** @param {string} path @param {unknown} body */
-async function post(path, body) {
+async function post(path, body, headers = {}) {
   const res = await fetch(`${API}${path}`, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: { 'Content-Type': 'application/json', ...headers },
     body: JSON.stringify(body),
   });
   const data = await res.json().catch(() => ({}));
@@ -70,13 +75,21 @@ function startCooldown(seconds = COOLDOWN) {
 }
 
 /** Step 1: request a reset code. Also used for resend. */
-async function requestCode(/** @type {string} */ address) {
-  const data = await post('/auth/forgot-password', { email: address });
+async function requestCode(/** @type {string} */ address, /** @type {Promise<any> | null} */ captcha) {
+  const cap = captcha ? await captcha : null;
+  if (cap && !cap.ready()) throw new Error('Please complete the security check.');
+  let data;
+  try {
+    data = await post('/auth/forgot-password', { email: address }, cap ? cap.header() : {});
+  } finally {
+    cap?.reset();
+  }
   email = data.email || address;
   $('verify-email').textContent = email;
   otp.forEach((i) => { i.value = ''; });
   setError('code-error', '');
   show('code');
+  resendCaptcha ??= mountCaptcha($('captcha-resend'));
   startCooldown();
   announce(data.message || 'A verification code has been sent.');
 }
@@ -88,7 +101,7 @@ $('forgot-password-form').addEventListener('submit', async (e) => {
   if (!input.checkValidity()) { setError('email-error', 'Enter a valid email address.'); input.focus(); return; }
   const btn = /** @type {HTMLButtonElement} */ ($('send-code'));
   btn.disabled = true;
-  try { await requestCode(input.value.trim()); }
+  try { await requestCode(input.value.trim(), emailCaptcha); }
   catch (err) { setError('email-error', /** @type {Error} */ (err).message); }
   finally { btn.disabled = false; }
 });
@@ -141,7 +154,7 @@ $('verify-code-form').addEventListener('submit', async (e) => {
 
 resendBtn.addEventListener('click', async () => {
   resendBtn.disabled = true;
-  try { await requestCode(email); }
+  try { await requestCode(email, resendCaptcha); }
   catch (err) { setError('code-error', /** @type {Error} */ (err).message); resendBtn.disabled = false; }
 });
 

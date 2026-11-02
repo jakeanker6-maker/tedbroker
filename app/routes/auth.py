@@ -29,6 +29,7 @@ from app.login_history import login_history_service
 from app.security_alerts import security_alerts_service
 from app.smartsupp_service import smartsupp_service
 from app.rate_limiter import limiter, get_rate_limit
+from app.captcha import require_captcha
 from app.referrals_service import referrals_service
 from pydantic import BaseModel, Field
 
@@ -67,7 +68,7 @@ def get_user_by_id(user_id: str):
         return None
 
 
-@router.post("/register")
+@router.post("/register", dependencies=[Depends(require_captcha)])
 @limiter.limit(get_rate_limit("register"))
 async def register(request: Request, user_data: UserRegister):
     """Register a new user and send 2FA verification code"""
@@ -151,7 +152,7 @@ async def register(request: Request, user_data: UserRegister):
     }
 
 
-@router.post("/login")
+@router.post("/login", dependencies=[Depends(require_captcha)])
 @limiter.limit(get_rate_limit("login"))
 async def login(request: Request, user_credentials: UserLogin):
     """Login user - sends 2FA code via email with security tracking"""
@@ -618,7 +619,7 @@ async def verify_2fa(request: Request, verification_data: TwoFAVerify):
     return Token(access_token=access_token, token_type="bearer")
 
 
-@router.post("/resend-2fa")
+@router.post("/resend-2fa", dependencies=[Depends(require_captcha)])
 @limiter.limit(get_rate_limit("resend_2fa"))
 async def resend_2fa(request: Request, email_data: dict):
     """Resend 2FA verification code"""
@@ -1267,7 +1268,7 @@ async def google_callback(request: Request, code: Optional[str] = None, error: O
         return RedirectResponse(url=redirect_url)
 
 
-@router.post("/forgot-password")
+@router.post("/forgot-password", dependencies=[Depends(require_captcha)])
 @limiter.limit(get_rate_limit("forgot_password"))
 async def forgot_password(request: Request, forgot_data: ForgotPasswordRequest):
     """
