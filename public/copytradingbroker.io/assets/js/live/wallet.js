@@ -68,7 +68,7 @@ async function boot() {
   const wallets = cryptoRes.status === 'fulfilled' && Array.isArray(cryptoRes.value?.wallets) ? cryptoRes.value.wallets : [];
   const savedAddresses = addrRes.status === 'fulfilled' && Array.isArray(addrRes.value) ? addrRes.value : [];
   initDeposit({ balance: bal.cash, bank, wallets });
-  initWithdraw({ balance: bal.withdrawable, savedAddresses });
+  initWithdraw({ balance: bal.withdrawable, savedAddresses, addrError: addrRes.status === 'rejected' });
   for (const el of balanceSections) busy(el, false);
 }
 
@@ -514,7 +514,9 @@ function initWithdraw({ balance, savedAddresses }) {
   if (help) help.textContent = `Available to withdraw ${money(balance)} · Min ${money(MIN_AMOUNT)}`;
   form.dataset.available = String(balance);
 
-  const addresses = savedAddresses.filter((a) => a && a.wallet_address && a.currency);
+  // Only admin-verified addresses can receive a withdrawal (the server enforces the same rule).
+  const addresses = savedAddresses.filter((a) => a && a.wallet_address && a.currency && a.is_verified);
+  const awaitingVerification = savedAddresses.some((a) => a && a.wallet_address && !a.is_verified);
   address.replaceChildren(...addresses.map((a) => {
     const o = document.createElement('option');
     o.value = String(a.id);
@@ -523,7 +525,10 @@ function initWithdraw({ balance, savedAddresses }) {
   }));
   const hasCrypto = addresses.length > 0;
   cryptoRadio.disabled = !hasCrypto;
-  if (cryptoMeta) cryptoMeta.textContent = hasCrypto ? 'Send to one of your saved addresses' : 'Add a crypto address first';
+  if (cryptoMeta) cryptoMeta.textContent = hasCrypto ? 'Send to one of your verified addresses'
+    : addrError ? 'Could not load your crypto addresses. Reload the page to try again.'
+    : awaitingVerification ? 'Your crypto address is awaiting verification'
+    : 'Add a crypto address first';
 
   const destination = () => /** @type {HTMLInputElement|null} */ ($('input[name="destination"]:checked', form))?.value || 'bank';
   const renderDestination = () => {
@@ -545,6 +550,8 @@ function initWithdraw({ balance, savedAddresses }) {
   };
 
   const reset = () => {
+    // Closing while the code is still outstanding leaves the request on hold until it expires.
+    const abandoned = phase === 'verify' && requestId;
     requestId = null;
     form.reset();
     clearError(amount);
@@ -553,6 +560,7 @@ function initWithdraw({ balance, savedAddresses }) {
     setPhase('request');
     renderDestination();
     setBusy(submit, false);
+    if (abandoned) toast('Your withdrawal is still waiting for its verification code. Funds stay on hold until it expires after 15 minutes.');
   };
   dialog.addEventListener('close', reset);
 
@@ -573,6 +581,7 @@ function initWithdraw({ balance, savedAddresses }) {
           method: 'POST',
           body: JSON.stringify({ request_id: requestId, verification_code: code }),
         });
+        requestId = null; // verified: closing the dialog must not report an abandoned request
         toast('Withdrawal verified and awaiting approval');
         dialog.close();
         await refreshAfterChange();

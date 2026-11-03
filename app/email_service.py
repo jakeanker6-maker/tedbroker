@@ -146,29 +146,48 @@ class EmailService:
         return self.send_email(to_email, subject, html, text)
 
     def send_withdrawal_notification(self, to_email: str, username: str, amount: float, withdrawal_method: str, account_details: dict) -> bool:
-        """Send a withdrawal approval notification. Account identifiers are masked."""
+        """Send the withdrawal-processed email for a bank or crypto withdrawal.
+
+        Both vocabularies are accepted: wallet requests store "Bank Transfer" /
+        "Cryptocurrency", the withdrawal-requests API stores "bank" / "crypto".
+        Account identifiers are masked and the verification code is never included.
+        """
         from datetime import datetime
 
         processed_at = datetime.utcnow().strftime("%d %b %Y, %H:%M UTC")
+        account_details = account_details or {}
         details = []
-        if withdrawal_method == "bank":
-            account_number = str(account_details.get("account_number", ""))
-            details.append(("Bank", str(account_details.get("bank_name", "N/A"))))
-            details.append(("Account", f"****{account_number[-4:]}"))
+        if _is_crypto_method(withdrawal_method):
+            method_label = "Cryptocurrency"
+            currency = account_details.get("currency") or account_details.get("crypto_type")
+            if currency:
+                details.append(("Currency", str(currency)))
+            if account_details.get("network"):
+                details.append(("Network", str(account_details["network"])))
+            wallet_address = str(account_details.get("wallet_address") or "")
+            if wallet_address:
+                masked = f"{wallet_address[:6]}...{wallet_address[-4:]}" if len(wallet_address) > 10 else wallet_address
+                details.append(("Wallet", masked))
         else:
-            wallet_address = str(account_details.get("wallet_address", ""))
-            masked = f"{wallet_address[:6]}...{wallet_address[-4:]}" if len(wallet_address) > 10 else wallet_address
-            details.append(("Currency", str(account_details.get("currency", "N/A"))))
-            details.append(("Wallet", masked))
+            method_label = "Bank Transfer"
+            if account_details.get("bank_name"):
+                details.append(("Bank", str(account_details["bank_name"])))
+            account_number = str(account_details.get("account_number") or "")
+            if account_number:
+                details.append(("Account", f"****{account_number[-4:]}"))
 
         subject, html, text = email_templates.withdrawal_processed(
             username=username,
             amount=f"${amount:,.2f}",
-            method=str(withdrawal_method).title(),
+            method=method_label,
             details=details,
             processed_at=processed_at,
         )
         return self.send_email(to_email, subject, html, text)
+
+
+def _is_crypto_method(withdrawal_method: str) -> bool:
+    return str(withdrawal_method or "").strip().lower() in ("crypto", "cryptocurrency")
 
 
 email_service = EmailService()

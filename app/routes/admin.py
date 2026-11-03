@@ -1418,6 +1418,25 @@ def _claim_request(collection, request_id: str, from_status: str, to_status: str
     return result.modified_count == 1
 
 
+def _notify_withdrawal_completed(user: dict, amount: float, withdrawal_method: str, account_details: dict) -> None:
+    """Email the user that a withdrawal has been paid out. Never fails the payout."""
+    if not user or not user.get("email"):
+        return
+    try:
+        from app.email_service import email_service
+        sent = email_service.send_withdrawal_notification(
+            to_email=user["email"],
+            username=user.get("full_name", user.get("username", "User")),
+            amount=amount,
+            withdrawal_method=withdrawal_method,
+            account_details=account_details or {},
+        )
+        if not sent:
+            print(f"Withdrawal notification email was not sent to {user['email']}")
+    except Exception as e:
+        print(f"Failed to send withdrawal notification email: {e}")
+
+
 def _set_linked_transaction(transactions, request: dict, txn_type: str, new_status: str, description: str):
     """Update the transactions row that belongs to a deposit/withdrawal request.
 
@@ -2116,19 +2135,9 @@ async def approve_withdrawal_request(
         }
     )
 
-    # Send withdrawal approval notification email
-    try:
-        from app.email_service import email_service
-        username = user.get("full_name", user.get("username", "User"))
-        email_service.send_withdrawal_notification(
-            to_email=user["email"],
-            username=username,
-            amount=amount,
-            withdrawal_method=withdrawal_request["withdrawal_method"],
-            account_details=withdrawal_request["account_details"]
-        )
-    except Exception as e:
-        print(f"Failed to send withdrawal notification email: {e}")
+    _notify_withdrawal_completed(
+        user, amount, withdrawal_request["withdrawal_method"], withdrawal_request.get("account_details")
+    )
 
     return {
         "message": "Withdrawal request approved and completed successfully",
@@ -2284,23 +2293,46 @@ async def complete_withdrawal_transaction(
             detail="User not found"
         )
 
-    if not _claim_request(transactions, transaction_id, "pending", "processing"):
-        raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="Transaction is already being processed")
-
     # The linked withdrawal request (if any) owns the held funds; use its id as the
     # ledger key so this endpoint and the request-approval endpoint can never both pay.
     linked = withdrawal_requests.find_one({"transaction_id": transaction_id})
+    linked_status = linked.get("status") if linked else None
+    if linked and linked_status != "pending":
+        # The customer must have entered the withdrawal code before anything is paid out.
+        if linked_status == "pending_verification":
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="The customer has not verified this withdrawal code yet."
+            )
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail=f"This withdrawal request is {linked_status}."
+        )
+
+    if not _claim_request(transactions, transaction_id, "pending", "processing"):
+        raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="Transaction is already being processed")
+
+    # Claim the request as well, so request approval and this endpoint cannot run side by side.
+    if linked and not _claim_request(withdrawal_requests, str(linked["_id"]), "pending", "processing"):
+        _claim_request(transactions, transaction_id, "processing", "pending")
+        raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="Withdrawal request is already being processed")
+
+    def _release_claims():
+        _claim_request(transactions, transaction_id, "processing", "pending")
+        if linked:
+            _claim_request(withdrawal_requests, str(linked["_id"]), "processing", "pending")
+
     ledger_ref = str(linked["_id"]) if linked else f"txn-{transaction_id}"
     try:
         funding.settle_withdrawal(ledger_ref, user_id, amount, transaction["payment_method"])
     except ledger.InsufficientFunds as exc:
-        _claim_request(transactions, transaction_id, "processing", "pending")
+        _release_claims()
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail=f"Insufficient user balance. Available: ${exc.available_cents / 100:.2f}, Requested: ${amount:.2f}"
         )
     except Exception as exc:
-        _claim_request(transactions, transaction_id, "processing", "pending")
+        _release_claims()
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=f"Could not complete withdrawal: {exc}")
 
     # Update transaction status
@@ -2327,6 +2359,18 @@ async def complete_withdrawal_transaction(
                 "updated_at": datetime.utcnow()
             }
         }
+    )
+
+    # Same notification as the request-approval path (bank and crypto).
+    payment_details = transaction.get("payment_details") or {}
+    _notify_withdrawal_completed(
+        user,
+        amount,
+        transaction["payment_method"],
+        (linked or {}).get("account_details") or {
+            "crypto_type": payment_details.get("crypto_type"),
+            "wallet_address": payment_details.get("wallet_address"),
+        },
     )
 
     return {

@@ -9,10 +9,21 @@ from pydantic import BaseModel
 
 from app.schemas import TransactionResponse
 from app.auth import get_current_user_token, verify_password
-from app.database import get_collection, USERS_COLLECTION, TRANSACTIONS_COLLECTION, DEPOSIT_REQUESTS_COLLECTION, WITHDRAWAL_REQUESTS_COLLECTION, BANK_ACCOUNTS_COLLECTION
+from app.database import get_collection, USERS_COLLECTION, TRANSACTIONS_COLLECTION, DEPOSIT_REQUESTS_COLLECTION, WITHDRAWAL_REQUESTS_COLLECTION, BANK_ACCOUNTS_COLLECTION, USER_CRYPTO_ADDRESSES_COLLECTION
 from app.trading import funding, ledger
 
 router = APIRouter(prefix="/api/wallet", tags=["Wallet"])
+
+WITHDRAWAL_METHODS = ("Bank Transfer", "Cryptocurrency")
+
+
+def _find_user_crypto_address(user_id: str, currency: str, wallet_address: str):
+    """The user's saved crypto address matching the destination, or None."""
+    addresses = get_collection(USER_CRYPTO_ADDRESSES_COLLECTION)
+    for addr in addresses.find({"user_id": user_id, "wallet_address": wallet_address}):
+        if str(addr.get("currency", "")).upper() == currency.upper():
+            return addr
+    return None
 
 
 class DepositRequest(BaseModel):
@@ -188,6 +199,13 @@ async def create_withdrawal(
             detail="Amount must be greater than 0"
         )
 
+    # Exact labels only: an unknown label would skip the crypto destination checks below.
+    if withdrawal_data.withdrawal_method not in WITHDRAWAL_METHODS:
+        raise HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+            detail="Withdrawal method must be 'Bank Transfer' or 'Cryptocurrency'"
+        )
+
     users = get_collection(USERS_COLLECTION)
     transactions_col = get_collection(TRANSACTIONS_COLLECTION)
     withdrawal_requests_col = get_collection(WITHDRAWAL_REQUESTS_COLLECTION)
@@ -222,6 +240,8 @@ async def create_withdrawal(
 
     reference_number = f"WTH-{secrets.token_hex(8).upper()}"
     payment_details = {}
+    account_id = None
+    account_details = {"type": "bank"}
 
     if withdrawal_data.withdrawal_method == "Cryptocurrency":
         if not withdrawal_data.crypto_type or not withdrawal_data.wallet_address:
@@ -229,8 +249,33 @@ async def create_withdrawal(
                 status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
                 detail="Crypto withdrawal requires crypto_type and wallet_address"
             )
-        payment_details["crypto_type"] = withdrawal_data.crypto_type
-        payment_details["wallet_address"] = withdrawal_data.wallet_address
+        # Only an address the user saved and an admin verified can receive funds. The
+        # destination is read from the saved record, not from the request body.
+        saved = _find_user_crypto_address(
+            current_user["user_id"], withdrawal_data.crypto_type, withdrawal_data.wallet_address
+        )
+        if saved is None:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Choose a crypto address saved to your account."
+            )
+        if not saved.get("is_verified", False):
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="This crypto address is awaiting verification. You can withdraw to it once it is verified."
+            )
+        account_id = str(saved["_id"])
+        payment_details["crypto_type"] = saved["currency"]
+        payment_details["wallet_address"] = saved["wallet_address"]
+        payment_details["network"] = saved.get("network")
+        account_details = {
+            "type": "crypto",
+            "currency": saved["currency"],
+            "crypto_type": saved["currency"],
+            "wallet_address": saved["wallet_address"],
+            "network": saved.get("network"),
+            "label": saved.get("label"),
+        }
 
     # Additional handling can be added here for other withdrawal methods
 
@@ -274,12 +319,8 @@ async def create_withdrawal(
         "email": user.get("email", ""),
         "amount": withdrawal_data.amount,
         "withdrawal_method": withdrawal_data.withdrawal_method,
-        "account_id": None,  # Simple withdrawal doesn't require account_id
-        "account_details": {
-            "type": "crypto" if withdrawal_data.withdrawal_method == "Cryptocurrency" else "other",
-            "crypto_type": payment_details.get("crypto_type"),
-            "wallet_address": payment_details.get("wallet_address")
-        },
+        "account_id": account_id,
+        "account_details": account_details,
         "notes": None,
         "status": "pending_verification",  # Set to pending_verification initially
         "verification_code": generate_withdrawal_code(),  # Generate verification code

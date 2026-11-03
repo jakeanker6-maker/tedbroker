@@ -127,6 +127,7 @@ def test_withdrawal_reject_releases_hold(env):
 def test_withdrawal_complete_via_transaction_endpoint(env):
     client, admin, user, uid = env
     rid = _withdraw(client, user, 100).json()["request_id"]
+    _verify(client, user, rid)  # the customer must enter the code before payout
     tid = get_collection("withdrawal_requests").find_one({"_id": ObjectId(rid)})["transaction_id"]
     r = client.put(f"/api/admin/transactions/withdrawals/{tid}/complete", headers=admin)
     assert r.status_code == 200, r.text
