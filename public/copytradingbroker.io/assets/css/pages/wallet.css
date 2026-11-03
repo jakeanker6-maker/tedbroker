@@ -112,6 +112,9 @@
   .wl-detail .icon-btn { inline-size: 2.25rem; block-size: 2.25rem; }
   .wl-detail .icon-btn svg { inline-size: 1rem; block-size: 1rem; }
   .wl-address { word-break: break-all; }
+  .wl-qr { display: grid; justify-items: center; gap: var(--space-2); margin: 0; }
+  .wl-qr__img { inline-size: 12.5rem; block-size: 12.5rem; padding: var(--space-2); background: #fff; border-radius: var(--radius-md, 8px); }
+  .wl-qr__caption { font-size: var(--text-xs); color: var(--color-text-muted); text-align: center; }
   .wl-ref-value { font-weight: 600; color: var(--color-text); }
   .wl-note { display: flex; gap: var(--space-2); align-items: start; font-size: var(--text-small); color: var(--color-text-muted); }
   .wl-note svg { inline-size: 1rem; block-size: 1rem; flex: none; margin-block-start: 0.2em; }

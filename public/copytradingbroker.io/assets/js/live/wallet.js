@@ -295,6 +295,7 @@ function initDeposit({ bank, wallets }) {
   const bankRadio = /** @type {HTMLInputElement} */ ($('input[name="method"][value="bank"]', form));
   const cryptoRadio = /** @type {HTMLInputElement} */ ($('input[name="method"][value="crypto"]', form));
   const bankMeta = $('[data-dep-bank-meta]', form);
+  const methodStatus = $('[data-dep-method-status]', form);
   const cryptoMeta = $('[data-dep-crypto-meta]', form);
   let step = 1;
 
@@ -319,12 +320,45 @@ function initDeposit({ bank, wallets }) {
     return o;
   }));
   const walletById = new Map(wallets.map((w) => [String(w.id), w]));
+  const qrImg = /** @type {HTMLImageElement|null} */ ($('[data-dep-qr]', form));
+  const qrStatus = $('[data-dep-qr-status]', form);
+  /** @type {Map<string, string>} wallet id -> data URL, so switching networks does not refetch */
+  const qrCache = new Map();
+  let qrRequest = 0;
+  /** Load the admin-configured QR for the selected wallet (authenticated base64 endpoint). */
+  const renderQr = async () => {
+    const w = walletById.get(network.value) || wallets[0];
+    if (!qrImg || !qrStatus) return;
+    const token = ++qrRequest;
+    qrImg.hidden = true;
+    qrImg.removeAttribute('src');
+    if (!w) { qrStatus.textContent = 'No QR code available.'; return; }
+    let src = qrCache.get(String(w.id));
+    if (!src) {
+      qrStatus.textContent = 'Loading QR code…';
+      try {
+        const res = await api(`/api/crypto-wallets/${encodeURIComponent(String(w.id))}/qr/base64`);
+        src = res?.qr_code;
+        if (!src) throw new Error('QR code missing from response');
+        qrCache.set(String(w.id), src);
+      } catch (err) {
+        console.error('[wallet] QR code failed', err);
+        if (token === qrRequest) qrStatus.textContent = 'QR code couldn’t be loaded. Copy the address below instead.';
+        return;
+      }
+    }
+    if (token !== qrRequest) return;
+    qrImg.src = src;
+    qrImg.alt = `${w.currency}${w.network ? ` (${w.network})` : ''} deposit address QR code`;
+    qrImg.hidden = false;
+    qrStatus.textContent = 'Scan with your wallet app to fill in the address.';
+  };
   const renderAddress = () => {
     const w = walletById.get(network.value) || wallets[0];
     if (address) address.textContent = w?.wallet_address || '—';
     addressCopy?.setAttribute('data-copy', w?.wallet_address || '');
   };
-  network.addEventListener('change', renderAddress);
+  network.addEventListener('change', () => { renderAddress(); renderQr(); });
   const hasCrypto = wallets.length > 0;
   cryptoRadio.disabled = !hasCrypto;
   if (cryptoMeta) cryptoMeta.textContent = hasCrypto ? 'Send from a wallet you control' : 'No deposit wallets configured';
@@ -333,18 +367,27 @@ function initDeposit({ bank, wallets }) {
   if (!hasBank && !hasCrypto) next.disabled = true;
 
   const method = () => /** @type {HTMLInputElement|null} */ ($('input[name="method"]:checked', form))?.value || 'bank';
+  // PayPal is listed but not available yet: choosing it shows a notice and blocks Continue.
+  // Continue uses aria-disabled for PayPal so it stays focusable and the notice is announced.
   const renderMethod = () => {
     const m = method();
     form.querySelectorAll('[data-method-detail]').forEach((el) => {
       if (el instanceof HTMLElement) el.hidden = el.dataset.methodDetail !== m;
     });
+    const paypal = m === 'paypal';
+    if (methodStatus) methodStatus.textContent = paypal ? 'PayPal deposit isn’t available at the moment.' : '';
+    if (step === 2) {
+      next.setAttribute('aria-disabled', String(paypal));
+      if (paypal) next.setAttribute('aria-describedby', 'dep-method-status'); else next.removeAttribute('aria-describedby');
+    }
+    if (m === 'crypto' && step === 2) renderQr();
   };
   const renderSummary = () => {
     const v = parseAmount(amount.value);
     const m = method();
     const set = (/** @type {string} */ k, /** @type {string} */ t) => { const el = $(`[data-sum="${k}"]`, form); if (el) el.textContent = t; };
     set('amount', money(v));
-    set('method', m === 'crypto' ? 'Cryptocurrency' : 'Bank transfer');
+    set('method', m === 'crypto' ? 'Cryptocurrency' : m === 'paypal' ? 'PayPal' : 'Bank transfer');
     set('destination', m === 'crypto'
       ? `${network.selectedOptions[0]?.textContent || ''}`
       : (bank?.bank_name || '—'));
@@ -361,6 +404,11 @@ function initDeposit({ bank, wallets }) {
     }
     back.textContent = n === 1 ? 'Cancel' : 'Back';
     nextLabel.textContent = n === 3 ? 'Confirm deposit' : 'Continue';
+    if (n === 1) {
+      next.disabled = !hasBank && !hasCrypto;
+      next.removeAttribute('aria-disabled');
+      next.removeAttribute('aria-describedby');
+    }
     if (n === 2) renderMethod();
     if (n === 3) renderSummary();
   };
@@ -370,7 +418,8 @@ function initDeposit({ bank, wallets }) {
     setBusy(next, false);
     bankRadio.checked = hasBank || !hasCrypto;
     cryptoRadio.checked = !hasBank && hasCrypto;
-    renderMethod();
+    form.querySelectorAll('[data-quick]').forEach((b) => b.setAttribute('aria-pressed', 'false'));
+    if (methodStatus) methodStatus.textContent = '';
     renderAddress();
     go(1);
   };
@@ -403,10 +452,15 @@ function initDeposit({ bank, wallets }) {
       go(2);
       return;
     }
-    if (step === 2) { go(3); return; }
+    if (step === 2) {
+      if (method() === 'paypal') return;
+      go(3);
+      return;
+    }
 
     const v = parseAmount(amount.value);
     const m = method();
+    if (m === 'paypal') return;
     /** @type {Record<string, any>} */
     const body = { amount: v, payment_method: m === 'crypto' ? 'Cryptocurrency' : 'Bank Transfer' };
     if (m === 'bank') {

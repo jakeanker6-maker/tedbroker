@@ -291,7 +291,14 @@
               <span class="wl-option__name">Cryptocurrency</span>
               <span class="wl-option__meta" data-dep-crypto-meta>Loading deposit wallets…</span>
             </label>
+            <label class="wl-option">
+              <input type="radio" name="method" value="paypal">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><rect x="3" y="6" width="18" height="12" rx="2"/><path d="M3 10h18M7 15h4"/></svg>
+              <span class="wl-option__name">PayPal</span>
+              <span class="wl-option__meta">Not available</span>
+            </label>
           </div>
+          <p class="wl-note" id="dep-method-status" role="status" data-dep-method-status></p>
 
           <div class="wl-detail" data-method-detail="bank">
             <dl class="wl-detail__list">
@@ -308,9 +315,14 @@
               <label class="field__label" for="dep-network">Network</label>
               <div class="field__control"><select class="field__select" id="dep-network" name="network"></select></div>
             </div>
+            <figure class="wl-qr">
+              <img class="wl-qr__img" data-dep-qr alt="" width="200" height="200" hidden>
+              <figcaption class="wl-qr__caption" role="status" data-dep-qr-status></figcaption>
+            </figure>
             <div class="copyline"><dt>Deposit address</dt><dd><span class="wl-address" data-dep-address>—</span> <button class="icon-btn" type="button" data-dep-address-copy data-copy="" aria-label="Copy deposit address"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h9"/></svg></button></dd></div>
             <p class="wl-note wl-note--pending">Send only the selected asset on this network.</p>
           </div>
+
         </fieldset>
 
         <fieldset class="wl-step" data-step="3" hidden>
