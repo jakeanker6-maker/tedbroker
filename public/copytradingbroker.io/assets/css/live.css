@@ -405,3 +405,35 @@ tbody[aria-busy="true"] .skeleton { animation: shimmer 1.4s linear infinite; }
   opacity: .5;
   cursor: not-allowed;
 }
+
+/* ---------- Managed-plan progress (Investment plans and Portfolio) ---------- */
+.plan-progress-cell {
+  display: inline-grid;
+  grid-template-columns: minmax(4rem, 7rem) auto;
+  align-items: center;
+  gap: var(--space-2);
+  white-space: nowrap;
+}
+.plan-progress {
+  display: block;
+  block-size: .375rem;
+  inline-size: 100%;
+  border-radius: var(--radius-pill);
+  background: var(--color-border);
+  overflow: hidden;
+}
+.plan-progress__fill {
+  display: block;
+  block-size: 100%;
+  inline-size: 0;
+  border-radius: inherit;
+  background: var(--color-signal);
+  transition: inline-size var(--duration-slow) var(--ease-out);
+}
+@media (prefers-reduced-motion: reduce) {
+  .plan-progress__fill { transition: none; }
+}
+@media (forced-colors: active) {
+  .plan-progress { border: 1px solid CanvasText; background: Canvas; }
+  .plan-progress__fill { background: Highlight; }
+}

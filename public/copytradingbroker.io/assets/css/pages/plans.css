@@ -213,6 +213,12 @@
   .plan-summary dt { color: var(--color-text-muted); }
   .plan-summary dd { font-family: var(--font-mono); font-variant-numeric: tabular-nums; text-align: end; }
 
+  /* ---------- Active plans ---------- */
+  .active-plans { display: grid; gap: var(--space-4); }
+  .active-plans .ledger-wrap { margin-block-start: 0; }
+  .plan-pnl__pct { display: block; font-size: var(--text-xs); color: inherit; opacity: .85; }
+  .plan-activate { display: grid; gap: var(--space-3); justify-items: start; }
+
   /* ---------- Staking: coming soon ---------- */
   .plans-soon { padding-block: var(--space-9); border-block-end: 1px solid var(--color-border); }
   .plans-soon p:not(.overline) { max-inline-size: 32rem; }

@@ -12,6 +12,8 @@ import { $, $$, debounce, h, isOcc, occName, price, qty as fmtQty, setText, sign
 import { markDemo } from './shell.js';
 import { PriceChart, ready as chartReady } from '../trade/chart.js';
 import { accountStream } from '../trade/stream.js';
+import { mountHistoryChart } from './plan-history.js';
+import { fetchActivePlans, pctText, progressBar } from './plan-progress.js';
 
 const CLASS_LABEL = /** @type {Record<string,string>} */ ({
   stock: 'Stocks', etf: 'ETFs', crypto: 'Crypto', option: 'Options', cash: 'Cash', managed_plans: 'Managed plans',
@@ -200,14 +202,24 @@ function stopCopy(btn, l) {
   });
 }
 
-/** @param {any} p */
-function renderPlans(p) {
+/**
+ * Progress cell: bar plus NN%. "—" when the active-plans figure is unavailable.
+ * @param {unknown} value @param {string} name
+ */
+const progressCell = (value, name) => h('span', { class: 'plan-progress-cell' },
+  progressBar(value, name), h('span', { class: 'mono' }, pctText(value)));
+
+/**
+ * @param {any} p
+ * @param {Map<string, unknown>|null} progress investment id -> progress_percent (null when not loaded)
+ */
+function renderPlans(p, progress) {
   const tbody = $('[data-pf-plans]');
   if (!tbody) return;
   const invs = (p?.investments || []).filter((/** @type {any} */ i) => i.status === 'active');
   setText($('[data-pf-plans-count]'), `${invs.length}`);
   if (!invs.length) {
-    tbody.replaceChildren(h('tr', null, h('td', { colspan: 5, class: 'muted' }, 'No active managed plans.')));
+    tbody.replaceChildren(h('tr', null, h('td', { colspan: 6, class: 'muted' }, 'No active managed plans.')));
     return;
   }
   tbody.replaceChildren(...invs.map((/** @type {any} */ i) => h('tr', null,
@@ -215,15 +227,16 @@ function renderPlans(p) {
     h('td', { class: 'is-num opt-sm' }, usdFmt(i.amount_invested)),
     h('td', { class: 'is-num' }, usdFmt(i.current_value)),
     h('td', { class: `is-num ${tone(i.profit_loss)}` }, signedUsd(i.profit_loss), h('span', { class: 'pf-pct' }, signedPct(i.profit_loss_percent))),
+    h('td', { class: 'is-num' }, progressCell(progress?.get(String(i.id)) ?? null, i.plan_name || 'plan')),
     h('td', { class: 'mono muted opt' }, Number.isFinite(Date.parse(i.maturity_date)) ? new Date(i.maturity_date).toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric' }) : '—'))));
 }
 
 let loadedOnce = false;
 const refresh = debounce(async () => {
   const seq = ++state.refreshSeq;
-  const [sum, pos, links, plans] = await Promise.allSettled([
+  const [sum, pos, links, plans, active] = await Promise.allSettled([
     api('/api/trading/portfolio/summary'), api('/api/trading/positions'),
-    api('/api/copy/links'), api('/api/investments/portfolio'),
+    api('/api/copy/links'), api('/api/investments/portfolio'), fetchActivePlans(),
   ]);
   if (seq !== state.refreshSeq) return;   // a newer refresh is in flight
   const first = !loadedOnce;
@@ -238,8 +251,13 @@ const refresh = debounce(async () => {
   else if (first) $('[data-pf-holdings]')?.replaceChildren(errorRow(8, 'Your holdings could not be loaded. Reload the page to try again.'));
   if (links.status === 'fulfilled') renderCopies(links.value.links || []);
   else if (first) $('[data-pf-copies]')?.replaceChildren(errorRow(7, 'Your copies could not be loaded. Reload the page to try again.'));
-  if (plans.status === 'fulfilled') renderPlans(plans.value);
-  else if (first) $('[data-pf-plans]')?.replaceChildren(errorRow(5, 'Your plans could not be loaded. Reload the page to try again.'));
+  // Progress comes from active-plans, keyed by investment id. If it fails, the bars show "—".
+  if (active.status === 'rejected') console.error('[portfolio] active plans', active.reason);
+  const progress = active.status === 'fulfilled'
+    ? new Map(active.value.map((/** @type {any} */ a) => [String(a.id), a.progress_percent]))
+    : null;
+  if (plans.status === 'fulfilled') renderPlans(plans.value, progress);
+  else if (first) $('[data-pf-plans]')?.replaceChildren(errorRow(6, 'Your plans could not be loaded. Reload the page to try again.'));
 }, 300);
 
 $('[data-pf-range]')?.addEventListener('click', (e) => {
@@ -266,6 +284,16 @@ async function boot() {
     summary?.removeAttribute('aria-busy');
     markDemo(summary, 'Demo preview: sign in to see your account.');
     return;
+  }
+  // Managed-plan value over time: the same modelled series as the Managed plans total.
+  const planSection = /** @type {HTMLElement|null} */ ($('[data-pf-plan-history]'));
+  if (planSection) {
+    planSection.hidden = false;
+    mountHistoryChart(planSection, {
+      title: 'Plan progress over time',
+      headingId: 'pf-plan-chart-title',
+      footnote: 'This chart is the managed-plans part of Total value. Its latest point matches the Managed plans figure in By source.',
+    }).catch((err) => console.error('[portfolio] plan history', err));
   }
   await Promise.all([refresh(), loadHistory()]);
   accountStream({ balance: () => refresh(), fill: () => refresh(), position: () => refresh() });

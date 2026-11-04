@@ -12,7 +12,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=JetBrains+Mono:wght@400;500;600&family=Sora:wght@300;600;700;800&display=swap">
   <link rel="stylesheet" href="../assets/css/main.css?v=2">
-  <link rel="stylesheet" href="../assets/css/live.css?v=2">
+  <link rel="stylesheet" href="../assets/css/live.css?v=3">
   <link rel="stylesheet" href="../assets/css/pages/portfolio.css?v=4">
   <script>document.documentElement.classList.add('js');try{var t=localStorage.getItem('ted:theme');if(t==='system')t=matchMedia('(prefers-color-scheme: light)').matches?'light':'dark';if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
   <script type="module" src="../assets/js/main.js?v=3"></script>
@@ -144,6 +144,8 @@
         <p class="fineprint" data-pf-chart-note>Recorded from your account snapshots (every minute while you hold positions, and at each close).</p>
       </section>
 
+      <section aria-labelledby="pf-plan-chart-title" data-pf-plan-history hidden></section>
+
       <div class="cols pf-cols">
         <section aria-labelledby="pf-src-title">
           <div class="block-head"><h2 id="pf-src-title">By source</h2></div>
@@ -188,7 +190,7 @@
         </div>
         <div class="ledger-wrap" tabindex="0" role="region" aria-labelledby="pf-plans-title">
           <table class="ledger pf-ledger">
-            <thead><tr><th scope="col">Plan</th><th scope="col" class="is-num opt-sm">Invested</th><th scope="col" class="is-num">Current value</th><th scope="col" class="is-num">P&amp;L</th><th scope="col" class="opt">Matures</th></tr></thead>
+            <thead><tr><th scope="col">Plan</th><th scope="col" class="is-num opt-sm">Invested</th><th scope="col" class="is-num">Current value</th><th scope="col" class="is-num">P&amp;L</th><th scope="col" class="is-num">Progress</th><th scope="col" class="opt">Matures</th></tr></thead>
             <tbody data-pf-plans></tbody>
           </table>
         </div>
@@ -242,7 +244,7 @@
   </dialog>
 
   <script src="../assets/vendor/lightweight-charts-4.2.3/lightweight-charts.standalone.production.js" defer></script>
-  <script type="module" src="../assets/js/live/portfolio.js?v=4"></script>
+  <script type="module" src="../assets/js/live/portfolio.js?v=5"></script>
   <script type="module" src="../assets/js/live/ticker.js"></script>
   <script type="module" src="../assets/js/live/ai-panel.js"></script>
   <script type="module" src="../assets/js/live/header.js"></script>

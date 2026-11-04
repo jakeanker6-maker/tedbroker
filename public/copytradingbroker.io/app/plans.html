@@ -12,8 +12,8 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=JetBrains+Mono:wght@400;500;600&family=Sora:wght@300;600;700;800&display=swap">
   <link rel="stylesheet" href="../assets/css/main.css?v=2">
-  <link rel="stylesheet" href="../assets/css/live.css?v=2">
-  <link rel="stylesheet" href="../assets/css/pages/plans.css">
+  <link rel="stylesheet" href="../assets/css/live.css?v=3">
+  <link rel="stylesheet" href="../assets/css/pages/plans.css?v=2">
   <script>document.documentElement.classList.add('js');try{var t=localStorage.getItem('ted:theme');if(t==='system')t=matchMedia('(prefers-color-scheme: light)').matches?'light':'dark';if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
   <script type="module" src="../assets/js/main.js?v=3"></script>
 </head>
@@ -115,6 +115,37 @@
       </div>
 
       <div class="plans">
+        <section class="active-plans" id="active-plans" aria-labelledby="active-plans-title" data-skeleton aria-busy="true">
+          <div class="block-head"><h2 id="active-plans-title">Your active plans <small data-active-count></small></h2></div>
+          <p class="muted" data-active-loading>Loading your active plans…</p>
+          <div class="empty" data-active-empty hidden>
+            <p class="empty__title">No active plans yet</p>
+            <p>Activate a plan below to start tracking its progress.</p>
+          </div>
+          <div class="empty" role="alert" data-active-error hidden>
+            <p class="empty__title">Your active plans couldn't be loaded.</p>
+            <p>Reload the page to try again.</p>
+          </div>
+          <div class="ledger-wrap" tabindex="0" role="region" aria-labelledby="active-plans-title" data-active-wrap hidden>
+            <table class="ledger plans-active">
+              <caption class="sr-only">Plans you have activated, with their value, profit or loss, progress and maturity date.</caption>
+              <thead>
+                <tr>
+                  <th scope="col">Plan</th>
+                  <th scope="col" class="opt-sm">Category</th>
+                  <th scope="col" class="is-num">Invested</th>
+                  <th scope="col" class="is-num">Current value</th>
+                  <th scope="col" class="is-num">P&amp;L</th>
+                  <th scope="col">Progress</th>
+                  <th scope="col" class="opt">Time remaining</th>
+                  <th scope="col" class="is-num opt-sm">Matures</th>
+                </tr>
+              </thead>
+              <tbody data-active-rows></tbody>
+            </table>
+          </div>
+        </section>
+
         <div class="tabs" role="tablist" aria-label="Plan types" data-component="tabs plans-hash">
           <button class="tabs__tab" type="button" role="tab" id="tab-robo" aria-controls="panel-robo" aria-selected="true" data-hash="robo">Robo Advisor</button>
           <button class="tabs__tab" type="button" role="tab" id="tab-etf" aria-controls="panel-etf" aria-selected="false" data-hash="etf">ETF automation</button>
@@ -137,7 +168,7 @@
                   <th scope="col">Plan</th>
                   <th scope="col" class="is-num">Minimum</th>
                   <th scope="col" class="is-num">Target return <span class="plans-th-note">set by TED Brokers</span></th>
-                  <th scope="col" class="is-num opt-sm">Holding period</th>
+                  <th scope="col" class="is-num opt-sm">Term</th>
                   <th scope="col" class="is-num opt">Subscribers</th>
                   <th scope="col"><span class="sr-only">Action</span></th>
                 </tr>
@@ -165,7 +196,7 @@
                   <th scope="col">Plan</th>
                   <th scope="col" class="is-num">Minimum</th>
                   <th scope="col" class="is-num">Target return <span class="plans-th-note">set by TED Brokers</span></th>
-                  <th scope="col" class="is-num opt-sm">Holding period</th>
+                  <th scope="col" class="is-num opt-sm">Term</th>
                   <th scope="col" class="is-num opt">Subscribers</th>
                   <th scope="col"><span class="sr-only">Action</span></th>
                 </tr>
@@ -190,7 +221,7 @@
                   <th scope="col">Plan</th>
                   <th scope="col" class="is-num">Minimum</th>
                   <th scope="col" class="is-num">Target return <span class="plans-th-note">set by TED Brokers</span></th>
-                  <th scope="col" class="is-num opt-sm">Holding period</th>
+                  <th scope="col" class="is-num opt-sm">Term</th>
                   <th scope="col" class="is-num opt">Subscribers</th>
                   <th scope="col"><span class="sr-only">Action</span></th>
                 </tr>
@@ -215,7 +246,7 @@
                   <th scope="col">Plan</th>
                   <th scope="col" class="is-num">Minimum</th>
                   <th scope="col" class="is-num">Target return <span class="plans-th-note">set by TED Brokers</span></th>
-                  <th scope="col" class="is-num opt-sm">Holding period</th>
+                  <th scope="col" class="is-num opt-sm">Term</th>
                   <th scope="col" class="is-num opt">Subscribers</th>
                   <th scope="col"><span class="sr-only">Action</span></th>
                 </tr>
@@ -283,7 +314,36 @@
       </form>
     </div>
   </dialog>
-  <script type="module" src="../assets/js/live/plans.js"></script>
+  <dialog class="dialog" id="activate-dialog" aria-labelledby="activate-title" aria-describedby="activate-note">
+    <form class="dialog__form" novalidate aria-label="Activate plan">
+      <div class="dialog__head">
+        <div>
+          <p class="overline" data-act="category"></p>
+          <h2 class="dialog__title" id="activate-title" data-act="name"></h2>
+        </div>
+        <button class="icon-btn" type="button" data-dialog-close aria-label="Close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+      </div>
+      <div class="dialog__body">
+        <dl class="confirm-rows">
+          <div><dt>Minimum investment</dt><dd data-act="min">—</dd></div>
+          <div><dt>Free cash available</dt><dd data-act="cash">—</dd></div>
+        </dl>
+        <p class="field__help" data-activate-short hidden>Free cash is below this plan’s minimum. <a class="link-arrow" href="wallet.html#deposit">Add funds <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></p>
+        <div class="field">
+          <div class="plan-form__row"><label class="field__label" for="activate-amount">Amount</label></div>
+          <div class="field__control"><span class="field__affix">$</span><input class="field__input amount-input" id="activate-amount" name="amount" type="number" inputmode="decimal" min="0" step="0.01" required autocomplete="off" aria-describedby="activate-amount-help activate-amount-err"></div>
+          <p class="field__help" id="activate-amount-help">The amount is taken from your free cash and stays in the plan until it matures.</p>
+          <p class="field__error" id="activate-amount-err"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7.5v5.5M12 16.5h.01"/></svg><span data-error-msg></span><a class="field__error-link" href="wallet.html#deposit" data-error-funds hidden>Add funds →</a></p>
+        </div>
+        <p class="fineprint" id="activate-note">Target returns are set by TED Brokers and are not guaranteed. Capital at risk.</p>
+      </div>
+      <div class="dialog__foot">
+        <button class="btn btn--ghost" type="button" data-dialog-close>Cancel</button>
+        <button class="btn" type="submit" data-activate-submit>Activate plan</button>
+      </div>
+    </form>
+  </dialog>
+  <script type="module" src="../assets/js/live/plans.js?v=2"></script>
   <script type="module" src="../assets/js/live/ticker.js"></script>
   <script type="module" src="../assets/js/live/ai-panel.js"></script>
   <script type="module" src="../assets/js/live/header.js"></script>
