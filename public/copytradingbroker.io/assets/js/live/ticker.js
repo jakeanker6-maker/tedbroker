@@ -6,6 +6,8 @@
 import { api, esc } from './api.js';
 
 const REFRESH_MS = 60000;
+const RETRY_MS = 8000;
+const MAX_ATTEMPTS = 6;
 const DEMO = new URLSearchParams(location.search).has('demo');
 const tapes = /** @type {HTMLElement[]} */ ([...document.querySelectorAll('[data-market-tape]')]);
 
@@ -32,7 +34,7 @@ function formatChange(pct) {
 function itemsHtml(items) {
   return items.map((it) => {
     const ch = formatChange(it.change_percent);
-    return `<li class="ticker__item" title="${esc(it.source)}"><span class="ticker__sym">${esc(it.symbol)}</span><span class="ticker__px">${esc(formatPrice(it.price, it.symbol))}</span><span class="delta"${ch.trend ? ` data-trend="${ch.trend}"` : ''}>${esc(ch.text)}</span></li>`;
+    return `<li class="ticker__item" data-price title="${esc(it.source)}"><span class="ticker__sym">${esc(it.symbol)}</span><span class="ticker__px">${esc(formatPrice(it.price, it.symbol))}</span><span class="delta"${ch.trend ? ` data-trend="${ch.trend}"` : ''}>${esc(ch.text)}</span></li>`;
   }).join('');
 }
 
@@ -48,21 +50,55 @@ function paint(tape, html) {
   tape.querySelector('.ticker__track')?.append(clone);
 }
 
+/** Make sure the scrolling loop is running after the tape has content. */
+function startLoop(tape) {
+  const track = tape.querySelector('.ticker__track');
+  if (!(track instanceof HTMLElement)) return;
+  for (const a of track.getAnimations?.() || []) {
+    if (a.playState !== 'running') a.play();
+  }
+}
+
+let attempts = 0;
+let timer = 0;
+
+function schedule(ms) {
+  clearTimeout(timer);
+  timer = window.setTimeout(refresh, ms);
+}
+
+/**
+ * Prices are rendered only when every item has a price. A partial response is retried rather
+ * than showing dashes; the previous complete values stay on screen if a later refresh is partial.
+ */
 async function refresh() {
   try {
     const data = await api('/api/market/ticker');
     const items = Array.isArray(data?.items) ? data.items : [];
+    if (!items.length || items.some((it) => it.price == null)) throw new Error('Prices incomplete');
     const html = itemsHtml(items);
     for (const tape of tapes) {
       paint(tape, html);
       tape.dataset.updated = data?.updated_at || '';
       tape.removeAttribute('aria-busy');
+      startLoop(tape);
     }
-  } catch {
+    attempts = 0;
+    schedule(REFRESH_MS);
+  } catch (err) {
+    console.warn('[ticker]', err);
+    attempts += 1;
+    if (attempts < MAX_ATTEMPTS) {
+      schedule(RETRY_MS);
+      return;
+    }
     for (const tape of tapes) {
+      if (tape.querySelector('.ticker__item[data-price]')) continue;   // keep the last complete values
       paint(tape, '<li class="ticker__item"><span class="ticker__sym">Prices unavailable</span></li>');
       tape.setAttribute('aria-busy', 'false');
     }
+    attempts = 0;
+    schedule(REFRESH_MS);
   }
 }
 
@@ -71,6 +107,5 @@ if (tapes.length) {
     for (const tape of tapes) paint(tape, '<li class="ticker__item"><span class="ticker__sym">Live prices require sign-in</span></li>');
   } else {
     refresh();
-    setInterval(refresh, REFRESH_MS);
   }
 }

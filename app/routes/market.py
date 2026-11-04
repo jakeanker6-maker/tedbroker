@@ -2,13 +2,13 @@
 
 Sources:
   - Finnhub quote API (stocks, Binance crypto pairs) - requires FINNHUB_API_KEY.
-  - Frankfurter (European Central Bank reference rates, daily, no key) - for fiat FX.
+  - European Central Bank reference rates (daily XML, no key) - for fiat FX.
 Values are cached briefly so the tape does not hit provider rate limits.
 """
 import asyncio
 import os
 import time
-from datetime import date, datetime, timedelta, timezone
+from datetime import datetime, timezone
 from typing import Optional
 
 import httpx
@@ -19,8 +19,8 @@ from app.auth import get_current_user_token
 router = APIRouter(prefix="/api/market", tags=["Market"])
 
 FINNHUB_QUOTE_URL = "https://finnhub.io/api/v1/quote"
-FRANKFURTER_URL = "https://api.frankfurter.dev/v1"
 CACHE_SECONDS = 60
+PARTIAL_RETRY_SECONDS = 10
 
 # Order and labels match the existing tape. Proxies are labelled as what they are.
 TAPE = [
@@ -33,7 +33,7 @@ TAPE = [
     {"symbol": "GBP/USD", "kind": "fx", "currency": "GBP"},
 ]
 
-_cache: dict = {"at": 0.0, "payload": None}
+_cache: dict = {"at": 0.0, "payload": None, "ttl": CACHE_SECONDS}
 
 
 async def _finnhub_quote(client: httpx.AsyncClient, key: str, ticker: str) -> dict:
@@ -53,41 +53,51 @@ async def _finnhub_quote(client: httpx.AsyncClient, key: str, ticker: str) -> di
         return {"price": None, "change_percent": None, "as_of": None}
 
 
+ECB_HISTORY_URL = "https://www.ecb.europa.eu/stats/eurofxref/eurofxref-hist-90d.xml"
+
+
 async def _fx_rates(client: httpx.AsyncClient, currencies: list[str]) -> dict:
-    """Return {currency: {price (USD per unit), change_percent, as_of}} from ECB reference rates."""
-    today = date.today()
-    start = today - timedelta(days=10)
+    """Return {currency: {price (USD per unit), change_percent, as_of}} from ECB reference rates.
+
+    The ECB publishes EUR-based rates (official, no key). USD per unit of currency C is
+    (USD per EUR) / (C per EUR). The latest day gives the price, the day before gives the change.
+    """
+    import xml.etree.ElementTree as ET
     out = {c: {"price": None, "change_percent": None, "as_of": None} for c in currencies}
     try:
-        res = await client.get(
-            f"{FRANKFURTER_URL}/{start.isoformat()}..{today.isoformat()}",
-            params={"base": "USD", "symbols": ",".join(currencies)},
-        )
-        if res.status_code != 200:
-            return out
-        series = res.json().get("rates", {})
-        dates = sorted(series.keys())
-        if not dates:
-            return out
-        last_date = dates[-1]
-        for c in currencies:
-            latest = series[last_date].get(c)
-            if not latest:
-                continue
-            price = 1.0 / float(latest)
-            change = None
-            if len(dates) > 1:
-                prev = series[dates[-2]].get(c)
-                if prev:
-                    prev_price = 1.0 / float(prev)
-                    change = (price - prev_price) / prev_price * 100
-            out[c] = {
-                "price": price,
-                "change_percent": change,
-                "as_of": f"{last_date}T00:00:00+00:00",
-            }
+        res = await client.get(ECB_HISTORY_URL)
+        res.raise_for_status()
+        root = ET.fromstring(res.content)
     except Exception:
-        pass
+        return out
+    days = []   # (date, {currency: rate per EUR}), newest first
+    for node in root.iter():
+        if node.tag.endswith("Cube") and node.get("time"):
+            rates = {c.get("currency"): float(c.get("rate")) for c in node if c.get("currency")}
+            days.append((node.get("time"), rates))
+    days.sort(key=lambda d: d[0], reverse=True)
+    if not days or "USD" not in days[0][1]:
+        return out
+
+    def usd_per(day_rates, c):
+        if c == "EUR":
+            return day_rates["USD"]
+        if c not in day_rates:
+            return None
+        return day_rates["USD"] / day_rates[c]
+
+    last_date, last_rates = days[0]
+    prev_rates = days[1][1] if len(days) > 1 else None
+    for c in currencies:
+        price = usd_per(last_rates, c)
+        if price is None:
+            continue
+        change = None
+        if prev_rates:
+            prev = usd_per(prev_rates, c)
+            if prev:
+                change = (price - prev) / prev * 100
+        out[c] = {"price": price, "change_percent": change, "as_of": f"{last_date}T00:00:00+00:00"}
     return out
 
 
@@ -125,9 +135,13 @@ async def build_ticker() -> dict:
 async def get_ticker(current_user: dict = Depends(get_current_user_token)):
     """Latest prices for the dashboard tape. Cached for CACHE_SECONDS."""
     now = time.time()
-    if _cache["payload"] is None or now - _cache["at"] > CACHE_SECONDS:
-        _cache["payload"] = await build_ticker()
+    if _cache["payload"] is None or now - _cache["at"] > _cache["ttl"]:
+        payload = await build_ticker()
+        complete = all(i["price"] is not None for i in payload["items"])
+        _cache["payload"] = payload
         _cache["at"] = now
+        # A partial result is retried soon instead of being cached for the full minute.
+        _cache["ttl"] = CACHE_SECONDS if complete else PARTIAL_RETRY_SECONDS
     return _cache["payload"]
 
 
