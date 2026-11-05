@@ -204,14 +204,17 @@ function tradePrice(tr) {
 function renderTrader(t, index, template, openIds) {
   const id = String(t.id);
   const name = String(t.full_name || 'Trader');
-  // Performance is shown only for a live track record; missing values stay null and render as "—".
-  const live = Boolean(t.stats_live);
+  // Performance is shown for a live track record (stats_source "live") or for figures the platform
+  // team entered ("admin"); missing values stay null and render as "—".
+  const source = t.stats_source ?? (t.stats_live ? 'live' : null);
+  const live = source === 'live';
+  const shown = source === 'live' || source === 'admin';
   const num = (/** @type {unknown} */ v) => (v == null || v === '' || !Number.isFinite(Number(v)) ? null : Number(v));
   const risk = num(t.risk_score);
-  const ytd = live ? num(t.ytd_return) : null;
-  const win = live ? num(t.win_rate) : null;
-  const dd = live ? num(t.max_drawdown) : null;
-  const aum = live ? num(t.assets_under_management) : null;
+  const ytd = shown ? num(t.ytd_return) : null;
+  const win = shown ? num(t.win_rate) : null;
+  const dd = shown ? num(t.max_drawdown) : null;
+  const aum = shown ? num(t.assets_under_management) : null;
   const min = Math.max(FLOOR, Number(t.minimum_copy_amount || 0));
   const copiers = Number(t.copiers || 0);
   const dash = '—';
@@ -249,7 +252,9 @@ function renderTrader(t, index, template, openIds) {
     if (ytd == null) { ret.textContent = dash; ret.removeAttribute('data-trend'); }
     else { ret.textContent = pct(ytd); ret.setAttribute('data-trend', ytd >= 0 ? 'up' : 'down'); }
   }
-  cells[2].replaceChildren(live ? h('span', { class: 'tag tag--plain tag--gain' }, 'Live') : h('span', { class: 'muted' }, 'No record yet'));
+  cells[2].replaceChildren(live ? h('span', { class: 'tag tag--plain tag--gain' }, 'Live')
+    : source === 'admin' ? h('span', { class: 'tag tag--plain' }, 'Platform figures')
+      : h('span', { class: 'muted' }, 'No record yet'));
   cells[3].textContent = win == null ? dash : `${win.toFixed(1)}%`;
   cells[4].textContent = pctOrDash(dd);
   const riskbar = cells[5].querySelector('.riskbar');
@@ -284,7 +289,9 @@ function renderTrader(t, index, template, openIds) {
     : h('span', { class: 'delta', 'data-trend': ytd >= 0 ? 'up' : 'down' }, pct(ytd)));
   const since = t.stats_since && Number.isFinite(Date.parse(t.stats_since)) ? new Date(t.stats_since).toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric' }) : '';
   setText(/** @type {HTMLElement|null} */ (detail.querySelector('.trader-detail__sub')),
-    live ? `Live from this trader’s account since ${since} · ${int(t.closed_trades || 0)} closed trades.` : 'No live track record yet. Figures appear once this trader’s account has trading history.');
+    live ? `Live from this trader’s account since ${since} · ${int(t.closed_trades || 0)} closed trades.`
+      : source === 'admin' ? 'Figures published by the TED Brokers team. They are not measured from a trading account.'
+        : 'No live track record yet. Figures appear once this trader’s account has trading history.');
   detail.querySelector('.trader-detail__chart')?.replaceWith(h('p', { class: 'field__help' }, 'Past performance is not indicative of future results.'));
 
   /* Strategy */

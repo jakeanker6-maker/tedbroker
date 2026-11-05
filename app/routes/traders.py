@@ -23,14 +23,22 @@ def copier_count(trader_id: str) -> int:
 def trader_helper(trader, copiers: int = 0) -> dict:
     """Format a trader for the directory.
 
-    Performance figures (return, win rate, drawdown, AUM, trades) are returned only when the
-    trader has a live track record computed from its simulated account (stats_live). Figures
-    stored on older seed documents are not shown: they were never measured.
+    Performance figures (return, win rate, drawdown, AUM) are returned when the trader has a live
+    track record computed from its simulated account (stats_live, stats_source "live") or when the
+    platform team entered them (stats_admin, stats_source "admin"). Other figures stored on seed
+    documents are not shown: they were never measured or entered.
     """
     live = bool(trader.get("stats_live"))
+    # Figures typed in by an admin (stats_admin) are shown too; stats_source says where they came from.
+    source = "live" if live else ("admin" if trader.get("stats_admin") else None)
+    shown = source is not None
 
     def measured(key):
-        return trader.get(key) if live else None
+        return trader.get(key) if shown else None
+
+    if source == "admin":
+        # Admin-entered copier count is kept unless real copy links are higher.
+        copiers = max(copiers, int(trader.get("copiers") or 0))
 
     return {
         "id": str(trader["_id"]),
@@ -52,6 +60,7 @@ def trader_helper(trader, copiers: int = 0) -> dict:
         "posts": [],
         "strategy_label": trader.get("strategy_label"),
         "stats_live": live,
+        "stats_source": source,
         "stats_since": trader["stats_since"].isoformat() + "Z" if trader.get("stats_since") else None,
         "closed_trades": trader.get("closed_trades", 0) if live else 0,
     }

@@ -239,6 +239,8 @@ class ExpertTraderResponse(BaseModel):
     posts: List[TraderPost] = []
     strategy_label: Optional[str] = None
     stats_live: bool = False
+    # "live" (measured from the trader's account), "admin" (entered by the platform team) or None.
+    stats_source: Optional[str] = None
     stats_since: Optional[str] = None
     closed_trades: int = 0
 

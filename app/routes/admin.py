@@ -858,12 +858,12 @@ async def get_all_traders(
     for trader in traders.find().sort("created_at", -1):
         traders_list.append({
             "id": str(trader["_id"]),
-            "full_name": trader["full_name"],
-            "profile_photo": trader["profile_photo"],
-            "description": trader["description"],
-            "specialization": trader["specialization"],
-            "ytd_return": trader["ytd_return"],
-            "win_rate": trader["win_rate"],
+            "full_name": trader.get("full_name", ""),
+            "profile_photo": trader.get("profile_photo", ""),
+            "description": trader.get("description", ""),
+            "specialization": trader.get("specialization", ""),
+            "ytd_return": trader.get("ytd_return", 0.0),
+            "win_rate": trader.get("win_rate", 0.0),
             "copiers": trader.get("copiers", 0),
             "minimum_copy_amount": trader.get("minimum_copy_amount", 100.0),
             "assets_under_management": trader.get("assets_under_management", 0.0),
@@ -871,6 +871,7 @@ async def get_all_traders(
             "risk_score": trader.get("risk_score", 5),
             "trades": trader.get("trades", []),
             "recent_trades": trader.get("recent_trades", []),
+            "stats_live": bool(trader.get("stats_live")),
             "created_at": trader["created_at"].isoformat() if trader.get("created_at") else None,
             "updated_at": trader["updated_at"].isoformat() if trader.get("updated_at") else None
         })
@@ -911,12 +912,12 @@ async def get_trader_details(
 
     return {
         "id": str(trader["_id"]),
-        "full_name": trader["full_name"],
-        "profile_photo": trader["profile_photo"],
-        "description": trader["description"],
-        "specialization": trader["specialization"],
-        "ytd_return": trader["ytd_return"],
-        "win_rate": trader["win_rate"],
+        "full_name": trader.get("full_name", ""),
+        "profile_photo": trader.get("profile_photo", ""),
+        "description": trader.get("description", ""),
+        "specialization": trader.get("specialization", ""),
+        "ytd_return": trader.get("ytd_return", 0.0),
+        "win_rate": trader.get("win_rate", 0.0),
         "copiers": trader.get("copiers", 0),
         "minimum_copy_amount": trader.get("minimum_copy_amount", 100.0),
         "assets_under_management": trader.get("assets_under_management", 0.0),
@@ -924,6 +925,7 @@ async def get_trader_details(
         "risk_score": trader.get("risk_score", 5),
         "trades": trader.get("trades", []),
         "recent_trades": trader.get("recent_trades", []),
+        "stats_live": bool(trader.get("stats_live")),
         "created_at": trader["created_at"].isoformat() if trader.get("created_at") else None,
         "updated_at": trader["updated_at"].isoformat() if trader.get("updated_at") else None
     }
@@ -960,6 +962,7 @@ async def create_trader(
         "max_drawdown": trader_data.max_drawdown,
         "risk_score": trader_data.risk_score,
         "trades": [],
+        "stats_admin": True,
         "created_at": datetime.utcnow(),
         "updated_at": datetime.utcnow()
     }
@@ -1041,6 +1044,9 @@ async def update_trader(
     if trader.get("stats_live"):
         for k in ("ytd_return", "win_rate", "copiers", "assets_under_management", "max_drawdown"):
             update_dict.pop(k, None)
+    else:
+        # Admin-entered figures are published to users (stats_source "admin").
+        update_dict["stats_admin"] = True
 
     # Update trader in database
     traders.update_one(
@@ -1053,20 +1059,21 @@ async def update_trader(
 
     return {
         "id": str(updated_trader["_id"]),
-        "full_name": updated_trader["full_name"],
-        "profile_photo": updated_trader["profile_photo"],
-        "description": updated_trader["description"],
-        "specialization": updated_trader["specialization"],
-        "ytd_return": updated_trader["ytd_return"],
-        "win_rate": updated_trader["win_rate"],
+        "full_name": updated_trader.get("full_name", ""),
+        "profile_photo": updated_trader.get("profile_photo", ""),
+        "description": updated_trader.get("description", ""),
+        "specialization": updated_trader.get("specialization", ""),
+        "ytd_return": updated_trader.get("ytd_return", 0.0),
+        "win_rate": updated_trader.get("win_rate", 0.0),
         "copiers": updated_trader.get("copiers", 0),
         "minimum_copy_amount": updated_trader.get("minimum_copy_amount", 100.0),
         "assets_under_management": updated_trader.get("assets_under_management", 0.0),
         "max_drawdown": updated_trader.get("max_drawdown", 0.0),
         "risk_score": updated_trader.get("risk_score", 5),
         "trades": updated_trader.get("trades", []),
+        "stats_live": bool(updated_trader.get("stats_live")),
         "created_at": updated_trader["created_at"].isoformat() if updated_trader.get("created_at") else None,
-        "updated_at": updated_trader["updated_at"].isoformat()
+        "updated_at": updated_trader["updated_at"].isoformat() if updated_trader.get("updated_at") else None
     }
 
 
