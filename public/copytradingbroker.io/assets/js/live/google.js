@@ -8,16 +8,16 @@
  *  3. The callback redirects to /login#token=<jwt> on success, or
  *     /login?error=oauth_failed on failure or cancel.
  *  4. This module runs on the login page, stores the token, loads the profile,
- *     and routes to /onboarding (incomplete profile) or /app/ (complete).
+ *     and routes to /onboarding (incomplete), /welcome (not approved) or /app/.
  *
  * The token is only ever read from the URL fragment, which the browser never
  * sends to the server. The fragment is cleared straight after it is read.
  */
 import { saveToken, saveUser, clearSession } from './api.js';
+import { resolvePostAuthPath } from './gate.js';
 
 const START_URL = '/api/auth/google/login';
 const APP_URL = '/app/';
-const ONBOARDING_URL = '/onboarding';
 
 const buttons = /** @type {HTMLButtonElement[]} */ ([...document.querySelectorAll('[data-google-signin]')]);
 const message = /** @type {HTMLElement|null} */ (document.getElementById('google-status'));
@@ -75,18 +75,7 @@ async function completeSignIn(token) {
     return;
   }
 
-  let target = APP_URL;
-  try {
-    const status = await fetch('/api/onboarding/status', {
-      headers: { Accept: 'application/json', Authorization: `Bearer ${token}` },
-    });
-    if (status.ok) {
-      const data = await status.json();
-      if (!data.is_onboarding_complete) target = ONBOARDING_URL;
-    }
-  } catch {
-    // Fall through to the dashboard; the app shell re-checks onboarding.
-  }
+  const target = (await resolvePostAuthPath()) || APP_URL;
   location.replace(target);
 }
 

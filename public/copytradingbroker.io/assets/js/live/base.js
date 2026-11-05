@@ -103,6 +103,12 @@ export async function initBase(opts = {}) {
   const cached = cachedUser();
   if (cached) hydrateChrome(cached, opts);
   const me = await getMe();
+  // Dashboard access needs admin approval after KYC. Until then, show the status placeholder.
+  // /welcome sends users who have not finished onboarding to /onboarding.
+  if (!me?.access_granted && !DEMO) {
+    location.replace('/welcome');
+    return new Promise(() => {});
+  }
   hydrateChrome(me, opts);
   hydrateNotifications(me);
   if (opts.copies == null) {

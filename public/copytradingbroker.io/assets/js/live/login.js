@@ -1,5 +1,6 @@
 // @ts-check
 import { saveToken, saveUser, clearSession } from './api.js';
+import { resolvePostAuthPath } from './gate.js';
 import { check, clearError, setError } from '../components/auth-form.js';
 import { mountCaptcha } from '../lib/captcha.js';
 
@@ -98,8 +99,10 @@ if (form instanceof HTMLFormElement) {
       }
 
       const rawNext = new URLSearchParams(location.search).get('next');
-      const next = rawNext && /^\/app(?:\/|$|\?)/.test(rawNext) ? rawNext : '/app/';
-      location.href = next;
+      const requested = rawNext && /^\/app(?:\/|$|\?)/.test(rawNext) ? rawNext : null;
+      const gated = await resolvePostAuthPath();
+      // An approved user keeps the page they asked for; everyone else goes through the gate.
+      location.href = gated === '/app/' && requested ? requested : (gated || '/app/');
     } catch (error) {
       setError(password, error instanceof Error ? error.message : 'Network error. Please try again.');
       password.focus();

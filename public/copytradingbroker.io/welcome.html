@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+  <script>if('scrollRestoration' in history)history.scrollRestoration='manual';var __top=function(){if(location.hash){var __t=document.getElementById(decodeURIComponent(location.hash.slice(1)));if(__t){__t.scrollIntoView();return}}scrollTo(0,0)};__top();addEventListener('load',__top);addEventListener('pageshow',function(e){if(e.persisted)__top()})</script>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Welcome — TED Brokers</title>
+  <meta name="description" content="Your TED Brokers account is waiting for identity verification approval.">
+  <meta name="robots" content="noindex">
+  <meta name="theme-color" content="#0A1626">
+  <link rel="icon" href="assets/img/favicon.ico">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=JetBrains+Mono:wght@400;500;600&family=Sora:wght@300;600;700;800&display=swap">
+  <link rel="stylesheet" href="assets/css/main.css">
+  <link rel="stylesheet" href="assets/css/pages/welcome.css?v=5">
+  <script>document.documentElement.classList.add('js');try{var t=localStorage.getItem('ted:theme');if(t==='system')t=matchMedia('(prefers-color-scheme: light)').matches?'light':'dark';if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
+  <script type="module" src="assets/js/main.js?v=3"></script>
+  <script type="module" src="assets/js/welcome.js"></script>
+</head>
+<body class="surface-ink">
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="welcome-bar">
+    <a class="wordmark" href="index.html" aria-label="TED Brokers home">
+      <span class="wordmark__ted">TED</span><span class="wordmark__brokers">Br<svg class="wordmark__o" viewBox="0 0 20 20" aria-hidden="true"><g fill="currentColor"><circle cx="10" cy="2" r="1.6"/><circle cx="15.2" cy="4.1" r="1.4" opacity=".8"/><circle cx="17.9" cy="9.4" r="1.6"/><circle cx="16.3" cy="14.8" r="1.4" opacity=".8"/><circle cx="11.2" cy="17.9" r="1.6"/><circle cx="5.6" cy="16.4" r="1.4" opacity=".7"/><circle cx="2.2" cy="11.6" r="1.6"/><circle cx="3" cy="6" r="1.4" opacity=".8"/><circle cx="6.6" cy="2.9" r="1.1" opacity=".6"/><circle cx="10" cy="10" r="1.9"/><circle cx="13.3" cy="9.2" r="1" opacity=".7"/><circle cx="7.4" cy="12" r="1" opacity=".7"/></g></svg>kers</span>
+    </a>
+    <a class="welcome-bar__back" href="/">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M19 12H5M11 6l-6 6 6 6"/></svg>
+      Back to homepage
+    </a>
+  </header>
+
+  <main class="welcome" id="main">
+    <!-- ============ Status ============ -->
+    <section class="welcome-hero" aria-labelledby="welcome-title">
+      <div class="mesh" aria-hidden="true"><span></span></div>
+      <p class="overline"><span class="live-dot" aria-hidden="true"></span>Account status</p>
+      <h1 id="welcome-title">Your ID upload is being approved.</h1>
+      <p class="welcome-hero__lead">Your user dashboard unlocks once your identity check is approved. The features below show what you will have access to.</p>
+      <p class="welcome-status" id="welcome-status" role="status"></p>
+    </section>
+
+    <!-- ============ Features ============ -->
+    <section class="welcome-features" aria-labelledby="features-title">
+      <div class="welcome-features__head">
+        <h2 id="features-title">What your dashboard includes</h2>
+        <p class="overline overline--muted">Illustrative preview</p>
+      </div>
+
+      <ol class="feature-list">
+        <li class="feature" data-reveal>
+          <p class="feature__index" aria-hidden="true">01</p>
+          <div class="feature__copy">
+            <h3>Trade</h3>
+            <p>Stocks, ETFs, options and crypto with live quotes, charts and a full order ticket, including limit, stop and trailing stop orders.</p>
+          </div>
+          <svg class="feature__art art-trade" viewBox="0 0 240 140" aria-hidden="true" focusable="false">
+            <path class="art-trade__grid" d="M0 35H240M0 70H240M0 105H240"/>
+            <path class="art-trade__line" pathLength="100" d="M6 110 L38 92 L62 98 L92 66 L118 74 L146 44 L172 56 L200 30 L234 40"/>
+            <circle class="art-trade__dot" cx="234" cy="40" r="4"/>
+            <rect class="art-trade__ticket" x="150" y="86" width="82" height="40" rx="4"/>
+            <rect class="art-trade__seg" x="156" y="92" width="32" height="10" rx="2"/>
+            <path class="art-trade__bar" d="M160 116H222"/>
+          </svg>
+        </li>
+
+        <li class="feature" data-reveal>
+          <p class="feature__index" aria-hidden="true">02</p>
+          <div class="feature__copy">
+            <h3>Wallet</h3>
+            <p>Deposit by bank transfer or cryptocurrency and request withdrawals. Your available cash and pending items are shown in one place.</p>
+          </div>
+          <svg class="feature__art art-wallet" viewBox="0 0 240 140" aria-hidden="true" focusable="false">
+            <path class="art-wallet__lane" d="M20 40H220M20 100H220"/>
+            <g class="art-wallet__flow art-wallet__flow--in"><circle cx="20" cy="40" r="5"/></g>
+            <g class="art-wallet__flow art-wallet__flow--out"><circle cx="220" cy="100" r="5"/></g>
+            <rect class="art-wallet__pill-free" x="20" y="60" width="200" height="6" rx="3"/>
+            <rect class="art-wallet__pill-hold" x="150" y="60" width="70" height="6" rx="3"/>
+          </svg>
+        </li>
+
+        <li class="feature" data-reveal>
+          <p class="feature__index" aria-hidden="true">03</p>
+          <div class="feature__copy">
+            <h3>Copy traders</h3>
+            <p>Browse traders, choose how much to allocate and set an optional drawdown stop. Pause, resume or stop a copy at any time.</p>
+          </div>
+          <svg class="feature__art art-copy" viewBox="0 0 240 140" aria-hidden="true" focusable="false">
+            <g class="art-copy__links">
+              <path d="M120 70L60 28M120 70L60 112M120 70L180 28M120 70L180 112M120 70L220 70"/>
+            </g>
+            <circle class="art-copy__hub" cx="120" cy="70" r="11"/>
+            <circle class="art-copy__node" cx="60" cy="28" r="5"/>
+            <circle class="art-copy__node" cx="60" cy="112" r="5"/>
+            <circle class="art-copy__node" cx="180" cy="28" r="5"/>
+            <circle class="art-copy__node" cx="180" cy="112" r="5"/>
+            <circle class="art-copy__node" cx="220" cy="70" r="5"/>
+            <circle class="art-copy__pulse" cx="120" cy="70" r="11"/>
+          </svg>
+        </li>
+
+        <li class="feature" data-reveal>
+          <p class="feature__index" aria-hidden="true">04</p>
+          <div class="feature__copy">
+            <h3>Investment plans</h3>
+            <p>Robo Advisor, ETF automation, DeFi and Options plans. Each active plan shows its value, progress and time remaining.</p>
+          </div>
+          <svg class="feature__art art-plans" viewBox="0 0 240 140" aria-hidden="true" focusable="false">
+            <rect class="art-plans__track" x="10" y="20" width="220" height="10" rx="5"/>
+            <rect class="art-plans__fill" x="10" y="20" width="220" height="10" rx="5"/>
+            <rect class="art-plans__track" x="10" y="64" width="220" height="10" rx="5"/>
+            <rect class="art-plans__fill art-plans__fill--2" x="10" y="64" width="220" height="10" rx="5"/>
+            <rect class="art-plans__track" x="10" y="108" width="220" height="10" rx="5"/>
+            <rect class="art-plans__fill art-plans__fill--3" x="10" y="108" width="220" height="10" rx="5"/>
+          </svg>
+        </li>
+
+        <li class="feature" data-reveal>
+          <p class="feature__index" aria-hidden="true">05</p>
+          <div class="feature__copy">
+            <h3>Portfolio and documents</h3>
+            <p>Holdings, allocation and realized gains in one view, with monthly statements and trade confirmations ready to download.</p>
+          </div>
+          <svg class="feature__art art-donut" viewBox="0 0 240 140" aria-hidden="true" focusable="false">
+            <circle class="art-donut__base" cx="120" cy="70" r="50"/>
+            <circle class="art-donut__seg art-donut__seg--1" cx="120" cy="70" r="50"/>
+            <circle class="art-donut__seg art-donut__seg--2" cx="120" cy="70" r="50"/>
+            <circle class="art-donut__seg art-donut__seg--3" cx="120" cy="70" r="50"/>
+          </svg>
+        </li>
+      </ol>
+    </section>
+
+  </main>
+
+  <!-- ============ Footer ============ -->
+  <footer class="welcome-foot">
+    <p class="fineprint">Trading involves risk. Past performance is not indicative of future results. <a href="legal/risk_closure.html">Risk disclosure</a></p>
+  </footer>
+</body>
+</html>

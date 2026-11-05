@@ -32,8 +32,8 @@ async function checkOnboardingStatus() {
         const data = await response.json();
 
         if (data.is_onboarding_complete) {
-            // Already completed, redirect to dashboard
-            window.location.href = '/dashboard';
+            // Already completed: approved users go to the app, everyone else to the status page
+            await goToNextStep();
             return;
         }
 
@@ -42,6 +42,18 @@ async function checkOnboardingStatus() {
 
     } catch (error) {
         console.error('Error checking onboarding status:', error);
+    }
+}
+
+/**
+ * After onboarding: /app/ when approved, /welcome while ID upload is being approved.
+ */
+async function goToNextStep() {
+    try {
+        const { resolvePostAuthPath } = await import('./live/gate.js');
+        window.location.href = (await resolvePostAuthPath()) || '/welcome';
+    } catch (error) {
+        window.location.href = '/welcome';
     }
 }
 
@@ -266,14 +278,11 @@ function setupKYCForm() {
                     </div>
                 `,
                 icon: 'info',
-                confirmButtonText: 'Go to Dashboard',
+                confirmButtonText: 'Continue',
                 confirmButtonColor: '#D32F2F',
                 allowOutsideClick: false,
                 allowEscapeKey: false
-            }).then(() => {
-                // Redirect to dashboard
-                window.location.href = '/dashboard';
-            });
+            }).then(() => goToNextStep());
 
         } catch (error) {
             TED_AUTH.closeLoading();

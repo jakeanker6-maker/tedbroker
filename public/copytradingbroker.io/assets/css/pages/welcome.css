@@ -1,0 +1,221 @@
+/* Placeholder for signed-in users whose dashboard access is not approved yet.
+   Market Pulse: hairlines, no cards, numbered rows, illustrative SVG motion. Tokens only. */
+@layer pages {
+  body.surface-ink {
+    min-block-size: 100dvh;
+    background: var(--color-bg);
+    color: var(--color-text);
+    font-family: var(--font-text);
+  }
+
+  .welcome-bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-3) var(--space-5);
+    padding-block: var(--space-4);
+    padding-inline: var(--gutter);
+    border-block-end: 1px solid var(--color-border);
+    background: var(--color-bg);
+  }
+  .welcome-bar .wordmark { font-size: 1.25rem; }
+  .welcome-bar__back {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    min-block-size: 44px;
+    padding-inline: var(--space-2);
+    font: 600 var(--text-small)/1 var(--font-text);
+    color: var(--color-text);
+    text-decoration: none;
+  }
+  .welcome-bar__back svg { inline-size: 1rem; block-size: 1rem; }
+  .welcome-bar__back:hover { text-decoration: underline; text-underline-offset: 4px; }
+  .welcome-bar__back:focus-visible,
+  .welcome-foot a:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 2px; border-radius: 2px; }
+
+  .welcome {
+    position: relative;
+    inline-size: min(100%, var(--content-max));
+    margin-inline: auto;
+    padding-inline: var(--gutter);
+  }
+
+  /* ---------- Hero ---------- */
+  .welcome-hero {
+    position: relative;
+    isolation: isolate;
+    display: grid;
+    gap: var(--space-4);
+    padding-block: clamp(3rem, 2rem + 4vw, 6rem) clamp(2.5rem, 1.5rem + 3vw, 4rem);
+    max-inline-size: 46rem;
+  }
+  .welcome-hero .mesh { position: absolute; inset: -20% -10% auto auto; z-index: -1; opacity: .7; pointer-events: none; }
+  .welcome-hero h1 {
+    font: 800 var(--text-h1)/1.05 var(--font-display);
+    letter-spacing: -0.03em;
+    text-wrap: balance;
+  }
+  .welcome-hero__lead {
+    font-size: var(--text-lead);
+    line-height: 1.55;
+    color: var(--color-text-muted);
+    max-inline-size: 60ch;
+  }
+  .welcome-status { font: 500 var(--text-small)/1.4 var(--font-text); color: var(--color-pending); }
+  .welcome-status[hidden] { display: none; }
+
+  /* ---------- Features ---------- */
+  .welcome-features {
+    padding-block: clamp(3rem, 2rem + 3vw, 5rem);
+    border-block-start: 1px solid var(--color-border);
+  }
+  .welcome-features__head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--space-2) var(--space-5);
+    margin-block-end: var(--space-5);
+  }
+  .welcome-features h2 { font: 700 var(--text-h2)/1.1 var(--font-display); letter-spacing: -0.02em; }
+  .overline--muted { color: var(--color-text-muted); }
+
+  .feature-list { list-style: none; margin: 0; padding: 0; display: grid; }
+  .feature {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    align-items: center;
+    gap: var(--space-5) var(--space-6);
+    padding-block: var(--space-6);
+    border-block-start: 1px solid var(--color-border);
+  }
+  .feature:last-child { border-block-end: 1px solid var(--color-border); }
+  .feature__index {
+    font: 700 var(--text-numeral)/1 var(--font-display);
+    letter-spacing: -0.02em;
+    color: transparent;
+    -webkit-text-stroke: 1px var(--color-outline-num);
+  }
+  .feature__copy { display: grid; gap: var(--space-2); max-inline-size: 42ch; }
+  .feature__copy h3 { font: 700 var(--text-h3)/1.25 var(--font-display); letter-spacing: -0.01em; }
+  .feature__copy p { color: var(--color-text-muted); line-height: 1.55; }
+  .feature__art { inline-size: 100%; max-inline-size: 24rem; block-size: auto; overflow: visible; }
+
+  @media (width >= 56rem) {
+    .feature { grid-template-columns: minmax(0, 6rem) minmax(0, 1fr) minmax(0, 1fr); }
+    .feature__art { justify-self: end; }
+  }
+
+  /* ---------- Illustrative graphics (decorative) ---------- */
+  /* Rotate and scale SVG parts around their own centre, not the SVG origin */
+  .feature__art circle,
+  .feature__art path,
+  .feature__art rect { transform-box: fill-box; transform-origin: 50% 50%; }
+  .feature__art .art-plans__fill { transform-origin: left center; }
+
+  /* 01 Trade: price line draws in, cursor dot pulses, ticket segment slides */
+  .art-trade__grid { stroke: var(--color-border); stroke-width: 1; }
+  .art-trade__line { fill: none; stroke: var(--color-signal); stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 100; stroke-dashoffset: 100; }
+  .art-trade__dot { fill: var(--color-signal); }
+  .art-trade__ticket { fill: var(--color-surface); stroke: var(--color-border-strong); stroke-width: 1; }
+  .art-trade__seg { fill: var(--color-accent); }
+  .art-trade__bar { stroke: var(--color-border-strong); stroke-width: 6; stroke-linecap: round; }
+  .is-in .art-trade__line { animation: art-draw 1.6s var(--ease-out) .2s forwards; }
+  .is-in .art-trade__dot { animation: art-ping 1.6s var(--ease-out) 1.6s infinite; }
+  .is-in .art-trade__seg { animation: art-slide 3.2s var(--ease-out) .6s infinite alternate; }
+
+  /* 02 Wallet: a deposit lane and a withdrawal lane with moving markers */
+  .art-wallet__lane { stroke: var(--color-border-strong); stroke-width: 1; stroke-dasharray: 2 6; }
+  .art-wallet__flow circle { fill: var(--color-signal); }
+  .art-wallet__flow--out circle { fill: var(--color-accent); }
+  .art-wallet__pill-free { fill: var(--color-gain); opacity: .85; }
+  .art-wallet__pill-hold { fill: var(--color-pending); opacity: .85; }
+  .is-in .art-wallet__flow--in { animation: art-lane-right 3.6s linear infinite; }
+  .is-in .art-wallet__flow--out { animation: art-lane-left 3.6s linear infinite; }
+
+  /* 03 Copy traders: lines pulse outward from the central trader */
+  .art-copy__links path { fill: none; stroke: var(--color-border-strong); stroke-width: 1.25; }
+  .art-copy__hub { fill: var(--color-accent); }
+  .art-copy__node { fill: var(--color-signal); }
+  .art-copy__pulse { fill: none; stroke: var(--color-accent); stroke-width: 1.5; opacity: 0; }
+  .is-in .art-copy__pulse { animation: art-ring 2.4s var(--ease-out) infinite; }
+
+  /* 04 Plans: progress bars fill on entry and drift */
+  /* --plans-to is the illustrative fill ratio for each bar */
+  .art-plans__track { fill: var(--color-surface-2); }
+  .art-plans__fill { fill: var(--color-gain); transform: scaleX(0); --plans-to: .78; }
+  .art-plans__fill--2 { fill: var(--color-signal); --plans-to: .52; }
+  .art-plans__fill--3 { fill: var(--color-accent); --plans-to: .34; }
+  .is-in .art-plans__fill { animation: art-grow 1.2s var(--ease-out) .1s forwards; }
+  .is-in .art-plans__fill--2 { animation-delay: .35s; }
+  .is-in .art-plans__fill--3 { animation-delay: .6s; }
+
+  /* 05 Donut: three segments draw in sequence, each starting where the previous ends.
+     Lengths are percentages of the circumference (pathLength=100). */
+  .art-donut__base { fill: none; stroke: var(--color-surface-2); stroke-width: 14; }
+  /* One shared start at 12 o'clock. Each segment is offset along the ring by the arc lengths before it. */
+  .art-donut circle[class*="__seg"] { fill: none; stroke-width: 14; stroke-dasharray: 0 314.16; stroke-dashoffset: 0; transform: rotate(-90deg); }
+  .art-donut circle.art-donut__seg--1 { stroke: var(--color-signal); }
+  .art-donut circle.art-donut__seg--2 { stroke: var(--color-link); stroke-dashoffset: -119.4px; }
+  .art-donut circle.art-donut__seg--3 { stroke: var(--color-accent); stroke-dashoffset: -204.2px; }
+  .is-in .art-donut__seg--1 { animation: art-donut-1 1.8s var(--ease-out) .1s forwards; }
+  .is-in .art-donut__seg--2 { animation: art-donut-2 1.8s var(--ease-out) .5s forwards; }
+  .is-in .art-donut__seg--3 { animation: art-donut-3 1.8s var(--ease-out) .9s forwards; }
+
+  /* ---------- Reveal ---------- */
+  .js [data-reveal] { opacity: 0; transform: translateY(24px); transition: opacity var(--duration-slow) var(--ease-out), transform var(--duration-slow) var(--ease-out); }
+  .js [data-reveal].is-in { opacity: 1; transform: none; }
+
+  /* ---------- Footer ---------- */
+  .welcome-foot {
+    inline-size: min(100%, var(--content-max));
+    margin-inline: auto;
+    padding-inline: var(--gutter);
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: var(--space-3) var(--space-5);
+    padding-block: var(--space-6) var(--space-7);
+    border-block-start: 1px solid var(--color-border);
+    color: var(--color-text-muted);
+    font-size: var(--text-small);
+  }
+  .welcome-foot a {
+    display: inline-flex;
+    align-items: center;
+    min-block-size: 44px;
+    color: var(--color-text);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  /* ---------- Keyframes ---------- */
+  @keyframes art-draw { to { stroke-dashoffset: 0; } }
+  @keyframes art-ping { 0% { transform: scale(1); opacity: 1; } 60% { transform: scale(2.2); opacity: 0; } 100% { transform: scale(1); opacity: 0; } }
+  @keyframes art-slide { from { transform: translateX(0); } to { transform: translateX(6px); } }
+  @keyframes art-lane-right { 0% { transform: translateX(0); opacity: 0; } 10% { opacity: 1; } 90% { opacity: 1; } 100% { transform: translateX(200px); opacity: 0; } }
+  @keyframes art-lane-left { 0% { transform: translateX(0); opacity: 0; } 10% { opacity: 1; } 90% { opacity: 1; } 100% { transform: translateX(-200px); opacity: 0; } }
+  @keyframes art-ring { 0% { transform: scale(1); opacity: .9; } 100% { transform: scale(3.2); opacity: 0; } }
+  @keyframes art-grow { from { transform: scaleX(0); } to { transform: scaleX(var(--plans-to, 1)); } }
+  @keyframes art-donut-1 { to { stroke-dasharray: 119.4 314.16; } }
+  @keyframes art-donut-2 { to { stroke-dasharray: 84.8 314.16; } }
+  @keyframes art-donut-3 { to { stroke-dasharray: 110 314.16; } }
+
+  /* ---------- Reduced motion: final state, no movement ---------- */
+  @media (prefers-reduced-motion: reduce) {
+    .js [data-reveal] { opacity: 1; transform: none; transition: none; }
+    .feature__art *, .feature__art { animation: none !important; }
+    .art-trade__line { stroke-dashoffset: 0; }
+    .art-plans__fill { transform: scaleX(var(--plans-to)); }
+    .art-donut circle.art-donut__seg--1 { stroke-dasharray: 119.4 314.16; }
+    .art-donut circle.art-donut__seg--2 { stroke-dasharray: 84.8 314.16; }
+    .art-donut circle.art-donut__seg--3 { stroke-dasharray: 110 314.16; }
+    .art-copy__pulse { opacity: 0; }
+  }
+
+  @media (forced-colors: active) {
+    .feature__index { -webkit-text-stroke: 0; color: CanvasText; }
+  }
+}

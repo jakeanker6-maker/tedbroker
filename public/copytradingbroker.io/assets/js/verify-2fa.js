@@ -7,6 +7,7 @@
  * request a new code on page load; the user can resend after a cooldown.
  */
 import { mountCaptcha } from './lib/captcha.js';
+import { resolvePostAuthPath } from './live/gate.js';
 
 const RESEND_COOLDOWN = 30;
 const API = '/api';
@@ -129,7 +130,7 @@ form?.addEventListener('submit', async (e) => {
         // The referral is optional; sign-in should still complete.
       }
     }
-    location.href = '/app/';
+    location.href = (await resolvePostAuthPath()) || '/app/';
   } catch {
     showError('Network error. Check your connection and try again.');
   } finally {

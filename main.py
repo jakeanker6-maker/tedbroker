@@ -329,6 +329,13 @@ async def verify_2fa_page():
     return read_html_file(SITE_DIR / "verify-2fa.html")
 
 
+@app.get("/welcome", response_class=HTMLResponse)
+@app.get("/welcome.html", response_class=HTMLResponse)
+async def welcome():
+    """Placeholder for signed-in users whose dashboard access is not approved yet"""
+    return read_html_file(SITE_DIR / "welcome.html")
+
+
 @app.get("/onboarding", response_class=HTMLResponse)
 @app.get("/onboarding.html", response_class=HTMLResponse)
 async def onboarding_page():
