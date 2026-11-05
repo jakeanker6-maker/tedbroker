@@ -1,0 +1,41 @@
+// @ts-check
+/**
+ * Terms the generated chunks left in English, reviewed by hand. Loaded last, so these win.
+ * Row order: zh, hi, es, fr, ar, bn, ru, pt, de.
+ */
+export const ENTRIES = {
+  "Trading": ["交易", "ट्रेडिंग", "Negociación", "Négociation", "التداول", "ট্রেডিং", "Торговля", "Negociação", "Handel"],
+  "Trading account": ["交易账户", "ट्रेडिंग खाता", "Cuenta de negociación", "Compte de négociation", "حساب التداول", "ট্রেডিং অ্যাকাউন্ট", "Торговый счёт", "Conta de negociação", "Handelskonto"],
+  "Copy trading": ["跟单交易", "कॉपी ट्रेडिंग", "Copiar operaciones", "Copie d'opérations", "نسخ التداول", "কপি ট্রেডিং", "Копи-трейдинг", "Copiar operações", "Copy-Trading"],
+  "Trader": ["交易员", "ट्रेडर", "Operador", "Trader", "متداول", "ট্রেডার", "Трейдер", "Trader", "Trader"],
+  "Traders": ["交易员", "ट्रेडर्स", "Operadores", "Traders", "متداولون", "ট্রেডারগণ", "Трейдеры", "Traders", "Trader"],
+  "Plan": ["计划", "योजना", "Plan", "Plan", "خطة", "পরিকল্পনা", "План", "Plano", "Plan"],
+  "Stop": ["止损", "स्टॉप", "Stop", "Stop", "وقف", "স্টপ", "Стоп", "Stop", "Stopp"],
+  "Stop limit": ["止损限价", "स्टॉप लिमिट", "Stop limitada", "Stop limité", "وقف محدود", "স্টপ লিমিট", "Стоп-лимит", "Stop limitada", "Stop-Limit"],
+  "Collar": ["领口策略", "कॉलर", "Collar", "Collier", "ياقة", "কলার", "Коллар", "Collar", "Collar"],
+  "DeFi": ["DeFi", "DeFi", "DeFi", "DeFi", "DeFi", "DeFi", "DeFi", "DeFi", "DeFi"],
+  "Staking": ["质押", "स्टेकिंग", "Staking", "Staking", "التخزين بالرهن", "স্টেকিং", "Стейкинг", "Staking", "Staking"],
+  "Forex": ["外汇", "फ़ॉरेक्स", "Forex", "Forex", "الفوركس", "ফরেক্স", "Форекс", "Forex", "Devisen"],
+  "P/E": ["市盈率", "P/E", "P/E", "P/E", "P/E", "P/E", "P/E", "P/L", "KGV"],
+  "FIFO": ["先进先出", "FIFO", "FIFO", "FIFO", "FIFO", "FIFO", "FIFO", "FIFO", "FIFO"],
+  "Positions": ["持仓", "पोज़िशन", "Posiciones", "Positions", "المراكز", "পজিশন", "Позиции", "Posições", "Positionen"],
+  "Actions": ["操作", "क्रियाएँ", "Acciones", "Actions", "الإجراءات", "কার্যাবলি", "Действия", "Ações", "Aktionen"],
+  "Action": ["操作", "कार्रवाई", "Acción", "Action", "الإجراء", "কার্যকলাপ", "Действие", "Ação", "Aktion"],
+  "Dollars": ["美元", "डॉलर", "Dólares", "Dollars", "دولار", "ডলার", "Доллары", "Dólares", "Dollar"],
+  "Net": ["净额", "नेट", "Neto", "Net", "صافي", "নেট", "Чистый", "Líquido", "Netto"],
+  "Volume": ["成交量", "वॉल्यूम", "Volumen", "Volume", "حجم التداول", "ভলিউম", "Объём", "Volume", "Volumen"],
+  "Source": ["来源", "स्रोत", "Origen", "Source", "المصدر", "উৎস", "Источник", "Origem", "Quelle"],
+  "Trades": ["交易", "ट्रेड", "Operaciones", "Transactions", "الصفقات", "ট্রেড", "Сделки", "Operações", "Trades"],
+  "Minimum": ["最低", "न्यूनतम", "Mínimo", "Minimum", "الحد الأدنى", "ন্যূনতম", "Минимум", "Mínimo", "Mindestbetrag"],
+  "Protections": ["保护措施", "सुरक्षा उपाय", "Protecciones", "Protections", "الحمايات", "সুরক্ষা", "Защита", "Proteções", "Schutzmaßnahmen"],
+  "Active": ["活跃", "सक्रिय", "Activo", "Actif", "نشط", "সক্রিয়", "Активно", "Ativo", "Aktiv"],
+  "Crypto": ["加密货币", "क्रिप्टो", "Cripto", "Crypto", "العملات الرقمية", "ক্রিপ্টো", "Крипто", "Cripto", "Krypto"],
+  "Plans": ["计划", "योजनाएँ", "Planes", "Plans", "الخطط", "পরিকল্পনাসমূহ", "Планы", "Planos", "Pläne"],
+  "Iron condor": ["铁鹰式", "आयरन कोंडोर", "Cóndor de hierro", "Condor de fer", "عقد الكوندور الحديدي", "আয়রন কন্ডর", "Железный кондор", "Iron condor", "Iron Condor"],
+  "Options": ["期权", "विकल्प", "Opciones", "Options", "الخيارات", "অপশন", "Опционы", "Opções", "Optionen"],
+  "Notifications": ["通知", "सूचनाएँ", "Notificaciones", "Notifications", "الإشعارات", "বিজ্ঞপ্তি", "Уведомления", "Notificações", "Benachrichtigungen"],
+  "Documents": ["文件", "दस्तावेज़", "Documentos", "Documents", "المستندات", "নথি", "Документы", "Documentos", "Dokumente"],
+  "Date": ["日期", "तारीख", "Fecha", "Date", "التاريخ", "তারিখ", "Дата", "Data", "Datum"],
+  "Description": ["描述", "विवरण", "Descripción", "Description", "الوصف", "বিবরণ", "Описание", "Descrição", "Beschreibung"],
+  "Shortcut: Alt+F": ["快捷键：Alt+F", "शॉर्टकट: Alt+F", "Atajo: Alt+F", "Raccourci : Alt+F", "اختصار: Alt+F", "শর্টকাট: Alt+F", "Сочетание: Alt+F", "Atalho: Alt+F", "Tastenkürzel: Alt+F"],
+};

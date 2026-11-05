@@ -5,7 +5,19 @@
 export const CODES = ['zh', 'hi', 'es', 'fr', 'ar', 'bn', 'ru', 'pt', 'de'];
 
 /** @type {Record<string, string[]>} */
-export const DICT = {
+import { ENTRIES as CHUNK_1 } from './i18n-chunk-1.js';
+import { ENTRIES as CHUNK_2A } from './i18n-chunk-2a.js';
+import { ENTRIES as CHUNK_2B } from './i18n-chunk-2b.js';
+import { ENTRIES as CHUNK_3 } from './i18n-chunk-3.js';
+import { ENTRIES as CHUNK_4A } from './i18n-chunk-4a.js';
+import { ENTRIES as CHUNK_4B } from './i18n-chunk-4b.js';
+import { ENTRIES as CHUNK_FIX } from './i18n-chunk-fix.js';
+import { ENTRIES as CHUNK_PUB_A } from './i18n-public-a.js';
+import { ENTRIES as CHUNK_PUB_B } from './i18n-public-b.js';
+import { PAGE_ENTRIES } from './i18n-page-all.js';
+
+/** Reviewed base entries (177). These win over generated chunks for the same key. */
+const BASE = {
   // Navigation and chrome
   "Overview": ["总览", "अवलोकन", "Resumen", "Vue d'ensemble", "نظرة عامة", "ওভারভিউ", "Обзор", "Visão geral", "Übersicht"],
   "Wallet": ["钱包", "वॉलेट", "Billetera", "Portefeuille", "المحفظة", "ওয়ালেট", "Кошелёк", "Carteira", "Wallet"],
@@ -191,3 +203,11 @@ export const DICT = {
   "No activity yet": ["暂无活动", "अभी कोई गतिविधि नहीं", "Aún no hay actividad", "Aucune activité pour le moment", "لا يوجد نشاط بعد", "এখনো কোনো কার্যকলাপ নেই", "Активности пока нет", "Ainda não há atividade", "Noch keine Aktivität"],
   "modelled plan value": ["模拟计划价值", "अनुमानित योजना मूल्य", "valor modelado del plan", "valeur modélisée du plan", "القيمة المُقدّرة للخطة", "মডেলকৃত পরিকল্পনা মূল্য", "модельная стоимость плана", "valor modelado do plano", "modellierter Planwert"]
 };
+
+/** Full dictionary: generated chunks, then reviewed base entries, then hand-fixed terms (last one wins). */
+export const DICT = Object.freeze({
+  ...CHUNK_1, ...CHUNK_2A, ...CHUNK_2B, ...CHUNK_3, ...CHUNK_4A, ...CHUNK_4B,
+  ...CHUNK_PUB_A, ...CHUNK_PUB_B, ...PAGE_ENTRIES,
+  ...BASE,
+  ...CHUNK_FIX,
+});

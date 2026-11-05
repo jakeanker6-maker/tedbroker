@@ -4,6 +4,8 @@
 .wordmark {
   display: inline-flex;
   align-items: center;
+  direction: ltr;          /* the brand name reads the same in right-to-left languages */
+  unicode-bidi: isolate;
   gap: 0.28em;
   font: 800 1.375rem/1 var(--font-display);
   letter-spacing: -0.03em;

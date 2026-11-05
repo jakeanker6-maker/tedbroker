@@ -5,7 +5,7 @@
  */
 import { api, date } from './api.js';
 import { toast } from '../lib/util.js';
-import { setLanguage } from './i18n.js';
+import { applyRegionLanguage, currentLanguage, setLanguage } from './i18n.js';
 
 const TOKEN_KEY = 'ted_access_token';
 const signedIn = () => !!localStorage.getItem(TOKEN_KEY);
@@ -238,10 +238,11 @@ let langPop = null;
 
 async function initLanguage() {
   if (!langBtn) return;
+  // Saved account preference wins; otherwise the browser's explicit choice; otherwise the visitor's region.
   const prefRes = await api('/api/language/preference').catch(() => null);
-  const current = String(prefRes?.preferred_language || 'en');
-  applyLanguageLabel(current);
-  setLanguage(current);
+  if (prefRes?.preferred_language) setLanguage(String(prefRes.preferred_language), 'user');
+  else await applyRegionLanguage();
+  applyLanguageLabel(currentLanguage());
   langBtn.addEventListener('click', async () => {
     if (!langPop) {
       langPop = make('div', 'header-pop lang-pop', { role: 'listbox', 'aria-label': 'Language' });
@@ -274,7 +275,7 @@ async function renderLanguages(pop) {
   try {
     const [supported, pref] = await Promise.all([api('/api/language/supported'), api('/api/language/preference')]);
     const languages = /** @type {Record<string, {name: string, flag: string}>} */ (supported?.languages || {});
-    const selected = String(pref?.preferred_language || 'en');
+    const selected = String(pref?.preferred_language || currentLanguage());
     pop.replaceChildren(...Object.entries(languages).map(([code, info]) => {
       const opt = make('button', 'header-pop__item lang-option', { type: 'button', role: 'option', 'aria-selected': String(code === selected), 'data-code': code });
       const flag = make('span', 'lang-option__flag', { 'aria-hidden': 'true' });
@@ -296,7 +297,7 @@ async function chooseLanguage(code, name) {
   closeAll();
   try {
     await api('/api/language/preference', { method: 'PUT', body: JSON.stringify({ language: code }) });
-    setLanguage(code);
+    setLanguage(code, 'user');
     applyLanguageLabel(code);
     toast(`Language set to ${name}`);
   } catch (err) {

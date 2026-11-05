@@ -2,6 +2,7 @@ from fastapi import APIRouter, HTTPException, Request, Depends
 from typing import Dict, Optional
 from bson import ObjectId
 from datetime import datetime
+import time
 
 from app.database import get_collection, USERS_COLLECTION
 from app.auth import get_current_user_token
@@ -87,23 +88,48 @@ async def get_supported_languages():
     }
 
 
+DETECT_TTL_SECONDS = 24 * 60 * 60
+_detect_cache: Dict[str, tuple] = {}  # ip -> (expires_at, country_code, country)
+
+
+def _cached_country(ip_address: str) -> tuple:
+    """Country for an IP, cached for a day so each visitor costs at most one lookup."""
+    now = time.time()
+    hit = _detect_cache.get(ip_address)
+    if hit and hit[0] > now:
+        return hit[1], hit[2]
+    location = get_location_from_ip(ip_address)
+    country_code = str(location.get("country_code") or "US").upper()
+    country = location.get("country", "Unknown")
+    if len(_detect_cache) > 10000:
+        _detect_cache.clear()
+    _detect_cache[ip_address] = (now + DETECT_TTL_SECONDS, country_code, country)
+    return country_code, country
+
+
 @router.get("/detect")
 async def detect_language(request: Request):
     """
-    Detect language based on user's IP address
-    Returns suggested language code based on their location
+    Suggest a supported language from the visitor's region.
+    Uses the CDN country header when present (Cloudflare), otherwise an IP lookup.
+    Always returns one of SUPPORTED_LANGUAGES; unknown regions fall back to English.
     """
     ip_address = get_ip_address(request)
-    location = get_location_from_ip(ip_address)
-    country_code = location.get("country_code", "US")
+    cdn_country = (request.headers.get("CF-IPCountry") or "").strip().upper()
+    if len(cdn_country) == 2 and cdn_country.isalpha() and cdn_country not in ("XX", "T1"):
+        country_code, country = cdn_country, "Unknown"
+    else:
+        country_code, country = _cached_country(ip_address)
 
     # Map country to language
     detected_language = COUNTRY_TO_LANGUAGE.get(country_code, "en")
+    if detected_language not in SUPPORTED_LANGUAGES:
+        detected_language = "en"
 
     return {
         "detected_language": detected_language,
         "country_code": country_code,
-        "country": location.get("country", "Unknown"),
+        "country": country,
         "language_info": SUPPORTED_LANGUAGES.get(detected_language, SUPPORTED_LANGUAGES["en"]),
         "ip_address": ip_address
     }
@@ -121,11 +147,12 @@ async def get_user_language_preference(current_user: dict = Depends(get_current_
     if not user:
         raise HTTPException(status_code=404, detail="User not found")
 
-    preferred_language = user.get("preferred_language", "en")
+    # None means the user never chose a language: the client then uses the detected region.
+    preferred_language = user.get("preferred_language") or None
 
     return {
         "preferred_language": preferred_language,
-        "language_info": SUPPORTED_LANGUAGES.get(preferred_language, SUPPORTED_LANGUAGES["en"])
+        "language_info": SUPPORTED_LANGUAGES.get(preferred_language or "en", SUPPORTED_LANGUAGES["en"])
     }
 
 

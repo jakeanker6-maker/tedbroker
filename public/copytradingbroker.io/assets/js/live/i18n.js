@@ -8,6 +8,8 @@ import { DICT, CODES } from './i18n-dict.js';
 
 export const SUPPORTED = ['en', ...CODES];
 const STORE = 'ted:lang';
+const SOURCE_STORE = 'ted:lang-source';
+const REGION_STORE = 'ted:lang-region';
 const ATTRS = ['placeholder', 'aria-label', 'title'];
 const ATTR_SELECTOR = ATTRS.map((a) => `[${a}]`).join(',');
 const SKIP = 'script,style,[data-i18n-skip]';
@@ -104,20 +106,75 @@ function observe() {
   });
 }
 
-/** @param {string} code */
-export function setLanguage(code) {
+/**
+ * @param {string} code
+ * @param {'user'|'region'} [source] 'user' = the visitor chose it (sticky); 'region' = detected from location.
+ */
+export function setLanguage(code, source = 'user') {
   const next = SUPPORTED.includes(code) ? code : 'en';
   current = next;
-  try { localStorage.setItem(STORE, next); } catch { /* storage unavailable */ }
+  try {
+    localStorage.setItem(STORE, next);
+    localStorage.setItem(SOURCE_STORE, source);
+  } catch { /* storage unavailable */ }
   document.documentElement.lang = next;
   document.documentElement.dir = next === 'ar' ? 'rtl' : 'ltr';
   if (document.body) translateTree(document.body);
   observe();
-  window.dispatchEvent(new CustomEvent('ted:language', { detail: { code: next } }));
+  window.dispatchEvent(new CustomEvent('ted:language', { detail: { code: next, source } }));
+}
+
+/** The language chosen by the visitor (never a region guess), or null. */
+export function userChosenLanguage() {
+  try {
+    if (localStorage.getItem(SOURCE_STORE) !== 'user') return null;
+    const code = localStorage.getItem(STORE);
+    return code && SUPPORTED.includes(code) ? code : null;
+  } catch { return null; }
+}
+
+/**
+ * Language from the visitor's region (/api/language/detect), cached in the browser.
+ * Returns 'en' when the lookup fails so the page always has a language.
+ * @returns {Promise<string>}
+ */
+export async function detectRegionLanguage() {
+  try {
+    const cached = localStorage.getItem(REGION_STORE);
+    if (cached && SUPPORTED.includes(cached)) return cached;
+  } catch { /* storage unavailable */ }
+  try {
+    const res = await fetch('/api/language/detect', { headers: { Accept: 'application/json' } });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const data = await res.json();
+    const code = SUPPORTED.includes(data.detected_language) ? data.detected_language : 'en';
+    try { localStorage.setItem(REGION_STORE, code); } catch { /* storage unavailable */ }
+    return code;
+  } catch {
+    return 'en';
+  }
+}
+
+/**
+ * Apply the language for a visitor who has not chosen one: their region's language.
+ * An explicit choice (see userChosenLanguage) always wins over this.
+ * @returns {Promise<string>}
+ */
+export async function applyRegionLanguage() {
+  const chosen = userChosenLanguage();
+  if (chosen) { setLanguage(chosen, 'user'); return chosen; }
+  const code = await detectRegionLanguage();
+  setLanguage(code, 'region');
+  return code;
 }
 
 if (typeof document !== 'undefined') {
-  let saved = 'en';
-  try { saved = localStorage.getItem(STORE) || 'en'; } catch { /* storage unavailable */ }
-  setLanguage(saved);
+  // Restore what was saved last time; keep its source so a region guess is not treated as a choice.
+  let saved = null;
+  let source = 'region';
+  try {
+    saved = localStorage.getItem(STORE);
+    source = localStorage.getItem(SOURCE_STORE) === 'user' ? 'user' : 'region';
+  } catch { /* storage unavailable */ }
+  setLanguage(saved && SUPPORTED.includes(saved) ? saved : 'en', source);
 }

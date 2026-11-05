@@ -8,7 +8,7 @@ import { api, date, esc, saveUser } from './api.js';
 import { initBase } from './base.js';
 import { busy, markDemo, settle } from './shell.js';
 import { toast } from '../lib/util.js';
-import { setLanguage } from './i18n.js';
+import { currentLanguage, setLanguage } from "./i18n.js";
 import { clearError, setError } from '../components/auth-form.js';
 import { initPayout } from './payout.js';
 
@@ -256,8 +256,9 @@ function renderHistory(history) {
  */
 function renderPreferences(preference) {
   const select = /** @type {HTMLSelectElement|null} */ ($('#pref-lang'));
-  if (select && preference?.preferred_language) {
-    const code = String(preference.preferred_language);
+  if (select) {
+    // An unset preference shows the language in use (the region default), not a fixed option.
+    const code = String(preference?.preferred_language || currentLanguage());
     if (![...select.options].some((o) => o.value === code)) select.append(new Option(code, code));
     select.value = code;
   }
@@ -271,7 +272,7 @@ function renderPreferences(preference) {
       if (button) { button.disabled = true; button.setAttribute('aria-busy', 'true'); }
       try {
         await api('/api/language/preference', { method: 'PUT', body: JSON.stringify({ language: lang }) });
-        setLanguage(lang);
+        setLanguage(lang, 'user');
         toast('Language saved to your account');
       } catch (err) {
         toast(/** @type {Error} */ (err).message || 'Could not save your language.');
