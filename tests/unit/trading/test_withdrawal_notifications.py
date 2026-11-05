@@ -52,6 +52,10 @@ def env(fresh_db, client):
          "wallet_address": "bc1qunverifiedaddress0000000000000", "label": "Cold", "is_primary": False,
          "is_verified": False, "created_at": datetime.utcnow(), "updated_at": datetime.utcnow()},
     ])
+    get_collection("user_bank_accounts").insert_one({
+        "_id": ObjectId(), "user_id": str(uid), "account_name": "Alice Tester", "account_number": "0123456789",
+        "bank_name": "Test Bank", "is_primary": True, "is_verified": True,
+        "created_at": datetime.utcnow(), "updated_at": datetime.utcnow()})
     admin = {"Authorization": "Bearer " + create_access_token({"sub": "adm", "user_id": str(admin_id), "role": "admin"})}
     user = {"Authorization": "Bearer " + create_access_token({"sub": "alice@example.com", "user_id": str(uid), "role": "user"})}
     return client, admin, user, str(uid)
@@ -137,7 +141,9 @@ def test_bank_withdrawal_is_unaffected_by_crypto_rules(env):
     client, admin, user, uid = env
     r = _bank(client, user, 75)
     assert r.status_code == 200, r.text
-    assert _request(r.json()["request_id"])["account_details"] == {"type": "bank"}
+    details = _request(r.json()["request_id"])["account_details"]
+    assert details["type"] == "bank"
+    assert details["account_number"] == "0123456789"
 
 
 # ------------------------------------------------------------ emails on payout

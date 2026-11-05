@@ -498,7 +498,7 @@ function switchTab(tab) {
     if (tab === 'defi-plans') loadDeFiPlans();
     if (tab === 'options-plans') loadOptionsPlans();
     if (tab === 'deposits') loadDepositRequests();
-    if (tab === 'withdrawals') loadWithdrawalRequests();
+    if (tab === 'withdrawals') { loadWithdrawalRequests(); loadPayoutAccounts(); }
     if (tab === 'bank-accounts') loadBankAccounts();
     if (tab === 'crypto-wallets') loadCryptoWallets();
     if (tab === 'notifications') loadNotifications();
@@ -2906,6 +2906,93 @@ async function deleteNotification(notificationId) {
 // ============================================================
 // WITHDRAWAL REQUESTS
 // ============================================================
+
+// Payout accounts (user bank account and crypto wallets) awaiting admin verification.
+// Rendered with DOM APIs only: customer-supplied values are set as text, never as HTML.
+function payoutCell(text, extraClass = '') {
+    const td = document.createElement('td');
+    td.style.cssText = 'padding: 10px; border-bottom: 1px solid #e2e8f0; vertical-align: top;';
+    if (extraClass) td.className = extraClass;
+    td.textContent = text == null || text === '' ? '—' : String(text);
+    return td;
+}
+
+async function loadPayoutAccounts() {
+    const container = document.getElementById('payout-verify-container');
+    if (!container) return;
+    container.textContent = 'Loading payout accounts...';
+    try {
+        const [bankRes, cryptoRes] = await Promise.all([
+            adminFetch('/api/admin/user-bank-accounts'),
+            adminFetch('/api/admin/user-crypto-addresses')
+        ]);
+        if (!bankRes.ok || !cryptoRes.ok) throw new Error('Request failed');
+        const banks = await bankRes.json();
+        const cryptos = await cryptoRes.json();
+        const rows = [
+            ...banks.map((a) => ({ kind: 'Bank account', user: a.user_id, detail: `${a.bank_name} · ${a.account_name} · ${a.account_number}${a.swift_code ? ` · SWIFT ${a.swift_code}` : ''}`, verified: a.is_verified, endpoint: `/api/admin/user-bank-accounts/${a.id}/verify`, created: a.created_at })),
+            ...cryptos.map((a) => ({ kind: `Crypto · ${a.currency}`, user: a.user_id, detail: `${a.wallet_address}${a.network ? ` · ${a.network}` : ''}${a.label ? ` · ${a.label}` : ''}`, verified: a.is_verified, endpoint: `/api/admin/user-crypto-addresses/${a.id}/verify`, created: a.created_at })),
+        ].sort((x, y) => (x.verified === y.verified ? 0 : x.verified ? 1 : -1) || String(y.created).localeCompare(String(x.created)));
+
+        if (rows.length === 0) {
+            container.textContent = 'No payout accounts saved yet.';
+            return;
+        }
+        const table = document.createElement('table');
+        table.style.cssText = 'width: 100%; border-collapse: collapse; font-size: 14px;';
+        const head = document.createElement('thead');
+        const headRow = document.createElement('tr');
+        ['Type', 'User ID', 'Details', 'Status', 'Action'].forEach((label) => {
+            const th = document.createElement('th');
+            th.style.cssText = 'text-align: left; padding: 10px; border-bottom: 2px solid #e2e8f0;';
+            th.textContent = label;
+            headRow.appendChild(th);
+        });
+        head.appendChild(headRow);
+        table.appendChild(head);
+        const body = document.createElement('tbody');
+        for (const row of rows) {
+            const tr = document.createElement('tr');
+            tr.appendChild(payoutCell(row.kind));
+            tr.appendChild(payoutCell(row.user));
+            tr.appendChild(payoutCell(row.detail));
+            tr.appendChild(payoutCell(row.verified ? 'Verified' : 'Awaiting verification'));
+            const action = payoutCell('');
+            if (row.verified) {
+                action.textContent = 'Verified';
+            } else {
+                const btn = document.createElement('button');
+                btn.type = 'button';
+                btn.className = 'btn btn-primary';
+                btn.textContent = 'Verify';
+                btn.dataset.endpoint = row.endpoint;
+                btn.addEventListener('click', () => verifyPayoutAccount(row.endpoint, btn));
+                action.appendChild(btn);
+            }
+            tr.appendChild(action);
+            body.appendChild(tr);
+        }
+        table.appendChild(body);
+        container.replaceChildren(table);
+    } catch (error) {
+        console.error('Failed to load payout accounts', error);
+        container.textContent = 'Payout accounts could not be loaded. Reload the page to try again.';
+    }
+}
+
+async function verifyPayoutAccount(endpoint, button) {
+    button.disabled = true;
+    try {
+        const response = await adminFetch(endpoint, { method: 'PUT' });
+        const data = await response.json().catch(() => ({}));
+        if (!response.ok) throw new Error(data.detail || 'Verification failed');
+        Swal.fire({ title: 'Verified', text: 'The payout account is verified and can be used for withdrawals.', icon: 'success', timer: 1800, showConfirmButton: false });
+        loadPayoutAccounts();
+    } catch (error) {
+        button.disabled = false;
+        Swal.fire({ title: 'Error', text: error.message || 'Verification failed', icon: 'error' });
+    }
+}
 
 // Load withdrawal requests
 async function loadWithdrawalRequests(statusFilter = '') {

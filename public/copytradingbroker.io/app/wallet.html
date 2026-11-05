@@ -368,10 +368,10 @@
             <legend class="wl-legend-label">Send to</legend>
             <div class="wl-options">
               <label class="wl-option">
-                <input type="radio" name="destination" value="bank" checked>
+                <input type="radio" name="destination" value="bank" checked disabled>
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M3 9.5L12 4l9 5.5"/><path d="M5 10v8M9.5 10v8M14.5 10v8M19 10v8M3 20.5h18"/></svg>
                 <span class="wl-option__name">Bank transfer</span>
-                <span class="wl-option__meta">Processed to your bank details on file</span>
+                <span class="wl-option__meta" data-wd-bank-meta>Loading your bank account…</span>
               </label>
               <label class="wl-option">
                 <input type="radio" name="destination" value="crypto">
@@ -381,6 +381,15 @@
               </label>
             </div>
           </fieldset>
+
+          <div class="wl-hints">
+            <p class="field__help" data-wd-bank-missing hidden>No bank account on file. <a href="settings.html#payout">Add a bank account in Settings</a></p>
+            <p class="field__help" data-wd-bank-pending hidden>Your bank account is awaiting verification. <a href="settings.html#payout">Check its status in Settings</a></p>
+            <p class="field__help" data-wd-bank-error hidden>Your bank account couldn’t be loaded. Reload the page to try again.</p>
+            <p class="field__help" data-wd-crypto-missing hidden>No crypto address saved yet. <a href="settings.html#payout">Add a crypto address in Settings</a></p>
+            <p class="field__help" data-wd-crypto-pending hidden>Your crypto address is awaiting verification. <a href="settings.html#payout">Check its status in Settings</a></p>
+            <p class="field__help wl-hints__blocked" id="wd-destination-error" data-wd-no-destination hidden role="status">No verified withdrawal destination. Add and verify a bank account or crypto address in <a href="settings.html#payout">Settings</a>, then come back to withdraw.</p>
+          </div>
 
           <div class="field" data-wd-crypto-field hidden>
             <label class="field__label" for="wd-address">Saved crypto address</label>

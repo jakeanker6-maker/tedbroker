@@ -16,9 +16,24 @@ client = None
 db = None
 
 
+def _describe_url(url: str) -> str:
+    """Describe the connection string without revealing the password."""
+    import hashlib
+    from urllib.parse import urlsplit
+    parts = urlsplit(url)
+    password = parts.password or ""
+    return (
+        f"scheme={parts.scheme} user={parts.username!r} host={parts.hostname!r} "
+        f"path={parts.path!r} password_len={len(password)} "
+        f"has_quotes={url[:1] in chr(34) + chr(39)} has_space={' ' in url} "
+        f"sha256={hashlib.sha256(url.encode()).hexdigest()[:12]}"
+    )
+
+
 def connect_to_mongo():
     """Connect to MongoDB and return database instance"""
     global client, db
+    print(f"MongoDB config: {_describe_url(MONGODB_URL)} db={DATABASE_NAME!r}")
     try:
         client = MongoClient(MONGODB_URL)
         # Test the connection

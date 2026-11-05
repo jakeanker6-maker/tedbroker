@@ -9,7 +9,7 @@ from pydantic import BaseModel
 
 from app.schemas import TransactionResponse
 from app.auth import get_current_user_token, verify_password
-from app.database import get_collection, USERS_COLLECTION, TRANSACTIONS_COLLECTION, DEPOSIT_REQUESTS_COLLECTION, WITHDRAWAL_REQUESTS_COLLECTION, BANK_ACCOUNTS_COLLECTION, USER_CRYPTO_ADDRESSES_COLLECTION
+from app.database import get_collection, USERS_COLLECTION, TRANSACTIONS_COLLECTION, DEPOSIT_REQUESTS_COLLECTION, WITHDRAWAL_REQUESTS_COLLECTION, BANK_ACCOUNTS_COLLECTION, USER_BANK_ACCOUNTS_COLLECTION, USER_CRYPTO_ADDRESSES_COLLECTION
 from app.trading import funding, ledger
 
 router = APIRouter(prefix="/api/wallet", tags=["Wallet"])
@@ -275,6 +275,31 @@ async def create_withdrawal(
             "wallet_address": saved["wallet_address"],
             "network": saved.get("network"),
             "label": saved.get("label"),
+        }
+
+    elif withdrawal_data.withdrawal_method == "Bank Transfer":
+        # The payout goes to the user's single saved bank account, which an admin must verify.
+        bank = get_collection(USER_BANK_ACCOUNTS_COLLECTION).find_one({"user_id": current_user["user_id"]})
+        if bank is None:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Add a bank account in Settings before withdrawing to a bank."
+            )
+        if not bank.get("is_verified", False):
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Your bank account is awaiting verification. You can withdraw to it once it is verified."
+            )
+        account_id = str(bank["_id"])
+        payment_details["bank_name"] = bank["bank_name"]
+        payment_details["account_number"] = bank["account_number"]
+        account_details = {
+            "type": "bank",
+            "account_name": bank["account_name"],
+            "account_number": bank["account_number"],
+            "bank_name": bank["bank_name"],
+            "swift_code": bank.get("swift_code"),
+            "iban": bank.get("iban"),
         }
 
     # Additional handling can be added here for other withdrawal methods

@@ -48,11 +48,13 @@ async function boot() {
 
   if (session.demo) {
     for (const el of balanceSections) markDemo(el, 'Demo preview: sample wallet activity.');
+    const bankMeta = $('[data-wd-bank-meta]');
+    if (bankMeta) bankMeta.textContent = 'Not available in demo mode';
     return;
   }
   for (const el of balanceSections) busy(el);
 
-  const [balRes, pendRes, txnRes, ledRes, bankRes, cryptoRes, addrRes] = await Promise.allSettled([
+  const [balRes, pendRes, txnRes, ledRes, bankRes, cryptoRes, addrRes, wdBankRes] = await Promise.allSettled([
     api('/api/wallet/balance'),
     api('/api/wallet/pending-transactions'),
     api('/api/wallet/transactions'),
@@ -60,6 +62,7 @@ async function boot() {
     api('/api/wallet/deposit-bank-accounts'),
     api('/api/crypto-wallets/'),
     api('/api/withdrawals/crypto-addresses'),
+    api('/api/withdrawals/bank-accounts'),
   ]);
   const entries = ledRes.status === 'fulfilled' ? ledRes.value.items || [] : [];
   renderWallet({ balRes, pendRes, txnRes, entries });
@@ -68,7 +71,9 @@ async function boot() {
   const wallets = cryptoRes.status === 'fulfilled' && Array.isArray(cryptoRes.value?.wallets) ? cryptoRes.value.wallets : [];
   const savedAddresses = addrRes.status === 'fulfilled' && Array.isArray(addrRes.value) ? addrRes.value : [];
   initDeposit({ balance: bal.cash, bank, wallets });
-  initWithdraw({ balance: bal.withdrawable, savedAddresses, addrError: addrRes.status === 'rejected' });
+  // null = the request failed; [] = no bank account saved; otherwise the saved account(s).
+  const withdrawBanks = wdBankRes.status === 'fulfilled' && Array.isArray(wdBankRes.value) ? wdBankRes.value : null;
+  initWithdraw({ balance: bal.withdrawable, savedAddresses, addrError: addrRes.status === 'rejected', bankAccounts: withdrawBanks });
   for (const el of balanceSections) busy(el, false);
 }
 
@@ -488,10 +493,13 @@ function initDeposit({ bank, wallets }) {
   if (location.hash === '#deposit' && !dialog.open) dialog.showModal();
 }
 
+/** @param {Element|null} el @param {boolean} hidden */
+const setHidden = (el, hidden) => { if (el instanceof HTMLElement) el.hidden = hidden; };
+
 /**
- * @param {{balance: number, savedAddresses: any[]}} data
+ * @param {{balance: number, savedAddresses: any[], addrError?: boolean, bankAccounts?: any[]|null}} data
  */
-function initWithdraw({ balance, savedAddresses }) {
+function initWithdraw({ balance, savedAddresses, addrError = false, bankAccounts = null }) {
   const form = /** @type {HTMLFormElement|null} */ ($('[data-withdraw-form]'));
   const dialog = /** @type {HTMLDialogElement|null} */ ($('#withdraw'));
   if (!form || !dialog) return;
@@ -505,7 +513,10 @@ function initWithdraw({ balance, savedAddresses }) {
   const verify = /** @type {HTMLInputElement} */ ($('#wd-verify', form));
   const msg = /** @type {HTMLElement} */ ($('[data-wd-msg]', form));
   const submit = /** @type {HTMLButtonElement} */ ($('[data-wd-submit]', form));
+  const bankRadio = /** @type {HTMLInputElement} */ ($('input[name="destination"][value="bank"]', form));
   const cryptoRadio = /** @type {HTMLInputElement} */ ($('input[name="destination"][value="crypto"]', form));
+  const bankMeta = $('[data-wd-bank-meta]', form);
+  const noDestination = $('[data-wd-no-destination]', form);
   /** @type {string|null} */
   let requestId = null;
   let phase = 'request';
@@ -529,10 +540,42 @@ function initWithdraw({ balance, savedAddresses }) {
     : addrError ? 'Could not load your crypto addresses. Reload the page to try again.'
     : awaitingVerification ? 'Your crypto address is awaiting verification'
     : 'Add a crypto address first';
+  setHidden($('[data-wd-crypto-missing]', form), hasCrypto || addrError || awaitingVerification);
+  setHidden($('[data-wd-crypto-pending]', form), hasCrypto || addrError || !awaitingVerification);
+
+  // Bank: only a verified account can receive a withdrawal. The server pays the saved account,
+  // so the request body does not need an account id.
+  const banks = Array.isArray(bankAccounts) ? bankAccounts : [];
+  const bankLoadFailed = bankAccounts === null;
+  const bankVerified = !bankLoadFailed && banks.some((a) => a && a.is_verified);
+  const bankAwaiting = !bankLoadFailed && !bankVerified && banks.length > 0;
+  bankRadio.disabled = !bankVerified;
+  if (bankMeta) bankMeta.textContent = bankVerified ? 'Processed to your bank details on file'
+    : bankLoadFailed ? 'Could not load your bank account'
+    : bankAwaiting ? 'Awaiting verification'
+    : 'Add a bank account first';
+  setHidden($('[data-wd-bank-missing]', form), bankLoadFailed || bankVerified || bankAwaiting);
+  setHidden($('[data-wd-bank-pending]', form), !bankAwaiting);
+  setHidden($('[data-wd-bank-error]', form), !bankLoadFailed);
 
   const destination = () => /** @type {HTMLInputElement|null} */ ($('input[name="destination"]:checked', form))?.value || 'bank';
+  const destinationReady = () => (destination() === 'crypto' ? hasCrypto : bankVerified);
+  /** Request is blocked (not just hidden) when the chosen destination cannot receive funds. */
+  const syncSubmit = () => {
+    const blocked = phase === 'request' && !destinationReady();
+    submit.disabled = blocked;
+    if (blocked) submit.setAttribute('aria-describedby', 'wd-destination-error');
+    else submit.removeAttribute('aria-describedby');
+    setHidden(noDestination, !blocked);
+  };
+  /** Pick the usable destination: bank when verified, otherwise crypto when available. */
+  const applyDestinationChoice = () => {
+    bankRadio.checked = bankVerified || !hasCrypto;
+    cryptoRadio.checked = !bankVerified && hasCrypto;
+  };
   const renderDestination = () => {
     cryptoField.hidden = destination() !== 'crypto';
+    syncSubmit();
   };
   form.addEventListener('change', (e) => {
     if (e.target instanceof HTMLInputElement && e.target.name === 'destination') renderDestination();
@@ -547,6 +590,7 @@ function initWithdraw({ balance, savedAddresses }) {
     msg.hidden = p !== 'verify';
     submit.textContent = p === 'verify' ? 'Verify withdrawal' : 'Request withdrawal';
     if (p === 'verify') verify.focus();
+    syncSubmit();
   };
 
   const reset = () => {
@@ -557,12 +601,15 @@ function initWithdraw({ balance, savedAddresses }) {
     clearError(amount);
     clearError(address);
     clearError(verify);
+    setBusy(submit, false);
+    applyDestinationChoice();
     setPhase('request');
     renderDestination();
-    setBusy(submit, false);
     if (abandoned) toast('Your withdrawal is still waiting for its verification code. Funds stay on hold until it expires after 15 minutes.');
   };
   dialog.addEventListener('close', reset);
+  applyDestinationChoice();
+  renderDestination();
 
   verify.addEventListener('input', () => {
     verify.value = verify.value.replace(/[^a-z0-9]/gi, '').slice(0, 8).toUpperCase();
@@ -590,9 +637,12 @@ function initWithdraw({ balance, savedAddresses }) {
         verify.focus();
       } finally {
         setBusy(submit, false);
+        syncSubmit();
       }
       return;
     }
+
+    if (!destinationReady()) { syncSubmit(); return; }
 
     const v = parseAmount(amount.value);
     const msgText = !Number.isFinite(v) || v <= 0 ? 'Enter an amount to withdraw.'
@@ -622,6 +672,7 @@ function initWithdraw({ balance, savedAddresses }) {
       toast(/** @type {Error} */ (err).message || 'The withdrawal request could not be created.');
     } finally {
       setBusy(submit, false);
+      syncSubmit();
     }
   });
 

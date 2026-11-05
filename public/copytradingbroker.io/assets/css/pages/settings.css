@@ -108,6 +108,33 @@
   .set-code .field__input { font: 500 1.5rem/1.2 var(--font-mono); letter-spacing: 0.3em; }
   .set-secret { font: 500 var(--text-small) var(--font-mono); letter-spacing: 0.08em; word-break: break-all; }
 
+  /* ---------- Payout accounts (bank + crypto wallets used for withdrawals) ---------- */
+  .payout-msg { font-size: var(--text-small); color: var(--color-text-muted); }
+  .payout-msg[data-tone="error"] { color: var(--color-loss); }
+  .payout-msg[data-tone="ok"] { color: var(--color-gain); }
+  .payout-opt { font-family: var(--font-text); font-size: var(--text-xs); letter-spacing: 0; text-transform: none; font-weight: 400; color: var(--color-text-muted); }
+  .payout-form__title { font-size: 1rem; font-weight: 600; letter-spacing: -0.01em; }
+  .payout-saved { display: grid; gap: var(--space-4); }
+  .payout-facts {
+    display: grid; grid-template-columns: minmax(0, auto) minmax(0, 1fr); gap: var(--space-3) var(--space-6);
+    margin: 0; padding-block: var(--space-2);
+    border-block-start: 1px solid var(--color-border);
+  }
+  .payout-facts__key { font: 600 var(--text-label)/1.2 var(--font-mono); letter-spacing: .12em; text-transform: uppercase; color: var(--color-text-muted); align-self: center; }
+  .payout-facts__value { margin: 0; font-weight: 500; overflow-wrap: anywhere; font-family: var(--font-mono); font-size: var(--text-small); }
+  .payout-list { list-style: none; margin: 0; padding: 0; display: grid; border-block-start: 1px solid var(--color-border); }
+  .payout-item {
+    display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--space-3) var(--space-5);
+    padding-block: var(--space-4); border-block-end: 1px solid var(--color-border);
+  }
+  .payout-item__main { display: grid; gap: var(--space-1); min-inline-size: 0; }
+  .payout-item__title { font-weight: 600; }
+  .payout-item__label, .payout-item__addr { font-size: var(--text-small); color: var(--color-text-muted); overflow-wrap: anywhere; }
+  .payout-item__side { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-3); }
+
+  /* Respect the hidden attribute on elements whose component rules set display (.form, .payout-list). */
+  [data-payout] [hidden] { display: none; }
+
   @media (forced-colors: active) {
     .set-kyc__step::before { background: CanvasText; }
     .set-qr__code { forced-color-adjust: none; }

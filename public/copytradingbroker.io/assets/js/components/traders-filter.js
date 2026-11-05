@@ -25,24 +25,38 @@ const SORT = {
 const num = (el, key) => Number(el.dataset[key] || 0);
 const norm = (s) => s.toLocaleLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
 
-/** @param {HTMLElement} root */
+/** @type {WeakMap<HTMLElement, () => void>} apply() for each initialised root */
+const instances = new WeakMap();
+
+/**
+ * Wire the filter bar once per root. Calling it again after the rows were re-rendered
+ * re-applies the current filters to the new rows instead of binding a second set of handlers.
+ * @param {HTMLElement} root
+ */
 export function init(root) {
   const form = /** @type {HTMLFormElement|null} */ (root.querySelector('.filterbar'));
   const table = root.querySelector('table');
   const empty = /** @type {HTMLElement|null} */ (root.querySelector('[data-filter-empty]'));
   const count = root.querySelector('[data-filter-count]');
   if (!form || !table) return;
-  const rows = /** @type {HTMLElement[]} */ ([...table.querySelectorAll('tbody.trader')]);
+  const existing = instances.get(root);
+  if (existing) { existing(); return; }
   const specBtns = /** @type {HTMLButtonElement[]} */ ([...form.querySelectorAll('.spec [aria-pressed]')]);
   const els = /** @type {HTMLFormControlsCollection & Record<string, HTMLInputElement|HTMLSelectElement>} */ (form.elements);
-  // Searchable text per row, computed once.
-  const haystack = new Map(rows.map((r) => [r, norm(r.querySelector('tr')?.textContent || '')]));
+  // Searchable text per row, cached per row element (rows are replaced when the directory re-renders).
+  const haystack = new WeakMap();
+  const textOf = (/** @type {HTMLElement} */ r) => {
+    let text = haystack.get(r);
+    if (text === undefined) { text = norm(r.querySelector('tr')?.textContent || ''); haystack.set(r, text); }
+    return text;
+  };
 
   const q = new URLSearchParams(location.search).get('q');
   if (q) els.q.value = q;
 
   let lastCount = '';
   const apply = () => {
+    const rows = /** @type {HTMLElement[]} */ ([...table.querySelectorAll('tbody.trader')]);
     const spec = specBtns.find((b) => b.getAttribute('aria-pressed') === 'true')?.value || 'all';
     const [rMin, rMax] = RISK[els.risk.value] || RISK.any;
     const minWin = Number(els.win.value || 0);
@@ -52,7 +66,7 @@ export function init(root) {
     let shown = 0;
     for (const r of rows) {
       const risk = num(r, 'risk');
-      const text = haystack.get(r) || '';
+      const text = textOf(r);
       const match = (spec === 'all' || r.dataset.spec === spec)
         && (els.risk.value === 'any' || (risk >= rMin && risk <= rMax))   // unrated traders match "Any"
         && num(r, 'win') >= minWin
@@ -88,5 +102,6 @@ export function init(root) {
     specBtns[0]?.focus();
   });
 
+  instances.set(root, apply);
   apply();
 }

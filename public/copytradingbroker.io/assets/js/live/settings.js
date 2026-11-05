@@ -1,6 +1,6 @@
 // @ts-check
 /**
- * Settings: profile, security status, login history, language and verification,
+ * Settings: profile, security status, login history, language, verification and payout accounts,
  * all read from the account. Controls the backend cannot change yet are disabled
  * and explained, and unsupported sections are labelled as demo data.
  */
@@ -10,6 +10,7 @@ import { busy, markDemo, settle } from './shell.js';
 import { toast } from '../lib/util.js';
 import { setLanguage } from './i18n.js';
 import { clearError, setError } from '../components/auth-form.js';
+import { initPayout } from './payout.js';
 
 const $ = (/** @type {string} */ s, root = document) => root.querySelector(s);
 const $$ = (/** @type {string} */ s, root = document) => [...root.querySelectorAll(s)];
@@ -24,6 +25,8 @@ const disable = (el, title) => {
 
 async function boot() {
   const session = await initBase();
+  // Payout accounts load on their own (own busy state); demo mode is handled inside.
+  initPayout(session.demo).catch((err) => console.error('[payout]', err));
   const sections = {
     personal: $('#set-panel-personal'),
     security: $('#set-panel-security'),

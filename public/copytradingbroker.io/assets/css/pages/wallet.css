@@ -108,6 +108,17 @@
     .wl-option__meta { grid-column: 3; text-align: start; }
   }
 
+  /* Withdraw destination hints (links to Settings > Payout accounts) */
+  .wl-hints { display: grid; gap: var(--space-1); }
+  .wl-hints a {
+    color: var(--color-link); font-weight: 500;
+    text-decoration: underline; text-underline-offset: 0.2em; text-decoration-thickness: 1px;
+  }
+  .wl-hints a:hover { text-decoration-thickness: 2px; }
+  .wl-hints__blocked { color: var(--color-loss); }
+  .wl-hints__blocked a { color: inherit; }
+  [data-withdraw-form] [hidden] { display: none; }
+
   .wl-detail { display: grid; gap: var(--space-3); padding-inline-start: var(--space-4); border-inline-start: 1px solid var(--color-border); }
   .wl-detail dl { margin: 0; }
   .wl-detail .copyline dd { text-align: end; }

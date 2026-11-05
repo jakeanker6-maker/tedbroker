@@ -21,6 +21,9 @@ from app.trading import funding, ledger
 
 router = APIRouter(prefix="/api/withdrawals", tags=["Withdrawals"])
 
+MAX_BANK_ACCOUNTS = 1
+MAX_CRYPTO_ADDRESSES = 3
+
 
 def generate_withdrawal_code() -> str:
     """Generate 8-digit alphanumeric withdrawal verification code"""
@@ -49,8 +52,13 @@ async def create_bank_account(
     """
     bank_accounts_col = get_collection(USER_BANK_ACCOUNTS_COLLECTION)
 
-    # Check if user already has bank accounts
+    # One bank account per user. Replace it by deleting the existing one first.
     existing_accounts = list(bank_accounts_col.find({"user_id": current_user["user_id"]}))
+    if len(existing_accounts) >= MAX_BANK_ACCOUNTS:
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail="You can add one bank account. Delete your current bank account to add a different one."
+        )
     is_primary = len(existing_accounts) == 0  # First account is primary by default
 
     # Create bank account document
@@ -272,11 +280,24 @@ async def create_crypto_address(
     """
     crypto_addresses_col = get_collection(USER_CRYPTO_ADDRESSES_COLLECTION)
 
+    all_addresses = list(crypto_addresses_col.find({"user_id": current_user["user_id"]}))
+    if len(all_addresses) >= MAX_CRYPTO_ADDRESSES:
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail=f"You can save up to {MAX_CRYPTO_ADDRESSES} crypto wallets. Delete one to add another."
+        )
+    if any(
+        addr.get("wallet_address") == crypto_data.wallet_address
+        and str(addr.get("currency", "")).upper() == crypto_data.currency
+        for addr in all_addresses
+    ):
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail="This crypto wallet is already saved to your account."
+        )
+
     # Check if user already has addresses for this currency
-    existing_addresses = list(crypto_addresses_col.find({
-        "user_id": current_user["user_id"],
-        "currency": crypto_data.currency
-    }))
+    existing_addresses = [a for a in all_addresses if a.get("currency") == crypto_data.currency]
     is_primary = len(existing_addresses) == 0  # First address for this currency is primary
 
     # Create crypto address document

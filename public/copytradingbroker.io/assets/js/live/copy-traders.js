@@ -80,6 +80,84 @@ function setLoadError(/** @type {boolean} */ on) {
   el.hidden = false;
 }
 
+/** Signature of the directory last rendered, so an unchanged list is not rebuilt. */
+let directorySig = '';
+let directoryBusy = false;
+
+/** Detail-row ids of the rows the user has expanded, so a re-render keeps them open. */
+function expandedDetailIds(/** @type {HTMLElement} */ table) {
+  return new Set($$('tbody.trader [data-expand][aria-expanded="true"]', table)
+    .map((b) => b.getAttribute('aria-controls') || '')
+    .filter(Boolean));
+}
+
+/**
+ * Build the trader rows from a directory response. Called on load and again whenever the
+ * list changes (an admin created, edited or removed a trader while this page was open).
+ * @param {HTMLElement} section
+ * @param {any[]} traders
+ * @param {boolean} failed the directory request failed
+ */
+async function renderDirectory(section, traders, failed) {
+  const table = /** @type {HTMLTableElement|null} */ ($('table', section));
+  // Row template lives in an inert <template> so no seed figures are ever rendered or auto-initialised.
+  const template = /** @type {HTMLTableSectionElement|null} */ (/** @type {HTMLTemplateElement|null} */ (document.getElementById('trader-row-template'))?.content.querySelector('tbody.trader') || null);
+  const empty = /** @type {HTMLElement|null} */ ($('[data-filter-empty]', section));
+  const count = $('[data-filter-count]', section);
+  if (!table || !template) return;
+
+  const open = table.querySelector('tbody.trader') ? expandedDetailIds(table) : null;
+  state.forms.clear();
+  $$('tbody.trader', table).forEach((r) => r.remove());   // drop the approved demo rows and the previous render
+  renderHead(traders.length);
+
+  if (!traders.length) {
+    if (count) count.textContent = failed ? 'Traders could not be loaded' : 'No traders available';
+    if (empty) {
+      empty.replaceChildren(h('tr', null, h('td', { colspan: 9 }, h('div', { class: 'empty' },
+        h('p', { class: 'empty__title' }, failed ? 'The trader directory couldn’t be loaded' : 'No traders are available yet'),
+        h('p', null, failed ? 'Reload the page to try again.' : 'New trader profiles will appear here when they are published.')))));
+      empty.hidden = false;
+    }
+  } else if (empty) {
+    empty.hidden = true;
+  }
+
+  const frags = traders.map((t, i) => renderTrader(t, i, template, open));
+  table.append(...frags, ...(empty ? [empty] : []));
+
+  if (traders.length) {
+    const filter = await import('../components/traders-filter.js');
+    filter.init(section);   // re-applies the active search and filters to the new rows
+  }
+}
+
+/**
+ * Poll the directory and re-render when an admin change is visible. Skipped while the user
+ * is typing in a trader row or a dialog is open, so nothing they are editing is replaced.
+ * @param {HTMLElement} section
+ */
+async function refreshDirectory(section) {
+  if (directoryBusy || document.querySelector('dialog[open]')) return;
+  const active = /** @type {HTMLElement|null} */ (document.activeElement);
+  const typingInRow = Boolean(active && section.contains(active) && !active.closest('.filterbar')
+    && /^(INPUT|SELECT|TEXTAREA)$/.test(active.tagName));
+  if (typingInRow) return;
+  directoryBusy = true;
+  try {
+    const traders = await api('/api/traders/');
+    if (!Array.isArray(traders)) return;
+    const sig = JSON.stringify(traders);
+    if (sig === directorySig) return;
+    directorySig = sig;
+    await renderDirectory(section, traders, false);
+  } catch (err) {
+    console.error('[copy-traders] directory refresh', err);
+  } finally {
+    directoryBusy = false;
+  }
+}
+
 async function boot() {
   const session = await initBase();
   const section = /** @type {HTMLElement|null} */ ($('[data-component="traders-filter"]'));
@@ -94,17 +172,13 @@ async function boot() {
 
   busy(section);
   const table = /** @type {HTMLTableElement|null} */ ($('table', section));
-  // Row template lives in an inert <template> so no seed figures are ever rendered or auto-initialised.
-  const template = /** @type {HTMLTableSectionElement|null} */ (/** @type {HTMLTemplateElement|null} */ (document.getElementById('trader-row-template'))?.content.querySelector('tbody.trader') || null);
-  const empty = /** @type {HTMLElement|null} */ ($('[data-filter-empty]', section));
-  const count = $('[data-filter-count]', section);
-  if (!table || !template) return;
+  if (!table || !document.getElementById('trader-row-template')) return;
 
   const [tradersRes, linksRes, balRes] = await Promise.allSettled([api('/api/traders/'), loadLinks(), loadBalance()]);
   const traders = tradersRes.status === 'fulfilled' && Array.isArray(tradersRes.value) ? tradersRes.value : [];
   state.ready = linksRes.status === 'fulfilled' && balRes.status === 'fulfilled';
   if (!state.ready) setLoadError(true);
-  renderHead(traders.length);
+  directorySig = tradersRes.status === 'fulfilled' ? JSON.stringify(traders) : '';
 
   const th = table.querySelector('thead th:nth-child(2)');
   if (th) th.textContent = 'YTD return';
@@ -113,32 +187,13 @@ async function boot() {
   const caption = table.querySelector('caption');
   if (caption) caption.textContent = 'Traders available to copy. Live figures come from each trader’s account since it started trading on this platform.';
 
-  $$('tbody.trader', table).forEach((r) => r.remove());   // drop the approved demo rows
-
-  if (!traders.length) {
-    const failed = tradersRes.status === 'rejected';
-    if (count) count.textContent = failed ? 'Traders could not be loaded' : 'No traders available';
-    if (empty) {
-      empty.replaceChildren(h('tr', null, h('td', { colspan: 9 }, h('div', { class: 'empty' },
-        h('p', { class: 'empty__title' }, failed ? 'The trader directory couldn’t be loaded' : 'No traders are available yet'),
-        h('p', null, failed ? 'Reload the page to try again.' : 'New trader profiles will appear here when they are published.')))));
-      empty.hidden = false;
-    }
-  }
-
-  const frags = traders.map((t, i) => renderTrader(t, i, template));
-  table.append(...frags, ...(empty ? [empty] : []));
-
-  if (traders.length) {
-    const filter = await import('../components/traders-filter.js');
-    filter.init(section);
-  }
+  await renderDirectory(section, traders, tradersRes.status === 'rejected');
   wireConfirm();
   accountStream({ balance: () => refresh(), fill: () => refresh(), position: () => refresh() });
   setInterval(() => { if (!document.hidden) refresh(); }, 15000);
+  setInterval(() => { if (!document.hidden) refreshDirectory(section); }, 30000);
 }
 
-/** Entry price of a shared trade; small prices keep their decimals (e.g. DOGE), missing prices show a dash. @param {any} tr */
 function tradePrice(tr) {
   const v = Number(tr.entry_price ?? tr.current_price ?? tr.price);
   if (!Number.isFinite(v) || v <= 0) return '—';
@@ -146,7 +201,7 @@ function tradePrice(tr) {
 }
 
 /** @param {any} t @param {number} index @param {HTMLTableSectionElement} template */
-function renderTrader(t, index, template) {
+function renderTrader(t, index, template, openIds) {
   const id = String(t.id);
   const name = String(t.full_name || 'Trader');
   // Performance is shown only for a live track record; missing values stay null and render as "—".
@@ -172,7 +227,8 @@ function renderTrader(t, index, template) {
 
   const row = /** @type {HTMLTableRowElement} */ (body.querySelector(':scope > tr'));
   const detail = /** @type {HTMLTableRowElement} */ (body.querySelector('tr.ledger__detail'));
-  const open = index === 0;
+  // First render opens the first trader; later renders keep whatever the user had expanded.
+  const open = openIds ? openIds.has(detailId) : index === 0;
   row.toggleAttribute('data-expanded', open);
   detail.hidden = !open;
   detail.id = detailId;

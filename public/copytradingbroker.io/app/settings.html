@@ -120,6 +120,7 @@
           <button class="tabs__tab" type="button" role="tab" id="set-tab-security" aria-controls="set-panel-security" aria-selected="true">Security</button>
           <button class="tabs__tab" type="button" role="tab" id="set-tab-preferences" aria-controls="set-panel-preferences" aria-selected="false">Preferences</button>
           <button class="tabs__tab" type="button" role="tab" id="set-tab-verification" aria-controls="set-panel-verification" aria-selected="false">Verification<small>1 step left</small></button>
+          <button class="tabs__tab" type="button" role="tab" id="set-tab-payout" aria-controls="set-panel-payout" aria-selected="false">Payout accounts</button>
           <button class="tabs__tab" type="button" role="tab" id="set-tab-trading" aria-controls="set-panel-trading" aria-selected="false">Trading account</button>
         </div>
 
@@ -371,6 +372,130 @@
               <ol class="set-kyc" role="list" aria-busy="true"></ol>
             </div>
           </section>
+        </div>
+
+        <!-- ===================== PAYOUT ACCOUNTS ===================== -->
+        <div class="set-panel" role="tabpanel" id="set-panel-payout" data-skeleton aria-busy="true" aria-labelledby="set-tab-payout" tabindex="0" hidden data-payout>
+          <section class="set-row" aria-labelledby="set-bank-title">
+            <div class="set-row__intro">
+              <h2 id="set-bank-title">Bank account</h2>
+              <p>Bank withdrawals are paid to the account saved here. You can save one bank account. Our team verifies new accounts before you can withdraw to them.</p>
+            </div>
+            <div class="set-row__body">
+              <p class="payout-msg" data-payout-bank-status role="status" aria-live="polite"></p>
+
+              <div class="payout-saved" data-payout-bank-saved hidden>
+                <dl class="payout-facts" data-payout-bank-facts></dl>
+                <div class="set-line">
+                  <span class="tag tag--plain" data-payout-bank-tag>—</span>
+                  <button class="btn btn--sm btn--outline" type="button" data-payout-bank-delete>Delete bank account</button>
+                </div>
+              </div>
+
+              <form class="form" data-payout-bank-form novalidate hidden aria-labelledby="set-bank-form-title">
+                <h3 class="payout-form__title" id="set-bank-form-title">Add a bank account</h3>
+                <p class="field__help">One bank account is allowed. Enter the details exactly as your bank shows them.</p>
+                <div class="set-fields">
+                  <div class="field">
+                    <label class="field__label" for="pb-name">Account holder name</label>
+                    <div class="field__control"><input class="field__input" id="pb-name" name="account_name" autocomplete="name" maxlength="100" required aria-describedby="pb-name-error"></div>
+                    <p class="field__error" id="pb-name-error"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7.5v5.5M12 16.5h.01"/></svg><span data-error-msg></span></p>
+                  </div>
+                  <div class="field">
+                    <label class="field__label" for="pb-bank">Bank name</label>
+                    <div class="field__control"><input class="field__input" id="pb-bank" name="bank_name" autocomplete="organization" maxlength="100" required aria-describedby="pb-bank-error"></div>
+                    <p class="field__error" id="pb-bank-error"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7.5v5.5M12 16.5h.01"/></svg><span data-error-msg></span></p>
+                  </div>
+                  <div class="field">
+                    <label class="field__label" for="pb-number">Account number</label>
+                    <div class="field__control"><input class="field__input mono" id="pb-number" name="account_number" autocomplete="off" maxlength="50" required aria-describedby="pb-number-error"></div>
+                    <p class="field__error" id="pb-number-error"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7.5v5.5M12 16.5h.01"/></svg><span data-error-msg></span></p>
+                  </div>
+                  <div class="field">
+                    <label class="field__label" for="pb-swift">SWIFT / BIC <span class="payout-opt">(optional)</span></label>
+                    <div class="field__control"><input class="field__input mono" id="pb-swift" name="swift_code" autocomplete="off" spellcheck="false" maxlength="11"></div>
+                  </div>
+                  <div class="field">
+                    <label class="field__label" for="pb-iban">IBAN <span class="payout-opt">(optional)</span></label>
+                    <div class="field__control"><input class="field__input mono" id="pb-iban" name="iban" autocomplete="off" spellcheck="false" maxlength="50"></div>
+                  </div>
+                  <div class="field">
+                    <label class="field__label" for="pb-routing">Routing number <span class="payout-opt">(optional)</span></label>
+                    <div class="field__control"><input class="field__input mono" id="pb-routing" name="routing_number" autocomplete="off" maxlength="50"></div>
+                  </div>
+                </div>
+                <div class="set-actions"><button class="btn btn--sm" type="submit" data-payout-bank-submit>Save bank account</button></div>
+              </form>
+            </div>
+          </section>
+
+          <section class="set-row" aria-labelledby="set-crypto-title">
+            <div class="set-row__intro">
+              <h2 id="set-crypto-title">Crypto wallets</h2>
+              <p>Crypto withdrawals are sent to the wallets saved here. You can save up to three. Our team verifies each wallet before you can withdraw to it.</p>
+            </div>
+            <div class="set-row__body">
+              <p class="payout-msg" data-payout-crypto-status role="status" aria-live="polite"></p>
+              <p class="set-strong" data-payout-crypto-count>—</p>
+
+              <p class="set-meta" data-payout-crypto-empty hidden>No crypto wallets saved yet.</p>
+              <ul class="payout-list" role="list" data-payout-crypto-list aria-label="Saved crypto wallets"></ul>
+
+              <p class="field__help" data-payout-crypto-full hidden>You can save up to 3 crypto wallets. Delete one to add another.</p>
+
+              <form class="form" data-payout-crypto-form novalidate hidden aria-labelledby="set-crypto-form-title">
+                <h3 class="payout-form__title" id="set-crypto-form-title">Add a crypto wallet</h3>
+                <div class="set-fields">
+                  <div class="field">
+                    <label class="field__label" for="pc-currency">Currency</label>
+                    <div class="field__control">
+                      <select class="field__select" id="pc-currency" name="currency" required>
+                        <option value="BTC">BTC</option>
+                        <option value="ETH">ETH</option>
+                        <option value="USDT">USDT</option>
+                        <option value="USDC">USDC</option>
+                        <option value="BNB">BNB</option>
+                        <option value="XRP">XRP</option>
+                        <option value="ADA">ADA</option>
+                        <option value="SOL">SOL</option>
+                        <option value="DOGE">DOGE</option>
+                        <option value="TRX">TRX</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="field">
+                    <label class="field__label" for="pc-network">Network <span class="payout-opt">(optional)</span></label>
+                    <div class="field__control"><input class="field__input" id="pc-network" name="network" autocomplete="off" maxlength="50" placeholder="e.g. ERC-20"></div>
+                  </div>
+                  <div class="field">
+                    <label class="field__label" for="pc-label">Label <span class="payout-opt">(optional)</span></label>
+                    <div class="field__control"><input class="field__input" id="pc-label" name="label" autocomplete="off" maxlength="50" placeholder="e.g. Hardware wallet"></div>
+                  </div>
+                  <div class="field set-fields__wide">
+                    <label class="field__label" for="pc-address">Wallet address</label>
+                    <div class="field__control"><input class="field__input mono" id="pc-address" name="wallet_address" autocomplete="off" spellcheck="false" minlength="10" maxlength="100" required aria-describedby="pc-address-help pc-address-error"></div>
+                    <p class="field__help" id="pc-address-help">10 to 100 characters. Double-check it: crypto sent to the wrong address cannot be recovered.</p>
+                    <p class="field__error" id="pc-address-error"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7.5v5.5M12 16.5h.01"/></svg><span data-error-msg></span></p>
+                  </div>
+                </div>
+                <div class="set-actions"><button class="btn btn--sm" type="submit" data-payout-crypto-submit>Save wallet</button></div>
+              </form>
+            </div>
+          </section>
+
+          <dialog class="dialog" id="payout-confirm-dialog" aria-labelledby="payout-confirm-title" aria-describedby="payout-confirm-text">
+            <div class="dialog__head">
+              <h2 class="dialog__title" id="payout-confirm-title" data-payout-confirm-title>Delete this account?</h2>
+              <button class="icon-btn" type="button" data-dialog-close aria-label="Close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+            </div>
+            <div class="dialog__body">
+              <p id="payout-confirm-text" data-payout-confirm-text></p>
+            </div>
+            <div class="dialog__foot">
+              <button class="btn btn--outline" type="button" data-dialog-close>Keep it</button>
+              <button class="btn" type="button" data-payout-confirm>Delete</button>
+            </div>
+          </dialog>
         </div>
 
         <!-- ===================== TRADING ACCOUNT ===================== -->

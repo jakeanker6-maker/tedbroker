@@ -6,13 +6,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Help center — TED Brokers</title>
   <!-- share-meta:start -->
-  <meta name="description" content="Search TED Brokers help for orders, funding, statements and two-factor authentication, or contact support by chat, email or phone.">
+  <meta name="description" content="Search TED Brokers help for orders, funding, plans, statements and two-factor authentication, or contact support by chat, email or phone.">
   <link rel="canonical" href="https://tedbrokers.com/help.html">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="TED Brokers">
   <meta property="og:locale" content="en_US">
   <meta property="og:title" content="Help center — TED Brokers">
-  <meta property="og:description" content="Search TED Brokers help for orders, funding, statements and two-factor authentication, or contact support by chat, email or phone.">
+  <meta property="og:description" content="Search TED Brokers help for orders, funding, plans, statements and two-factor authentication, or contact support by chat, email or phone.">
   <meta property="og:url" content="https://tedbrokers.com/help.html">
   <meta property="og:image" content="https://tedbrokers.com/assets/img/share/help.png">
   <meta property="og:image:width" content="1200">
@@ -20,7 +20,7 @@
   <meta property="og:image:alt" content="TED Brokers: How can we help?">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Help center — TED Brokers">
-  <meta name="twitter:description" content="Search TED Brokers help for orders, funding, statements and two-factor authentication, or contact support by chat, email or phone.">
+  <meta name="twitter:description" content="Search TED Brokers help for orders, funding, plans, statements and two-factor authentication, or contact support by chat, email or phone.">
   <meta name="twitter:image" content="https://tedbrokers.com/assets/img/share/help.png">
   <meta name="twitter:image:alt" content="TED Brokers: How can we help?">
 <!-- share-meta:end -->
@@ -71,7 +71,7 @@
           <label class="sr-only" for="help-q">Search help articles</label>
           <div class="help-search__control">
             <svg class="help-search__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
-            <input class="help-search__input" id="help-q" name="q" type="search" placeholder="Search deposits, orders, statements, 2FA…" autocomplete="off" spellcheck="false" enterkeyhint="search" aria-describedby="help-q-status">
+            <input class="help-search__input" id="help-q" name="q" type="search" placeholder="Search deposits, orders, plans, statements, 2FA…" autocomplete="off" spellcheck="false" enterkeyhint="search" aria-describedby="help-q-status">
             <button class="help-search__submit" type="submit">Search</button>
           </div>
           <p class="help-search__status" id="help-q-status" role="status" aria-live="polite" data-search-status></p>
@@ -81,7 +81,7 @@
               <li><a href="help.html?q=Fund+wallet#faq" data-search-term="Fund wallet">Fund wallet</a></li>
               <li><a href="help.html?q=Withdraw+funds#faq" data-search-term="Withdraw funds">Withdraw funds</a></li>
               <li><a href="help.html?q=Order+types#faq" data-search-term="Order types">Order types</a></li>
-              <li><a href="help.html?q=Enable+2FA#faq" data-search-term="Enable 2FA">Enable 2FA</a></li>
+              <li><a href="help.html?q=Turn+on+2FA#faq" data-search-term="Turn on 2FA">Turn on 2FA</a></li>
             </ul>
           </div>
         </form>
@@ -94,12 +94,14 @@
         <div class="help-aside">
           <div class="help-aside__inner">
             <p class="overline overline--accent">Knowledge base</p>
-            <p class="help-aside__title">Frequently asked questions</p>
+            <h2 class="help-aside__title">Frequently asked questions</h2>
             <nav class="help-toc" data-component="help-toc" aria-label="Help topics">
               <ul class="help-toc__list" role="list">
                 <li><a href="#faq-general">General</a></li>
                 <li><a href="#faq-account">Account &amp; verification</a></li>
                 <li><a href="#faq-funding">Funding &amp; withdrawals</a></li>
+                <li><a href="#faq-trading">Trading tools</a></li>
+                <li><a href="#faq-plans">Investment plans</a></li>
                 <li><a href="#faq-copy">Optional copy trading</a></li>
                 <li><a href="#faq-security">Security</a></li>
               </ul>
@@ -143,27 +145,91 @@
           <section class="help-group" id="faq-funding" aria-labelledby="faq-funding-title" data-faq-group>
             <h2 class="help-group__title" id="faq-funding-title"><span class="help-group__num" aria-hidden="true">03</span> Funding &amp; withdrawals</h2>
             <div class="accordion">
-              <details data-keywords="deposit fund wallet bank transfer cryptocurrency approved">
+              <details data-keywords="deposit fund wallet bank transfer cryptocurrency crypto network qr code address approved paypal">
                 <summary><span data-q>How do I fund my wallet?</span></summary>
-                <div class="accordion__body"><p>You can fund your wallet by bank transfer or cryptocurrency. Request the deposit in your wallet. The balance is credited once the deposit has been approved.</p></div>
+                <div class="accordion__body"><p>Open Wallet and choose Deposit. You can fund by bank transfer or cryptocurrency. For crypto, choose the network and send to the address or scan the QR code shown. The balance is credited after the deposit is approved by our team. PayPal is listed in Wallet but is not available at the moment.</p></div>
               </details>
-              <details data-keywords="withdrawal withdraw cash out confirmation code approval">
+              <details data-keywords="withdrawal withdraw cash out confirmation code approval saved address verified bank account">
                 <summary><span data-q>How do I withdraw funds?</span></summary>
-                <div class="accordion__body"><p>Request a withdrawal in your wallet. Withdrawals need a confirmation code and approval before they are processed.</p></div>
+                <div class="accordion__body"><p>Request a withdrawal in Wallet. Funds are held while the request is pending. Enter the 8-character confirmation code we send you, then the request goes for approval by our team. Crypto withdrawals can only go to a saved address that has been verified, and bank accounts must be verified before the first withdrawal.</p></div>
               </details>
-              <details data-keywords="fees cost charges commission options crypto stocks">
+              <details data-keywords="minimum min minimum deposit withdrawal amount limit 10 dollars">
+                <summary><span data-q>What is the minimum deposit or withdrawal?</span></summary>
+                <div class="accordion__body"><p>The minimum deposit and withdrawal amount is $10.</p></div>
+              </details>
+              <details data-keywords="fees cost charges commission options crypto stocks etfs pass-through per contract 0.50 percent">
                 <summary><span data-q>What does it cost to trade?</span></summary>
-                <div class="accordion__body"><p>US stocks and ETFs have a $0 commission; regulatory pass-through fees apply to sales. Options are $0.65 per contract. Cryptocurrency trades are charged 0.50% per trade.</p></div>
+                <div class="accordion__body"><p>US stocks and ETFs have a $0 commission. Sales carry regulatory pass-through fees (the SEC fee and the FINRA trading activity fee). Options are $0.65 per contract on both buys and sells. Cryptocurrency trades are charged 0.50% of the trade value.</p></div>
+              </details>
+            </div>
+          </section>
+
+          <section class="help-group" id="faq-trading" aria-labelledby="faq-trading-title" data-faq-group>
+            <h2 class="help-group__title" id="faq-trading-title"><span class="help-group__num" aria-hidden="true">04</span> Trading tools</h2>
+            <div class="accordion">
+              <details data-keywords="order types market limit stop stop-limit trailing gtc ioc fok time in force day good till cancelled immediate or cancel fill or kill">
+                <summary><span data-q>What order types can I use?</span></summary>
+                <div class="accordion__body"><p>Market, limit, stop, stop-limit and trailing stop orders. Time-in-force options are day, good-till-cancelled (GTC), immediate-or-cancel (IOC) and fill-or-kill (FOK).</p></div>
+              </details>
+              <details data-keywords="options chain expiry expiration multi-leg spread strategy templates payoff single-leg delayed quotes">
+                <summary><span data-q>How do options work on the platform?</span></summary>
+                <div class="accordion__body"><p>The Trade page shows the options chain by expiry. You can place single-leg orders or multi-leg strategies from built-in templates, and review the payoff before you confirm. Options quotes can be delayed.</p></div>
+              </details>
+              <details data-keywords="etf baskets basket etfs templates custom bundle one order">
+                <summary><span data-q>What are ETF baskets?</span></summary>
+                <div class="accordion__body"><p>Ready-made ETF baskets built from five templates, plus custom baskets of up to 20 ETFs. You can buy a basket as one order.</p></div>
+              </details>
+              <details data-keywords="watchlists price alerts recurring investments screener company profiles news feed market tools">
+                <summary><span data-q>Which tools help me follow the market?</span></summary>
+                <div class="accordion__body"><p>Watchlists, price alerts, recurring investments, the screener, company profiles and the news feed. Find them in the Trade, Screener and News pages.</p></div>
+              </details>
+              <details data-keywords="margin short selling sell short borrow fee locate pattern day trader pdt 25000 eligible accounts">
+                <summary><span data-q>Can I sell short or trade on margin?</span></summary>
+                <div class="accordion__body"><p>Margin and short-selling are available on eligible accounts. Margin and short sales can increase your losses, and losses on a short sale are not limited. Short sales require shares to be located and can carry a borrow fee. Accounts under $25,000 are subject to pattern day trader limits. Read the <a href="legal/risk_closure.html">full risk disclosure</a> before you use margin or short sales.</p></div>
+              </details>
+              <details data-keywords="hours trading hours market hours nyse holidays calendar crypto spot cryptocurrency extended">
+                <summary><span data-q>What hours can I trade?</span></summary>
+                <div class="accordion__body"><p>US stock and ETF orders follow the US market (NYSE) trading hours and holiday calendar. Cryptocurrency trades on the Trade page as spot only, and cannot be sold short.</p></div>
+              </details>
+              <details data-keywords="statements tax reports documents monthly statement trade confirmations realized gains records tax">
+                <summary><span data-q>Where do I find statements and tax reports?</span></summary>
+                <div class="accordion__body"><p>In Documents: monthly statements, trade confirmations and realized gains reports. These help you keep records and are not tax advice.</p></div>
+              </details>
+            </div>
+          </section>
+
+          <section class="help-group" id="faq-plans" aria-labelledby="faq-plans-title" data-faq-group>
+            <h2 class="help-group__title" id="faq-plans-title"><span class="help-group__num" aria-hidden="true">05</span> Investment plans</h2>
+            <div class="accordion">
+              <details data-keywords="plans investment plans robo advisor etf automation defi options staking coming soon">
+                <summary><span data-q>What investment plans are available?</span></summary>
+                <div class="accordion__body"><p>Robo Advisor, ETF automation, DeFi and Options plans, all in the Plans page. Staking is coming soon. Every plan carries market risk, so read <a href="#faq-plans">Are plan returns guaranteed?</a> below before you invest.</p></div>
+              </details>
+              <details data-keywords="activate plan start invest minimum investment free cash withdrawable balance amount">
+                <summary><span data-q>How do I activate a plan?</span></summary>
+                <div class="accordion__body"><p>Open Plans, choose a plan, and enter an amount from your free cash (withdrawable balance). Each plan has a minimum investment, which is enforced when you activate it.</p></div>
+              </details>
+              <details data-keywords="track plans plan progress value profit loss time remaining plan history past plans">
+                <summary><span data-q>How do I track my plans?</span></summary>
+                <div class="accordion__body"><p>Plan progress shows each active plan's value, profit or loss, progress and time remaining. Plan history lists past plans.</p></div>
+              </details>
+              <details data-keywords="plan returns guaranteed guarantee returns performance risk market loss">
+                <summary><span data-q>Are plan returns guaranteed?</span></summary>
+                <div class="accordion__body"><p>No. Plan values follow market prices and are not guaranteed. Past performance is not a reliable guide to future results.</p></div>
               </details>
             </div>
           </section>
 
           <section class="help-group" id="faq-copy" aria-labelledby="faq-copy-title" data-faq-group>
-            <h2 class="help-group__title" id="faq-copy-title"><span class="help-group__num" aria-hidden="true">04</span> Optional copy trading</h2>
+            <h2 class="help-group__title" id="faq-copy-title"><span class="help-group__num" aria-hidden="true">06</span> Optional copy trading</h2>
             <div class="accordion">
               <details data-keywords="copy trading what is strategy profile allocate mirror">
                 <summary><span data-q>What is copy trading?</span></summary>
                 <div class="accordion__body"><p>Copy trading is an optional feature. You choose a strategy profile and allocate cash, and your account mirrors the profile's trades in proportion to your allocation. Copy trades run on the same order system as your own orders.</p></div>
+              </details>
+              <details data-keywords="start copying copy trader choose trader allocation minimum 100 copy stop-loss reserved cash allocate">
+                <summary><span data-q>How do I start copying a trader?</span></summary>
+                <div class="accordion__body"><p>Open Copy traders, choose a trader, set the amount you want to allocate and, if you like, a copy stop-loss. The minimum copy amount is $100 by default and the allocation is reserved from your cash while the copy is active.</p></div>
               </details>
               <details data-keywords="stop copying pause cancel unfollow resume">
                 <summary><span data-q>How do I pause or stop copying?</span></summary>
@@ -181,15 +247,19 @@
           </section>
 
           <section class="help-group" id="faq-security" aria-labelledby="faq-security-title" data-faq-group>
-            <h2 class="help-group__title" id="faq-security-title"><span class="help-group__num" aria-hidden="true">05</span> Security</h2>
+            <h2 class="help-group__title" id="faq-security-title"><span class="help-group__num" aria-hidden="true">07</span> Security</h2>
             <div class="accordion">
-              <details data-keywords="enable 2fa two-factor authentication authenticator app security code">
-                <summary><span data-q>How do I enable two-factor authentication (2FA)?</span></summary>
-                <div class="accordion__body"><p>Go to Settings, then Security, and choose Enable 2FA. Scan the QR code with an authenticator app such as Google Authenticator or Authy, then enter the 6-digit code to confirm.</p></div>
+              <details data-keywords="turn on 2fa two-factor authentication email code 6-digit sign in security settings">
+                <summary><span data-q>How do I turn on two-factor authentication (2FA)?</span></summary>
+                <div class="accordion__body"><p>Open Settings and turn on Two-factor authentication. When you sign in, we email a 6-digit code to your registered address and you enter it to finish signing in.</p></div>
+              </details>
+              <details data-keywords="suspicious sign-in sign in alert email login security notification">
+                <summary><span data-q>Will I be told about suspicious sign-ins?</span></summary>
+                <div class="accordion__body"><p>Yes. We send an email alert for suspicious sign-ins.</p></div>
               </details>
               <details data-keywords="hacked compromised password suspicious login 2fa">
                 <summary><span data-q>What should I do if I think my account is compromised?</span></summary>
-                <div class="accordion__body"><p>Change your password straight away, make sure 2FA is on, and contact support by live chat or phone so we can secure your account and review recent activity with you.</p></div>
+                <div class="accordion__body"><p>Change your password straight away and make sure 2FA is on. Then contact support by email at support@tedbrokers.com, or by phone at +1 (332) 220-8968 if the account is locked. Signed-in users can also use live chat. We will secure your account and review recent activity with you.</p></div>
               </details>
             </div>
           </section>

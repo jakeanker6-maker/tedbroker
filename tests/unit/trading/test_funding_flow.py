@@ -28,6 +28,10 @@ def env(fresh_db, client):
     get_collection("users").insert_one({
         "_id": uid, "username": "u", "email": "u@t.io", "full_name": "U", "wallet_balance": 1000.0,
         "hashed_password": get_password_hash("pw-123456"), "is_active": True, "access_granted": True})
+    # Bank withdrawals pay out to the user's one saved, admin-verified bank account.
+    get_collection("user_bank_accounts").insert_one({
+        "user_id": str(uid), "account_name": "U", "account_number": "0123456789", "bank_name": "Test Bank",
+        "is_primary": True, "is_verified": True, "created_at": datetime.utcnow(), "updated_at": datetime.utcnow()})
     admin = {"Authorization": "Bearer " + create_access_token({"sub": "adm", "user_id": str(admin_id), "role": "admin"})}
     user = {"Authorization": "Bearer " + create_access_token({"sub": "u@t.io", "user_id": str(uid), "role": "user"})}
     return client, admin, user, str(uid)
