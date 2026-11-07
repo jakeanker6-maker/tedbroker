@@ -75,7 +75,8 @@ async def get_onboarding_status(current_user: dict = Depends(get_current_user_to
     return OnboardingStatus(
         is_onboarding_complete=is_complete,
         current_step=current_step,
-        completed_steps=completed_steps
+        completed_steps=completed_steps,
+        questionnaire_completed=bool(onboarding_data.get("questionnaire_completed", False))
     )
 
 
@@ -314,6 +315,13 @@ async def submit_questionnaire(
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="User not found"
+        )
+
+    # The questionnaire is the last onboarding step: it comes after KYC and before the pending review
+    if not user.get("onboarding", {}).get("kyc_completed"):
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Please complete identity verification first"
         )
 
     valid_risk = ["very_low", "low", "moderate", "high", "very_high"]

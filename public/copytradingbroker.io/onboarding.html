@@ -196,26 +196,109 @@
             border-color: #4A5568;
         }
 
-        .success-message {
-            text-align: center;
-            padding: 50px 20px;
+        .questionnaire-dots {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 24px;
         }
 
-        .success-message i {
-            font-size: 72px;
-            color: #48BB78;
-            margin-bottom: 20px;
+        .questionnaire-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #A0AEC0;
+            transition: background-color 0.3s;
         }
 
-        .success-message h2 {
+        .questionnaire-dot.is-active {
+            background: #D32F2F;
+        }
+
+        .questionnaire-dot.is-done {
+            background: #38A169;
+        }
+
+        .questionnaire-heading {
             color: #2D3748;
-            margin-bottom: 15px;
+            font-size: 1.25rem;
+            margin: 0 0 6px;
         }
 
-        .success-message p {
-            color: #718096;
-            font-size: 16px;
-            margin-bottom: 30px;
+        .questionnaire-heading:focus {
+            outline: none;
+        }
+
+        .questionnaire-heading:focus-visible {
+            outline: 2px solid #D32F2F;
+            outline-offset: 4px;
+            border-radius: 2px;
+        }
+
+        .questionnaire-description {
+            color: #4A5568;
+            font-size: 14px;
+            margin: 0 0 16px;
+        }
+
+        .questionnaire-error {
+            color: #B71C1C;
+            font-size: 14px;
+            font-weight: 600;
+            margin: 12px 0 0;
+        }
+
+        .questionnaire-options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .questionnaire-option {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 14px;
+            border: 1px solid #E2E8F0;
+            border-radius: 8px;
+            color: #2D3748;
+            font-size: 14px;
+            cursor: pointer;
+            transition: border-color 0.2s, background-color 0.2s;
+        }
+
+        .questionnaire-option:hover {
+            border-color: #D32F2F;
+        }
+
+        .questionnaire-option:has(input:checked) {
+            border-color: #D32F2F;
+            background: #FFF5F5;
+        }
+
+        .questionnaire-option:has(input:focus-visible) {
+            outline: 2px solid #D32F2F;
+            outline-offset: 2px;
+        }
+
+        .questionnaire-option input[type=radio] {
+            flex-shrink: 0;
+            width: 18px;
+            height: 18px;
+            margin: 0;
+            accent-color: #D32F2F;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .questionnaire-dot,
+            .questionnaire-option,
+            .btn {
+                transition: none;
+            }
+
+            .btn-primary:hover {
+                transform: none;
+            }
         }
     </style>
 </head>
@@ -255,6 +338,10 @@
                                         <div class="wizard-step" data-step="3">
                                             <div class="wizard-step-circle">3</div>
                                             <div class="wizard-step-label">ID Verification</div>
+                                        </div>
+                                        <div class="wizard-step" data-step="4">
+                                            <div class="wizard-step-circle">4</div>
+                                            <div class="wizard-step-label">Investment Profile</div>
                                         </div>
                                     </div>
 
@@ -365,19 +452,137 @@
                                             </form>
                                         </div>
 
-                                        <!-- Success Message -->
+                                        <!-- Step 4: Investment Profile (3 views, one question each) -->
                                         <div class="step-content" data-step="4">
-                                            <div class="success-message">
-                                                <i class="fa fa-check-circle"></i>
-                                                <h2>Profile Complete!</h2>
-                                                <p>Your profile has been successfully completed. Our team will review your information and you'll be notified once verification is complete.</p>
-                                                <button class="btn btn-primary btn-lg" onclick="window.location.href='/dashboard'">Go to Dashboard</button>
-                                            </div>
+                                            <h3 class="mb-2">Investment Profile</h3>
+                                            <p class="text-muted mb-4">Help us understand your investment preferences.</p>
+                                            <form id="questionnaire-form">
+                                                <p class="visually-hidden" id="questionnaire-position">Question 1 of 3</p>
+                                                <div class="questionnaire-dots" aria-hidden="true">
+                                                    <span class="questionnaire-dot is-active" data-dot="1"></span>
+                                                    <span class="questionnaire-dot" data-dot="2"></span>
+                                                    <span class="questionnaire-dot" data-dot="3"></span>
+                                                </div>
+
+                                                <!-- View 1: Risk Tolerance -->
+                                                <div class="questionnaire-view" data-view="1">
+                                                    <fieldset aria-describedby="q-desc-1 q-error-1">
+                                                        <legend>
+                                                            <h4 class="questionnaire-heading" id="q-heading-1" tabindex="-1">What is your investment risk tolerance?</h4>
+                                                        </legend>
+                                                        <p class="questionnaire-description" id="q-desc-1">Select the level of risk you are comfortable with.</p>
+                                                        <div class="questionnaire-options">
+                                                            <label class="questionnaire-option">
+                                                                <input type="radio" name="risk_tolerance" value="very_low">
+                                                                <span>Very Low</span>
+                                                            </label>
+                                                            <label class="questionnaire-option">
+                                                                <input type="radio" name="risk_tolerance" value="low">
+                                                                <span>Low</span>
+                                                            </label>
+                                                            <label class="questionnaire-option">
+                                                                <input type="radio" name="risk_tolerance" value="moderate">
+                                                                <span>Moderate</span>
+                                                            </label>
+                                                            <label class="questionnaire-option">
+                                                                <input type="radio" name="risk_tolerance" value="high">
+                                                                <span>High</span>
+                                                            </label>
+                                                            <label class="questionnaire-option">
+                                                                <input type="radio" name="risk_tolerance" value="very_high">
+                                                                <span>Very High</span>
+                                                            </label>
+                                                        </div>
+                                                        <p class="questionnaire-error" id="q-error-1" role="alert" hidden></p>
+                                                    </fieldset>
+
+                                                    <div class="form-actions">
+                                                        <button type="button" class="btn btn-secondary" data-q-action="back">Back</button>
+                                                        <button type="button" class="btn btn-primary" data-q-action="next">Next</button>
+                                                    </div>
+                                                </div>
+
+                                                <!-- View 2: Annual Income -->
+                                                <div class="questionnaire-view" data-view="2" hidden>
+                                                    <fieldset aria-describedby="q-desc-2 q-error-2">
+                                                        <legend>
+                                                            <h4 class="questionnaire-heading" id="q-heading-2" tabindex="-1">What is your annual income?</h4>
+                                                        </legend>
+                                                        <p class="questionnaire-description" id="q-desc-2">Select the range that best describes your annual earnings.</p>
+                                                        <div class="questionnaire-options">
+                                                            <label class="questionnaire-option">
+                                                                <input type="radio" name="annual_income" value="under_10k">
+                                                                <span>Less than $10,000</span>
+                                                            </label>
+                                                            <label class="questionnaire-option">
+                                                                <input type="radio" name="annual_income" value="10k_50k">
+                                                                <span>$10,000 - $50,000</span>
+                                                            </label>
+                                                            <label class="questionnaire-option">
+                                                                <input type="radio" name="annual_income" value="50k_100k">
+                                                                <span>$50,000 - $100,000</span>
+                                                            </label>
+                                                            <label class="questionnaire-option">
+                                                                <input type="radio" name="annual_income" value="100k_1m">
+                                                                <span>$100,000 - $1,000,000</span>
+                                                            </label>
+                                                            <label class="questionnaire-option">
+                                                                <input type="radio" name="annual_income" value="over_1m">
+                                                                <span>More than $1,000,000</span>
+                                                            </label>
+                                                        </div>
+                                                        <p class="questionnaire-error" id="q-error-2" role="alert" hidden></p>
+                                                    </fieldset>
+
+                                                    <div class="form-actions">
+                                                        <button type="button" class="btn btn-secondary" data-q-action="back">Back</button>
+                                                        <button type="button" class="btn btn-primary" data-q-action="next">Next</button>
+                                                    </div>
+                                                </div>
+
+                                                <!-- View 3: Employment Status -->
+                                                <div class="questionnaire-view" data-view="3" hidden>
+                                                    <fieldset aria-describedby="q-desc-3 q-error-3">
+                                                        <legend>
+                                                            <h4 class="questionnaire-heading" id="q-heading-3" tabindex="-1">What is your employment status?</h4>
+                                                        </legend>
+                                                        <p class="questionnaire-description" id="q-desc-3">Select the option that best describes your current status.</p>
+                                                        <div class="questionnaire-options">
+                                                            <label class="questionnaire-option">
+                                                                <input type="radio" name="employment_status" value="unemployed">
+                                                                <span>Unemployed</span>
+                                                            </label>
+                                                            <label class="questionnaire-option">
+                                                                <input type="radio" name="employment_status" value="self_employed">
+                                                                <span>Self-Employed</span>
+                                                            </label>
+                                                            <label class="questionnaire-option">
+                                                                <input type="radio" name="employment_status" value="part_time">
+                                                                <span>Part Time</span>
+                                                            </label>
+                                                            <label class="questionnaire-option">
+                                                                <input type="radio" name="employment_status" value="full_time">
+                                                                <span>Full Time</span>
+                                                            </label>
+                                                            <label class="questionnaire-option">
+                                                                <input type="radio" name="employment_status" value="retired">
+                                                                <span>Retired</span>
+                                                            </label>
+                                                        </div>
+                                                        <p class="questionnaire-error" id="q-error-3" role="alert" hidden></p>
+                                                    </fieldset>
+
+                                                    <div class="form-actions">
+                                                        <button type="button" class="btn btn-secondary" data-q-action="back">Back</button>
+                                                        <button type="submit" class="btn btn-primary" id="questionnaire-submit">Submit</button>
+                                                    </div>
+                                                </div>
+                                            </form>
                                         </div>
                                     </div>
 
                                     <div class="progress-indicator" id="progress-indicator">
-                                        Step <span id="current-step">1</span> of 3
+                                        Step <span id="current-step">1</span> of 4
                                     </div>
                                 </div>
                             </div>

@@ -656,6 +656,7 @@ class OnboardingStatus(BaseModel):
     is_onboarding_complete: bool
     current_step: Optional[str] = None
     completed_steps: List[str] = []
+    questionnaire_completed: bool = False
 
 
 class ForgotPasswordRequest(BaseModel):

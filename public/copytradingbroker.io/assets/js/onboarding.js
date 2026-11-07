@@ -21,6 +21,7 @@ document.addEventListener('DOMContentLoaded', function() {
     setupKYCForm();
     setupFileUpload();
     setupBackButtons();
+    setupQuestionnaireForm();
 });
 
 /**
@@ -32,8 +33,14 @@ async function checkOnboardingStatus() {
         const data = await response.json();
 
         if (data.is_onboarding_complete) {
-            // Already completed: approved users go to the app, everyone else to the status page
-            await goToNextStep();
+            if (data.questionnaire_completed) {
+                // Fully onboarded: approved users go to the app, everyone else to the status page
+                await goToNextStep();
+            } else {
+                // KYC done but questionnaire missing: resume it here.
+                // Do not call goToNextStep(): the gate would send the user back to /onboarding.
+                goToStep(4);
+            }
             return;
         }
 
@@ -255,40 +262,189 @@ function setupKYCForm() {
                 throw new Error(data.detail || 'Failed to submit KYC documents');
             }
 
-            // Show success message and redirect to dashboard
-            Swal.fire({
-                title: 'Verification Submitted!',
-                html: `
-                    <div style="text-align: center;">
-                        <i class="fas fa-clock" style="color: #ff9800; font-size: 64px; margin-bottom: 20px;"></i>
-                        <p style="font-size: 18px; font-weight: bold; color: #2d3748; margin-bottom: 16px;">
-                            Thank you for submitting your verification documents!
-                        </p>
-                        <p style="font-size: 16px; margin-bottom: 12px; color: #4a5568; line-height: 1.6;">
-                            Your information is currently under review by our team.
-                        </p>
-                        <div style="background: #fff3cd; padding: 16px; border-radius: 8px; border-left: 4px solid #ff9800; margin: 20px 0;">
-                            <p style="font-size: 15px; color: #856404; margin: 0; font-weight: 600;">
-                                <i class="fas fa-info-circle"></i> Approval typically takes less than 24 hours
-                            </p>
-                        </div>
-                        <p style="font-size: 14px; color: #6b7280; margin-top: 16px;">
-                            You will receive a notification once your account has been approved and you can start trading.
-                        </p>
-                    </div>
-                `,
-                icon: 'info',
-                confirmButtonText: 'Continue',
-                confirmButtonColor: '#D32F2F',
-                allowOutsideClick: false,
-                allowEscapeKey: false
-            }).then(() => goToNextStep());
+            // KYC saved: continue with the investment questionnaire
+            goToStep(4);
 
         } catch (error) {
             TED_AUTH.closeLoading();
             TED_AUTH.showError(error.message);
         }
     });
+}
+
+/**
+ * Setup Investment Questionnaire (step 4)
+ */
+function setupQuestionnaireForm() {
+    const form = document.getElementById('questionnaire-form');
+
+    // Next/Back buttons use data-q-action; one delegated listener covers all views
+    form.addEventListener('click', function(e) {
+        const button = e.target.closest('button[data-q-action]');
+        if (!button || !form.contains(button)) {
+            return;
+        }
+
+        if (button.dataset.qAction === 'next') {
+            questionnaireNext();
+        } else {
+            questionnaireBack();
+        }
+    });
+
+    form.addEventListener('submit', submitQuestionnaire);
+}
+
+/**
+ * Questionnaire fields, in view order (view N uses QUESTIONNAIRE_FIELDS[N - 1])
+ */
+const QUESTIONNAIRE_FIELDS = ['risk_tolerance', 'annual_income', 'employment_status'];
+let questionnaireView = 1;
+
+/**
+ * Whether a radio group of the questionnaire has a selection
+ */
+function isQuestionAnswered(fieldName) {
+    return document.querySelector(`input[name="${fieldName}"]:checked`) !== null;
+}
+
+/**
+ * Show or clear the inline validation message of one questionnaire view
+ */
+function setQuestionnaireError(view, message) {
+    const errorEl = document.getElementById(`q-error-${view}`);
+    errorEl.textContent = message || '';
+    errorEl.hidden = !message;
+}
+
+/**
+ * Show one questionnaire view (1-3), update progress dots and screen-reader text
+ */
+function showQuestionnaireView(view) {
+    setQuestionnaireError(questionnaireView, '');
+    questionnaireView = view;
+
+    document.querySelectorAll('.questionnaire-view').forEach(section => {
+        section.hidden = Number(section.dataset.view) !== view;
+    });
+
+    document.querySelectorAll('.questionnaire-dot').forEach(dot => {
+        const dotNumber = Number(dot.dataset.dot);
+        dot.classList.toggle('is-active', dotNumber === view);
+        dot.classList.toggle('is-done', dotNumber < view);
+    });
+
+    document.getElementById('questionnaire-position').textContent = `Question ${view} of ${QUESTIONNAIRE_FIELDS.length}`;
+
+    // Move focus to the new question so keyboard and screen reader users land on it
+    document.getElementById(`q-heading-${view}`).focus({ preventScroll: true });
+}
+
+/**
+ * Go to the next questionnaire view, requiring a selection on the current one
+ */
+function questionnaireNext() {
+    if (!isQuestionAnswered(QUESTIONNAIRE_FIELDS[questionnaireView - 1])) {
+        setQuestionnaireError(questionnaireView, 'Please select an option to continue.');
+        return;
+    }
+
+    showQuestionnaireView(questionnaireView + 1);
+}
+
+/**
+ * Go to the previous questionnaire view; from view 1 return to step 3
+ */
+function questionnaireBack() {
+    if (questionnaireView === 1) {
+        goToStep(3);
+        return;
+    }
+
+    showQuestionnaireView(questionnaireView - 1);
+}
+
+/**
+ * Submit the investment questionnaire (view 3 only)
+ */
+async function submitQuestionnaire(e) {
+    e.preventDefault();
+
+    // Submit is only reachable from view 3; ignore any other submit
+    if (questionnaireView < QUESTIONNAIRE_FIELDS.length) {
+        return;
+    }
+
+    // Make sure every question is answered; jump to the first unanswered one
+    const missingView = QUESTIONNAIRE_FIELDS.findIndex(field => !isQuestionAnswered(field));
+    if (missingView !== -1) {
+        showQuestionnaireView(missingView + 1);
+        setQuestionnaireError(missingView + 1, 'Please select an option to continue.');
+        return;
+    }
+
+    setQuestionnaireError(questionnaireView, '');
+
+    const payload = {};
+    QUESTIONNAIRE_FIELDS.forEach(field => {
+        payload[field] = document.querySelector(`input[name="${field}"]:checked`).value;
+    });
+
+    const submitButton = document.getElementById('questionnaire-submit');
+    const navButtons = document.querySelectorAll('#questionnaire-form [data-q-action]');
+    submitButton.disabled = true;
+    navButtons.forEach(button => { button.disabled = true; });
+    TED_AUTH.showLoading('Saving your investment profile...');
+
+    try {
+        const response = await TED_AUTH.apiCall('/api/onboarding/questionnaire', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        });
+
+        const data = await response.json().catch(() => ({}));
+        TED_AUTH.closeLoading();
+
+        if (!response.ok) {
+            throw new Error(typeof data.detail === 'string' ? data.detail : 'Failed to save questionnaire.');
+        }
+
+        // Buttons stay disabled: the user is leaving this page
+        Swal.fire({
+            title: 'Verification Submitted!',
+            html: `
+                <div style="text-align: center;">
+                    <i class="fas fa-clock" style="color: #ff9800; font-size: 64px; margin-bottom: 20px;"></i>
+                    <p style="font-size: 18px; font-weight: bold; color: #2d3748; margin-bottom: 16px;">
+                        Thank you for completing your investment profile!
+                    </p>
+                    <p style="font-size: 16px; margin-bottom: 12px; color: #4a5568; line-height: 1.6;">
+                        Your information is currently under review by our team.
+                    </p>
+                    <div style="background: #fff3cd; padding: 16px; border-radius: 8px; border-left: 4px solid #ff9800; margin: 20px 0;">
+                        <p style="font-size: 15px; color: #856404; margin: 0; font-weight: 600;">
+                            <i class="fas fa-info-circle"></i> Approval typically takes less than 24 hours
+                        </p>
+                    </div>
+                    <p style="font-size: 14px; color: #6b7280; margin-top: 16px;">
+                        You will receive a notification once your account has been approved and you can start trading.
+                    </p>
+                </div>
+            `,
+            icon: 'info',
+            confirmButtonText: 'Continue',
+            confirmButtonColor: '#D32F2F',
+            allowOutsideClick: false,
+            allowEscapeKey: false
+        }).then(() => goToNextStep());
+
+    } catch (error) {
+        TED_AUTH.closeLoading();
+        submitButton.disabled = false;
+        navButtons.forEach(button => { button.disabled = false; });
+        TED_AUTH.showError(error.message);
+    }
 }
 
 /**
@@ -400,25 +556,33 @@ function goToStep(step) {
         const stepNumber = index + 1;
 
         stepElement.classList.remove('active', 'completed');
+        stepElement.removeAttribute('aria-current');
 
         if (stepNumber < step) {
             stepElement.classList.add('completed');
         } else if (stepNumber === step) {
             stepElement.classList.add('active');
+            stepElement.setAttribute('aria-current', 'step');
         }
     });
 
     // Update current step
     currentStep = step;
 
+    // Entering the questionnaire always starts at its first question
+    if (step === 4) {
+        showQuestionnaireView(1);
+    }
+
     // Update progress indicator
-    if (step <= 3) {
+    if (step <= 4) {
         document.getElementById('current-step').textContent = step;
         document.getElementById('progress-indicator').style.display = 'block';
     } else {
         document.getElementById('progress-indicator').style.display = 'none';
     }
 
-    // Scroll to top
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    // Scroll to top (instant when the user prefers reduced motion)
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    window.scrollTo({ top: 0, behavior: reduceMotion ? 'auto' : 'smooth' });
 }

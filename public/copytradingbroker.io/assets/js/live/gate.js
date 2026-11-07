@@ -3,6 +3,7 @@
  * Post-sign-in routing gate.
  *
  *   onboarding incomplete            -> /onboarding
+ *   questionnaire not answered       -> /onboarding (wizard step after KYC)
  *   onboarding done, not approved    -> /welcome   (placeholder: ID upload is being approved)
  *   onboarding done, access granted  -> /app/
  *
@@ -17,7 +18,7 @@ export async function resolvePostAuthPath() {
   try {
     const status = await api('/api/onboarding/status', timeout);
     if (!status || typeof status !== 'object') return null;
-    if (!status.is_onboarding_complete) return '/onboarding';
+    if (!status.is_onboarding_complete || !status.questionnaire_completed) return '/onboarding';
     const me = await api('/api/auth/me', timeout);
     return me?.access_granted ? '/app/' : '/welcome';
   } catch (err) {
