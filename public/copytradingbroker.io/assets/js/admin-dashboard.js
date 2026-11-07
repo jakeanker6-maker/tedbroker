@@ -1211,6 +1211,107 @@ async function rejectKYC(userId) {
     }
 }
 
+// ---- Trader profile photo: local file -> POST /api/admin/traders/photo -> profile_photo URL ----
+const TRADER_PHOTO_TYPES = ['image/jpeg', 'image/png', 'image/webp'];
+const TRADER_PHOTO_MAX_BYTES = 5 * 1024 * 1024;
+const traderPhotoPreviewUrls = {};
+
+function setTraderPhotoError(prefix, message) {
+    const el = document.getElementById(`${prefix}-profile-photo-error`);
+    if (!el) return;
+    el.textContent = message || '';
+    el.hidden = !message;
+}
+
+function showTraderPhotoPreview(prefix, src) {
+    const img = document.getElementById(`${prefix}-profile-photo-preview`);
+    if (!img) return;
+    if (src) {
+        img.src = src;
+        img.hidden = false;
+    } else {
+        img.removeAttribute('src');
+        img.hidden = true;
+    }
+}
+
+function resetTraderPhotoPicker(prefix) {
+    const input = document.getElementById(`${prefix}-profile-photo-file`);
+    if (input) input.value = '';
+    const hidden = document.getElementById(`${prefix}-profile-photo`);
+    if (hidden) hidden.value = '';
+    if (traderPhotoPreviewUrls[prefix]) {
+        URL.revokeObjectURL(traderPhotoPreviewUrls[prefix]);
+        traderPhotoPreviewUrls[prefix] = null;
+    }
+    showTraderPhotoPreview(prefix, '');
+    setTraderPhotoError(prefix, '');
+}
+
+// Wire the file input once per modal; choosing a file validates it and shows a local preview.
+function setupTraderPhotoPicker(prefix) {
+    const input = document.getElementById(`${prefix}-profile-photo-file`);
+    if (!input || input.dataset.pickerReady) return;
+    input.dataset.pickerReady = 'true';
+    input.addEventListener('change', () => {
+        const file = input.files && input.files[0];
+        setTraderPhotoError(prefix, '');
+        if (traderPhotoPreviewUrls[prefix]) {
+            URL.revokeObjectURL(traderPhotoPreviewUrls[prefix]);
+            traderPhotoPreviewUrls[prefix] = null;
+        }
+        if (!file) {
+            showTraderPhotoPreview(prefix, document.getElementById(`${prefix}-profile-photo`).value);
+            return;
+        }
+        if (!TRADER_PHOTO_TYPES.includes(file.type)) {
+            input.value = '';
+            setTraderPhotoError(prefix, 'Choose a JPEG, PNG or WebP image.');
+            return;
+        }
+        if (file.size > TRADER_PHOTO_MAX_BYTES) {
+            input.value = '';
+            setTraderPhotoError(prefix, 'The photo must be 5 MB or smaller.');
+            return;
+        }
+        traderPhotoPreviewUrls[prefix] = URL.createObjectURL(file);
+        showTraderPhotoPreview(prefix, traderPhotoPreviewUrls[prefix]);
+    });
+}
+
+/**
+ * Resolve the photo URL for a trader form. Uploads the chosen file when there is one.
+ * Returns the URL to store, the existing URL when no new file was chosen, or null on failure
+ * (the error is shown in the form and the trader is not saved).
+ */
+async function resolveTraderPhoto(prefix) {
+    const input = document.getElementById(`${prefix}-profile-photo-file`);
+    const file = input && input.files && input.files[0];
+    const existing = document.getElementById(`${prefix}-profile-photo`).value;
+    if (!file) return existing || '';
+
+    const body = new FormData();
+    body.append('file', file);
+    try {
+        const response = await fetch(API_BASE + '/api/admin/traders/photo', {
+            method: 'POST',
+            headers: { 'Authorization': `Bearer ${localStorage.getItem('admin_token')}` },
+            body
+        });
+        const data = await response.json().catch(() => ({}));
+        if (!response.ok) {
+            setTraderPhotoError(prefix, data.detail || 'The photo could not be uploaded.');
+            return null;
+        }
+        document.getElementById(`${prefix}-profile-photo`).value = data.url;
+        return data.url;
+    } catch (error) {
+        console.error('Photo upload failed:', error);
+        setTraderPhotoError(prefix, 'Network error while uploading the photo.');
+        return null;
+    }
+}
+
 // Load traders
 async function loadTraders() {
     const container = document.getElementById('traders-container');
@@ -1228,7 +1329,7 @@ async function loadTraders() {
         let html = '<div style="display: grid; gap: 20px;">';
         traders.forEach(trader => {
             html += `
-                <div style="border: 1px solid #e2e8f0; padding: 20px; border-radius: 8px;">
+                <div data-trader-card="${trader.id}" style="border: 1px solid #e2e8f0; padding: 20px; border-radius: 8px;">
                     <h4>${trader.full_name}</h4>
                     <p>${trader.description}</p>
                     <p><strong>Specialization:</strong> ${trader.specialization}</p>
@@ -1245,6 +1346,19 @@ async function loadTraders() {
         });
         html += '</div>';
         container.innerHTML = html;
+        // Photos are set as DOM properties, never interpolated into the markup above.
+        traders.forEach(trader => {
+            if (!trader.profile_photo) return;
+            const card = container.querySelector(`[data-trader-card="${CSS.escape(String(trader.id))}"]`);
+            if (!card) return;
+            const img = document.createElement('img');
+            img.src = trader.profile_photo;
+            img.alt = '';
+            img.width = 64;
+            img.height = 64;
+            img.style.cssText = 'width:64px;height:64px;object-fit:cover;border-radius:50%;margin-bottom:12px;';
+            card.prepend(img);
+        });
     } catch (error) {
         container.innerHTML = '<p style="color: red;">Error loading traders</p>';
     }
@@ -1254,6 +1368,7 @@ async function loadTraders() {
 function showAddTraderModal() {
     const modal = document.getElementById('addTraderModal');
     modal.classList.add('show');
+    setupTraderPhotoPicker('trader');
 
     // Setup form submission if not already done
     const form = document.getElementById('add-trader-form');
@@ -1268,15 +1383,23 @@ function closeAddTraderModal() {
     const modal = document.getElementById('addTraderModal');
     modal.classList.remove('show');
     document.getElementById('add-trader-form').reset();
+    resetTraderPhotoPicker('trader');
 }
 
 // Handle add trader form submission
 async function handleAddTraderSubmit(e) {
     e.preventDefault();
 
+    const photo = await resolveTraderPhoto('trader');
+    if (photo === null) return;   // upload failed; the error is shown in the form
+    if (!photo) {
+        setTraderPhotoError('trader', 'Choose a profile photo.');
+        return;
+    }
+
     const formData = {
         full_name: document.getElementById('trader-full-name').value,
-        profile_photo: document.getElementById('trader-profile-photo').value,
+        profile_photo: photo,
         description: document.getElementById('trader-description').value,
         specialization: document.getElementById('trader-specialization').value,
         ytd_return: parseFloat(document.getElementById('trader-ytd-return').value),
@@ -1318,7 +1441,9 @@ async function showEditTraderModal(traderId) {
         // Populate form fields
         document.getElementById('edit-trader-id').value = trader.id;
         document.getElementById('edit-trader-full-name').value = trader.full_name;
-        document.getElementById('edit-trader-profile-photo').value = trader.profile_photo;
+        resetTraderPhotoPicker('edit-trader');
+        document.getElementById('edit-trader-profile-photo').value = trader.profile_photo || '';
+        showTraderPhotoPreview('edit-trader', trader.profile_photo || '');
         document.getElementById('edit-trader-description').value = trader.description;
         document.getElementById('edit-trader-specialization').value = trader.specialization;
         document.getElementById('edit-trader-ytd-return').value = trader.ytd_return;
@@ -1330,6 +1455,7 @@ async function showEditTraderModal(traderId) {
         document.getElementById('edit-trader-risk-score').value = trader.risk_score || 5;
 
         // Show modal
+        setupTraderPhotoPicker('edit-trader');
         const modal = document.getElementById('edit-trader-modal');
         if (modal) {
             modal.classList.add('show');
@@ -1346,6 +1472,7 @@ function hideEditTraderModal() {
     if (modal) {
         modal.classList.remove('show');
         document.getElementById('edit-trader-form').reset();
+        resetTraderPhotoPicker('edit-trader');
     }
 }
 
@@ -1354,9 +1481,12 @@ async function submitEditedTrader(event) {
     event.preventDefault();
 
     const traderId = document.getElementById('edit-trader-id').value;
+    const photo = await resolveTraderPhoto('edit-trader');
+    if (photo === null) return;   // upload failed; the error is shown in the form
+
     const traderData = {
         full_name: document.getElementById('edit-trader-full-name').value,
-        profile_photo: document.getElementById('edit-trader-profile-photo').value,
+        profile_photo: photo,
         description: document.getElementById('edit-trader-description').value,
         specialization: document.getElementById('edit-trader-specialization').value,
         ytd_return: parseFloat(document.getElementById('edit-trader-ytd-return').value),

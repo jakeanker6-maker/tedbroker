@@ -1,4 +1,5 @@
-from fastapi import APIRouter, HTTPException, status, Depends
+from fastapi import APIRouter, HTTPException, status, Depends, UploadFile, File
+from pathlib import Path
 from pydantic import BaseModel, EmailStr, Field, field_validator
 from datetime import timedelta, datetime
 from typing import List, Optional
@@ -929,6 +930,44 @@ async def get_trader_details(
         "created_at": trader["created_at"].isoformat() if trader.get("created_at") else None,
         "updated_at": trader["updated_at"].isoformat() if trader.get("updated_at") else None
     }
+
+
+TRADER_PHOTO_DIR = Path(__file__).resolve().parent.parent.parent / "public" / "copytradingbroker.io" / "uploads" / "traders"
+TRADER_PHOTO_MAX_BYTES = 5 * 1024 * 1024
+
+
+def _detect_image_type(data: bytes) -> Optional[str]:
+    """Return the extension for a JPEG/PNG/WebP file by its magic bytes, else None."""
+    if data[:3] == b"\xff\xd8\xff":
+        return "jpg"
+    if data[:8] == b"\x89PNG\r\n\x1a\n":
+        return "png"
+    if data[:4] == b"RIFF" and data[8:12] == b"WEBP":
+        return "webp"
+    return None
+
+
+@router.post("/traders/photo")
+async def upload_trader_photo(
+    file: UploadFile = File(...),
+    current_admin: dict = Depends(get_current_admin)
+):
+    """Upload a trader profile photo from the admin's local storage (admin only).
+
+    Accepts JPEG, PNG or WebP up to 5 MB. The file is stored under /uploads/traders and the
+    returned URL is saved as the trader's profile_photo.
+    """
+    data = await file.read(TRADER_PHOTO_MAX_BYTES + 1)
+    if len(data) > TRADER_PHOTO_MAX_BYTES:
+        raise HTTPException(status_code=status.HTTP_413_REQUEST_ENTITY_TOO_LARGE, detail="Photo must be 5 MB or smaller")
+    ext = _detect_image_type(data)
+    if ext is None:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Photo must be a JPEG, PNG or WebP image")
+
+    TRADER_PHOTO_DIR.mkdir(parents=True, exist_ok=True)
+    filename = f"{secrets.token_hex(16)}.{ext}"
+    (TRADER_PHOTO_DIR / filename).write_bytes(data)
+    return {"url": f"/uploads/traders/{filename}"}
 
 
 @router.post("/traders")

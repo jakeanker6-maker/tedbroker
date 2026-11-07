@@ -315,6 +315,9 @@
   box-shadow: inset 0 0 0 1px color-mix(in oklch, var(--_c) 35%, transparent);
 }
 .avatar--lg { inline-size: 3rem; block-size: 3rem; }
+/* Avatar showing a trader's profile photo (falls back to initials on load error). */
+.avatar--photo { padding: 0; overflow: hidden; background: var(--color-surface-2); }
+.avatar--photo > img { inline-size: 100%; block-size: 100%; object-fit: cover; display: block; border-radius: 50%; }
 .avatar--accent { --_c: var(--red-400); }
 .avatar--amber { --_c: var(--amber-400); }
 .avatar--navy { --_c: var(--navy-300); }

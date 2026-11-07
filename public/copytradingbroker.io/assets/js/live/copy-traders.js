@@ -21,6 +21,11 @@ const FLOOR = 10;   // server-side minimum allocation for any trader
 
 const firstName = (/** @type {string} */ name) => String(name || 'trader').trim().split(/\s+/)[0];
 const safeId = (/** @type {string} */ id) => `trader-${String(id).replace(/[^a-zA-Z0-9_-]/g, '')}`;
+/** Only same-origin upload/asset paths or http(s) URLs may be used as an avatar src. */
+const safePhotoUrl = (/** @type {unknown} */ v) => {
+  const u = typeof v === 'string' ? v.trim() : '';
+  return /^\/(uploads|assets)\//.test(u) || /^https?:\/\//.test(u) ? u : '';
+};
 const pct = (/** @type {number} */ v) => `${v >= 0 ? '+' : '−'}${Math.abs(v).toFixed(1)}%`;
 
 const state = {
@@ -240,8 +245,23 @@ function renderTrader(t, index, template, openIds) {
   const person = cells[0].querySelector('.person');
   const avatar = person?.querySelector('.avatar');
   if (avatar) {
+    const initials = name.split(/\s+/).map((p) => p[0] || '').join('').slice(0, 2).toUpperCase();
     avatar.className = `avatar ${['avatar--amber', 'avatar--navy', 'avatar--accent'][index % 3]}`;
-    avatar.textContent = name.split(/\s+/).map((p) => p[0] || '').join('').slice(0, 2).toUpperCase();
+    avatar.textContent = initials;
+    const photo = safePhotoUrl(t.profile_photo);
+    if (photo) {
+      // Admin-uploaded photo (/uploads/traders/...). On load error, keep the initials.
+      const img = document.createElement('img');
+      img.alt = name;
+      img.width = 40;
+      img.height = 40;
+      img.loading = 'lazy';
+      img.decoding = 'async';
+      img.addEventListener('error', () => { img.remove(); avatar.classList.remove('avatar--photo'); avatar.textContent = initials; }, { once: true });
+      img.src = photo;
+      avatar.classList.add('avatar--photo');
+      avatar.replaceChildren(img);
+    }
   }
   setText(/** @type {HTMLElement|null} */ (person?.querySelector('.person__name') || null), name);
   setText(/** @type {HTMLElement|null} */ (person?.querySelector('.person__meta') || null),
