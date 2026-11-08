@@ -756,8 +756,8 @@ class ChatWidget {
         }
 
         container.innerHTML = messages.map(msg => `
-            <div class="chat-message ${msg.sender_type}">
-                <div class="chat-message-sender">${msg.sender_name}</div>
+            <div class="chat-message ${this.escapeHtml(msg.sender_type)}">
+                <div class="chat-message-sender">${this.escapeHtml(msg.sender_name)}</div>
                 <div class="chat-message-content">${this.escapeHtml(msg.message)}</div>
                 <div class="chat-message-time">${this.formatTime(msg.created_at)}</div>
             </div>

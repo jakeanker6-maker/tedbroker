@@ -489,6 +489,7 @@ function switchTab(tab) {
     }
 
     currentTab = tab;
+    syncMenuCurrent();
 
     // Load data for specific tabs
     if (tab === 'users') loadUsers();
@@ -502,6 +503,7 @@ function switchTab(tab) {
     if (tab === 'bank-accounts') loadBankAccounts();
     if (tab === 'crypto-wallets') loadCryptoWallets();
     if (tab === 'notifications') loadNotifications();
+    if (tab === 'trading-activity' && window.tradingActivity) window.tradingActivity.open();
     if (tab === 'chats') {
         // Initialize chat manager if not already initialized
         if (typeof window.adminChatManager !== 'undefined') {
@@ -525,313 +527,136 @@ async function loadDashboardStats() {
     }
 }
 
-// Load users with full onboarding data
-async function loadUsers(search = '') {
+// ----------------------------------------------------------------------------
+// Users table
+// The list is rendered from a single request to /api/admin/users. Full details
+// (KYC, login history, trading) are fetched only when a row's Details button
+// is pressed, inside the user details modal.
+// ----------------------------------------------------------------------------
+
+let usersSearch = '';
+let usersLoadSeq = 0; // guards against out-of-order responses from rapid searches
+let userDetailSeq = 0; // guards the details modal against out-of-order user responses
+
+const USER_MONEY_FMT = new Intl.NumberFormat('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+// Build an element with textContent-safe children (no innerHTML for API data)
+function userEl(tag, props = {}, ...children) {
+    const node = document.createElement(tag);
+    for (const [key, value] of Object.entries(props)) {
+        if (value === undefined || value === null || value === false) continue;
+        if (key === 'className') node.className = value;
+        else node.setAttribute(key, value === true ? '' : String(value));
+    }
+    for (const child of children) {
+        if (child === null || child === undefined) continue;
+        node.append(child instanceof Node ? child : document.createTextNode(String(child)));
+    }
+    return node;
+}
+
+// Load users (single request, no per-user follow-up calls)
+async function loadUsers(search = usersSearch) {
+    usersSearch = search;
     const container = document.getElementById('users-table-container');
-    container.innerHTML = 'Loading...';
+    const seq = ++usersLoadSeq;
+
+    container.setAttribute('aria-busy', 'true');
+    container.replaceChildren(userEl('p', { className: 'users-status' }, 'Loading users...'));
 
     try {
         const url = search ? `/api/admin/users?search=${encodeURIComponent(search)}` : '/api/admin/users';
         const response = await adminFetch(url);
+        if (!response.ok) throw new Error(`Users request failed: ${response.status}`);
         const data = await response.json();
 
-        if (data.users.length === 0) {
-            container.innerHTML = '<p>No users found</p>';
-            return;
-        }
-
-        let html = '<div style="display: grid; gap: 20px;">';
-
-        // For each user, fetch full details including onboarding data
-        for (const user of data.users) {
-            // Fetch detailed user data
-            let fullUserData = user;
-            try {
-                const detailResponse = await adminFetch(`/api/admin/users/${user.id}`);
-                fullUserData = await detailResponse.json();
-            } catch (err) {
-                console.error(`Error fetching details for user ${user.id}:`, err);
-            }
-
-            const kyc = fullUserData.kyc || {};
-            const date = user.created_at ? new Date(user.created_at).toLocaleDateString() : 'N/A';
-            const statusBadge = `badge-${user.is_active ? 'active' : 'inactive'}`;
-            const verifiedBadge = user.is_verified ? '<span class="badge badge-approved" style="margin-left: 8px; font-size: 11px;">Verified</span>' : '<span class="badge badge-pending" style="margin-left: 8px; font-size: 11px;">Unverified</span>';
-
-            // KYC status badge
-            let kycStatusClass = 'badge-pending';
-            let kycStatusText = 'Not Submitted';
-            if (kyc.kyc_status === 'approved') {
-                kycStatusClass = 'badge-approved';
-                kycStatusText = 'Approved';
-            } else if (kyc.kyc_status === 'rejected') {
-                kycStatusClass = 'badge-rejected';
-                kycStatusText = 'Rejected';
-            } else if (kyc.kyc_status === 'not_submitted') {
-                kycStatusText = 'Not Submitted';
-            } else if (kyc.kyc_status) {
-                kycStatusText = kyc.kyc_status.replace('_', ' ').toUpperCase();
-            }
-
-            html += `
-                <div style="border: 1px solid #e2e8f0; padding: 24px; border-radius: 12px; background: white; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
-                    <!-- User Header -->
-                    <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 20px; padding-bottom: 16px; border-bottom: 2px solid #f7fafc;">
-                        <div style="flex: 1;">
-                            <h3 style="margin: 0 0 8px 0; color: #2D3748; display: flex; align-items: center; font-size: 20px;">
-                                <i class="fas fa-user-circle" style="color: #D32F2F; margin-right: 12px; font-size: 24px;"></i>
-                                ${user.username}
-                                <span class="badge ${statusBadge}" style="margin-left: 12px;">${user.is_active ? 'Active' : 'Inactive'}</span>
-                                ${verifiedBadge}
-                            </h3>
-                            <p style="margin: 0; color: #8b93a7; font-size: 14px;">
-                                <i class="fas fa-envelope" style="margin-right: 6px;"></i>
-                                ${user.email}
-                            </p>
-                        </div>
-                        <div style="display: flex; gap: 8px; flex-wrap: wrap;">
-                            <button class="btn btn-primary" style="padding: 10px 18px;" data-action="view-user" data-user-id="${user.id}">
-                                <i class="fas fa-eye"></i> Full Details
-                            </button>
-                            ${kyc.kyc_completed || kyc.address_completed || kyc.personal_info_completed ?
-                                `<button class="btn btn-warning" style="padding: 10px 18px;" data-action="reject-kyc" data-user-id="${user.id}">
-                                    <i class="fas fa-times-circle"></i> Reject KYC
-                                </button>` : ''
-                            }
-                            ${user.access_granted ?
-                                `<button class="btn btn-danger" style="padding: 10px 18px;" data-action="revoke-access" data-user-id="${user.id}">
-                                    <i class="fas fa-lock"></i> Revoke Access
-                                </button>` :
-                                `<button class="btn btn-success" style="padding: 10px 18px;" data-action="grant-access" data-user-id="${user.id}">
-                                    <i class="fas fa-unlock"></i> Grant Access
-                                </button>`
-                            }
-                            ${user.is_active ?
-                                `<button class="btn btn-danger" style="padding: 10px 18px;" data-action="deactivate-user" data-user-id="${user.id}">
-                                    <i class="fas fa-ban"></i> Deactivate
-                                </button>` :
-                                `<button class="btn btn-success" style="padding: 10px 18px;" data-action="activate-user" data-user-id="${user.id}">
-                                    <i class="fas fa-check"></i> Activate
-                                </button>`
-                            }
-                        </div>
-                    </div>
-
-                    <!-- Basic Info Section -->
-                    <div style="margin-bottom: 20px;">
-                        <h4 style="margin: 0 0 12px 0; color: #2D3748; font-size: 14px; text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px;">
-                            <i class="fas fa-info-circle" style="margin-right: 8px; color: #D32F2F;"></i>
-                            Account Information
-                        </h4>
-                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; padding: 16px; background: #f7fafc; border-radius: 8px; border-left: 4px solid #D32F2F;">
-                            <div>
-                                <label style="display: block; color: #8b93a7; font-size: 11px; margin-bottom: 4px; text-transform: uppercase; font-weight: 600;">Full Name</label>
-                                <p style="margin: 0; color: #2D3748; font-weight: 600;">${user.full_name || '-'}</p>
-                            </div>
-                            <div>
-                                <label style="display: block; color: #8b93a7; font-size: 11px; margin-bottom: 4px; text-transform: uppercase; font-weight: 600;">Phone</label>
-                                <p style="margin: 0; color: #2D3748; font-weight: 600;">${user.phone || '-'}</p>
-                            </div>
-                            <div>
-                                <label style="display: block; color: #8b93a7; font-size: 11px; margin-bottom: 4px; text-transform: uppercase; font-weight: 600;">Country</label>
-                                <p style="margin: 0; color: #2D3748; font-weight: 600;">
-                                    ${user.country ? `<i class="fas fa-globe" style="margin-right: 6px;"></i>${user.country}` : '-'}
-                                </p>
-                            </div>
-                            <div>
-                                <label style="display: block; color: #8b93a7; font-size: 11px; margin-bottom: 4px; text-transform: uppercase; font-weight: 600;">Gender</label>
-                                <p style="margin: 0; color: #2D3748; font-weight: 600;">${user.gender || '-'}</p>
-                            </div>
-                            <div>
-                                <label style="display: block; color: #8b93a7; font-size: 11px; margin-bottom: 4px; text-transform: uppercase; font-weight: 600;">Wallet Balance</label>
-                                <div style="display: flex; align-items: center; gap: 10px;">
-                                    <p style="margin: 0; color: #D32F2F; font-size: 20px; font-weight: 700;">
-                                        <i class="fas fa-wallet" style="margin-right: 6px; font-size: 16px;"></i>
-                                        $${user.wallet_balance.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}
-                                    </p>
-                                    <button class="btn btn-sm btn-primary" style="padding: 6px 12px; font-size: 12px;" data-action="update-balance" data-user-id="${user.id}" data-balance="${user.wallet_balance}">
-                                        <i class="fas fa-edit"></i> Update
-                                    </button>
-                                </div>
-                            </div>
-                            <div>
-                                <label style="display: block; color: #8b93a7; font-size: 11px; margin-bottom: 4px; text-transform: uppercase; font-weight: 600;">Auth Provider</label>
-                                <p style="margin: 0; color: #2D3748; font-weight: 600;">${fullUserData.auth_provider || 'local'}</p>
-                            </div>
-                            <div>
-                                <label style="display: block; color: #8b93a7; font-size: 11px; margin-bottom: 4px; text-transform: uppercase; font-weight: 600;">Referral Code</label>
-                                <p style="margin: 0; color: #2D3748; font-weight: 600;">
-                                    ${user.referral_code ? `<code style="background: white; padding: 4px 8px; border-radius: 4px; font-size: 12px;">${user.referral_code}</code>` : '-'}
-                                </p>
-                            </div>
-                            <div>
-                                <label style="display: block; color: #8b93a7; font-size: 11px; margin-bottom: 4px; text-transform: uppercase; font-weight: 600;">Referred By</label>
-                                <p style="margin: 0; color: #2D3748; font-weight: 600;">${user.referred_by || '-'}</p>
-                            </div>
-                            <div>
-                                <label style="display: block; color: #8b93a7; font-size: 11px; margin-bottom: 4px; text-transform: uppercase; font-weight: 600;">Account Created</label>
-                                <p style="margin: 0; color: #2D3748; font-weight: 600;">
-                                    <i class="fas fa-calendar" style="margin-right: 6px;"></i>
-                                    ${date}
-                                </p>
-                            </div>
-                            <div>
-                                <label style="display: block; color: #8b93a7; font-size: 11px; margin-bottom: 4px; text-transform: uppercase; font-weight: 600;">User ID</label>
-                                <p style="margin: 0; color: #2D3748; font-family: monospace; font-size: 11px;">${user.id}</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- KYC/Onboarding Section -->
-                    <div style="margin-bottom: 0;">
-                        <h4 style="margin: 0 0 12px 0; color: #2D3748; font-size: 14px; text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px; display: flex; align-items: center; justify-content: space-between;">
-                            <span>
-                                <i class="fas fa-id-card" style="margin-right: 8px; color: #D32F2F;"></i>
-                                KYC / Onboarding Information
-                            </span>
-                            <span class="badge ${kycStatusClass}" style="font-size: 11px;">${kycStatusText}</span>
-                        </h4>
-
-                        <!-- Personal Information -->
-                        <div style="margin-bottom: 16px;">
-                            <h5 style="margin: 0 0 8px 0; color: #5a5a5a; font-size: 12px; font-weight: 600; text-transform: uppercase;">Personal Information</h5>
-                            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; padding: 14px; background: #fffbf5; border-radius: 8px; border-left: 3px solid #ff9800;">
-                                <div>
-                                    <label style="display: block; color: #8b93a7; font-size: 11px; margin-bottom: 4px; text-transform: uppercase; font-weight: 600;">First Name</label>
-                                    <p style="margin: 0; color: #2D3748; font-weight: 600;">${kyc.first_name || '-'}</p>
-                                </div>
-                                <div>
-                                    <label style="display: block; color: #8b93a7; font-size: 11px; margin-bottom: 4px; text-transform: uppercase; font-weight: 600;">Last Name</label>
-                                    <p style="margin: 0; color: #2D3748; font-weight: 600;">${kyc.last_name || '-'}</p>
-                                </div>
-                                <div>
-                                    <label style="display: block; color: #8b93a7; font-size: 11px; margin-bottom: 4px; text-transform: uppercase; font-weight: 600;">Gender</label>
-                                    <p style="margin: 0; color: #2D3748; font-weight: 600;">${kyc.gender || '-'}</p>
-                                </div>
-                                <div>
-                                    <label style="display: block; color: #8b93a7; font-size: 11px; margin-bottom: 4px; text-transform: uppercase; font-weight: 600;">Completed</label>
-                                    <p style="margin: 0; color: #2D3748; font-weight: 600;">
-                                        ${kyc.personal_info_completed ? '<i class="fas fa-check-circle" style="color: #4caf50;"></i> Yes' : '<i class="fas fa-times-circle" style="color: #f44336;"></i> No'}
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Address Information -->
-                        <div style="margin-bottom: 16px;">
-                            <h5 style="margin: 0 0 8px 0; color: #5a5a5a; font-size: 12px; font-weight: 600; text-transform: uppercase;">Address Information</h5>
-                            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; padding: 14px; background: #f0f9ff; border-radius: 8px; border-left: 3px solid #2196F3;">
-                                <div>
-                                    <label style="display: block; color: #8b93a7; font-size: 11px; margin-bottom: 4px; text-transform: uppercase; font-weight: 600;">Street Address</label>
-                                    <p style="margin: 0; color: #2D3748; font-weight: 600;">${kyc.street || '-'}</p>
-                                </div>
-                                <div>
-                                    <label style="display: block; color: #8b93a7; font-size: 11px; margin-bottom: 4px; text-transform: uppercase; font-weight: 600;">City</label>
-                                    <p style="margin: 0; color: #2D3748; font-weight: 600;">${kyc.city || '-'}</p>
-                                </div>
-                                <div>
-                                    <label style="display: block; color: #8b93a7; font-size: 11px; margin-bottom: 4px; text-transform: uppercase; font-weight: 600;">State/Province</label>
-                                    <p style="margin: 0; color: #2D3748; font-weight: 600;">${kyc.state || '-'}</p>
-                                </div>
-                                <div>
-                                    <label style="display: block; color: #8b93a7; font-size: 11px; margin-bottom: 4px; text-transform: uppercase; font-weight: 600;">ZIP/Postal Code</label>
-                                    <p style="margin: 0; color: #2D3748; font-weight: 600;">${kyc.zip_code || '-'}</p>
-                                </div>
-                                <div>
-                                    <label style="display: block; color: #8b93a7; font-size: 11px; margin-bottom: 4px; text-transform: uppercase; font-weight: 600;">Country</label>
-                                    <p style="margin: 0; color: #2D3748; font-weight: 600;">
-                                        ${kyc.country ? `<i class="fas fa-globe" style="margin-right: 6px;"></i>${kyc.country}` : '-'}
-                                    </p>
-                                </div>
-                                <div>
-                                    <label style="display: block; color: #8b93a7; font-size: 11px; margin-bottom: 4px; text-transform: uppercase; font-weight: 600;">Completed</label>
-                                    <p style="margin: 0; color: #2D3748; font-weight: 600;">
-                                        ${kyc.address_completed ? '<i class="fas fa-check-circle" style="color: #4caf50;"></i> Yes' : '<i class="fas fa-times-circle" style="color: #f44336;"></i> No'}
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Verification Documents -->
-                        <div>
-                            <h5 style="margin: 0 0 8px 0; color: #5a5a5a; font-size: 12px; font-weight: 600; text-transform: uppercase;">Verification Documents</h5>
-                            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; padding: 14px; background: #f3f4f6; border-radius: 8px; border-left: 3px solid #6366f1;">
-                                <div>
-                                    <label style="display: block; color: #8b93a7; font-size: 11px; margin-bottom: 4px; text-transform: uppercase; font-weight: 600;">Document Number</label>
-                                    <p style="margin: 0; color: #2D3748; font-weight: 600;">
-                                        ${kyc.document_number ? `<code style="background: white; padding: 4px 8px; border-radius: 4px; font-size: 12px;">${kyc.document_number}</code>` : '-'}
-                                    </p>
-                                </div>
-                                <div>
-                                    <label style="display: block; color: #8b93a7; font-size: 11px; margin-bottom: 4px; text-transform: uppercase; font-weight: 600;">Document Photo</label>
-                                    ${kyc.document_photo ? `
-                                        <a href="${kyc.document_photo}" target="_blank" style="text-decoration: none;">
-                                            <div style="display: flex; align-items: center; gap: 8px;">
-                                                <img src="${kyc.document_photo}" alt="ID Document" style="width: 40px; height: 40px; border-radius: 4px; object-fit: cover; border: 2px solid #4caf50;">
-                                                <span style="color: #4caf50; font-weight: 600;">
-                                                    <i class="fas fa-check-circle"></i> View Document
-                                                </span>
-                                            </div>
-                                        </a>
-                                    ` : '<p style="margin: 0; color: #2D3748; font-weight: 600;"><i class="fas fa-times-circle" style="color: #f44336;"></i> Not Uploaded</p>'}
-                                </div>
-                                <div>
-                                    <label style="display: block; color: #8b93a7; font-size: 11px; margin-bottom: 4px; text-transform: uppercase; font-weight: 600;">KYC Submitted</label>
-                                    <p style="margin: 0; color: #2D3748; font-weight: 600;">
-                                        ${kyc.kyc_submitted_at ? new Date(kyc.kyc_submitted_at).toLocaleDateString() : '-'}
-                                    </p>
-                                </div>
-                                <div>
-                                    <label style="display: block; color: #8b93a7; font-size: 11px; margin-bottom: 4px; text-transform: uppercase; font-weight: 600;">Completed</label>
-                                    <p style="margin: 0; color: #2D3748; font-weight: 600;">
-                                        ${kyc.kyc_completed ? '<i class="fas fa-check-circle" style="color: #4caf50;"></i> Yes' : '<i class="fas fa-times-circle" style="color: #f44336;"></i> No'}
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Investment Questionnaire -->
-                        <div style="margin-top: 16px;">
-                            <h5 style="margin: 0 0 8px 0; color: #5a5a5a; font-size: 12px; font-weight: 600; text-transform: uppercase;">Investment Questionnaire</h5>
-                            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; padding: 14px; background: #fdf2f8; border-radius: 8px; border-left: 3px solid #D32F2F;">
-                                <div>
-                                    <label style="display: block; color: #8b93a7; font-size: 11px; margin-bottom: 4px; text-transform: uppercase; font-weight: 600;">Risk Tolerance</label>
-                                    <p style="margin: 0; color: #2D3748; font-weight: 600;">${{'very_low':'Very Low','low':'Low','moderate':'Moderate','high':'High','very_high':'Very High'}[kyc.risk_tolerance] || '-'}</p>
-                                </div>
-                                <div>
-                                    <label style="display: block; color: #8b93a7; font-size: 11px; margin-bottom: 4px; text-transform: uppercase; font-weight: 600;">Annual Income</label>
-                                    <p style="margin: 0; color: #2D3748; font-weight: 600;">${{'under_10k':'Less than $10,000','10k_50k':'$10,000 - $50,000','50k_100k':'$50,000 - $100,000','100k_1m':'$100,000 - $1,000,000','over_1m':'More than $1,000,000'}[kyc.annual_income] || '-'}</p>
-                                </div>
-                                <div>
-                                    <label style="display: block; color: #8b93a7; font-size: 11px; margin-bottom: 4px; text-transform: uppercase; font-weight: 600;">Employment Status</label>
-                                    <p style="margin: 0; color: #2D3748; font-weight: 600;">${{'unemployed':'Unemployed','self_employed':'Self-Employed','part_time':'Part Time','full_time':'Full Time','retired':'Retired'}[kyc.employment_status] || '-'}</p>
-                                </div>
-                                <div>
-                                    <label style="display: block; color: #8b93a7; font-size: 11px; margin-bottom: 4px; text-transform: uppercase; font-weight: 600;">Completed</label>
-                                    <p style="margin: 0; color: #2D3748; font-weight: 600;">
-                                        ${kyc.questionnaire_completed ? '<i class="fas fa-check-circle" style="color: #4caf50;"></i> Yes' : '<i class="fas fa-times-circle" style="color: #f44336;"></i> No'}
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            `;
-        }
-
-        html += '</div>';
-        container.innerHTML = html;
+        if (seq !== usersLoadSeq) return; // a newer request has superseded this one
+        renderUsersTable(container, data);
     } catch (error) {
+        if (seq !== usersLoadSeq) return;
         console.error('Error loading users:', error);
-        container.innerHTML = '<p style="color: red;">Error loading users. Please try again.</p>';
+        const retry = userEl('button', { type: 'button', className: 'btn btn-primary btn-sm' }, 'Retry');
+        retry.addEventListener('click', () => loadUsers(usersSearch));
+        container.replaceChildren(
+            userEl('p', { className: 'users-status users-status--error', role: 'alert' },
+                'Error loading users. ', retry)
+        );
+    } finally {
+        if (seq === usersLoadSeq) container.removeAttribute('aria-busy');
     }
+}
+
+function renderUsersTable(container, data) {
+    const users = data.users || [];
+
+    if (users.length === 0) {
+        container.replaceChildren(userEl('p', { className: 'users-status' },
+            usersSearch ? 'No users match your search.' : 'No users found.'));
+        return;
+    }
+
+    const headers = ['Username', 'Email', 'Full name', 'Wallet balance', 'Status', 'Joined'];
+    const headRow = userEl('tr', {}, ...headers.map(label => userEl('th', {
+            scope: 'col',
+            className: label === 'Wallet balance' ? 'is-num' : undefined
+        }, label)),
+        userEl('th', { scope: 'col' }, userEl('span', { className: 'visually-hidden' }, 'Actions')));
+
+    const rows = users.map(user => {
+        const joined = user.created_at ? new Date(user.created_at).toLocaleDateString() : 'N/A';
+        const balance = Number(user.wallet_balance || 0);
+        const status = userEl('span', { className: `badge ${user.is_active ? 'badge-active' : 'badge-inactive'}` },
+            user.is_active ? 'Active' : 'Inactive');
+        const details = userEl('button', {
+            type: 'button',
+            className: 'btn btn-primary btn-sm',
+            'data-action': 'view-user',
+            'data-user-id': user.id,
+            'aria-label': `View full details for ${user.username}`
+        }, userEl('i', { className: 'fas fa-eye', 'aria-hidden': 'true' }), ' Details');
+
+        return userEl('tr', {},
+            userEl('td', {}, user.username || '-'),
+            userEl('td', {}, user.email || '-'),
+            userEl('td', {}, user.full_name || '-'),
+            userEl('td', { className: 'is-num' }, `$${USER_MONEY_FMT.format(balance)}`),
+            userEl('td', {}, status),
+            userEl('td', {}, joined),
+            userEl('td', {}, details)
+        );
+    });
+
+    const table = userEl('table', { className: 'users-table' },
+        userEl('caption', { className: 'visually-hidden' }, 'Users'),
+        userEl('thead', {}, headRow),
+        userEl('tbody', {}, ...rows));
+
+    const summary = userEl('p', { className: 'users-summary', role: 'status' },
+        `Showing ${users.length} of ${data.total ?? users.length} users`,
+        (data.total ?? 0) > users.length ? ' - narrow your search to see others.' : '.');
+
+    container.replaceChildren(userEl('div', {
+        className: 'table-wrap',
+        tabindex: '0',
+        role: 'region',
+        'aria-label': 'Users table'
+    }, table), summary);
 }
 
 // Search users
 function searchUsers() {
-    const search = document.getElementById('user-search').value;
+    const search = document.getElementById('user-search').value.trim();
     loadUsers(search);
 }
+
+// Refresh the list after a user action. If the details modal is open for this
+// user, reload it so the modal reflects the new state.
+function onUserChanged(userId) {
+    loadUsers();
+    const modal = document.getElementById('user-details-modal');
+    if (userId && modal && modal.classList.contains('show')) viewUser(userId);
+}
+
 
 // View user details
 async function viewUser(userId) {
@@ -844,9 +669,12 @@ async function viewUser(userId) {
     loading.style.display = 'block';
     content.style.display = 'none';
 
+    const seq = ++userDetailSeq;
     try {
         const response = await adminFetch(`/api/admin/users/${userId}`);
         const user = await response.json();
+        // Ignore a response for a user the admin has since opened or refreshed
+        if (seq !== userDetailSeq) return;
 
         // Populate overview tab
         document.getElementById('detail-username').textContent = user.username || '-';
@@ -873,6 +701,9 @@ async function viewUser(userId) {
         // Populate KYC tab
         const kyc = user.kyc || {};
 
+        // Account actions (moved here from the list rows)
+        renderUserDetailActions(user, kyc);
+
         // KYC status badge
         let kycStatusClass = 'badge-pending';
         if (kyc.kyc_status === 'approved') kycStatusClass = 'badge-approved';
@@ -894,23 +725,20 @@ async function viewUser(userId) {
 
         // KYC document photo
         const docContainer = document.getElementById('kyc-document-container');
-        if (kyc.document_photo) {
-            // Add a clickable link to open the image in a new tab for full-size viewing
-            docContainer.innerHTML = `
-                <div style="text-align: center;">
-                    <a href="${kyc.document_photo}" target="_blank" style="display: inline-block; position: relative;">
-                        <img src="${kyc.document_photo}" alt="KYC Document" style="max-width: 100%; max-height: 500px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); cursor: pointer;">
-                        <div style="position: absolute; top: 10px; right: 10px; background: rgba(0,0,0,0.7); color: white; padding: 8px 12px; border-radius: 6px; font-size: 12px;">
-                            <i class="fas fa-external-link-alt"></i> Click to open full size
-                        </div>
-                    </a>
-                    <p style="margin-top: 12px; font-size: 13px; color: #8b93a7;">
-                        <i class="fas fa-file-image"></i> Document uploaded
-                    </p>
-                </div>
-            `;
+        const docUrl = safeUrl(kyc.document_photo);
+        if (docUrl) {
+            // Only http(s) or same-origin URLs reach the DOM (see safeUrl in admin-html.js)
+            const link = userEl('a', { href: docUrl, target: '_blank', rel: 'noopener noreferrer', style: 'display: inline-block; position: relative;' },
+                userEl('img', { src: docUrl, alt: 'KYC Document', style: 'max-width: 100%; max-height: 500px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); cursor: pointer;' }),
+                userEl('div', { style: 'position: absolute; top: 10px; right: 10px; background: rgba(0,0,0,0.7); color: white; padding: 8px 12px; border-radius: 6px; font-size: 12px;' },
+                    userEl('i', { className: 'fas fa-external-link-alt', 'aria-hidden': 'true' }), ' Open full size'));
+            docContainer.replaceChildren(userEl('div', { style: 'text-align: center;' }, link,
+                userEl('p', { style: 'margin-top: 12px; font-size: 13px; color: #55657A;' },
+                    userEl('i', { className: 'fas fa-file-image', 'aria-hidden': 'true' }), ' Document uploaded')));
+        } else if (kyc.document_photo) {
+            docContainer.replaceChildren(userEl('p', { style: 'color: #55657A;' }, 'Document link is not a valid web address and cannot be displayed.'));
         } else {
-            docContainer.innerHTML = '<p style="color: #8b93a7;">No document uploaded</p>';
+            docContainer.replaceChildren(userEl('p', { style: 'color: #55657A;' }, 'No document uploaded'));
         }
 
         // Populate questionnaire data
@@ -933,42 +761,30 @@ async function viewUser(userId) {
         const historyContainer = document.getElementById('login-history-container');
 
         if (loginHistory.length === 0) {
-            historyContainer.innerHTML = '<p style="text-align: center; color: #8b93a7; padding: 40px;">No login history available</p>';
+            historyContainer.innerHTML = '<p style="text-align: center; color: #55657A; padding: 40px;">No login history available</p>';
         } else {
-            let historyHtml = '';
-            loginHistory.forEach(login => {
-                const successClass = login.success ? '' : ' failed';
-                const statusIcon = login.success ? '<i class="fas fa-check-circle" style="color: #4caf50;"></i>' : '<i class="fas fa-times-circle" style="color: #f44336;"></i>';
-                const timestamp = new Date(login.timestamp).toLocaleString();
-
-                historyHtml += `
-                    <div class="login-history-item${successClass}">
-                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-                            <div style="display: flex; align-items: center; gap: 8px;">
-                                ${statusIcon}
-                                <strong>${login.success ? 'Successful Login' : 'Failed Login'}</strong>
-                            </div>
-                            <span style="color: #8b93a7; font-size: 13px;">${timestamp}</span>
-                        </div>
-                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; font-size: 13px;">
-                            <div>
-                                <strong>IP Address:</strong> ${login.ip_address || 'Unknown'}
-                            </div>
-                            <div>
-                                <strong>Location:</strong> ${login.location ? `${login.location.city}, ${login.location.country}` : 'Unknown'}
-                            </div>
-                            <div>
-                                <strong>Device:</strong> ${login.device_info ? login.device_info.device : 'Unknown'}
-                            </div>
-                            <div>
-                                <strong>Browser:</strong> ${login.device_info ? login.device_info.browser : 'Unknown'}
-                            </div>
-                            ${!login.success && login.failure_reason ? `<div style="grid-column: span 2; color: #f44336;"><strong>Reason:</strong> ${login.failure_reason}</div>` : ''}
-                        </div>
-                    </div>
-                `;
+            const field = (label, value) => userEl('div', {},
+                userEl('strong', {}, `${label}: `), value);
+            const entries = loginHistory.map(login => {
+                const ok = !!login.success;
+                const head = userEl('div', { style: 'display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;' },
+                    userEl('div', { style: 'display: flex; align-items: center; gap: 8px;' },
+                        userEl('i', { className: ok ? 'fas fa-check-circle' : 'fas fa-times-circle', style: `color: ${ok ? '#2e7d32' : '#c62828'};`, 'aria-hidden': 'true' }),
+                        userEl('strong', {}, ok ? 'Successful Login' : 'Failed Login')),
+                    userEl('span', { style: 'color: #55657A; font-size: 13px;' },
+                        login.timestamp ? new Date(login.timestamp).toLocaleString() : '-'));
+                const location = login.location ? `${login.location.city || ''}, ${login.location.country || ''}` : 'Unknown';
+                const grid = userEl('div', { style: 'display: grid; grid-template-columns: 1fr 1fr; gap: 10px; font-size: 13px;' },
+                    field('IP Address', login.ip_address || 'Unknown'),
+                    field('Location', location),
+                    field('Device', (login.device_info && login.device_info.device) || 'Unknown'),
+                    field('Browser', (login.device_info && login.device_info.browser) || 'Unknown'),
+                    (!ok && login.failure_reason)
+                        ? userEl('div', { style: 'grid-column: span 2; color: #c62828;' }, userEl('strong', {}, 'Reason: '), login.failure_reason)
+                        : null);
+                return userEl('div', { className: `login-history-item${ok ? '' : ' failed'}` }, head, grid);
             });
-            historyContainer.innerHTML = historyHtml;
+            historyContainer.replaceChildren(...entries);
         }
 
         // Hide loading and show content
@@ -983,6 +799,40 @@ async function viewUser(userId) {
         Swal.fire({ title: 'Error!', text: 'Error loading user details', icon: 'error' });
         modal.classList.remove('show');
     }
+}
+
+// Account action buttons shown in the user details modal.
+// They use the same data-action hooks as the old list rows, so the existing
+// delegated click handler performs them.
+function renderUserDetailActions(user, kyc) {
+    const bar = document.getElementById('user-details-actions');
+    if (!bar) return;
+
+    const makeButton = (cls, action, icon, label, extra = {}) => userEl('button', {
+        type: 'button',
+        className: `btn ${cls} btn-sm`,
+        'data-action': action,
+        'data-user-id': user.id,
+        ...extra
+    }, userEl('i', { className: `fas ${icon}`, 'aria-hidden': 'true' }), ` ${label}`);
+
+    const buttons = [];
+    buttons.push(makeButton('btn-primary', 'update-balance', 'fa-edit', 'Update balance',
+        { 'data-balance': user.wallet_balance ?? 0 }));
+
+    if (kyc.kyc_completed || kyc.address_completed || kyc.personal_info_completed) {
+        buttons.push(makeButton('btn-warning', 'reject-kyc', 'fa-times-circle', 'Reject KYC'));
+    }
+
+    buttons.push(user.access_granted
+        ? makeButton('btn-danger', 'revoke-access', 'fa-lock', 'Revoke access')
+        : makeButton('btn-success', 'grant-access', 'fa-unlock', 'Grant access'));
+
+    buttons.push(user.is_active
+        ? makeButton('btn-danger', 'deactivate-user', 'fa-ban', 'Deactivate')
+        : makeButton('btn-success', 'activate-user', 'fa-check', 'Activate'));
+
+    bar.replaceChildren(...buttons);
 }
 
 // Close user details modal
@@ -1035,7 +885,7 @@ async function submitBalanceUpdate(event) {
                 icon: 'success'
             });
             closeUpdateBalanceModal();
-            loadUsers(); // Reload user list to show updated balance
+            onUserChanged(userId); // Reload user list and open details to show updated balance
         } else {
             const error = await response.json();
             Swal.fire({
@@ -1091,7 +941,7 @@ async function activateUser(userId) {
         await adminFetch(`/api/admin/users/${userId}/activate`, { method: 'PUT' });
         TED_AUTH.closeLoading();
         Swal.fire({ title: 'Success!', text: 'User activated', icon: 'success' });
-        loadUsers();
+        onUserChanged(userId);
     } catch (error) {
         TED_AUTH.closeLoading();
         Swal.fire({ title: 'Error!', text: 'Error activating user', icon: 'error' });
@@ -1114,7 +964,7 @@ async function deactivateUser(userId) {
         await adminFetch(`/api/admin/users/${userId}/deactivate`, { method: 'PUT' });
         TED_AUTH.closeLoading();
         Swal.fire({ title: 'Success!', text: 'User deactivated', icon: 'success' });
-        loadUsers();
+        onUserChanged(userId);
     } catch (error) {
         TED_AUTH.closeLoading();
         Swal.fire({ title: 'Error!', text: 'Error deactivating user', icon: 'error' });
@@ -1137,7 +987,7 @@ async function grantAccess(userId) {
         await adminFetch(`/api/admin/users/${userId}/grant-access`, { method: 'PUT' });
         TED_AUTH.closeLoading();
         Swal.fire({ title: 'Success!', text: 'Dashboard access granted to user', icon: 'success' });
-        loadUsers();
+        onUserChanged(userId);
     } catch (error) {
         TED_AUTH.closeLoading();
         Swal.fire({ title: 'Error!', text: 'Error granting access', icon: 'error' });
@@ -1160,7 +1010,7 @@ async function revokeAccess(userId) {
         await adminFetch(`/api/admin/users/${userId}/revoke-access`, { method: 'PUT' });
         TED_AUTH.closeLoading();
         Swal.fire({ title: 'Success!', text: 'Dashboard access revoked from user', icon: 'success' });
-        loadUsers();
+        onUserChanged(userId);
     } catch (error) {
         TED_AUTH.closeLoading();
         Swal.fire({ title: 'Error!', text: 'Error revoking access', icon: 'error' });
@@ -1200,7 +1050,7 @@ async function rejectKYC(userId) {
             text: 'KYC rejected successfully. User will need to complete onboarding again.',
             icon: 'success'
         });
-        loadUsers();
+        onUserChanged(userId);
     } catch (error) {
         TED_AUTH.closeLoading();
         Swal.fire({
@@ -1227,7 +1077,9 @@ function showTraderPhotoPreview(prefix, src) {
     const img = document.getElementById(`${prefix}-profile-photo-preview`);
     if (!img) return;
     if (src) {
-        img.src = src;
+        const safe = safeUrl(src);
+        if (!safe) { img.removeAttribute('src'); img.hidden = true; return; }
+        img.src = safe;
         img.hidden = false;
     } else {
         img.removeAttribute('src');
@@ -1329,17 +1181,17 @@ async function loadTraders() {
         let html = '<div style="display: grid; gap: 20px;">';
         traders.forEach(trader => {
             html += `
-                <div data-trader-card="${trader.id}" style="border: 1px solid #e2e8f0; padding: 20px; border-radius: 8px;">
-                    <h4>${trader.full_name}</h4>
-                    <p>${trader.description}</p>
-                    <p><strong>Specialization:</strong> ${trader.specialization}</p>
-                    <p><strong>YTD Return:</strong> ${trader.ytd_return}% | <strong>Win Rate:</strong> ${trader.win_rate}%</p>
-                    <p><strong>Copiers:</strong> ${trader.copiers || 0}</p>
+                <div data-trader-card="${esc(trader.id)}" style="border: 1px solid #e2e8f0; padding: 20px; border-radius: 8px;">
+                    <h4>${esc(trader.full_name)}</h4>
+                    <p>${esc(trader.description)}</p>
+                    <p><strong>Specialization:</strong> ${esc(trader.specialization)}</p>
+                    <p><strong>YTD Return:</strong> ${esc(trader.ytd_return)}% | <strong>Win Rate:</strong> ${esc(trader.win_rate)}%</p>
+                    <p><strong>Copiers:</strong> ${esc(trader.copiers || 0)}</p>
                     <p><strong>Minimum Copy Amount:</strong> $${(trader.minimum_copy_amount || 100).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</p>
-                    <p><strong>Assets Under Management:</strong> $${(trader.assets_under_management || 0).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})} | <strong>Max Drawdown:</strong> ${trader.max_drawdown || 0}% | <strong>Risk Score:</strong> ${trader.risk_score || 5}/10</p>
+                    <p><strong>Assets Under Management:</strong> $${(trader.assets_under_management || 0).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})} | <strong>Max Drawdown:</strong> ${esc(trader.max_drawdown || 0)}% | <strong>Risk Score:</strong> ${esc(trader.risk_score || 5)}/10</p>
                     <div style="display: flex; gap: 10px; margin-top: 15px;">
-                        <button class="btn btn-primary" style="padding: 8px 16px;" data-action="edit-trader" data-trader-id="${trader.id}">Edit</button>
-                        <button class="btn btn-danger" style="padding: 8px 16px;" data-action="delete-trader" data-trader-id="${trader.id}">Delete</button>
+                        <button class="btn btn-primary" style="padding: 8px 16px;" data-action="edit-trader" data-trader-id="${esc(trader.id)}">Edit</button>
+                        <button class="btn btn-danger" style="padding: 8px 16px;" data-action="delete-trader" data-trader-id="${esc(trader.id)}">Delete</button>
                     </div>
                 </div>
             `;
@@ -1352,7 +1204,9 @@ async function loadTraders() {
             const card = container.querySelector(`[data-trader-card="${CSS.escape(String(trader.id))}"]`);
             if (!card) return;
             const img = document.createElement('img');
-            img.src = trader.profile_photo;
+            const photo = safeUrl(trader.profile_photo);
+            if (!photo) return;
+            img.src = photo;
             img.alt = '';
             img.width = 64;
             img.height = 64;
@@ -1562,15 +1416,15 @@ async function loadPlans() {
         plans.forEach(plan => {
             html += `
                 <div style="border: 1px solid #e2e8f0; padding: 20px; border-radius: 8px;">
-                    <h4>${plan.name || 'Unnamed Plan'}</h4>
-                    <p>${plan.description || ''}</p>
+                    <h4>${esc(plan.name || 'Unnamed Plan')}</h4>
+                    <p>${esc(plan.description || '')}</p>
                     <p><strong>Min Investment:</strong> $${(plan.minimum_investment || 0).toLocaleString()}</p>
-                    <p><strong>Return:</strong> ${plan.expected_return_percent ?? 'N/A'}% | <strong>Period:</strong> ${plan.holding_period_months ?? 'N/A'} months</p>
-                    <p><strong>Subscribers:</strong> ${plan.current_subscribers || 0}</p>
+                    <p><strong>Return:</strong> ${esc(plan.expected_return_percent ?? 'N/A')}% | <strong>Period:</strong> ${esc(plan.holding_period_months ?? 'N/A')} months</p>
+                    <p><strong>Subscribers:</strong> ${esc(plan.current_subscribers || 0)}</p>
                     <p><span class="badge badge-${plan.is_active ? 'active' : 'inactive'}">${plan.is_active ? 'Active' : 'Inactive'}</span></p>
                     <div style="display: flex; gap: 10px; margin-top: 15px;">
-                        <button class="btn btn-primary" style="padding: 8px 16px;" data-action="edit-plan" data-plan-id="${plan.id}">Edit</button>
-                        <button class="btn btn-danger" style="padding: 8px 16px;" data-action="delete-plan" data-plan-id="${plan.id}">Delete</button>
+                        <button class="btn btn-primary" style="padding: 8px 16px;" data-action="edit-plan" data-plan-id="${esc(plan.id)}">Edit</button>
+                        <button class="btn btn-danger" style="padding: 8px 16px;" data-action="delete-plan" data-plan-id="${esc(plan.id)}">Delete</button>
                     </div>
                 </div>
             `;
@@ -1763,15 +1617,15 @@ async function loadETFPlans() {
         plans.forEach(plan => {
             html += `
                 <div style="border: 1px solid #e2e8f0; padding: 20px; border-radius: 8px;">
-                    <h4>${plan.name || 'Unnamed Plan'}</h4>
-                    <p><strong>Type:</strong> ${plan.plan_type || 'N/A'}</p>
-                    ${plan.description ? `<p>${plan.description}</p>` : ''}
-                    <p><strong>Expected Return:</strong> ${plan.expected_return_percent ?? 'N/A'}% | <strong>Duration:</strong> ${plan.duration_months ?? 'N/A'} months</p>
+                    <h4>${esc(plan.name || 'Unnamed Plan')}</h4>
+                    <p><strong>Type:</strong> ${esc(plan.plan_type || 'N/A')}</p>
+                    ${plan.description ? `<p>${esc(plan.description)}</p>` : ''}
+                    <p><strong>Expected Return:</strong> ${esc(plan.expected_return_percent ?? 'N/A')}% | <strong>Duration:</strong> ${esc(plan.duration_months ?? 'N/A')} months</p>
                     <p><strong>Min Investment:</strong> $${(plan.minimum_investment || 0).toLocaleString()}</p>
                     <p><span class="badge badge-${plan.is_active ? 'active' : 'inactive'}">${plan.is_active ? 'Active' : 'Inactive'}</span></p>
                     <div style="display: flex; gap: 10px; margin-top: 15px;">
-                        <button class="btn btn-primary" style="padding: 8px 16px;" data-action="edit-etf-plan" data-plan-id="${plan.id}">Edit</button>
-                        <button class="btn btn-danger" style="padding: 8px 16px;" data-action="delete-etf-plan" data-plan-id="${plan.id}">Delete</button>
+                        <button class="btn btn-primary" style="padding: 8px 16px;" data-action="edit-etf-plan" data-plan-id="${esc(plan.id)}">Edit</button>
+                        <button class="btn btn-danger" style="padding: 8px 16px;" data-action="delete-etf-plan" data-plan-id="${esc(plan.id)}">Delete</button>
                     </div>
                 </div>
             `;
@@ -1962,15 +1816,15 @@ async function loadDeFiPlans() {
         plans.forEach(plan => {
             html += `
                 <div style="border: 1px solid #e2e8f0; padding: 20px; border-radius: 8px;">
-                    <h4>${plan.name || 'Unnamed Plan'}</h4>
-                    <p><strong>Portfolio Type:</strong> ${plan.portfolio_type || 'N/A'}</p>
-                    ${plan.description ? `<p>${plan.description}</p>` : ''}
-                    <p><strong>Expected Return:</strong> ${plan.expected_return_percent ?? 'N/A'}% | <strong>Duration:</strong> ${plan.duration_months ?? 'N/A'} months</p>
+                    <h4>${esc(plan.name || 'Unnamed Plan')}</h4>
+                    <p><strong>Portfolio Type:</strong> ${esc(plan.portfolio_type || 'N/A')}</p>
+                    ${plan.description ? `<p>${esc(plan.description)}</p>` : ''}
+                    <p><strong>Expected Return:</strong> ${esc(plan.expected_return_percent ?? 'N/A')}% | <strong>Duration:</strong> ${esc(plan.duration_months ?? 'N/A')} months</p>
                     <p><strong>Min Investment:</strong> $${(plan.minimum_investment || 0).toLocaleString()}</p>
                     <p><span class="badge badge-${plan.is_active ? 'active' : 'inactive'}">${plan.is_active ? 'Active' : 'Inactive'}</span></p>
                     <div style="display: flex; gap: 10px; margin-top: 15px;">
-                        <button class="btn btn-primary" style="padding: 8px 16px;" data-action="edit-defi-plan" data-plan-id="${plan.id}">Edit</button>
-                        <button class="btn btn-danger" style="padding: 8px 16px;" data-action="delete-defi-plan" data-plan-id="${plan.id}">Delete</button>
+                        <button class="btn btn-primary" style="padding: 8px 16px;" data-action="edit-defi-plan" data-plan-id="${esc(plan.id)}">Edit</button>
+                        <button class="btn btn-danger" style="padding: 8px 16px;" data-action="delete-defi-plan" data-plan-id="${esc(plan.id)}">Delete</button>
                     </div>
                 </div>
             `;
@@ -2161,15 +2015,15 @@ async function loadOptionsPlans() {
         plans.forEach(plan => {
             html += `
                 <div style="border: 1px solid #e2e8f0; padding: 20px; border-radius: 8px;">
-                    <h4>${plan.name || 'Unnamed Plan'}</h4>
-                    <p><strong>Plan Type:</strong> ${plan.plan_type || 'N/A'}</p>
-                    ${plan.description ? `<p>${plan.description}</p>` : ''}
-                    <p><strong>Expected Return:</strong> ${plan.expected_return_percent ?? 'N/A'}% | <strong>Duration:</strong> ${plan.duration_months > 0 ? plan.duration_months + ' months' : 'Ongoing'}</p>
+                    <h4>${esc(plan.name || 'Unnamed Plan')}</h4>
+                    <p><strong>Plan Type:</strong> ${esc(plan.plan_type || 'N/A')}</p>
+                    ${plan.description ? `<p>${esc(plan.description)}</p>` : ''}
+                    <p><strong>Expected Return:</strong> ${esc(plan.expected_return_percent ?? 'N/A')}% | <strong>Duration:</strong> ${esc(plan.duration_months > 0 ? plan.duration_months + ' months' : 'Ongoing')}</p>
                     <p><strong>Min Investment:</strong> $${(plan.minimum_investment || 0).toLocaleString()}</p>
                     <p><span class="badge badge-${plan.is_active ? 'active' : 'inactive'}">${plan.is_active ? 'Active' : 'Inactive'}</span></p>
                     <div style="display: flex; gap: 10px; margin-top: 15px;">
-                        <button class="btn btn-primary" style="padding: 8px 16px;" data-action="edit-options-plan" data-plan-id="${plan.id}">Edit</button>
-                        <button class="btn btn-danger" style="padding: 8px 16px;" data-action="delete-options-plan" data-plan-id="${plan.id}">Delete</button>
+                        <button class="btn btn-primary" style="padding: 8px 16px;" data-action="edit-options-plan" data-plan-id="${esc(plan.id)}">Edit</button>
+                        <button class="btn btn-danger" style="padding: 8px 16px;" data-action="delete-options-plan" data-plan-id="${esc(plan.id)}">Delete</button>
                     </div>
                 </div>
             `;
@@ -2393,21 +2247,21 @@ async function loadDepositRequests(statusFilter = '') {
 
         data.requests.forEach(req => {
             const date = new Date(req.created_at).toLocaleDateString();
-            const statusBadge = `badge-${req.status}`;
+            const statusBadge = `badge-${esc(req.status)}`;
             html += `
                 <tr>
-                    <td>${req.username}<br><small style="color: #8b93a7;">${req.email}</small></td>
+                    <td>${esc(req.username)}<br><small style="color: #55657A;">${esc(req.email)}</small></td>
                     <td><strong>$${req.amount.toLocaleString()}</strong></td>
-                    <td>${req.payment_method}</td>
-                    <td><span class="badge ${statusBadge}">${req.status}</span></td>
+                    <td>${esc(req.payment_method)}</td>
+                    <td><span class="badge ${statusBadge}">${esc(req.status)}</span></td>
                     <td>${date}</td>
                     <td>
                         ${req.status === 'pending' ? `
                             <div class="action-buttons">
-                                <button class="btn btn-success" style="padding: 5px 10px;" data-action="approve-deposit" data-request-id="${req.id}">Approve</button>
-                                <button class="btn btn-danger" style="padding: 5px 10px;" data-action="reject-deposit" data-request-id="${req.id}">Reject</button>
+                                <button class="btn btn-success" style="padding: 5px 10px;" data-action="approve-deposit" data-request-id="${esc(req.id)}">Approve</button>
+                                <button class="btn btn-danger" style="padding: 5px 10px;" data-action="reject-deposit" data-request-id="${esc(req.id)}">Reject</button>
                             </div>
-                        ` : `<span style="color: #8b93a7;">Reviewed</span>`}
+                        ` : `<span style="color: #55657A;">Reviewed</span>`}
                     </td>
                 </tr>
             `;
@@ -2525,14 +2379,14 @@ async function loadCryptoWallets() {
             const date = wallet.created_at ? new Date(wallet.created_at).toLocaleDateString() : 'N/A';
             html += `
                 <tr>
-                    <td><strong>${wallet.currency}</strong></td>
-                    <td><code style="background: #f7fafc; padding: 4px 8px; border-radius: 4px; font-size: 12px;">${wallet.wallet_address}</code></td>
-                    <td>${wallet.network || 'N/A'}</td>
+                    <td><strong>${esc(wallet.currency)}</strong></td>
+                    <td><code style="background: #f7fafc; padding: 4px 8px; border-radius: 4px; font-size: 12px;">${esc(wallet.wallet_address)}</code></td>
+                    <td>${esc(wallet.network || 'N/A')}</td>
                     <td><span class="badge badge-${wallet.is_active ? 'active' : 'inactive'}">${wallet.is_active ? 'Active' : 'Inactive'}</span></td>
                     <td>${date}</td>
                     <td>
-                        <button class="btn btn-primary" style="padding: 5px 10px; margin-right: 5px;" data-action="edit-crypto-wallet" data-wallet-id="${wallet.id}"><i class="fas fa-edit"></i> Edit</button>
-                        <button class="btn btn-danger" style="padding: 5px 10px;" data-action="delete-crypto-wallet" data-wallet-id="${wallet.id}"><i class="fas fa-trash"></i> Delete</button>
+                        <button class="btn btn-primary" style="padding: 5px 10px; margin-right: 5px;" data-action="edit-crypto-wallet" data-wallet-id="${esc(wallet.id)}"><i class="fas fa-edit"></i> Edit</button>
+                        <button class="btn btn-danger" style="padding: 5px 10px;" data-action="delete-crypto-wallet" data-wallet-id="${esc(wallet.id)}"><i class="fas fa-trash"></i> Delete</button>
                     </td>
                 </tr>
             `;
@@ -2722,14 +2576,14 @@ async function loadBankAccounts() {
         accounts.forEach(account => {
             html += `
                 <tr>
-                    <td><strong>${account.bank_name}</strong></td>
-                    <td>${account.account_name}</td>
-                    <td><code style="background: #f7fafc; padding: 4px 8px; border-radius: 4px;">${account.account_number}</code></td>
-                    <td>${account.routing_number || 'N/A'}</td>
-                    <td>${account.swift_code || 'N/A'}</td>
+                    <td><strong>${esc(account.bank_name)}</strong></td>
+                    <td>${esc(account.account_name)}</td>
+                    <td><code style="background: #f7fafc; padding: 4px 8px; border-radius: 4px;">${esc(account.account_number)}</code></td>
+                    <td>${esc(account.routing_number || 'N/A')}</td>
+                    <td>${esc(account.swift_code || 'N/A')}</td>
                     <td><span class="badge badge-${account.is_active ? 'active' : 'inactive'}">${account.is_active ? 'Active' : 'Inactive'}</span></td>
                     <td>
-                        <button class="btn btn-danger" style="padding: 5px 10px;" data-action="delete-bank-account" data-account-id="${account.id}">Delete</button>
+                        <button class="btn btn-danger" style="padding: 5px 10px;" data-action="delete-bank-account" data-account-id="${esc(account.id)}">Delete</button>
                     </td>
                 </tr>
             `;
@@ -2859,16 +2713,16 @@ async function loadNotifications() {
                 'warning': '#ff9800',
                 'error': '#f44336'
             };
-            const typeColor = typeColors[notif.notification_type] || '#8b93a7';
+            const typeColor = typeColors[notif.notification_type] || '#55657A';
 
             html += `
                 <tr>
-                    <td><strong>${notif.title}</strong><br><small style="color: #8b93a7;">${notif.message.substring(0, 50)}${notif.message.length > 50 ? '...' : ''}</small></td>
-                    <td><span class="badge" style="background: ${typeColor};">${notif.notification_type.toUpperCase()}</span></td>
+                    <td><strong>${esc(notif.title)}</strong><br><small style="color: #55657A;">${esc(notif.message.substring(0, 50))}${notif.message.length > 50 ? '...' : ''}</small></td>
+                    <td><span class="badge" style="background: ${typeColor};">${esc(notif.notification_type.toUpperCase())}</span></td>
                     <td>${notif.target_type === 'all' ? '<strong>All Users</strong>' : 'Specific User'}</td>
                     <td>${date}</td>
                     <td>
-                        <button class="btn btn-danger" style="padding: 5px 10px;" data-action="delete-notification" data-notification-id="${notif.id}">Delete</button>
+                        <button class="btn btn-danger" style="padding: 5px 10px;" data-action="delete-notification" data-notification-id="${esc(notif.id)}">Delete</button>
                     </td>
                 </tr>
             `;
@@ -2935,7 +2789,7 @@ async function searchUsersForNotification() {
             const resultsDiv = document.getElementById('user-search-results');
 
             if (data.users.length === 0) {
-                resultsDiv.innerHTML = '<p style="padding: 10px; color: #8b93a7;">No users found</p>';
+                resultsDiv.innerHTML = '<p style="padding: 10px; color: #55657A;">No users found</p>';
                 resultsDiv.style.display = 'block';
                 return;
             }
@@ -2943,9 +2797,9 @@ async function searchUsersForNotification() {
             let html = '';
             data.users.forEach(user => {
                 html += `
-                    <div class="user-search-result-item" data-action="select-user-notification" data-user-id="${user.id}" data-username="${user.username}" data-email="${user.email}">
-                        <strong>${user.username}</strong><br>
-                        <small style="color: #8b93a7;">${user.email}</small>
+                    <div class="user-search-result-item" role="button" tabindex="0" data-action="select-user-notification" data-user-id="${esc(user.id)}" data-username="${esc(user.username)}" data-email="${esc(user.email)}">
+                        <strong>${esc(user.username)}</strong><br>
+                        <small style="color: #55657A;">${esc(user.email)}</small>
                     </div>
                 `;
             });
@@ -3214,18 +3068,18 @@ async function loadWithdrawalRequests(statusFilter = '') {
             let actionButtons = '';
             if (req.type === 'transaction') {
                 actionButtons = `
-                    <button class="btn btn-secondary" style="padding: 5px 10px;" data-action="view-transaction-withdrawal" data-request-id="${req.id}">View</button>
+                    <button class="btn btn-secondary" style="padding: 5px 10px;" data-action="view-transaction-withdrawal" data-request-id="${esc(req.id)}">View</button>
                     ${req.status === 'pending' ? `
-                        <button class="btn btn-success" style="padding: 5px 10px;" data-action="complete-transaction-withdrawal" data-request-id="${req.id}">Complete</button>
-                        <button class="btn btn-danger" style="padding: 5px 10px;" data-action="reject-transaction-withdrawal" data-request-id="${req.id}">Reject</button>
+                        <button class="btn btn-success" style="padding: 5px 10px;" data-action="complete-transaction-withdrawal" data-request-id="${esc(req.id)}">Complete</button>
+                        <button class="btn btn-danger" style="padding: 5px 10px;" data-action="reject-transaction-withdrawal" data-request-id="${esc(req.id)}">Reject</button>
                     ` : ''}
                 `;
             } else {
                 actionButtons = `
-                    <button class="btn btn-secondary" style="padding: 5px 10px;" data-action="view-withdrawal" data-request-id="${req.id}">View</button>
+                    <button class="btn btn-secondary" style="padding: 5px 10px;" data-action="view-withdrawal" data-request-id="${esc(req.id)}">View</button>
                     ${req.status === 'pending' ? `
-                        <button class="btn btn-success" style="padding: 5px 10px;" data-action="approve-withdrawal" data-request-id="${req.id}">Approve</button>
-                        <button class="btn btn-danger" style="padding: 5px 10px;" data-action="reject-withdrawal" data-request-id="${req.id}">Reject</button>
+                        <button class="btn btn-success" style="padding: 5px 10px;" data-action="approve-withdrawal" data-request-id="${esc(req.id)}">Approve</button>
+                        <button class="btn btn-danger" style="padding: 5px 10px;" data-action="reject-withdrawal" data-request-id="${esc(req.id)}">Reject</button>
                     ` : ''}
                 `;
             }
@@ -3234,15 +3088,15 @@ async function loadWithdrawalRequests(statusFilter = '') {
 
             // Display verification code if available
             const verificationCodeDisplay = req.verification_code
-                ? `<code style="background: #fff3cd; padding: 4px 8px; border-radius: 4px; font-size: 14px; font-weight: 700; color: #D32F2F; letter-spacing: 1px;">${req.verification_code}</code>`
+                ? `<code style="background: #fff3cd; padding: 4px 8px; border-radius: 4px; font-size: 14px; font-weight: 700; color: #D32F2F; letter-spacing: 1px;">${esc(req.verification_code)}</code>`
                 : '-';
 
             html += `
                 <tr>
-                    <td>${req.username}<br><small style="color: #8b93a7;">${req.email}</small></td>
+                    <td>${esc(req.username)}<br><small style="color: #55657A;">${esc(req.email)}</small></td>
                     <td><strong>$${req.amount.toLocaleString()}</strong></td>
-                    <td>${req.withdrawal_method}</td>
-                    <td><span class="badge ${statusBadge}">${displayStatus}</span></td>
+                    <td>${esc(req.withdrawal_method)}</td>
+                    <td><span class="badge ${statusBadge}">${esc(displayStatus)}</span></td>
                     <td>${verificationCodeDisplay}</td>
                     <td>${date}</td>
                     <td>
@@ -3284,7 +3138,7 @@ function viewWithdrawalDetails(requestId) {
             const statusBadge = withdrawal.status === 'completed' ? 'badge-approved' :
                               withdrawal.status === 'rejected' ? 'badge-rejected' : 'badge-pending';
             const statusText = withdrawal.status === 'pending_verification' ? 'PENDING VERIFICATION' : withdrawal.status.toUpperCase();
-            document.getElementById('wd-status-badge').innerHTML = `<span class="badge ${statusBadge}">${statusText}</span>`;
+            document.getElementById('wd-status-badge').innerHTML = `<span class="badge ${statusBadge}">${esc(statusText)}</span>`;
             document.getElementById('wd-amount').textContent = `$${withdrawal.amount.toLocaleString()}`;
             document.getElementById('wd-username').textContent = withdrawal.username || '-';
             document.getElementById('wd-email').textContent = withdrawal.email || '-';
@@ -3413,19 +3267,19 @@ async function viewTransactionWithdrawalDetails(transactionId) {
         let detailsHtml = `
             <div style="text-align: left; padding: 20px;">
                 <div style="margin-bottom: 15px;">
-                    <strong>Status:</strong> <span class="badge ${withdrawal.status === 'pending' ? 'badge-pending' : 'badge-approved'}">${withdrawal.status.toUpperCase()}</span>
+                    <strong>Status:</strong> <span class="badge ${withdrawal.status === 'pending' ? 'badge-pending' : 'badge-approved'}">${esc(withdrawal.status.toUpperCase())}</span>
                 </div>
                 <div style="margin-bottom: 15px;">
                     <strong>Amount:</strong> $${withdrawal.amount.toLocaleString()}
                 </div>
                 <div style="margin-bottom: 15px;">
-                    <strong>User:</strong> ${withdrawal.username} (${withdrawal.email})
+                    <strong>User:</strong> ${esc(withdrawal.username)} (${esc(withdrawal.email)})
                 </div>
                 <div style="margin-bottom: 15px;">
-                    <strong>Payment Method:</strong> ${withdrawal.payment_method}
+                    <strong>Payment Method:</strong> ${esc(withdrawal.payment_method)}
                 </div>
                 <div style="margin-bottom: 15px;">
-                    <strong>Reference Number:</strong> ${withdrawal.reference_number}
+                    <strong>Reference Number:</strong> ${esc(withdrawal.reference_number)}
                 </div>
                 <div style="margin-bottom: 15px;">
                     <strong>Created:</strong> ${new Date(withdrawal.created_at).toLocaleString()}
@@ -3437,7 +3291,7 @@ async function viewTransactionWithdrawalDetails(transactionId) {
             detailsHtml += `
                 <div style="margin-bottom: 15px;">
                     <strong>Payment Details:</strong>
-                    <pre style="background: #f5f5f5; padding: 10px; border-radius: 5px; overflow-x: auto;">${JSON.stringify(withdrawal.payment_details, null, 2)}</pre>
+                    <pre style="background: #f5f5f5; padding: 10px; border-radius: 5px; overflow-x: auto;">${esc(JSON.stringify(withdrawal.payment_details, null, 2))}</pre>
                 </div>
             `;
 
@@ -3447,16 +3301,16 @@ async function viewTransactionWithdrawalDetails(transactionId) {
                     <div style="margin-top: 20px; padding: 15px; background: rgba(123, 182, 218, 0.1); border-left: 3px solid #7BB6DA; border-radius: 5px;">
                         <h4 style="color: #D32F2F; margin-top: 0;">Cryptocurrency Withdrawal</h4>
                         <div style="margin-bottom: 10px;">
-                            <strong>Crypto Type:</strong> ${withdrawal.payment_details.crypto_type}
+                            <strong>Crypto Type:</strong> ${esc(withdrawal.payment_details.crypto_type)}
                         </div>
                         <div style="margin-bottom: 10px;">
                             <strong>User's Wallet Address:</strong><br>
-                            <code style="background: #fff; padding: 5px; border-radius: 3px; word-break: break-all;">${withdrawal.payment_details.wallet_address}</code>
+                            <code style="background: #fff; padding: 5px; border-radius: 3px; word-break: break-all;">${esc(withdrawal.payment_details.wallet_address)}</code>
                         </div>
                         <div style="margin-top: 15px; padding: 10px; background: rgba(255, 152, 0, 0.1); border-radius: 5px;">
                             <i class="fas fa-info-circle"></i> <strong>Instructions:</strong>
                             <ol style="margin: 10px 0 0 0;">
-                                <li>Send <strong>$${withdrawal.amount.toLocaleString()}</strong> worth of ${withdrawal.payment_details.crypto_type} to the user's wallet address above</li>
+                                <li>Send <strong>$${withdrawal.amount.toLocaleString()}</strong> worth of ${esc(withdrawal.payment_details.crypto_type)} to the user's wallet address above</li>
                                 <li>Verify the transaction is confirmed on the blockchain</li>
                                 <li>Click "Complete" to debit the amount from user's in-app wallet</li>
                             </ol>
@@ -3560,3 +3414,177 @@ async function rejectTransactionWithdrawal(transactionId) {
         console.error(error);
     }
 }
+
+// ============================================================================
+// ACCESSIBILITY AND LAYOUT
+// - Sidebar items are keyboard operable and expose the current page
+// - Modals get dialog semantics, focus on open, focus trap, Escape to close,
+//   focus return on close, and the page behind them is made inert
+// - The sidebar becomes an off-canvas menu below 1024px
+// ============================================================================
+
+function syncMenuCurrent() {
+    document.querySelectorAll('.menu-item').forEach(item => {
+        if (item.classList.contains('active')) item.setAttribute('aria-current', 'page');
+        else item.removeAttribute('aria-current');
+    });
+}
+
+const modalTriggers = new WeakMap(); // modal element -> element focused before it opened
+
+function getFocusable(root) {
+    return [...root.querySelectorAll('a[href], button:not([disabled]), input:not([disabled]):not([type="hidden"]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])')]
+        .filter(el => el.offsetParent !== null || el === document.activeElement);
+}
+
+function openModals() {
+    return [...document.querySelectorAll('.modal.show')];
+}
+
+function syncModals() {
+    const open = openModals();
+    const wrapper = document.querySelector('.dashboard-wrapper');
+    if (wrapper) wrapper.inert = open.length > 0;
+
+    document.querySelectorAll('.modal').forEach(modal => {
+        const isOpen = modal.classList.contains('show');
+        const hasTrigger = modalTriggers.has(modal);
+        if (isOpen && !hasTrigger) {
+            modalTriggers.set(modal, document.activeElement);
+            requestAnimationFrame(() => {
+                const content = modal.querySelector('.modal-content') || modal;
+                const target = content.querySelector('[autofocus]') || getFocusable(content)[0] || content;
+                target.focus();
+            });
+        } else if (!isOpen && hasTrigger) {
+            const trigger = modalTriggers.get(modal);
+            modalTriggers.delete(modal);
+            if (trigger && document.contains(trigger) && typeof trigger.focus === 'function') trigger.focus();
+        }
+    });
+}
+
+function closeTopModal() {
+    const modal = openModals().pop();
+    if (!modal) return false;
+    // Prefer the modal's own Cancel/Close button so its cleanup handler runs
+    const closer = [...modal.querySelectorAll('.btn-secondary')]
+        .find(btn => ['Close', 'Cancel'].includes(btn.textContent.trim()));
+    if (closer) closer.click();
+    else modal.classList.remove('show');
+    return true;
+}
+
+function setSidebarOpen(open) {
+    const sidebar = document.getElementById('admin-sidebar');
+    const toggle = document.getElementById('menu-toggle');
+    const backdrop = document.getElementById('sidebar-backdrop');
+    const main = document.getElementById('main-content');
+    if (!sidebar || !toggle) return;
+
+    const mobile = window.matchMedia('(max-width: 1023px)').matches;
+    const isOpen = open && mobile;
+    sidebar.classList.toggle('is-open', isOpen);
+    toggle.setAttribute('aria-expanded', String(isOpen));
+    toggle.textContent = '';
+    toggle.append(Object.assign(document.createElement('i'), { className: `fas ${isOpen ? 'fa-xmark' : 'fa-bars'}` }), isOpen ? ' Close menu' : ' Menu');
+    if (backdrop) backdrop.hidden = !isOpen;
+    if (main) main.inert = isOpen;
+    sidebar.inert = !isOpen && mobile;
+
+    if (isOpen) {
+        const first = sidebar.querySelector('.menu-item[data-tab].active') || sidebar.querySelector('.menu-item');
+        if (first) first.focus();
+    }
+}
+
+function initAccessibilityAndLayout() {
+    // Modal semantics
+    document.querySelectorAll('.modal').forEach(modal => {
+        modal.setAttribute('role', 'dialog');
+        modal.setAttribute('aria-modal', 'true');
+        const content = modal.querySelector('.modal-content');
+        if (content) content.setAttribute('tabindex', '-1');
+        const heading = content && content.querySelector('h1, h2, h3');
+        if (heading) {
+            if (!heading.id) heading.id = `${modal.id || 'modal'}-title`;
+            modal.setAttribute('aria-labelledby', heading.id);
+        }
+    });
+
+    // Sidebar items: make the divs keyboard operable
+    document.querySelectorAll('.menu-item').forEach(item => {
+        item.setAttribute('role', 'button');
+        item.setAttribute('tabindex', '0');
+        item.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                item.click();
+            }
+        });
+    });
+    // Close the off-canvas menu after choosing a tab on small screens
+    document.querySelectorAll('.menu-item[data-tab]').forEach(item => {
+        item.addEventListener('click', () => setSidebarOpen(false));
+    });
+    syncMenuCurrent();
+
+    // Mobile menu toggle and backdrop
+    const toggle = document.getElementById('menu-toggle');
+    if (toggle) {
+        toggle.addEventListener('click', () => {
+            const isOpen = document.getElementById('admin-sidebar').classList.contains('is-open');
+            setSidebarOpen(!isOpen);
+            if (isOpen) toggle.focus();
+        });
+    }
+    const backdrop = document.getElementById('sidebar-backdrop');
+    if (backdrop) backdrop.addEventListener('click', () => { setSidebarOpen(false); if (toggle) toggle.focus(); });
+    window.matchMedia('(max-width: 1023px)').addEventListener('change', () => setSidebarOpen(false));
+    setSidebarOpen(false); // sets the initial off-canvas / inert state on small screens
+
+    // Modal open/close tracking (covers every place that toggles .show)
+    new MutationObserver(syncModals).observe(document.body, { attributes: true, attributeFilter: ['class'], subtree: true });
+    syncModals();
+
+    // Keyboard: Escape closes the top dialog or the mobile menu; Tab stays inside an open dialog
+    document.addEventListener('keydown', (e) => {
+        if (document.querySelector('.swal2-container')) return; // SweetAlert handles its own keys
+
+        if ((e.key === 'Enter' || e.key === ' ') && e.target.matches && e.target.matches('[data-action][role="button"]')) {
+            e.preventDefault();
+            e.target.click();
+            return;
+        }
+
+        if (e.key === 'Escape') {
+            if (closeTopModal()) { e.preventDefault(); return; }
+            if (document.getElementById('admin-sidebar')?.classList.contains('is-open')) {
+                setSidebarOpen(false);
+                if (toggle) toggle.focus();
+            }
+            return;
+        }
+
+        if (e.key === 'Tab') {
+            const modal = openModals().pop();
+            if (!modal) return;
+            const content = modal.querySelector('.modal-content') || modal;
+            const focusables = getFocusable(content);
+            if (focusables.length === 0) { e.preventDefault(); content.focus(); return; }
+            const first = focusables[0];
+            const last = focusables[focusables.length - 1];
+            const active = document.activeElement;
+            if (!content.contains(active)) { e.preventDefault(); first.focus(); }
+            else if (e.shiftKey && active === first) { e.preventDefault(); last.focus(); }
+            else if (!e.shiftKey && active === last) { e.preventDefault(); first.focus(); }
+        }
+    });
+
+    // Search: Enter submits the user search
+    const search = document.getElementById('user-search');
+    if (search) search.addEventListener('keydown', (e) => { if (e.key === 'Enter') { e.preventDefault(); searchUsers(); } });
+}
+
+document.addEventListener('DOMContentLoaded', initAccessibilityAndLayout);
+

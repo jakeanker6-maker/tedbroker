@@ -1,9 +1,12 @@
-from fastapi import APIRouter, HTTPException, status, Depends
+from fastapi import APIRouter, HTTPException, status, Depends, Query
 from datetime import datetime
 from bson import ObjectId
 import base64
 import os
 from pathlib import Path
+from typing import Any, Dict, List
+
+import httpx
 
 from app.schemas import (
     OnboardingPersonalInfo,
@@ -11,6 +14,8 @@ from app.schemas import (
     OnboardingKYC,
     OnboardingQuestionnaire,
     OnboardingStatus,
+    OnboardingAddressSuggestion,
+    OnboardingAddressSuggestions,
     UserResponse
 )
 from app.auth import get_current_user_token
@@ -118,6 +123,79 @@ async def submit_personal_info(
         "step": "personal_info",
         "completed": True
     }
+
+
+# Global address lookup used for type-ahead suggestions. Photon (OpenStreetMap data, no API key).
+# Point ADDRESS_API_URL at a self-hosted Photon instance for production traffic.
+ADDRESS_API_URL = os.getenv("ADDRESS_API_URL", "https://photon.komoot.io/api/")
+ADDRESS_API_TIMEOUT = 4.0
+
+
+def _first(props: Dict[str, Any], *keys: str) -> str:
+    for key in keys:
+        value = props.get(key)
+        if isinstance(value, str) and value.strip():
+            return value.strip()
+    return ""
+
+
+def normalize_address_features(payload: Dict[str, Any]) -> List[OnboardingAddressSuggestion]:
+    """Map a Photon GeoJSON response to the suggestion shape the wizard expects."""
+    results: List[OnboardingAddressSuggestion] = []
+    seen = set()
+    for feature in payload.get("features") or []:
+        props = feature.get("properties") or {}
+        country = _first(props, "country")
+        country_code = _first(props, "countrycode").upper()
+        if not country or len(country_code) != 2:
+            continue  # need a country to autofill
+
+        street_name = _first(props, "street", "name")
+        housenumber = _first(props, "housenumber")
+        street = f"{housenumber} {street_name}".strip() if housenumber and street_name else street_name
+        city = _first(props, "city", "town", "village", "district", "county")
+        state = _first(props, "state", "county")
+        zip_code = _first(props, "postcode")
+
+        parts = [p for p in (street, city, state, zip_code, country) if p]
+        label = ", ".join(dict.fromkeys(parts))
+        if not label or label in seen:
+            continue
+        seen.add(label)
+        results.append(OnboardingAddressSuggestion(
+            label=label,
+            street=street,
+            city=city,
+            state=state,
+            zip_code=zip_code,
+            country=country,
+            country_code=country_code,
+        ))
+    return results
+
+
+@router.get("/address-suggestions", response_model=OnboardingAddressSuggestions)
+async def get_address_suggestions(
+    q: str = Query(..., min_length=3, max_length=200),
+    current_user: dict = Depends(get_current_user_token),
+):
+    """Address suggestions for the onboarding address step (signed-in users only)."""
+    query = q.strip()
+    if len(query) < 3:
+        return {"suggestions": []}
+
+    try:
+        async with httpx.AsyncClient(timeout=ADDRESS_API_TIMEOUT, headers={"User-Agent": "TEDBrokers-onboarding/1.0"}) as client:
+            response = await client.get(ADDRESS_API_URL, params={"q": query, "limit": 6, "lang": "en"})
+        response.raise_for_status()
+        payload = response.json()
+    except (httpx.HTTPError, ValueError):
+        raise HTTPException(
+            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+            detail="Address suggestions are unavailable. Enter your address manually."
+        )
+
+    return {"suggestions": normalize_address_features(payload)}
 
 
 @router.post("/address")

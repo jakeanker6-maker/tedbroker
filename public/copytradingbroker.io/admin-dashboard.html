@@ -6,8 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard | TED Brokers</title>
     <link rel="shortcut icon" href="/assets/images/logoIcon/tedbrokers-fav.ico">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha384-t1nt8BQoYMLFN5p42tRAtuAAFQaCQODekUVeKKZrEnEyp4H2R0RHFz0KWpmj7i8g" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.26.25" integrity="sha384-nLoOnA/BDh8A/jxqtckg4DumuCGOBYUnNJLZdQz/zfYNp3wcjGSoWTAzgko06G/2" crossorigin="anonymous"></script>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
@@ -74,7 +74,8 @@
             color: white;
         }
         .btn-primary:hover { background: #B71C1C; }
-        .btn-secondary { background: #8b93a7; color: white; }
+        .btn-secondary { background: #55657A; color: white; }
+        .btn-secondary:hover { background: #3f4b5e; }
         .stat-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -94,7 +95,7 @@
             margin-bottom: 8px;
         }
         .stat-label {
-            color: #8b93a7;
+            color: #55657A;
             font-size: 14px;
             text-transform: uppercase;
         }
@@ -127,17 +128,30 @@
             font-size: 12px;
             font-weight: 600;
         }
-        .badge-active { background: rgba(76, 175, 80, 0.2); color: #4caf50; }
-        .badge-inactive { background: rgba(244, 67, 54, 0.2); color: #f44336; }
-        .badge-pending { background: rgba(255, 152, 0, 0.2); color: #ff9800; }
-        .badge-approved { background: rgba(76, 175, 80, 0.2); color: #4caf50; }
-        .badge-rejected { background: rgba(244, 67, 54, 0.2); color: #f44336; }
-        .btn-success { background: #4caf50; color: white; }
-        .btn-success:hover { background: #388e3c; }
-        .btn-danger { background: #f44336; color: white; }
-        .btn-danger:hover { background: #d32f2f; }
-        .btn-warning { background: #ff9800; color: white; }
-        .btn-warning:hover { background: #f57c00; }
+        .main-content { min-width: 0; }
+        #tab-users .card { min-width: 0; }
+        .table-wrap { position: relative; overflow-x: auto; max-width: 100%; min-width: 0; }
+        .card { overflow-x: auto; }
+        .users-table td.is-num, .users-table th.is-num { text-align: right; font-variant-numeric: tabular-nums; }
+        .users-table th, .users-table td { padding: 12px 10px; }
+        .users-table td:nth-child(2), .users-table th:nth-child(2) { min-width: 210px; }
+        .users-table td:last-child, .users-table th:last-child { white-space: nowrap; text-align: right; }
+        .users-table tbody tr:hover { background: #fafbfc; }
+        .users-status { color: #55657A; padding: 16px 0; }
+        .users-status--error { color: #b42318; }
+        .users-summary { color: #55657A; font-size: 13px; margin-top: 12px; }
+        .visually-hidden { position: absolute !important; width: 1px; height: 1px; margin: -1px; padding: 0; border: 0; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+        .badge-active { background: rgba(76, 175, 80, 0.2); color: #1b5e20; }
+        .badge-inactive { background: rgba(244, 67, 54, 0.2); color: #b42318; }
+        .badge-pending { background: rgba(255, 152, 0, 0.2); color: #8a4b00; }
+        .badge-approved { background: rgba(76, 175, 80, 0.2); color: #1b5e20; }
+        .badge-rejected { background: rgba(244, 67, 54, 0.2); color: #b42318; }
+        .btn-success { background: #2e7d32; color: white; }
+        .btn-success:hover { background: #1b5e20; }
+        .btn-danger { background: #c62828; color: white; }
+        .btn-danger:hover { background: #b71c1c; }
+        .btn-warning { background: #b45309; color: white; }
+        .btn-warning:hover { background: #92400e; }
         .action-buttons { display: flex; gap: 8px; }
         .tab-content { display: none; }
         .tab-content.active { display: block; animation: fadeIn 0.3s; }
@@ -174,14 +188,14 @@
         .form-group input, .form-group textarea, .form-group select {
             width: 100%;
             padding: 12px;
-            border: 2px solid #e2e8f0;
+            border: 2px solid #6b7280;
             border-radius: 8px;
             font-size: 16px;
         }
         .photo-picker { display: grid; gap: 8px; }
         .photo-picker__preview { width: 96px; height: 96px; object-fit: cover; border-radius: 50%; border: 1px solid #e2e8f0; }
         .photo-picker__hint { margin: 0; font-size: 12px; color: #64748b; }
-        .photo-picker__error { margin: 0; font-size: 13px; color: #D32F2F; }
+        .photo-picker__error { margin: 0; font-size: 13px; color: #B71C1C; }
         .form-group input:focus, .form-group textarea:focus, .form-group select:focus {
             outline: none;
             border-color: #D32F2F;
@@ -225,7 +239,7 @@
         }
         .conversation-preview {
             font-size: 13px;
-            color: #8b93a7;
+            color: #55657A;
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
@@ -233,7 +247,7 @@
         }
         .conversation-time {
             font-size: 11px;
-            color: #a0aec0;
+            color: #55657A;
         }
         .conversation-unread {
             display: inline-block;
@@ -291,7 +305,7 @@
             padding: 12px 20px;
             font-size: 15px;
             font-weight: 600;
-            color: #8b93a7;
+            color: #55657A;
             cursor: pointer;
             border-bottom: 3px solid transparent;
             transition: all 0.3s;
@@ -321,14 +335,62 @@
             background: #fff5f5;
             border-color: #fc8181;
         }
+
+        /* ---- Accessibility and responsive layout ---- */
+        :focus-visible { outline: 3px solid #1d4ed8; outline-offset: 2px; }
+        .menu-item:focus-visible { outline: 3px solid #ffffff; outline-offset: -3px; }
+        .sidebar :focus-visible { outline-color: #ffffff; }
+        .menu-item[aria-current="page"] { background: rgba(255,255,255,0.1); color: white; border-left-color: #D32F2F; }
+        .menu-toggle {
+            display: none;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 16px;
+            padding: 10px 16px;
+            border: none;
+            border-radius: 8px;
+            background: #2D3748;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        .sidebar-backdrop { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 1050; }
+        .modal-content:focus { outline: none; }
+        .header > div { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; min-width: 0; }
+        @media (prefers-reduced-motion: reduce) {
+            .sidebar, .tab-content.active, .user-tab-content, .menu-item { transition: none !important; animation: none !important; }
+        }
+        @media (max-width: 1023px) {
+            .sidebar {
+                transform: translateX(-100%);
+                transition: transform 0.25s ease;
+                width: min(280px, 85vw);
+                z-index: 1100;
+            }
+            .sidebar.is-open { transform: none; }
+            .menu-toggle { display: inline-flex; }
+            .main-content { margin-left: 0; padding: 16px; }
+            .header { flex-wrap: wrap; gap: 12px; padding: 16px; }
+            .header h1 { font-size: 22px; }
+            .card { padding: 16px; }
+            .stat-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+            .modal-content { width: calc(100% - 24px); padding: 20px; }
+        }
+        @media (max-width: 599px) {
+            .stat-grid { grid-template-columns: minmax(0, 1fr); }
+            .header > div { width: 100%; }
+            #user-search { flex: 1 1 180px; min-width: 0; }
+            .action-buttons, #user-details-actions { gap: 6px; }
+        }
     </style>
+    <link rel="stylesheet" href="/assets/css/pages/admin-trading-activity.css">
 </head>
 <body>
     <div class="dashboard-wrapper">
-        <aside class="sidebar">
+        <aside class="sidebar" id="admin-sidebar">
             <div class="sidebar-header">
                 <img src="/assets/images/logoIcon/tedbrokers-logo.jpg" alt="TED Brokers">
-                <p style="margin-top: 10px; color: #a0aec0; font-size: 14px;">Admin Panel</p>
+                <p style="margin-top: 10px; color: #cbd5e0; font-size: 14px;">Admin Panel</p>
             </div>
             <nav>
                 <div class="menu-item active" data-tab="dashboard">
@@ -364,6 +426,7 @@
                 <div class="menu-item" data-tab="crypto-wallets">
                     <i class="fab fa-bitcoin"></i> <span>Crypto Wallets</span>
                 </div>
+                <div class="menu-item" data-tab="trading-activity"><i class="fas fa-chart-column"></i> <span>Trading Activity</span></div>
                 <div class="menu-item" data-tab="chats">
                     <i class="fas fa-comments"></i> <span>Support Chats</span>
                     <span id="chat-badge" class="badge" style="margin-left: auto; background: #D32F2F; color: white; display: none;">0</span>
@@ -377,13 +440,17 @@
             </nav>
         </aside>
         
-        <main class="main-content">
+        <div class="sidebar-backdrop" id="sidebar-backdrop" hidden></div>
+        <main class="main-content" id="main-content">
+            <button type="button" class="menu-toggle" id="menu-toggle" aria-controls="admin-sidebar" aria-expanded="false">
+                <i class="fas fa-bars" aria-hidden="true"></i> Menu
+            </button>
             <!-- Dashboard Tab -->
             <div class="tab-content active" id="tab-dashboard">
                 <div class="header">
                     <div>
                         <h1>Dashboard</h1>
-                        <p style="color: #8b93a7;">Welcome, <span id="admin-name">Admin</span></p>
+                        <p style="color: #55657A;">Welcome, <span id="admin-name">Admin</span></p>
                     </div>
                 </div>
                 
@@ -412,7 +479,8 @@
                 <div class="header">
                     <h1>Users Management</h1>
                     <div>
-                        <input type="text" id="user-search" placeholder="Search users..." style="padding: 10px; border: 2px solid #e2e8f0; border-radius: 8px; margin-right: 10px;">
+                        <label for="user-search" class="visually-hidden">Search users by name, username or email</label>
+                        <input type="text" id="user-search" placeholder="Search users..." style="padding: 10px; border: 2px solid #6b7280; border-radius: 8px; margin-right: 10px;">
                         <button class="btn btn-primary" onclick="searchUsers()"><i class="fas fa-search"></i> Search</button>
                     </div>
                 </div>
@@ -487,7 +555,7 @@
                 <div class="header">
                     <h1>Deposit Requests</h1>
                     <div>
-                        <select id="deposit-status-filter" style="padding: 10px; border: 2px solid #e2e8f0; border-radius: 8px; margin-right: 10px;">
+                        <select id="deposit-status-filter" style="padding: 10px; border: 2px solid #6b7280; border-radius: 8px; margin-right: 10px;">
                             <option value="">All Statuses</option>
                             <option value="pending">Pending</option>
                             <option value="approved">Approved</option>
@@ -507,7 +575,7 @@
                 <div class="header">
                     <h1>Withdrawal Requests</h1>
                     <div>
-                        <select id="withdrawal-status-filter" style="padding: 10px; border: 2px solid #e2e8f0; border-radius: 8px; margin-right: 10px;">
+                        <select id="withdrawal-status-filter" style="padding: 10px; border: 2px solid #6b7280; border-radius: 8px; margin-right: 10px;">
                             <option value="">All Statuses</option>
                             <option value="pending_verification">Pending Verification</option>
                             <option value="pending">Pending</option>
@@ -566,12 +634,139 @@
                 </div>
             </div>
 
+            <!-- Trading Activity Tab -->
+            <div class="tab-content" id="tab-trading-activity">
+                <div class="header">
+                    <div>
+                        <h1>Trading Activity</h1>
+                        <p class="ta-subtitle">Stocks, ETFs and options bought and sold by users, and how they perform over time</p>
+                    </div>
+                    <button type="button" class="ta-btn" id="ta-refresh">
+                        <i class="fas fa-rotate" aria-hidden="true"></i> Refresh
+                    </button>
+                </div>
+
+                <div class="ta-toolbar">
+                    <div class="ta-group" role="group" aria-labelledby="ta-range-label">
+                        <span class="ta-group-label" id="ta-range-label">Range</span>
+                        <button type="button" class="ta-seg" data-ta-range="1D" aria-pressed="false">1D</button>
+                        <button type="button" class="ta-seg" data-ta-range="1W" aria-pressed="false">1W</button>
+                        <button type="button" class="ta-seg" data-ta-range="1M" aria-pressed="true">1M</button>
+                        <button type="button" class="ta-seg" data-ta-range="3M" aria-pressed="false">3M</button>
+                        <button type="button" class="ta-seg" data-ta-range="1Y" aria-pressed="false">1Y</button>
+                        <button type="button" class="ta-seg" data-ta-range="ALL" aria-pressed="false">ALL</button>
+                    </div>
+                    <div class="ta-group" role="group" aria-labelledby="ta-class-label">
+                        <span class="ta-group-label" id="ta-class-label">Asset class</span>
+                        <button type="button" class="ta-seg" data-ta-class="all" aria-pressed="true">All</button>
+                        <button type="button" class="ta-seg" data-ta-class="stock" aria-pressed="false">Stocks</button>
+                        <button type="button" class="ta-seg" data-ta-class="etf" aria-pressed="false">ETFs</button>
+                        <button type="button" class="ta-seg" data-ta-class="option" aria-pressed="false">Options</button>
+                        <button type="button" class="ta-seg" data-ta-class="crypto" aria-pressed="false">Crypto</button>
+                    </div>
+                    <div class="ta-group" role="group" aria-labelledby="ta-view-label">
+                        <span class="ta-group-label" id="ta-view-label">View</span>
+                        <button type="button" class="ta-seg" data-ta-view="trades" aria-pressed="true">Trades</button>
+                        <button type="button" class="ta-seg" data-ta-view="assets" aria-pressed="false">Assets</button>
+                        <button type="button" class="ta-seg" data-ta-view="traders" aria-pressed="false">Traders</button>
+                    </div>
+                </div>
+
+                <!-- Detail panel: asset or trader portfolio -->
+                <section class="ta-detail-panel" id="ta-detail" hidden aria-label="Detail">
+                    <button type="button" class="ta-btn ta-back" id="ta-back">
+                        <i class="fas fa-arrow-left" aria-hidden="true"></i> Back
+                    </button>
+                    <p class="ta-status" id="ta-detail-status" aria-live="polite" hidden></p>
+                    <div id="ta-detail-body"></div>
+                </section>
+
+                <!-- TRADES view -->
+                <section id="ta-view-trades" aria-label="Trades">
+                    <div class="ta-stats" id="ta-summary"></div>
+                    <p class="ta-status" id="ta-summary-status" aria-live="polite" hidden></p>
+
+                    <div class="ta-card">
+                        <div class="ta-filters">
+                            <label class="ta-field" for="ta-side">Side
+                                <select id="ta-side" class="ta-select">
+                                    <option value="all">All</option>
+                                    <option value="buy">Buy</option>
+                                    <option value="sell">Sell</option>
+                                </select>
+                            </label>
+                            <label class="ta-field" for="ta-bucket">Bucket
+                                <select id="ta-bucket" class="ta-select">
+                                    <option value="all">All</option>
+                                    <option value="self">Self-directed</option>
+                                    <option value="copy">Copy</option>
+                                    <option value="basket">ETF basket</option>
+                                </select>
+                            </label>
+                        </div>
+                        <p class="ta-status" id="ta-trades-status" aria-live="polite" hidden></p>
+                        <div id="ta-trades-table"></div>
+                        <div class="ta-pager">
+                            <span id="ta-trades-count">—</span>
+                            <div class="ta-pager-buttons">
+                                <button type="button" class="ta-btn" id="ta-trades-prev" disabled>Previous</button>
+                                <button type="button" class="ta-btn" id="ta-trades-next" disabled>Next</button>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ASSETS view -->
+                <section id="ta-view-assets" aria-label="Assets" hidden>
+                    <div class="ta-card">
+                        <div class="ta-card-head">
+                            <h3>Assets held</h3>
+                            <label class="ta-field" for="ta-assets-sort">Sort by
+                                <select id="ta-assets-sort" class="ta-select">
+                                    <option value="market_value">Market value</option>
+                                    <option value="holders">Holders</option>
+                                    <option value="unrealized">Unrealized</option>
+                                </select>
+                            </label>
+                        </div>
+                        <p class="ta-status" id="ta-assets-status" aria-live="polite" hidden></p>
+                        <div id="ta-assets-table"></div>
+                    </div>
+                </section>
+
+                <!-- TRADERS view -->
+                <section id="ta-view-traders" aria-label="Traders" hidden>
+                    <div class="ta-card">
+                        <div class="ta-card-head">
+                            <h3>Traders</h3>
+                            <label class="ta-field" for="ta-traders-sort">Sort by
+                                <select id="ta-traders-sort" class="ta-select">
+                                    <option value="equity">Equity</option>
+                                    <option value="return">Return</option>
+                                    <option value="realized">Realized</option>
+                                    <option value="trades">Trades</option>
+                                    <option value="last_trade">Last trade</option>
+                                </select>
+                            </label>
+                        </div>
+                        <p class="ta-status" id="ta-traders-status" aria-live="polite" hidden></p>
+                        <div id="ta-traders-table"></div>
+                        <div class="ta-pager">
+                            <span id="ta-traders-count">—</span>
+                            <div class="ta-pager-buttons">
+                                <button type="button" class="ta-btn" id="ta-traders-more" hidden>Load more</button>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
             <!-- Chats Tab -->
             <div class="tab-content" id="tab-chats">
                 <div class="header">
                     <h1>Support Chats</h1>
                     <div>
-                        <select id="chat-status-filter" style="padding: 10px; border: 2px solid #e2e8f0; border-radius: 8px; margin-right: 10px;">
+                        <select id="chat-status-filter" style="padding: 10px; border: 2px solid #6b7280; border-radius: 8px; margin-right: 10px;">
                             <option value="">All Conversations</option>
                             <option value="open">Open</option>
                             <option value="closed">Closed</option>
@@ -589,15 +784,15 @@
 
                     <!-- Chat Window -->
                     <div class="card" style="display: flex; flex-direction: column; height: 100%;">
-                        <div id="chat-header" style="display: none; padding-bottom: 16px; border-bottom: 2px solid #e2e8f0; margin-bottom: 16px;">
+                        <div id="chat-header" style="display: none; padding-bottom: 16px; border-bottom: 2px solid #6b7280; margin-bottom: 16px;">
                             <h3 style="margin-bottom: 8px;"><i class="fas fa-user"></i> <span id="chat-user-name">Select a conversation</span></h3>
-                            <p style="color: #8b93a7; font-size: 14px;">
+                            <p style="color: #55657A; font-size: 14px;">
                                 <span id="chat-user-email"></span>
                                 <span id="chat-status-badge" class="badge" style="margin-left: 10px;"></span>
                             </p>
                         </div>
 
-                        <div id="chat-placeholder" style="display: flex; align-items: center; justify-content: center; flex: 1; color: #8b93a7;">
+                        <div id="chat-placeholder" style="display: flex; align-items: center; justify-content: center; flex: 1; color: #55657A;">
                             <div style="text-align: center;">
                                 <i class="fas fa-comments" style="font-size: 64px; opacity: 0.3; margin-bottom: 16px;"></i>
                                 <p>Select a conversation to view messages</p>
@@ -610,7 +805,7 @@
 
                         <div id="chat-input-area" style="display: none;">
                             <div style="display: flex; gap: 8px;">
-                                <input type="text" id="admin-chat-input" placeholder="Type your message..." style="flex: 1; padding: 12px; border: 2px solid #e2e8f0; border-radius: 8px; font-size: 14px;">
+                                <input type="text" id="admin-chat-input" placeholder="Type your message..." style="flex: 1; padding: 12px; border: 2px solid #6b7280; border-radius: 8px; font-size: 14px;">
                                 <button class="btn btn-primary" onclick="sendAdminMessage()" style="padding: 12px 24px;">
                                     <i class="fas fa-paper-plane"></i> Send
                                 </button>
@@ -669,28 +864,28 @@
                 <div class="form-group">
                     <label for="trader-minimum-amount">Minimum Copy Amount (USD) *</label>
                     <input type="number" id="trader-minimum-amount" step="0.01" min="0.01" value="100" placeholder="100.00" required>
-                    <small style="color: #8b93a7; font-size: 13px; display: block; margin-top: 5px;">
+                    <small style="color: #55657A; font-size: 13px; display: block; margin-top: 5px;">
                         Minimum wallet balance required for users to copy this trader
                     </small>
                 </div>
                 <div class="form-group">
                     <label for="trader-aum">Assets Under Management (USD)</label>
                     <input type="number" id="trader-aum" step="0.01" min="0" value="0" placeholder="e.g., 1000000">
-                    <small style="color: #8b93a7; font-size: 13px; display: block; margin-top: 5px;">
+                    <small style="color: #55657A; font-size: 13px; display: block; margin-top: 5px;">
                         Total value of assets being managed by this trader
                     </small>
                 </div>
                 <div class="form-group">
                     <label for="trader-max-drawdown">Max Drawdown (%)</label>
                     <input type="number" id="trader-max-drawdown" step="0.01" min="0" max="100" value="0" placeholder="e.g., 15.5">
-                    <small style="color: #8b93a7; font-size: 13px; display: block; margin-top: 5px;">
+                    <small style="color: #55657A; font-size: 13px; display: block; margin-top: 5px;">
                         Largest peak-to-trough drop in account value
                     </small>
                 </div>
                 <div class="form-group">
                     <label for="trader-risk-score">Risk Score (1-10)</label>
                     <input type="number" id="trader-risk-score" min="1" max="10" value="5" placeholder="1-10">
-                    <small style="color: #8b93a7; font-size: 13px; display: block; margin-top: 5px;">
+                    <small style="color: #55657A; font-size: 13px; display: block; margin-top: 5px;">
                         Based on leverage usage and volatility (1=lowest risk, 10=highest)
                     </small>
                 </div>
@@ -750,7 +945,7 @@
                 <div class="form-group">
                     <label for="edit-trader-minimum-amount">Minimum Copy Amount (USD) *</label>
                     <input type="number" id="edit-trader-minimum-amount" step="0.01" min="0.01" value="100" placeholder="100.00" required>
-                    <small style="color: #8b93a7; font-size: 13px; display: block; margin-top: 5px;">
+                    <small style="color: #55657A; font-size: 13px; display: block; margin-top: 5px;">
                         Minimum wallet balance required for users to copy this trader
                     </small>
                 </div>
@@ -824,7 +1019,7 @@
                 <div class="form-group">
                     <label for="plan-subscribers">Current Subscribers</label>
                     <input type="number" id="plan-subscribers" min="0" value="0" placeholder="0">
-                    <small style="color: #8b93a7; font-size: 13px; display: block; margin-top: 5px;">
+                    <small style="color: #55657A; font-size: 13px; display: block; margin-top: 5px;">
                         Number of users currently subscribed to this plan
                     </small>
                 </div>
@@ -896,7 +1091,7 @@
                 <div class="form-group">
                     <label for="edit-plan-subscribers">Current Subscribers</label>
                     <input type="number" id="edit-plan-subscribers" min="0" value="0" placeholder="0">
-                    <small style="color: #8b93a7; font-size: 13px; display: block; margin-top: 5px;">
+                    <small style="color: #55657A; font-size: 13px; display: block; margin-top: 5px;">
                         Number of users currently subscribed to this plan
                     </small>
                 </div>
@@ -928,7 +1123,7 @@
                 <div class="form-group">
                     <label for="crypto-currency">Cryptocurrency Symbol *</label>
                     <input type="text" id="crypto-currency" required placeholder="e.g., BTC, ETH, USDT, BNB, SOL, ADA, etc." style="text-transform: uppercase;">
-                    <small style="color: #8b93a7; font-size: 11px;">Enter any cryptocurrency symbol (e.g., BTC, ETH, USDT, BNB, SOL, DOGE, etc.)</small>
+                    <small style="color: #55657A; font-size: 11px;">Enter any cryptocurrency symbol (e.g., BTC, ETH, USDT, BNB, SOL, DOGE, etc.)</small>
                 </div>
 
                 <div class="form-group">
@@ -969,7 +1164,7 @@
                 <div class="form-group">
                     <label for="edit-crypto-currency">Cryptocurrency Symbol *</label>
                     <input type="text" id="edit-crypto-currency" required placeholder="e.g., BTC, ETH, USDT, BNB, SOL, ADA, etc." style="text-transform: uppercase;">
-                    <small style="color: #8b93a7; font-size: 11px;">Enter any cryptocurrency symbol</small>
+                    <small style="color: #55657A; font-size: 11px;">Enter any cryptocurrency symbol</small>
                 </div>
 
                 <div class="form-group">
@@ -1014,13 +1209,16 @@
             <!-- Loading State -->
             <div id="user-details-loading" style="text-align: center; padding: 40px;">
                 <i class="fas fa-spinner fa-spin" style="font-size: 48px; color: #D32F2F;"></i>
-                <p style="margin-top: 20px; color: #8b93a7;">Loading user data...</p>
+                <p style="margin-top: 20px; color: #55657A;">Loading user data...</p>
             </div>
 
             <!-- User Details Content -->
             <div id="user-details-content" style="display: none;">
+                <!-- Account actions (rendered by renderUserDetailActions) -->
+                <div id="user-details-actions" style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 20px;"></div>
+
                 <!-- Navigation Tabs -->
-                <div style="border-bottom: 2px solid #e2e8f0; margin-bottom: 20px;">
+                <div style="border-bottom: 2px solid #6b7280; margin-bottom: 20px;">
                     <div style="display: flex; gap: 10px;">
                         <button class="user-tab-btn active" data-tab="overview" onclick="switchUserTab('overview')">
                             <i class="fas fa-info-circle"></i> Overview
@@ -1105,11 +1303,11 @@
                         <h3 style="margin-bottom: 15px; color: #2D3748;">KYC Status</h3>
                         <div style="display: flex; gap: 20px; align-items: center;">
                             <div>
-                                <label style="display: block; color: #8b93a7; font-size: 14px;">Verification Status</label>
+                                <label style="display: block; color: #55657A; font-size: 14px;">Verification Status</label>
                                 <span id="kyc-status-badge" class="badge" style="font-size: 14px; padding: 6px 16px;">-</span>
                             </div>
                             <div>
-                                <label style="display: block; color: #8b93a7; font-size: 14px;">Submitted At</label>
+                                <label style="display: block; color: #55657A; font-size: 14px;">Submitted At</label>
                                 <p id="kyc-submitted-at" style="margin: 5px 0; font-weight: 600;">-</p>
                             </div>
                         </div>
@@ -1161,22 +1359,22 @@
 
                     <h3 style="margin-bottom: 15px; color: #2D3748;">Document Photo</h3>
                     <div id="kyc-document-container" style="text-align: center; padding: 20px; background: #f7fafc; border-radius: 8px;">
-                        <p style="color: #8b93a7;">No document uploaded</p>
+                        <p style="color: #55657A;">No document uploaded</p>
                     </div>
 
                     <h3 style="margin: 25px 0 15px; color: #2D3748;">Investment Questionnaire</h3>
                     <div id="kyc-questionnaire-container" style="background: #f7fafc; padding: 20px; border-radius: 8px;">
                         <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;">
                             <div>
-                                <label style="display: block; color: #8b93a7; font-size: 11px; margin-bottom: 4px; text-transform: uppercase; font-weight: 600;">Risk Tolerance</label>
+                                <label style="display: block; color: #55657A; font-size: 11px; margin-bottom: 4px; text-transform: uppercase; font-weight: 600;">Risk Tolerance</label>
                                 <p id="kyc-risk-tolerance" style="font-weight: 600; color: #2D3748; margin: 0;">-</p>
                             </div>
                             <div>
-                                <label style="display: block; color: #8b93a7; font-size: 11px; margin-bottom: 4px; text-transform: uppercase; font-weight: 600;">Annual Income</label>
+                                <label style="display: block; color: #55657A; font-size: 11px; margin-bottom: 4px; text-transform: uppercase; font-weight: 600;">Annual Income</label>
                                 <p id="kyc-annual-income" style="font-weight: 600; color: #2D3748; margin: 0;">-</p>
                             </div>
                             <div>
-                                <label style="display: block; color: #8b93a7; font-size: 11px; margin-bottom: 4px; text-transform: uppercase; font-weight: 600;">Employment Status</label>
+                                <label style="display: block; color: #55657A; font-size: 11px; margin-bottom: 4px; text-transform: uppercase; font-weight: 600;">Employment Status</label>
                                 <p id="kyc-employment-status" style="font-weight: 600; color: #2D3748; margin: 0;">-</p>
                             </div>
                         </div>
@@ -1186,7 +1384,7 @@
                 <!-- Login History Tab -->
                 <!-- Trading Hub Tab (assets/js/admin-trading.js) -->
                 <div class="user-tab-content" id="user-tab-trading">
-                    <div id="admin-trading-root"><p style="color: #8b93a7;">Open this tab to load the user's trading account.</p></div>
+                    <div id="admin-trading-root"><p style="color: #55657A;">Open this tab to load the user's trading account.</p></div>
                 </div>
 
                 <div class="user-tab-content" id="user-tab-login-history" style="display: none;">
@@ -1194,15 +1392,15 @@
                         <h3 style="margin-bottom: 15px; color: #2D3748;">Login Statistics (Last 30 Days)</h3>
                         <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;">
                             <div>
-                                <label style="display: block; color: #8b93a7; font-size: 14px;">Total Logins</label>
+                                <label style="display: block; color: #55657A; font-size: 14px;">Total Logins</label>
                                 <p id="login-stat-total" style="font-size: 24px; font-weight: 700; color: #D32F2F; margin: 5px 0;">0</p>
                             </div>
                             <div>
-                                <label style="display: block; color: #8b93a7; font-size: 14px;">Unique IPs</label>
+                                <label style="display: block; color: #55657A; font-size: 14px;">Unique IPs</label>
                                 <p id="login-stat-ips" style="font-size: 24px; font-weight: 700; color: #D32F2F; margin: 5px 0;">0</p>
                             </div>
                             <div>
-                                <label style="display: block; color: #8b93a7; font-size: 14px;">Unique Devices</label>
+                                <label style="display: block; color: #55657A; font-size: 14px;">Unique Devices</label>
                                 <p id="login-stat-devices" style="font-size: 24px; font-weight: 700; color: #D32F2F; margin: 5px 0;">0</p>
                             </div>
                         </div>
@@ -1210,7 +1408,7 @@
 
                     <h3 style="margin-bottom: 15px; color: #2D3748;">Recent Login Activity (Last 20 Logins)</h3>
                     <div id="login-history-container" style="max-height: 400px; overflow-y: auto;">
-                        <p style="text-align: center; color: #8b93a7; padding: 40px;">No login history available</p>
+                        <p style="text-align: center; color: #55657A; padding: 40px;">No login history available</p>
                     </div>
                 </div>
             </div>
@@ -1755,7 +1953,7 @@
                         <div class="form-group">
                             <label>User</label>
                             <p id="wd-username" style="font-weight: 600;">-</p>
-                            <small id="wd-email" style="color: #8b93a7;">-</small>
+                            <small id="wd-email" style="color: #55657A;">-</small>
                         </div>
                         <div class="form-group">
                             <label>Withdrawal Method</label>
@@ -1782,7 +1980,7 @@
                     <div style="background: rgba(255, 152, 0, 0.1); border: 2px solid #ff9800; padding: 20px; border-radius: 8px;">
                         <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px;">
                             <div>
-                                <label style="color: #8b93a7; font-size: 12px; display: block; margin-bottom: 5px;">One-Time Withdrawal Code</label>
+                                <label style="color: #55657A; font-size: 12px; display: block; margin-bottom: 5px;">One-Time Withdrawal Code</label>
                                 <p id="wd-verification-code" style="font-family: monospace; font-size: 24px; font-weight: 700; letter-spacing: 3px; color: #D32F2F; margin: 0;">XXXXXXXX</p>
                             </div>
                             <div>
@@ -1793,7 +1991,7 @@
                             <span style="color: #ff9800;"><i class="fa fa-clock"></i> Pending verification</span>
                         </div>
                         <div style="margin-top: 15px; padding-top: 15px; border-top: 1px solid rgba(255, 152, 0, 0.3);">
-                            <p style="margin: 0; font-size: 12px; color: #8b93a7;">
+                            <p style="margin: 0; font-size: 12px; color: #55657A;">
                                 <i class="fa fa-info-circle"></i> Send this code to the user via support chat to complete withdrawal verification.
                             </p>
                         </div>
@@ -1817,13 +2015,13 @@
 
                 <div class="form-group">
                     <label for="current-balance-display">Current Balance</label>
-                    <p id="current-balance-display" style="font-size: 24px; color: #8b93a7; font-weight: 700; margin: 0;">$0.00</p>
+                    <p id="current-balance-display" style="font-size: 24px; color: #55657A; font-weight: 700; margin: 0;">$0.00</p>
                 </div>
 
                 <div class="form-group">
                     <label for="new-balance-input">New Balance (USD) *</label>
                     <input type="number" id="new-balance-input" step="0.01" min="0" required placeholder="0.00" style="font-size: 18px; font-weight: 600;">
-                    <small style="color: #8b93a7; font-size: 13px; display: block; margin-top: 5px;">
+                    <small style="color: #55657A; font-size: 13px; display: block; margin-top: 5px;">
                         Enter the new wallet balance for this user
                     </small>
                 </div>
@@ -1833,7 +2031,7 @@
                         <input type="checkbox" id="reflect-on-portfolio" style="width: 18px; height: 18px;">
                         <span style="font-weight: 600; color: #D32F2F;">Reflect on Portfolio Performance</span>
                     </label>
-                    <small style="color: #8b93a7; font-size: 12px; display: block; margin-top: 5px; margin-left: 28px;">
+                    <small style="color: #55657A; font-size: 12px; display: block; margin-top: 5px; margin-left: 28px;">
                         Update the user's active copies to reflect this balance change
                     </small>
                 </div>
@@ -1850,8 +2048,10 @@
         </div>
     </div>
 
+    <script src="/assets/js/admin-html.js"></script>
     <script src="/assets/js/admin-dashboard.js"></script>
     <script src="/assets/js/admin-trading.js?v=2"></script>
+    <script src="/assets/js/admin-trading-activity.js"></script>
     <script src="/assets/js/admin-chat.js"></script>
     <!-- Chat Support Widget -->
     <script src="/assets/js/chat-events.js"></script>

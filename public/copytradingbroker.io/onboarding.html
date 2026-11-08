@@ -135,9 +135,15 @@
             <div class="auth-grid">
               <div class="field auth-grid__full">
                 <label class="field__label" for="street">Street address <span aria-hidden="true">*</span></label>
-                <div class="field__control">
-                  <input class="field__input" id="street" name="street" type="text" autocomplete="address-line1" required aria-describedby="street-error">
+                <div class="onb-combo">
+                  <div class="field__control">
+                    <input class="field__input" id="street" name="street" type="text" autocomplete="address-line1" required
+                           role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="street-listbox"
+                           aria-describedby="street-help street-error">
+                  </div>
+                  <ul class="onb-listbox" id="street-listbox" role="listbox" aria-label="Address suggestions" hidden></ul>
                 </div>
+                <p class="field__help" id="street-help">Start typing to see address suggestions.</p>
                 <p class="field__error" id="street-error" role="alert"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg><span data-error-msg></span></p>
               </div>
 
@@ -167,8 +173,13 @@
 
               <div class="field">
                 <label class="field__label" for="country">Country <span aria-hidden="true">*</span></label>
-                <div class="field__control">
-                  <input class="field__input" id="country" name="country" type="text" autocomplete="country-name" required aria-describedby="country-error">
+                <div class="onb-combo">
+                  <div class="field__control">
+                    <input class="field__input" id="country" name="country" type="text" autocomplete="country-name" required
+                           role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="country-listbox"
+                           aria-describedby="country-error">
+                  </div>
+                  <ul class="onb-listbox" id="country-listbox" role="listbox" aria-label="Countries" hidden></ul>
                 </div>
                 <p class="field__error" id="country-error" role="alert"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg><span data-error-msg></span></p>
               </div>
@@ -401,5 +412,6 @@
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.26.25/dist/sweetalert2.all.min.js" integrity="sha384-nLoOnA/BDh8A/jxqtckg4DumuCGOBYUnNJLZdQz/zfYNp3wcjGSoWTAzgko06G/2" crossorigin="anonymous"></script>
   <script src="assets/js/auth.js"></script>
   <script src="assets/js/onboarding.js"></script>
+  <script type="module" src="assets/js/onboarding-address.js"></script>
 </body>
 </html>

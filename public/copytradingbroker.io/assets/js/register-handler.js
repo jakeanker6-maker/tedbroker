@@ -71,8 +71,6 @@ document.addEventListener('DOMContentLoaded', async function() {
         const username = document.querySelector('input[name="username"]').value;
         const email = document.querySelector('input[name="email"]').value;
         const phone = document.querySelector('input[name="phone"]').value;
-        const gender = document.querySelector('select[name="gender"]').value;
-        const country = document.querySelector('select[name="country"]').value;
         const password = document.querySelector('input[name="password"]').value;
         const passwordConfirmation = document.querySelector('input[name="password_confirmation"]').value;
 
@@ -116,8 +114,6 @@ document.addEventListener('DOMContentLoaded', async function() {
             password: password,
             full_name: fullName || null,
             phone: phone || null,
-            gender: gender || null,
-            country: country || null,
             account_types: []
         };
 

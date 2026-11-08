@@ -212,6 +212,47 @@
     .onb-form .onb-actions > :last-child { flex: 1 1 auto; margin-inline-start: 0; }
   }
 
+  /* ---------- Combobox: country list and street suggestions ---------- */
+  /* Positioned against the control only, so the popup sits under the input and not under the help or error text */
+  .onb-combo { position: relative; display: grid; min-inline-size: 0; }
+  .onb-listbox[hidden] { display: none; }
+  .onb-listbox:not([hidden]) {
+    position: absolute; inset-inline: 0; inset-block-start: 100%; z-index: 20;
+    display: grid; gap: 0;
+    margin-block-start: var(--space-1);
+    padding: var(--space-1) 0;
+    list-style: none;
+    max-block-size: min(18rem, 50vh);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border-strong);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-float);
+  }
+  .onb-option {
+    position: relative;
+    min-block-size: 2.75rem;
+    display: flex; align-items: center;
+    padding: var(--space-2) var(--space-4);
+    font-size: var(--text-body);
+    line-height: 1.3;
+    color: var(--color-text);
+    overflow-wrap: anywhere;
+    cursor: pointer;
+  }
+  .onb-option[aria-selected="true"] { background: var(--color-surface-2); outline: 2px solid var(--color-focus); outline-offset: -2px; }
+  .onb-option[aria-selected="true"]::before {
+    content: ""; position: absolute; inset-block: 0; inset-inline-start: 0;
+    inline-size: 2px; background: var(--color-accent);
+  }
+  @media (hover: hover) {
+    .onb-option:hover { background: var(--onb-row-hover); }
+  }
+  @media (forced-colors: active) {
+    .onb-option[aria-selected="true"] { outline: 2px solid Highlight; outline-offset: -2px; }
+  }
+
   /* ---------- KYC note ---------- */
   .onb-note {
     display: grid; grid-template-columns: auto minmax(0, 1fr); gap: var(--space-3); align-items: start;

@@ -81,7 +81,7 @@ class AdminChatManager {
 
         if (this.conversations.length === 0) {
             container.innerHTML = `
-                <div style="padding: 20px; text-align: center; color: #8b93a7;">
+                <div style="padding: 20px; text-align: center; color: #55657A;">
                     <i class="fas fa-inbox" style="font-size: 48px; opacity: 0.3; margin-bottom: 12px;"></i>
                     <p>No conversations yet</p>
                 </div>
@@ -95,7 +95,7 @@ class AdminChatManager {
             const unreadCount = conv.unread_count || 0;
 
             return `
-                <div class="conversation-item ${isActive ? 'active' : ''}" data-action="select-conversation" data-conversation-id="${conv.id}">
+                <div class="conversation-item ${isActive ? 'active' : ''}" role="button" tabindex="0" data-action="select-conversation" data-conversation-id="${this.escapeHtml(String(conv.id ?? ''))}">
                     <div class="conversation-user">
                         ${this.escapeHtml(conv.user_name || conv.user_email)}
                         ${unreadCount > 0 ? `<span class="conversation-unread">${unreadCount}</span>` : ''}
@@ -104,7 +104,7 @@ class AdminChatManager {
                     <div class="conversation-time">
                         ${this.formatTime(conv.last_message_time || conv.created_at)}
                         <span class="badge ${conv.status === 'active' ? 'badge-active' : 'badge-inactive'}" style="margin-left: 8px; font-size: 10px;">
-                            ${conv.status}
+                            ${this.escapeHtml(conv.status)}
                         </span>
                     </div>
                 </div>
@@ -140,7 +140,7 @@ class AdminChatManager {
         const messagesContainer = document.getElementById('chat-messages-container');
         if (messagesContainer) {
             messagesContainer.innerHTML = `
-                <div style="text-align: center; color: #8b93a7; padding: 40px;">
+                <div style="text-align: center; color: #55657A; padding: 40px;">
                     <i class="fas fa-spinner fa-spin" style="font-size: 32px; opacity: 0.5; margin-bottom: 12px;"></i>
                     <p>Loading messages...</p>
                 </div>
@@ -173,7 +173,7 @@ class AdminChatManager {
 
         if (messages.length === 0) {
             container.innerHTML = `
-                <div style="text-align: center; color: #8b93a7; padding: 40px;">
+                <div style="text-align: center; color: #55657A; padding: 40px;">
                     <i class="fas fa-comment-slash" style="font-size: 48px; opacity: 0.3; margin-bottom: 12px;"></i>
                     <p>No messages in this conversation</p>
                 </div>
@@ -182,7 +182,7 @@ class AdminChatManager {
         }
 
         container.innerHTML = messages.map(msg => `
-            <div class="chat-message ${msg.sender_type}">
+            <div class="chat-message ${this.escapeHtml(msg.sender_type)}">
                 <div class="chat-message-sender">${this.escapeHtml(msg.sender_name)}</div>
                 <div class="chat-message-content">${this.escapeHtml(msg.message)}</div>
                 <div class="chat-message-time">${this.formatTime(msg.created_at)}</div>
@@ -328,7 +328,7 @@ class AdminChatManager {
             '"': '&quot;',
             "'": '&#039;'
         };
-        return text.replace(/[&<>"']/g, m => map[m]);
+        return String(text ?? '').replace(/[&<>"']/g, m => map[m]);
     }
 
     formatTime(timestamp) {

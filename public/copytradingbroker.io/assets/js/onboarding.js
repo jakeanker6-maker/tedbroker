@@ -8,6 +8,10 @@ const QUESTION_REQUIRED = 'Please select an option to continue.';
 const MAX_PHOTO_BYTES = 5 * 1024 * 1024;
 const QUESTIONNAIRE_FIELDS = ['risk_tolerance', 'annual_income', 'employment_status'];
 const SVG_NS = 'http://www.w3.org/2000/svg';
+const COUNTRY_NOT_LISTED = 'Choose your country from the list.';
+
+// Country list (ES module). Null if it fails to load: the country check then rejects every value.
+const countriesReady = import('./lib/countries.js').catch(() => null);
 
 let uploadedPhoto = null;
 let activeReader = null;
@@ -83,6 +87,10 @@ async function loadExistingData() {
         const response = await TED_AUTH.apiCall('/api/onboarding/data');
         const data = await response.json();
 
+        // Older accounts may hold a 2-letter code (e.g. "US"): show the country name instead
+        const countries = await countriesReady;
+        const countryName = (value) => countries?.findCountryByCode(value)?.name ?? value ?? '';
+
         // Load personal info if exists
         if (data.personal_info && data.personal_info.first_name) {
             document.getElementById('first_name').value = data.personal_info.first_name || '';
@@ -111,12 +119,12 @@ async function loadExistingData() {
             document.getElementById('city').value = data.address.city || '';
             document.getElementById('state').value = data.address.state || '';
             document.getElementById('zip_code').value = data.address.zip_code || '';
-            document.getElementById('country').value = data.address.country || '';
+            document.getElementById('country').value = countryName(data.address.country);
         } else {
             // Pre-fill country from user profile if available
             const userData = TED_AUTH.getUser();
             if (userData && userData.country) {
-                document.getElementById('country').value = userData.country;
+                document.getElementById('country').value = countryName(userData.country);
             }
         }
 
@@ -242,13 +250,15 @@ function setFormBusy(form, busy) {
  */
 function validateRequired(fields) {
     let firstInvalid = null;
-    fields.forEach(({ id, message }) => {
+    fields.forEach(({ id, message, isListed }) => {
         const control = document.getElementById(id);
-        if (control.value.trim()) {
+        const value = control.value.trim();
+        if (value && (!isListed || isListed(value))) {
             clearFieldError(control);
             return;
         }
-        showFieldError(control, message);
+        // A typed value that is not in the country list gets its own message
+        showFieldError(control, (value && isListed) ? COUNTRY_NOT_LISTED : message);
         firstInvalid = firstInvalid || control;
     });
     if (firstInvalid) {
@@ -332,19 +342,25 @@ function setupPersonalInfoForm() {
 function setupAddressForm() {
     const form = document.getElementById('address-form');
 
-    form.addEventListener('submit', function(e) {
+    form.addEventListener('submit', async function(e) {
         e.preventDefault();
         clearFormAlert(form);
+
+        const countries = await countriesReady;
+        const isListed = (value) => Boolean(countries?.findCountryByName(value));
 
         if (validateRequired([
             { id: 'street', message: 'Enter your street address.' },
             { id: 'city', message: 'Enter your city.' },
             { id: 'state', message: 'Enter your state or province.' },
             { id: 'zip_code', message: 'Enter your ZIP or postal code.' },
-            { id: 'country', message: 'Enter your country.' }
+            { id: 'country', message: 'Enter your country.', isListed }
         ])) {
             return;
         }
+
+        // Store the list's canonical name, whatever the casing the user typed
+        const country = countries.findCountryByName(document.getElementById('country').value).name;
 
         submitStep({
             form,
@@ -354,7 +370,7 @@ function setupAddressForm() {
                 city: document.getElementById('city').value.trim(),
                 state: document.getElementById('state').value.trim(),
                 zip_code: document.getElementById('zip_code').value.trim(),
-                country: document.getElementById('country').value.trim()
+                country
             },
             busyMessage: 'Saving address information...',
             successMessage: 'Address information saved!',

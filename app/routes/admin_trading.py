@@ -9,6 +9,7 @@ from pydantic import BaseModel
 
 from app.database import USERS_COLLECTION, get_collection
 from app.routes.admin import get_current_admin
+from app.trading import admin_activity as activity
 from app.trading import copy_engine, integrity, ledger, orders, positions, reset
 
 router = APIRouter(prefix="/api/admin/trading", tags=["Admin - Trading Hub"])
@@ -89,3 +90,52 @@ async def engine_and_feeds(current_admin: dict = Depends(get_current_admin)):
     from app.trading import engine
     return {"engine": engine.engine.status() if engine.engine else {"running": False},
             "feeds": feeds.manager.status() if feeds.manager else {"running": False}}
+
+
+# ---------------------------------------------------------------- read-only activity monitor
+# Every route below only reads. Logic lives in app/trading/admin_activity.py.
+async def _activity(coro):
+    try:
+        return await coro
+    except activity.ActivityError as exc:
+        raise HTTPException(status_code=exc.status, detail={"code": exc.code, "message": exc.message})
+
+
+@router.get("/activity/summary")
+async def activity_summary(range_: str = Query("1M", alias="range"), asset_class: str = Query("all"),
+                           current_admin: dict = Depends(get_current_admin)):
+    return await _activity(activity.summary(range_, asset_class))
+
+
+@router.get("/activity/trades")
+async def activity_trades(range_: str = Query("1M", alias="range"), asset_class: str = Query("all"),
+                          side: str = Query("all"), user_id: Optional[str] = Query(None),
+                          symbol: Optional[str] = Query(None, max_length=40), bucket: str = Query("all"),
+                          limit: int = Query(50, ge=1, le=200), offset: int = Query(0, ge=0),
+                          current_admin: dict = Depends(get_current_admin)):
+    return await _activity(activity.trades(range_, asset_class, side, user_id, symbol, bucket, limit, offset))
+
+
+@router.get("/activity/holdings")
+async def activity_holdings(asset_class: str = Query("all"), sort: str = Query("market_value"),
+                            limit: int = Query(100, ge=1, le=200), current_admin: dict = Depends(get_current_admin)):
+    return await _activity(activity.holdings(asset_class, sort, limit))
+
+
+@router.get("/activity/assets/{symbol}")
+async def activity_asset(symbol: str, range_: str = Query("1M", alias="range"),
+                         current_admin: dict = Depends(get_current_admin)):
+    return await _activity(activity.asset_detail(symbol, range_))
+
+
+@router.get("/activity/traders")
+async def activity_traders(range_: str = Query("1M", alias="range"), asset_class: str = Query("all"),
+                           sort: str = Query("equity"), limit: int = Query(100, ge=1, le=200),
+                           offset: int = Query(0, ge=0), current_admin: dict = Depends(get_current_admin)):
+    return await _activity(activity.traders(range_, asset_class, sort, limit, offset))
+
+
+@router.get("/activity/traders/{user_id}/portfolio")
+async def activity_trader_portfolio(user_id: str, range_: str = Query("1M", alias="range"),
+                                    current_admin: dict = Depends(get_current_admin)):
+    return await _activity(activity.trader_portfolio(user_id, range_))

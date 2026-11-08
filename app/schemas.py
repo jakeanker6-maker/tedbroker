@@ -629,6 +629,21 @@ class OnboardingPersonalInfo(BaseModel):
         return v
 
 
+class OnboardingAddressSuggestion(BaseModel):
+    """One address suggestion returned while the user types a street address"""
+    label: str
+    street: str
+    city: str
+    state: str
+    zip_code: str
+    country: str
+    country_code: str
+
+
+class OnboardingAddressSuggestions(BaseModel):
+    suggestions: List[OnboardingAddressSuggestion]
+
+
 class OnboardingAddress(BaseModel):
     """Schema for onboarding address step"""
     street: str = Field(..., min_length=1, max_length=200, description="Street address")

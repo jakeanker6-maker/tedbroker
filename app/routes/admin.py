@@ -299,8 +299,14 @@ async def get_all_users(
     # Get total count
     total_count = users.count_documents(query)
 
-    # Get users
-    cursor = users.find(query).sort("created_at", -1).skip(offset).limit(limit)
+    # Get users. Project only the list fields: full documents carry KYC
+    # onboarding data (including document photos) that the list never shows.
+    projection = {
+        "email": 1, "username": 1, "full_name": 1, "phone": 1, "country": 1,
+        "wallet_balance": 1, "is_active": 1, "is_verified": 1, "access_granted": 1,
+        "created_at": 1, "referral_code": 1, "referred_by": 1,
+    }
+    cursor = users.find(query, projection).sort("created_at", -1).skip(offset).limit(limit)
 
     users_list = []
     for user in cursor:
@@ -403,6 +409,7 @@ async def get_user_details(
         "wallet_balance": user.get("wallet_balance", 0.0),
         "is_active": user.get("is_active", True),
         "is_verified": user.get("is_verified", False),
+        "access_granted": user.get("access_granted", False),
         "two_fa_enabled": user.get("two_fa_enabled", False),
         "auth_provider": user.get("auth_provider", "local"),
         "created_at": user["created_at"].isoformat() if user.get("created_at") else None,
