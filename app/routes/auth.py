@@ -1,6 +1,7 @@
 from fastapi import APIRouter, HTTPException, status, Depends, Request
 from fastapi.security import OAuth2PasswordRequestForm
 from fastapi.responses import RedirectResponse
+from urllib.parse import urlencode
 from datetime import datetime, timedelta
 from bson import ObjectId
 from typing import Optional
@@ -1068,31 +1069,40 @@ async def verify_email_update(
     }
 
 
-# Google OAuth Configuration
-GOOGLE_CLIENT_ID = os.getenv("GOOGLE_CLIENT_ID")
-GOOGLE_CLIENT_SECRET = os.getenv("GOOGLE_CLIENT_SECRET")
-GOOGLE_REDIRECT_URI = os.getenv("GOOGLE_REDIRECT_URI")
+# Google OAuth configuration. Values come from .env (or the host's environment).
+# GOOGLE_REDIRECT_URI must exactly match an "Authorized redirect URI" in the Google Cloud
+# OAuth client, e.g. https://tedbrokers.com/api/auth/google/callback in production.
+GOOGLE_CLIENT_ID = os.getenv("GOOGLE_CLIENT_ID", "").strip()
+GOOGLE_CLIENT_SECRET = os.getenv("GOOGLE_CLIENT_SECRET", "").strip()
+GOOGLE_REDIRECT_URI = os.getenv("GOOGLE_REDIRECT_URI", "").strip()
+
+
+def _google_configured() -> bool:
+    return bool(GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET and GOOGLE_REDIRECT_URI)
 
 
 @router.get("/google/login")
 async def google_login():
     """Initiate Google OAuth flow"""
-    google_auth_url = (
-        f"https://accounts.google.com/o/oauth2/v2/auth?"
-        f"client_id={GOOGLE_CLIENT_ID}&"
-        f"redirect_uri={GOOGLE_REDIRECT_URI}&"
-        f"response_type=code&"
-        f"scope=openid%20email%20profile&"
-        f"access_type=offline&"
-        f"prompt=consent"
-    )
-    return RedirectResponse(url=google_auth_url)
+    if not _google_configured():
+        print("Google sign-in is not configured: set GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET and GOOGLE_REDIRECT_URI")
+        return RedirectResponse(url="/login?error=oauth_failed")
+
+    query = urlencode({
+        "client_id": GOOGLE_CLIENT_ID,
+        "redirect_uri": GOOGLE_REDIRECT_URI,
+        "response_type": "code",
+        "scope": "openid email profile",
+        "access_type": "offline",
+        "prompt": "consent",
+    })
+    return RedirectResponse(url=f"https://accounts.google.com/o/oauth2/v2/auth?{query}")
 
 
 @router.get("/google/callback")
 async def google_callback(request: Request, code: Optional[str] = None, error: Optional[str] = None):
     """Handle Google OAuth callback. Google sends `error` (not `code`) when the user cancels consent."""
-    if error or not code:
+    if error or not code or not _google_configured():
         return RedirectResponse(url="/login?error=oauth_failed")
 
     try:
@@ -1106,8 +1116,10 @@ async def google_callback(request: Request, code: Optional[str] = None, error: O
             "grant_type": "authorization_code"
         }
 
-        token_response = requests.post(token_url, data=token_data)
-        token_response.raise_for_status()
+        token_response = requests.post(token_url, data=token_data, timeout=10)
+        if not token_response.ok:
+            print(f"Google token exchange failed ({token_response.status_code}): {token_response.text}")
+            return RedirectResponse(url="/login?error=oauth_failed")
         tokens = token_response.json()
 
         # Verify ID token and get user info
@@ -1120,6 +1132,10 @@ async def google_callback(request: Request, code: Optional[str] = None, error: O
         # Extract user information
         google_id = id_info["sub"]
         email = id_info["email"]
+        if not id_info.get("email_verified"):
+            # Never link or create an account from an unverified address
+            print(f"Google sign-in rejected: email not verified for {email}")
+            return RedirectResponse(url="/login?error=oauth_failed")
         full_name = id_info.get("name")
         profile_picture = id_info.get("picture")
 
