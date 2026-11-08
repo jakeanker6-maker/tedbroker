@@ -1285,6 +1285,57 @@ async function handleAddTraderSubmit(e) {
     }
 }
 
+// Success/error notice with a plain alert fallback when SweetAlert is unavailable.
+function notifyTrader(icon, title, text) {
+    if (window.Swal) return Swal.fire({ title, text, icon });
+    alert(text);
+    return null;
+}
+
+// Fills the five performance fields from an API trader (effective values, as the server returns them).
+// "Use live figures" is shown only when the trader has a stats override.
+function fillTraderStats(trader) {
+    document.getElementById('edit-trader-ytd-return').value = trader.ytd_return ?? '';
+    document.getElementById('edit-trader-win-rate').value = trader.win_rate ?? '';
+    document.getElementById('edit-trader-copiers').value = trader.copiers || 0;
+    document.getElementById('edit-trader-aum').value = trader.assets_under_management || 0;
+    document.getElementById('edit-trader-max-drawdown').value = trader.max_drawdown || 0;
+    document.getElementById('edit-trader-use-live').hidden = !trader.stats_override;
+}
+
+// Clears the stats override so the trader shows live figures again.
+async function useLiveTraderFigures() {
+    const traderId = document.getElementById('edit-trader-id').value;
+    if (!traderId) return;
+    const question = 'Replace the saved performance figures with the live figures? '
+        + 'The saved YTD return, win rate, copiers, AUM and max drawdown will be cleared.';
+    if (window.Swal) {
+        const choice = await Swal.fire({
+            title: 'Use live figures', text: question, icon: 'question',
+            showCancelButton: true, confirmButtonText: 'Use live figures', cancelButtonText: 'Cancel'
+        });
+        if (!choice.isConfirmed) return;
+    } else if (!confirm(question)) {
+        return;
+    }
+    try {
+        const response = await adminFetch(`/api/admin/traders/${encodeURIComponent(traderId)}/stats-override`, {
+            method: 'DELETE'
+        });
+        const data = await response.json().catch(() => null);
+        if (!response.ok) {
+            notifyTrader('error', 'Error!', `Error: ${(data && data.detail) || 'Failed to clear the figures'}`);
+            return;
+        }
+        if (data) fillTraderStats(data);
+        notifyTrader('success', 'Success!', 'Live figures restored.');
+        loadTraders();
+    } catch (error) {
+        console.error(error);
+        notifyTrader('error', 'Error!', 'Network error. Please try again.');
+    }
+}
+
 // Show edit trader modal
 async function showEditTraderModal(traderId) {
     try {
@@ -1300,12 +1351,8 @@ async function showEditTraderModal(traderId) {
         showTraderPhotoPreview('edit-trader', trader.profile_photo || '');
         document.getElementById('edit-trader-description').value = trader.description;
         document.getElementById('edit-trader-specialization').value = trader.specialization;
-        document.getElementById('edit-trader-ytd-return').value = trader.ytd_return;
-        document.getElementById('edit-trader-win-rate').value = trader.win_rate;
-        document.getElementById('edit-trader-copiers').value = trader.copiers || 0;
+        fillTraderStats(trader);
         document.getElementById('edit-trader-minimum-amount').value = trader.minimum_copy_amount || 100;
-        document.getElementById('edit-trader-aum').value = trader.assets_under_management || 0;
-        document.getElementById('edit-trader-max-drawdown').value = trader.max_drawdown || 0;
         document.getElementById('edit-trader-risk-score').value = trader.risk_score || 5;
 
         // Show modal
@@ -1359,17 +1406,29 @@ async function submitEditedTrader(event) {
         });
 
         if (response.ok) {
-            Swal.fire({ title: 'Success!', text: 'Trader updated successfully!', icon: 'success' });
-            hideEditTraderModal();
+            // Show the effective values the server stored, not the typed ones. The modal stays open so they are visible.
+            const updated = await response.json().catch(() => null);
+            if (updated) fillTraderStats(updated);
+            notifyTrader('success', 'Success!', 'Trader updated successfully!');
             loadTraders();
         } else {
-            const error = await response.json();
-            Swal.fire({ title: 'Error!', text: `Error: ${error.detail || 'Failed to update trader'}`, icon: 'error' });
+            const error = await response.json().catch(() => ({}));
+            notifyTrader('error', 'Error!', `Error: ${formatApiDetail(error.detail, 'Failed to update trader')}`);
         }
     } catch (error) {
-        Swal.fire({ title: 'Error!', text: 'Network error. Please try again.', icon: 'error' });
+        notifyTrader('error', 'Error!', 'Network error. Please try again.');
         console.error(error);
     }
+}
+
+// FastAPI returns validation errors as an array of objects; show their messages, never "[object Object]".
+function formatApiDetail(detail, fallback) {
+    if (typeof detail === 'string' && detail) return detail;
+    if (Array.isArray(detail)) {
+        const msgs = detail.map((d) => (d && d.msg) || '').filter(Boolean);
+        if (msgs.length) return msgs.join('; ');
+    }
+    return fallback;
 }
 
 // Delete trader

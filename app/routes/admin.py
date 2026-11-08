@@ -22,6 +22,8 @@ def validate_plan_tags(v):
 from app.admin_service import admin_service
 from app.auth import create_access_token, get_current_user_token, ACCESS_TOKEN_EXPIRE_MINUTES
 from app.database import get_collection, USERS_COLLECTION, TRADERS_COLLECTION, INVESTMENT_PLANS_COLLECTION, ETF_PLANS_COLLECTION, DEFI_PLANS_COLLECTION, OPTIONS_PLANS_COLLECTION, DEPOSIT_REQUESTS_COLLECTION, TRANSACTIONS_COLLECTION, CRYPTO_WALLETS_COLLECTION, BANK_ACCOUNTS_COLLECTION, USER_BANK_ACCOUNTS_COLLECTION, USER_CRYPTO_ADDRESSES_COLLECTION, WITHDRAWAL_REQUESTS_COLLECTION, CHAT_CONVERSATIONS_COLLECTION, CHAT_MESSAGES_COLLECTION, NOTIFICATIONS_COLLECTION
+from app.trading.trader_stats import (FIELDS as STAT_FIELDS, active_copiers, effective_stats, is_live,
+                                       override_document, override_view)
 from app.schemas import Token, Trade, NotificationCreate, NotificationResponse
 from app.trading import funding, ledger
 import secrets
@@ -59,12 +61,12 @@ class CreateTrader(BaseModel):
     profile_photo: str = Field(..., description="URL to profile photo")
     description: str = Field(..., description="Trader description and expertise")
     specialization: str = Field(..., description="Trading specialization")
-    ytd_return: float = Field(..., description="Year-to-date return percentage")
-    win_rate: float = Field(..., description="Win rate percentage")
-    copiers: int = Field(default=0, description="Number of copiers")
+    ytd_return: float = Field(..., ge=-1000, le=1000, description="Year-to-date return percentage")
+    win_rate: Optional[float] = Field(default=None, ge=0, le=100, description="Win rate percentage (null: none measured)")
+    copiers: int = Field(default=0, ge=0, description="Number of copiers")
     minimum_copy_amount: float = Field(default=100.0, gt=0, description="Minimum amount required to copy this trader in USD")
-    assets_under_management: float = Field(default=0.0, description="Total assets under management in USD")
-    max_drawdown: float = Field(default=0.0, description="Maximum drawdown percentage (peak-to-trough)")
+    assets_under_management: float = Field(default=0.0, ge=0, description="Total assets under management in USD")
+    max_drawdown: float = Field(default=0.0, ge=0, le=100, description="Maximum drawdown percentage (peak-to-trough)")
     risk_score: int = Field(default=5, ge=1, le=10, description="Risk score from 1 (lowest) to 10 (highest)")
 
 
@@ -864,25 +866,7 @@ async def get_all_traders(
 
     traders_list = []
     for trader in traders.find().sort("created_at", -1):
-        traders_list.append({
-            "id": str(trader["_id"]),
-            "full_name": trader.get("full_name", ""),
-            "profile_photo": trader.get("profile_photo", ""),
-            "description": trader.get("description", ""),
-            "specialization": trader.get("specialization", ""),
-            "ytd_return": trader.get("ytd_return", 0.0),
-            "win_rate": trader.get("win_rate", 0.0),
-            "copiers": trader.get("copiers", 0),
-            "minimum_copy_amount": trader.get("minimum_copy_amount", 100.0),
-            "assets_under_management": trader.get("assets_under_management", 0.0),
-            "max_drawdown": trader.get("max_drawdown", 0.0),
-            "risk_score": trader.get("risk_score", 5),
-            "trades": trader.get("trades", []),
-            "recent_trades": trader.get("recent_trades", []),
-            "stats_live": bool(trader.get("stats_live")),
-            "created_at": trader["created_at"].isoformat() if trader.get("created_at") else None,
-            "updated_at": trader["updated_at"].isoformat() if trader.get("updated_at") else None
-        })
+        traders_list.append(_admin_trader_payload(trader))
 
     return traders_list
 
@@ -918,25 +902,51 @@ async def get_trader_details(
             detail="Trader not found"
         )
 
+    return _admin_trader_payload(trader)
+
+
+ADMIN_STAT_DEFAULTS = {"ytd_return": 0.0, "win_rate": 0.0, "copiers": 0,
+                       "assets_under_management": 0.0, "max_drawdown": 0.0}
+
+
+def _admin_stats(trader: dict) -> dict:
+    """Effective performance figures for admin screens, plus the admin-only override record.
+    Non-live traders keep the historical defaults for unset fields."""
+    live = is_live(trader)
+    eff = effective_stats(trader, active_copiers(trader["_id"]) if live else None)
+    if not live:
+        for k, default in ADMIN_STAT_DEFAULTS.items():
+            if eff[k] is None:
+                eff[k] = default
+    eff["stats_override"] = override_view(trader)
+    return eff
+
+
+def _admin_trader_payload(trader: dict) -> dict:
+    stats = _admin_stats(trader)
     return {
         "id": str(trader["_id"]),
         "full_name": trader.get("full_name", ""),
         "profile_photo": trader.get("profile_photo", ""),
         "description": trader.get("description", ""),
         "specialization": trader.get("specialization", ""),
-        "ytd_return": trader.get("ytd_return", 0.0),
-        "win_rate": trader.get("win_rate", 0.0),
-        "copiers": trader.get("copiers", 0),
+        **{k: stats[k] for k in STAT_FIELDS},
         "minimum_copy_amount": trader.get("minimum_copy_amount", 100.0),
-        "assets_under_management": trader.get("assets_under_management", 0.0),
-        "max_drawdown": trader.get("max_drawdown", 0.0),
         "risk_score": trader.get("risk_score", 5),
         "trades": trader.get("trades", []),
         "recent_trades": trader.get("recent_trades", []),
-        "stats_live": bool(trader.get("stats_live")),
+        "stats_live": is_live(trader),
+        "stats_override": stats["stats_override"],
         "created_at": trader["created_at"].isoformat() if trader.get("created_at") else None,
         "updated_at": trader["updated_at"].isoformat() if trader.get("updated_at") else None
     }
+
+
+def _trader_oid_or_400(trader_id: str) -> ObjectId:
+    try:
+        return ObjectId(trader_id)
+    except Exception:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Invalid trader ID")
 
 
 TRADER_PHOTO_DIR = Path(__file__).resolve().parent.parent.parent / "public" / "copytradingbroker.io" / "uploads" / "traders"
@@ -1043,84 +1053,56 @@ async def update_trader(
     current_admin: dict = Depends(get_current_admin)
 ):
     """
-    Update an existing trader (admin only)
+    Update an existing trader (admin only).
 
-    Args:
-        trader_id: Trader ID
-        trader_data: Updated trader information
-        current_admin: Current authenticated admin
+    Live traders (stats_live, bot-run): the five performance figures go to the `stats_override`
+    sub-document, shown on both dashboards; the computed top-level values stay stored untouched.
+    Other traders: the figures are stored top-level as before (stats_admin).
 
     Returns:
-        dict: Updated trader data
+        dict: Updated trader with the effective figures
     """
     traders = get_collection(TRADERS_COLLECTION)
-
-    try:
-        trader = traders.find_one({"_id": ObjectId(trader_id)})
-    except:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Invalid trader ID"
-        )
-
+    oid = _trader_oid_or_400(trader_id)
+    trader = traders.find_one({"_id": oid})
     if not trader:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="Trader not found"
-        )
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Trader not found")
 
-    # Update trader document
+    figures = {f: getattr(trader_data, f) for f in STAT_FIELDS}
     update_dict = {
         "full_name": trader_data.full_name,
         "profile_photo": trader_data.profile_photo,
         "description": trader_data.description,
         "specialization": trader_data.specialization,
-        "ytd_return": trader_data.ytd_return,
-        "win_rate": trader_data.win_rate,
-        "copiers": trader_data.copiers,
         "minimum_copy_amount": trader_data.minimum_copy_amount,
-        "assets_under_management": trader_data.assets_under_management,
-        "max_drawdown": trader_data.max_drawdown,
         "risk_score": trader_data.risk_score,
         "updated_at": datetime.utcnow()
     }
-
-    # Traders run by a trading bot have a live track record: performance fields are computed
-    # from real fills and snapshots (app/trading/bots.py) and cannot be typed in.
-    if trader.get("stats_live"):
-        for k in ("ytd_return", "win_rate", "copiers", "assets_under_management", "max_drawdown"):
-            update_dict.pop(k, None)
+    if is_live(trader):
+        update_dict["stats_override"] = override_document(figures, set_by=current_admin.get("user_id") or "admin")
     else:
-        # Admin-entered figures are published to users (stats_source "admin").
-        update_dict["stats_admin"] = True
+        update_dict.update(figures)
+        update_dict["stats_admin"] = True   # admin-entered figures are published (stats_source "admin")
 
-    # Update trader in database
-    traders.update_one(
-        {"_id": ObjectId(trader_id)},
-        {"$set": update_dict}
-    )
+    traders.update_one({"_id": oid}, {"$set": update_dict})
+    return _admin_trader_payload(traders.find_one({"_id": oid}))
 
-    # Get updated trader
-    updated_trader = traders.find_one({"_id": ObjectId(trader_id)})
 
-    return {
-        "id": str(updated_trader["_id"]),
-        "full_name": updated_trader.get("full_name", ""),
-        "profile_photo": updated_trader.get("profile_photo", ""),
-        "description": updated_trader.get("description", ""),
-        "specialization": updated_trader.get("specialization", ""),
-        "ytd_return": updated_trader.get("ytd_return", 0.0),
-        "win_rate": updated_trader.get("win_rate", 0.0),
-        "copiers": updated_trader.get("copiers", 0),
-        "minimum_copy_amount": updated_trader.get("minimum_copy_amount", 100.0),
-        "assets_under_management": updated_trader.get("assets_under_management", 0.0),
-        "max_drawdown": updated_trader.get("max_drawdown", 0.0),
-        "risk_score": updated_trader.get("risk_score", 5),
-        "trades": updated_trader.get("trades", []),
-        "stats_live": bool(updated_trader.get("stats_live")),
-        "created_at": updated_trader["created_at"].isoformat() if updated_trader.get("created_at") else None,
-        "updated_at": updated_trader["updated_at"].isoformat() if updated_trader.get("updated_at") else None
-    }
+@router.delete("/traders/{trader_id}/stats-override")
+async def clear_trader_stats_override(
+    trader_id: str,
+    current_admin: dict = Depends(get_current_admin)
+):
+    """
+    Remove the admin override of a trader's performance figures (admin only).
+    The computed figures are shown again. Idempotent: no override is a no-op.
+    """
+    traders = get_collection(TRADERS_COLLECTION)
+    oid = _trader_oid_or_400(trader_id)
+    if not traders.find_one({"_id": oid}):
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Trader not found")
+    traders.update_one({"_id": oid}, {"$unset": {"stats_override": ""}})
+    return _admin_trader_payload(traders.find_one({"_id": oid}))
 
 
 @router.delete("/traders/{trader_id}")

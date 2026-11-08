@@ -7,6 +7,7 @@ from app.database import get_collection, TRADERS_COLLECTION, USERS_COLLECTION
 from app.schemas import ExpertTraderResponse, Trade
 from app.auth import get_current_user_token
 from app.post_generator import post_generator
+from app.trading.trader_stats import active_copiers, effective_stats
 
 router = APIRouter(prefix="/api/traders", tags=["traders"])
 
@@ -16,8 +17,7 @@ MIN_COPY_FLOOR = 10.0   # server-side minimum allocation (copy_engine.create_lin
 
 def copier_count(trader_id: str) -> int:
     """Real number of copies on this trader right now (active or paused links)."""
-    return get_collection("copy_links").count_documents(
-        {"trader_id": str(trader_id), "status": {"$in": ["active", "paused"]}})
+    return active_copiers(trader_id)
 
 
 def trader_helper(trader, copiers: int = 0) -> dict:
@@ -33,12 +33,11 @@ def trader_helper(trader, copiers: int = 0) -> dict:
     source = "live" if live else ("admin" if trader.get("stats_admin") else None)
     shown = source is not None
 
-    def measured(key):
-        return trader.get(key) if shown else None
+    # Effective figures: admin override (live traders) or computed/stored values. See trader_stats.
+    eff = effective_stats(trader, copiers)
 
-    if source == "admin":
-        # Admin-entered copier count is kept unless real copy links are higher.
-        copiers = max(copiers, int(trader.get("copiers") or 0))
+    def measured(key):
+        return eff[key] if shown else None
 
     return {
         "id": str(trader["_id"]),
@@ -48,7 +47,7 @@ def trader_helper(trader, copiers: int = 0) -> dict:
         "specialization": trader.get("specialization") or "",
         "ytd_return": measured("ytd_return"),
         "win_rate": measured("win_rate"),
-        "copiers": copiers,
+        "copiers": eff["copiers"],
         "minimum_copy_amount": float(trader.get("minimum_copy_amount") or MIN_COPY_FLOOR),
         "assets_under_management": measured("assets_under_management"),
         "max_drawdown": measured("max_drawdown"),
@@ -262,5 +261,5 @@ async def get_selected_traders(current_user: dict = Depends(get_current_user_tok
         except Exception:
             trader = None
         if trader:
-            out.append({**trader_helper(trader), "copy": await asyncio.to_thread(copy_engine.serialize, link)})
+            out.append({**trader_helper(trader, copier_count(trader["_id"])), "copy": await asyncio.to_thread(copy_engine.serialize, link)})
     return {"selected_traders": out, "count": len(out)}

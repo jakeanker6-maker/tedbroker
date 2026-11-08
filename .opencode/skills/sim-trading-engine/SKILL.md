@@ -78,8 +78,11 @@ unique `ledger_entries.idempotency_key`, unique `(user_id,symbol,bucket)` on pos
   `is_system` users from customer-facing lists, totals and admin statistics.
 - Mirroring is asynchronous and durable: bot fill -> `copy_jobs` (unique `fill_id`) -> engine
   sweep -> `copy_engine.process_job`. Child `client_order_id` = `copy-<fill>-<link>` (idempotent).
-- Trader performance fields are computed (`bots.compute_stats`); admin edits must not override
-  them when `stats_live` is set.
+- Trader performance fields are computed (`bots.compute_stats`) and stored top-level; they are never
+  destroyed. For `stats_live` traders, admin-entered figures go to the `stats_override` sub-document
+  (`app/trading/trader_stats.py`, `effective_stats`), which wins on both admin and user dashboards.
+  Figures are shown unlabelled by decision (`stats_source` stays "live"); clear with
+  `DELETE /api/admin/traders/{id}/stats-override`.
 
 ## As built (Phase 2B)
 - `margin.account_state(user_id, changes, cash_delta)` is THE buying-power function (also a

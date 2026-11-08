@@ -85,7 +85,7 @@ def test_admin_list_survives_legacy_trader_document(client, admin_token):
     _cleanup([legacy_name])
 
 
-def test_admin_edit_does_not_overwrite_live_stats(client, admin_token, user_token):
+def test_admin_edit_is_an_override_and_keeps_computed_stats(client, admin_token, user_token):
     name = "Test Trader Bot"
     _cleanup([name])
     oid = ObjectId()
@@ -100,7 +100,9 @@ def test_admin_edit_does_not_overwrite_live_stats(client, admin_token, user_toke
                    headers={"Authorization": f"Bearer {admin_token}"})
     assert r.status_code == 200, r.text
 
+    # Admin figures are shown (override layer, unlabelled); the computed top-level value stays stored.
     t = _directory(client, user_token)[name]
     assert t["stats_source"] == "live"
-    assert t["ytd_return"] == 7.0
+    assert t["ytd_return"] == 99.0
+    assert get_collection(TRADERS_COLLECTION).find_one({"_id": oid})["ytd_return"] == 7.0
     _cleanup([name])
