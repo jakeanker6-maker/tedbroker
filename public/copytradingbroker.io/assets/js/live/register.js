@@ -23,7 +23,6 @@ const FIELD_IDS = {
   full_name: 'fullname',
   phone: 'phone',
   country: 'country',
-  gender: 'gender',
 };
 
 if (form) {
@@ -100,7 +99,6 @@ if (form) {
       password: control('password')?.value || '',
       full_name: (control('full_name')?.value || '').trim() || null,
       phone: phoneNumber ? `${phoneCode} ${phoneNumber}`.slice(0, 20) : null,
-      gender: control('gender')?.value || null,
       country: control('country')?.value || null,
     };
     const referral = (control('referral_code')?.value || '').trim();
