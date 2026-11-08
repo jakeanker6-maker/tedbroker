@@ -1,9 +1,17 @@
 /**
- * Onboarding Wizard Handler
+ * Onboarding wizard: personal info, address, identity verification, investment profile.
+ * Classic script. Needs assets/js/auth.js (TED_AUTH) to be loaded first.
  */
 
-let currentStep = 1;
+const GENERIC_ERROR = 'Something went wrong. Your answers are still here. Try again.';
+const QUESTION_REQUIRED = 'Please select an option to continue.';
+const MAX_PHOTO_BYTES = 5 * 1024 * 1024;
+const QUESTIONNAIRE_FIELDS = ['risk_tolerance', 'annual_income', 'employment_status'];
+const SVG_NS = 'http://www.w3.org/2000/svg';
+
 let uploadedPhoto = null;
+let activeReader = null;
+let questionnaireView = 1;
 
 document.addEventListener('DOMContentLoaded', function() {
     // Check authentication
@@ -22,6 +30,8 @@ document.addEventListener('DOMContentLoaded', function() {
     setupFileUpload();
     setupBackButtons();
     setupQuestionnaireForm();
+    setupCompletionDialog();
+    setupInlineErrorClearing();
 });
 
 /**
@@ -49,6 +59,7 @@ async function checkOnboardingStatus() {
 
     } catch (error) {
         console.error('Error checking onboarding status:', error);
+        showFormAlert(document.getElementById('personal-info-form'), 'We could not load your progress. Refresh the page to try again.');
     }
 }
 
@@ -119,162 +130,283 @@ async function loadExistingData() {
     }
 }
 
+/* ==================================================================
+   Shared helpers (DOM only: no innerHTML with data)
+   ================================================================== */
+
+/** Polite status text for screen readers while a request runs */
+function setStatus(message) {
+    document.getElementById('onb-status').textContent = message;
+}
+
+/** Success toast in the shared .toast-region */
+function showToast(message) {
+    const region = document.querySelector('.toast-region');
+    if (!region) return;
+
+    const toast = document.createElement('div');
+    toast.className = 'toast';
+
+    const icon = document.createElementNS(SVG_NS, 'svg');
+    icon.setAttribute('viewBox', '0 0 24 24');
+    icon.setAttribute('fill', 'none');
+    icon.setAttribute('stroke', 'currentColor');
+    icon.setAttribute('stroke-width', '1.5');
+    icon.setAttribute('aria-hidden', 'true');
+    icon.setAttribute('focusable', 'false');
+    const path = document.createElementNS(SVG_NS, 'path');
+    path.setAttribute('d', 'M20 6 9 17l-5-5');
+    icon.append(path);
+
+    const label = document.createElement('span');
+    label.textContent = message;
+
+    toast.append(icon, label);
+    region.append(toast);
+
+    setTimeout(() => {
+        toast.dataset.leaving = '';
+        toast.addEventListener('animationend', () => toast.remove(), { once: true });
+    }, 2600);
+}
+
+/** Error from a server response. The message is shown as-is; only string details are used. */
+function serverError(data) {
+    const message = typeof data?.detail === 'string' && data.detail ? data.detail : GENERIC_ERROR;
+    const error = new Error(message);
+    error.handled = true;
+    return error;
+}
+
+/** Inline field error: .field__error with the control's id plus "-error" */
+function showFieldError(control, message) {
+    const field = control.closest('.field');
+    document.getElementById(`${control.id}-error`).querySelector('[data-error-msg]').textContent = message;
+    control.setAttribute('aria-invalid', 'true');
+    field.dataset.invalid = 'true';
+}
+
+function clearFieldError(control) {
+    const field = control.closest('.field');
+    document.getElementById(`${control.id}-error`).querySelector('[data-error-msg]').textContent = '';
+    control.removeAttribute('aria-invalid');
+    delete field.dataset.invalid;
+}
+
+/** Clear the error as soon as a text field or select is changed */
+function setupInlineErrorClearing() {
+    const clearIfInvalid = (e) => {
+        const control = e.target;
+        if (control.matches('.field__input, .field__select') && control.hasAttribute('aria-invalid')) {
+            clearFieldError(control);
+        }
+    };
+    document.addEventListener('input', clearIfInvalid);
+    document.addEventListener('change', clearIfInvalid);
+}
+
+/** Form-level error line (.onb-alert) above the action row */
+function showFormAlert(form, message) {
+    const alert = form.querySelector('.onb-alert');
+    alert.querySelector('[data-error-msg]').textContent = message;
+    alert.hidden = false;
+    // Focus moves to the message, because the busy submit button lost focus when it was disabled
+    alert.tabIndex = -1;
+    alert.focus({ preventScroll: true });
+}
+
+function clearFormAlert(form) {
+    const alert = form.querySelector('.onb-alert');
+    alert.hidden = true;
+    alert.querySelector('[data-error-msg]').textContent = '';
+}
+
+/** Busy state: disable the form's controls and mark the submit button aria-busy */
+function setFormBusy(form, busy) {
+    const submit = form.querySelector('[type="submit"]');
+    form.querySelectorAll('button, input, select').forEach(control => {
+        control.disabled = busy;
+    });
+    if (submit) {
+        if (busy) {
+            submit.setAttribute('aria-busy', 'true');
+        } else {
+            submit.removeAttribute('aria-busy');
+        }
+    }
+}
+
 /**
- * Setup Personal Info Form
+ * Required-field validation. Shows inline errors, focuses the first invalid control.
+ * @returns {boolean} true when at least one field is invalid
  */
+function validateRequired(fields) {
+    let firstInvalid = null;
+    fields.forEach(({ id, message }) => {
+        const control = document.getElementById(id);
+        if (control.value.trim()) {
+            clearFieldError(control);
+            return;
+        }
+        showFieldError(control, message);
+        firstInvalid = firstInvalid || control;
+    });
+    if (firstInvalid) {
+        firstInvalid.focus();
+    }
+    return firstInvalid !== null;
+}
+
+/** POST one wizard step and move on when it is saved */
+async function submitStep({ form, endpoint, payload, busyMessage, successMessage, onSuccess }) {
+    clearFormAlert(form);
+    setFormBusy(form, true);
+    setStatus(busyMessage);
+
+    try {
+        const response = await TED_AUTH.apiCall(endpoint, {
+            method: 'POST',
+            body: JSON.stringify(payload)
+        });
+        const data = await response.json().catch(() => ({}));
+
+        if (!response.ok) {
+            throw serverError(data);
+        }
+
+        setStatus('');
+        const finish = () => {
+            setFormBusy(form, false);
+            onSuccess();
+        };
+        if (successMessage) {
+            showToast(successMessage);
+            setTimeout(finish, 500);
+        } else {
+            finish();
+        }
+
+    } catch (error) {
+        setStatus('');
+        setFormBusy(form, false);
+        showFormAlert(form, error.handled ? error.message : GENERIC_ERROR);
+    }
+}
+
+/* ==================================================================
+   Step 1: personal information
+   ================================================================== */
 function setupPersonalInfoForm() {
     const form = document.getElementById('personal-info-form');
 
-    form.addEventListener('submit', async function(e) {
+    form.addEventListener('submit', function(e) {
         e.preventDefault();
+        clearFormAlert(form);
 
-        const formData = {
-            first_name: document.getElementById('first_name').value.trim(),
-            last_name: document.getElementById('last_name').value.trim(),
-            gender: document.getElementById('gender').value
-        };
-
-        // Validate
-        if (!formData.first_name || !formData.last_name || !formData.gender) {
-            TED_AUTH.showError('Please fill in all required fields');
+        if (validateRequired([
+            { id: 'first_name', message: 'Enter your first name.' },
+            { id: 'last_name', message: 'Enter your last name.' },
+            { id: 'gender', message: 'Select your gender.' }
+        ])) {
             return;
         }
 
-        // Submit
-        TED_AUTH.showLoading('Saving personal information...');
-
-        try {
-            const response = await TED_AUTH.apiCall('/api/onboarding/personal-info', {
-                method: 'POST',
-                body: JSON.stringify(formData)
-            });
-
-            const data = await response.json();
-            TED_AUTH.closeLoading();
-
-            if (!response.ok) {
-                throw new Error(data.detail || 'Failed to save personal information');
-            }
-
-            TED_AUTH.showSuccess('Personal information saved!');
-            setTimeout(() => {
-                goToStep(2);
-            }, 500);
-
-        } catch (error) {
-            TED_AUTH.closeLoading();
-            TED_AUTH.showError(error.message);
-        }
+        submitStep({
+            form,
+            endpoint: '/api/onboarding/personal-info',
+            payload: {
+                first_name: document.getElementById('first_name').value.trim(),
+                last_name: document.getElementById('last_name').value.trim(),
+                gender: document.getElementById('gender').value
+            },
+            busyMessage: 'Saving personal information...',
+            successMessage: 'Personal information saved!',
+            onSuccess: () => goToStep(2)
+        });
     });
 }
 
-/**
- * Setup Address Form
- */
+/* ==================================================================
+   Step 2: address
+   ================================================================== */
 function setupAddressForm() {
     const form = document.getElementById('address-form');
 
-    form.addEventListener('submit', async function(e) {
+    form.addEventListener('submit', function(e) {
         e.preventDefault();
+        clearFormAlert(form);
 
-        const formData = {
-            street: document.getElementById('street').value.trim(),
-            city: document.getElementById('city').value.trim(),
-            state: document.getElementById('state').value.trim(),
-            zip_code: document.getElementById('zip_code').value.trim(),
-            country: document.getElementById('country').value.trim()
-        };
-
-        // Validate
-        if (!formData.street || !formData.city || !formData.state || !formData.zip_code || !formData.country) {
-            TED_AUTH.showError('Please fill in all required fields');
+        if (validateRequired([
+            { id: 'street', message: 'Enter your street address.' },
+            { id: 'city', message: 'Enter your city.' },
+            { id: 'state', message: 'Enter your state or province.' },
+            { id: 'zip_code', message: 'Enter your ZIP or postal code.' },
+            { id: 'country', message: 'Enter your country.' }
+        ])) {
             return;
         }
 
-        // Submit
-        TED_AUTH.showLoading('Saving address information...');
-
-        try {
-            const response = await TED_AUTH.apiCall('/api/onboarding/address', {
-                method: 'POST',
-                body: JSON.stringify(formData)
-            });
-
-            const data = await response.json();
-            TED_AUTH.closeLoading();
-
-            if (!response.ok) {
-                throw new Error(data.detail || 'Failed to save address information');
-            }
-
-            TED_AUTH.showSuccess('Address information saved!');
-            setTimeout(() => {
-                goToStep(3);
-            }, 500);
-
-        } catch (error) {
-            TED_AUTH.closeLoading();
-            TED_AUTH.showError(error.message);
-        }
+        submitStep({
+            form,
+            endpoint: '/api/onboarding/address',
+            payload: {
+                street: document.getElementById('street').value.trim(),
+                city: document.getElementById('city').value.trim(),
+                state: document.getElementById('state').value.trim(),
+                zip_code: document.getElementById('zip_code').value.trim(),
+                country: document.getElementById('country').value.trim()
+            },
+            busyMessage: 'Saving address information...',
+            successMessage: 'Address information saved!',
+            onSuccess: () => goToStep(3)
+        });
     });
 }
 
-/**
- * Setup KYC Form
- */
+/* ==================================================================
+   Step 3: identity verification
+   ================================================================== */
 function setupKYCForm() {
     const form = document.getElementById('kyc-form');
+    const photoInput = document.getElementById('document_photo');
 
-    form.addEventListener('submit', async function(e) {
+    form.addEventListener('submit', function(e) {
         e.preventDefault();
+        clearFormAlert(form);
 
-        const documentNumber = document.getElementById('document_number').value.trim();
-
-        // Validate
-        if (!documentNumber) {
-            TED_AUTH.showError('Please enter your document number');
-            return;
-        }
+        const numberInvalid = validateRequired([
+            { id: 'document_number', message: 'Enter your document number.' }
+        ]);
 
         if (!uploadedPhoto) {
-            TED_AUTH.showError('Please upload a photo of your ID document');
+            showFieldError(photoInput, 'Upload a photo of your ID document.');
+            if (!numberInvalid) {
+                photoInput.focus();
+            }
+        }
+
+        if (numberInvalid || !uploadedPhoto) {
             return;
         }
 
-        const formData = {
-            document_number: documentNumber,
-            document_photo: uploadedPhoto
-        };
-
-        // Submit
-        TED_AUTH.showLoading('Submitting verification documents...');
-
-        try {
-            const response = await TED_AUTH.apiCall('/api/onboarding/kyc', {
-                method: 'POST',
-                body: JSON.stringify(formData)
-            });
-
-            const data = await response.json();
-            TED_AUTH.closeLoading();
-
-            if (!response.ok) {
-                throw new Error(data.detail || 'Failed to submit KYC documents');
-            }
-
+        submitStep({
+            form,
+            endpoint: '/api/onboarding/kyc',
+            payload: {
+                document_number: document.getElementById('document_number').value.trim(),
+                document_photo: uploadedPhoto
+            },
+            busyMessage: 'Submitting verification documents...',
+            successMessage: null,
             // KYC saved: continue with the investment questionnaire
-            goToStep(4);
-
-        } catch (error) {
-            TED_AUTH.closeLoading();
-            TED_AUTH.showError(error.message);
-        }
+            onSuccess: () => goToStep(4)
+        });
     });
 }
 
-/**
- * Setup Investment Questionnaire (step 4)
- */
+/* ==================================================================
+   Step 4: investment questionnaire (three views, submitted once)
+   ================================================================== */
 function setupQuestionnaireForm() {
     const form = document.getElementById('questionnaire-form');
 
@@ -296,12 +428,6 @@ function setupQuestionnaireForm() {
 }
 
 /**
- * Questionnaire fields, in view order (view N uses QUESTIONNAIRE_FIELDS[N - 1])
- */
-const QUESTIONNAIRE_FIELDS = ['risk_tolerance', 'annual_income', 'employment_status'];
-let questionnaireView = 1;
-
-/**
  * Whether a radio group of the questionnaire has a selection
  */
 function isQuestionAnswered(fieldName) {
@@ -313,14 +439,15 @@ function isQuestionAnswered(fieldName) {
  */
 function setQuestionnaireError(view, message) {
     const errorEl = document.getElementById(`q-error-${view}`);
-    errorEl.textContent = message || '';
+    errorEl.querySelector('[data-error-text]').textContent = message || '';
     errorEl.hidden = !message;
 }
 
 /**
- * Show one questionnaire view (1-3), update progress dots and screen-reader text
+ * Show one questionnaire view (1-3), update progress dots and the position text.
+ * Focus moves to the question heading unless the caller is entering step 4 (then the step h1 has focus).
  */
-function showQuestionnaireView(view) {
+function showQuestionnaireView(view, { focus = true } = {}) {
     setQuestionnaireError(questionnaireView, '');
     questionnaireView = view;
 
@@ -336,8 +463,9 @@ function showQuestionnaireView(view) {
 
     document.getElementById('questionnaire-position').textContent = `Question ${view} of ${QUESTIONNAIRE_FIELDS.length}`;
 
-    // Move focus to the new question so keyboard and screen reader users land on it
-    document.getElementById(`q-heading-${view}`).focus({ preventScroll: true });
+    if (focus) {
+        document.getElementById(`q-heading-${view}`).focus({ preventScroll: true });
+    }
 }
 
 /**
@@ -345,7 +473,7 @@ function showQuestionnaireView(view) {
  */
 function questionnaireNext() {
     if (!isQuestionAnswered(QUESTIONNAIRE_FIELDS[questionnaireView - 1])) {
-        setQuestionnaireError(questionnaireView, 'Please select an option to continue.');
+        setQuestionnaireError(questionnaireView, QUESTION_REQUIRED);
         return;
     }
 
@@ -375,11 +503,14 @@ async function submitQuestionnaire(e) {
         return;
     }
 
+    const form = e.currentTarget;
+    clearFormAlert(form);
+
     // Make sure every question is answered; jump to the first unanswered one
     const missingView = QUESTIONNAIRE_FIELDS.findIndex(field => !isQuestionAnswered(field));
     if (missingView !== -1) {
         showQuestionnaireView(missingView + 1);
-        setQuestionnaireError(missingView + 1, 'Please select an option to continue.');
+        setQuestionnaireError(missingView + 1, QUESTION_REQUIRED);
         return;
     }
 
@@ -390,11 +521,8 @@ async function submitQuestionnaire(e) {
         payload[field] = document.querySelector(`input[name="${field}"]:checked`).value;
     });
 
-    const submitButton = document.getElementById('questionnaire-submit');
-    const navButtons = document.querySelectorAll('#questionnaire-form [data-q-action]');
-    submitButton.disabled = true;
-    navButtons.forEach(button => { button.disabled = true; });
-    TED_AUTH.showLoading('Saving your investment profile...');
+    setFormBusy(form, true);
+    setStatus('Saving your investment profile...');
 
     try {
         const response = await TED_AUTH.apiCall('/api/onboarding/questionnaire', {
@@ -404,58 +532,74 @@ async function submitQuestionnaire(e) {
         });
 
         const data = await response.json().catch(() => ({}));
-        TED_AUTH.closeLoading();
 
         if (!response.ok) {
-            throw new Error(typeof data.detail === 'string' ? data.detail : 'Failed to save questionnaire.');
+            throw serverError(data);
         }
 
-        // Buttons stay disabled: the user is leaving this page
-        Swal.fire({
-            title: 'Verification Submitted!',
-            html: `
-                <div style="text-align: center;">
-                    <i class="fas fa-clock" style="color: #ff9800; font-size: 64px; margin-bottom: 20px;"></i>
-                    <p style="font-size: 18px; font-weight: bold; color: #2d3748; margin-bottom: 16px;">
-                        Thank you for completing your investment profile!
-                    </p>
-                    <p style="font-size: 16px; margin-bottom: 12px; color: #4a5568; line-height: 1.6;">
-                        Your information is currently under review by our team.
-                    </p>
-                    <div style="background: #fff3cd; padding: 16px; border-radius: 8px; border-left: 4px solid #ff9800; margin: 20px 0;">
-                        <p style="font-size: 15px; color: #856404; margin: 0; font-weight: 600;">
-                            <i class="fas fa-info-circle"></i> Approval typically takes less than 24 hours
-                        </p>
-                    </div>
-                    <p style="font-size: 14px; color: #6b7280; margin-top: 16px;">
-                        You will receive a notification once your account has been approved and you can start trading.
-                    </p>
-                </div>
-            `,
-            icon: 'info',
-            confirmButtonText: 'Continue',
-            confirmButtonColor: '#D32F2F',
-            allowOutsideClick: false,
-            allowEscapeKey: false
-        }).then(() => goToNextStep());
+        setStatus('');
+        // Controls stay disabled: the user leaves this page through the dialog
+        openCompletionDialog();
 
     } catch (error) {
-        TED_AUTH.closeLoading();
-        submitButton.disabled = false;
-        navButtons.forEach(button => { button.disabled = false; });
-        TED_AUTH.showError(error.message);
+        setStatus('');
+        setFormBusy(form, false);
+        showFormAlert(form, error.handled ? error.message : GENERIC_ERROR);
     }
 }
 
-/**
- * Setup File Upload
- */
+/* ==================================================================
+   Completion dialog (native <dialog>, no Escape or backdrop dismissal)
+   ================================================================== */
+function setupCompletionDialog() {
+    const dialog = document.getElementById('onb-complete');
+
+    dialog.addEventListener('cancel', function(e) {
+        e.preventDefault();
+    });
+
+    document.getElementById('onb-complete-continue').addEventListener('click', function() {
+        goToNextStep();
+    });
+}
+
+function openCompletionDialog() {
+    const dialog = document.getElementById('onb-complete');
+    if (!dialog.open) {
+        dialog.showModal();
+    }
+    document.getElementById('onb-complete-continue').focus();
+}
+
+/* ==================================================================
+   Identity document: dropzone, preview, drag and drop
+   ================================================================== */
 function setupFileUpload() {
     const fileInput = document.getElementById('document_photo');
     const fileLabel = document.getElementById('file-upload-label');
     const filePreview = document.getElementById('file-preview');
     const previewImage = document.getElementById('preview-image');
+    const previewFail = document.getElementById('preview-error');
     const changePhotoBtn = document.getElementById('change-photo');
+
+    // Dropzone and preview are never shown together
+    function showPreview(show) {
+        fileLabel.hidden = show;
+        filePreview.hidden = !show;
+    }
+
+    // "Reading photo..." replaces the dropzone title while the file is read
+    function setReading(reading) {
+        if (reading) {
+            fileLabel.setAttribute('aria-busy', 'true');
+            setStatus('Reading photo...');
+        } else {
+            fileLabel.removeAttribute('aria-busy');
+            setStatus('');
+        }
+        fileLabel.querySelector('.onb-dropzone__title').hidden = reading;
+        fileLabel.querySelector('.onb-dropzone__reading').hidden = !reading;
+    }
 
     // Handle file selection
     fileInput.addEventListener('change', function(e) {
@@ -465,55 +609,78 @@ function setupFileUpload() {
             return;
         }
 
-        // Validate file type
-        if (!file.type.startsWith('image/')) {
-            TED_AUTH.showError('Please select an image file');
+        // Validate file type (the copy promises PNG or JPG)
+        if (!['image/png', 'image/jpeg'].includes(file.type)) {
+            showFieldError(fileInput, 'Choose an image file, such as PNG or JPG.');
             fileInput.value = '';
             return;
         }
 
         // Validate file size (5MB max)
-        if (file.size > 5 * 1024 * 1024) {
-            TED_AUTH.showError('File size must be less than 5MB');
+        if (file.size > MAX_PHOTO_BYTES) {
+            showFieldError(fileInput, 'The file must be smaller than 5 MB.');
             fileInput.value = '';
             return;
         }
 
+        clearFieldError(fileInput);
+        setReading(true);
+
+        // A new selection cancels any read still in progress, so an older file cannot win
+        if (activeReader) {
+            activeReader.abort();
+        }
+
         // Read file as base64
         const reader = new FileReader();
+        activeReader = reader;
         reader.onload = function(event) {
             uploadedPhoto = event.target.result;
-
-            // Show preview
+            previewFail.hidden = true;
+            previewImage.hidden = false;
             previewImage.src = uploadedPhoto;
-            fileLabel.style.display = 'none';
-            filePreview.style.display = 'block';
+            setReading(false);
+            showPreview(true);
+        };
+        reader.onerror = function() {
+            setReading(false);
+            showFieldError(fileInput, GENERIC_ERROR);
+            fileInput.value = '';
         };
         reader.readAsDataURL(file);
     });
 
-    // Handle change photo button
+    // A preview that cannot be decoded keeps "Change photo" available
+    previewImage.addEventListener('error', function() {
+        previewImage.hidden = true;
+        previewFail.hidden = false;
+    });
+
+    // Handle change photo button: reset and return focus to the file input
     changePhotoBtn.addEventListener('click', function() {
         fileInput.value = '';
         uploadedPhoto = null;
-        fileLabel.style.display = 'block';
-        filePreview.style.display = 'none';
+        previewImage.removeAttribute('src');
+        previewImage.hidden = false;
+        previewFail.hidden = true;
+        showPreview(false);
+        fileInput.focus();
     });
 
     // Handle drag and drop
     fileLabel.addEventListener('dragover', function(e) {
         e.preventDefault();
-        fileLabel.style.background = '#FED7D7';
+        fileLabel.classList.add('is-dragover');
     });
 
     fileLabel.addEventListener('dragleave', function(e) {
         e.preventDefault();
-        fileLabel.style.background = '#FFF5F5';
+        fileLabel.classList.remove('is-dragover');
     });
 
     fileLabel.addEventListener('drop', function(e) {
         e.preventDefault();
-        fileLabel.style.background = '#FFF5F5';
+        fileLabel.classList.remove('is-dragover');
 
         const files = e.dataTransfer.files;
         if (files.length > 0) {
@@ -523,9 +690,9 @@ function setupFileUpload() {
     });
 }
 
-/**
- * Setup Back Buttons
- */
+/* ==================================================================
+   Navigation
+   ================================================================== */
 function setupBackButtons() {
     document.getElementById('btn-back-address').addEventListener('click', function() {
         goToStep(1);
@@ -537,7 +704,7 @@ function setupBackButtons() {
 }
 
 /**
- * Navigate to a specific step
+ * Navigate to a specific step. Moves focus to the new step's h1 (spec 9.2 item 1).
  */
 function goToStep(step) {
     // Hide all step contents
@@ -567,22 +734,22 @@ function goToStep(step) {
     });
 
     // Update current step
-    currentStep = step;
 
-    // Entering the questionnaire always starts at its first question
+    // Entering the questionnaire always starts at its first question (no heading focus: the step h1 takes it)
     if (step === 4) {
-        showQuestionnaireView(1);
+        showQuestionnaireView(1, { focus: false });
     }
 
     // Update progress indicator
-    if (step <= 4) {
-        document.getElementById('current-step').textContent = step;
-        document.getElementById('progress-indicator').style.display = 'block';
-    } else {
-        document.getElementById('progress-indicator').style.display = 'none';
-    }
+    document.getElementById('current-step').textContent = step;
 
     // Scroll to top (instant when the user prefers reduced motion)
     const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     window.scrollTo({ top: 0, behavior: reduceMotion ? 'auto' : 'smooth' });
+
+    // Announce the new step: focus its heading without scrolling
+    const heading = targetContent?.querySelector('h1');
+    if (heading) {
+        heading.focus({ preventScroll: true });
+    }
 }
