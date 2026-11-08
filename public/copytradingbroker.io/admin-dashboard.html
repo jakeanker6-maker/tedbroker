@@ -639,7 +639,7 @@
                 <div class="header">
                     <div>
                         <h1>Trading Activity</h1>
-                        <p class="ta-subtitle">Stocks, ETFs and options bought and sold by users, and how they perform over time</p>
+                        <p class="ta-subtitle">Stocks, ETFs and options bought and sold by users, and how they perform over time. Manual trades only. Automated trading (bots, copy trading, ETF baskets, recurring orders) is excluded.</p>
                     </div>
                     <button type="button" class="ta-btn" id="ta-refresh">
                         <i class="fas fa-rotate" aria-hidden="true"></i> Refresh
@@ -683,6 +683,7 @@
 
                 <!-- TRADES view -->
                 <section id="ta-view-trades" aria-label="Trades">
+                    <p class="ta-scope-note">Manual trades only. Automated trading (bots, copy trading, ETF baskets, recurring orders) is excluded.</p>
                     <div class="ta-stats" id="ta-summary"></div>
                     <p class="ta-status" id="ta-summary-status" aria-live="polite" hidden></p>
 
@@ -718,6 +719,7 @@
 
                 <!-- ASSETS view -->
                 <section id="ta-view-assets" aria-label="Assets" hidden>
+                    <p class="ta-scope-note">Manual trades only. Automated trading (bots, copy trading, ETF baskets, recurring orders) is excluded.</p>
                     <div class="ta-card">
                         <div class="ta-card-head">
                             <h3>Assets held</h3>
@@ -736,13 +738,14 @@
 
                 <!-- TRADERS view -->
                 <section id="ta-view-traders" aria-label="Traders" hidden>
+                    <p class="ta-scope-note">Manual trades only. Automated trading (bots, copy trading, ETF baskets, recurring orders) is excluded.</p>
                     <div class="ta-card">
                         <div class="ta-card-head">
                             <h3>Traders</h3>
                             <label class="ta-field" for="ta-traders-sort">Sort by
                                 <select id="ta-traders-sort" class="ta-select">
-                                    <option value="equity">Equity</option>
-                                    <option value="return">Return</option>
+                                    <option value="equity">Positions value</option>
+                                    <option value="return">Unrealized</option>
                                     <option value="realized">Realized</option>
                                     <option value="trades">Trades</option>
                                     <option value="last_trade">Last trade</option>

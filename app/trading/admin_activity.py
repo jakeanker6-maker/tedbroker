@@ -1,26 +1,34 @@
-"""Read-only admin monitoring of customer trading activity (Trading Hub).
+"""Read-only admin monitoring of MANUAL (user-initiated) trading activity.
 
-Nothing here writes: no ledger, order, position, snapshot or user changes. Money is returned
-as decimal strings (2 dp; prices and marks 4 dp), timestamps as ISO-8601 UTC with a trailing
-"Z". Figures that cannot be measured are null, never 0. System (bot) accounts
-(`users.is_system == True`) are excluded everywhere. Only fills with status "applied" count
-as activity.
+Scope: only fills with status "applied" and source "manual" count. Automated activity (bot,
+copy, basket, recurring, liquidation, system) is excluded everywhere.
+
+A position is manual when it is open (or, for lifetime figures, any position), bucket "self",
+belongs to a non-system user, has at least one manual fill and no automated fill in the same
+(user_id, symbol) self bucket. The key set is built with one aggregation over fills.
+
+Nothing here writes. Money is returned as decimal strings (2 dp; prices and marks 4 dp),
+timestamps as ISO-8601 UTC with a trailing "Z". Figures that cannot be measured are null,
+never 0. System (bot) accounts (`users.is_system == True`) are excluded everywhere.
+Account-level balances and snapshot history are deliberately not returned: they cannot be
+split into manual and automated parts.
 
 Database work runs in worker threads (asyncio.to_thread); quotes come from
-`portfolio.quotes_for`, which makes one `service.get_quotes` call per request.
+`portfolio.quotes_for`, one `service.get_quotes` call per request.
 """
 import asyncio
 from collections import defaultdict
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 from decimal import ROUND_HALF_UP, Decimal
 from functools import lru_cache
-from typing import Any, Dict, Iterable, List, Optional, Tuple
+from typing import Any, Dict, Iterable, List, Optional, Set, Tuple
 
 from bson import ObjectId
+from pymongo import ASCENDING
 
-from app.database import USERS_COLLECTION, get_collection
-from app.market_data import service, universe
-from app.trading import copy_engine, portfolio, positions
+from app.database import MANUAL_SNAPSHOTS_COLLECTION, USERS_COLLECTION, get_collection
+from app.market_data import calendar, service, universe
+from app.trading import portfolio, positions
 
 RANGES = ("1D", "1W", "1M", "3M", "1Y", "ALL")
 ASSET_CLASSES = ("stock", "etf", "option", "crypto")
@@ -30,11 +38,17 @@ TRADER_SORTS = ("equity", "return", "realized", "trades", "last_trade")
 HOLDING_SORTS = ("market_value", "holders", "unrealized")
 # Admin range -> market-data candle range (keys of service.RANGES).
 CANDLE_RANGE = {"1D": "1D", "1W": "5D", "1M": "1M", "3M": "3M", "1Y": "1Y", "ALL": "5Y"}
+MANUAL = "manual"
 MARKER_CAP = 500
 PORTFOLIO_TRADES = 100
 CENT = Decimal("0.01")
 ZERO = Decimal("0")
 D = Decimal
+
+# traders sort -> row field. There is no return field for manual activity, so "return"
+# orders by unrealized P&L and "equity" orders by positions value (see README/docs).
+TRADER_SORT_FIELD = {"equity": "positions_value", "return": "unrealized_pnl", "realized": "realized_pnl",
+                     "trades": "trades", "last_trade": "last_trade_at"}
 
 _TALLY_FIELDS = {"user_id": 1, "asset_class": 1, "is_buy": 1, "gross": 1, "fee": 1, "realized_pnl": 1,
                  "symbol": 1, "ts": 1}
@@ -135,24 +149,14 @@ def _users(ids: Iterable[str]) -> Dict[str, Dict]:
     oids = [ObjectId(i) for i in set(ids) if i and ObjectId.is_valid(i)]
     if not oids:
         return {}
-    cur = get_collection(USERS_COLLECTION).find(
-        {"_id": {"$in": oids}},
-        {"email": 1, "full_name": 1, "is_system": 1, "cash_cents": 1, "wallet_balance": 1})
+    cur = get_collection(USERS_COLLECTION).find({"_id": {"$in": oids}},
+                                                {"email": 1, "full_name": 1, "is_system": 1})
     return {str(u["_id"]): u for u in cur}
 
 
 def _ref(uid: str, users: Dict[str, Dict]) -> Dict:
     u = users.get(uid) or {}
     return {"id": uid, "email": u.get("email"), "full_name": u.get("full_name")}
-
-
-def _cash_cents(user: Dict) -> int:
-    """Total cash in cents. Read-only: ledger.get_balances would migrate an account (a write)
-    when cash_cents is missing, so these views read the stored fields and fall back to the
-    legacy wallet_balance mirror."""
-    if "cash_cents" in user:
-        return int(user["cash_cents"])
-    return int((D(str(user.get("wallet_balance") or 0)) * 100).to_integral_value(ROUND_HALF_UP))
 
 
 def _fills():
@@ -165,10 +169,43 @@ def _user_clause(system_ids: List[str], user_id: Optional[str]):
     return {"$nin": system_ids}
 
 
+# ------------------------------------------------------------------ manual selection
+def manual_keys(system_ids: List[str], user_id: Optional[str] = None) -> Set[Tuple[str, str]]:
+    """(user_id, symbol) self-bucket keys whose applied fills are all manual (and at least one).
+    One aggregation over fills; system accounts excluded (optionally restricted to one user)."""
+    groups = _fills().aggregate([
+        {"$match": {"status": "applied", "bucket": "self",
+                    "user_id": _user_clause(list(system_ids), user_id)}},
+        {"$group": {"_id": {"u": "$user_id", "s": "$symbol"},
+                    "src": {"$addToSet": {"$ifNull": ["$source", ""]}}}},
+    ])
+    return {(g["_id"]["u"], g["_id"]["s"]) for g in groups if set(g["src"]) == {MANUAL}}
+
+
+def manual_positions(base_query: Dict, keys: Set[Tuple[str, str]]) -> List[Dict]:
+    """Self-bucket positions matching `base_query` whose (user, symbol) is a manual key."""
+    q = {**base_query, "bucket": "self"}
+    return [p for p in positions.col().find(q) if (p["user_id"], p["symbol"]) in keys]
+
+
+def _pos_query(asset_class: Optional[str], system_ids: List[str], open_only: bool = False,
+               symbol: Optional[str] = None) -> Dict:
+    q: Dict[str, Any] = {"user_id": {"$nin": system_ids}}
+    if open_only:
+        q["open"] = True
+    if asset_class:
+        q["asset_class"] = asset_class
+    if symbol:
+        q["symbol"] = symbol
+    return q
+
+
 def fill_query(range_: str, asset_class: Optional[str] = None, side: str = "all", user_id: Optional[str] = None,
                symbol: Optional[str] = None, bucket: str = "all", system_ids: Iterable[str] = ()) -> Dict:
-    """Applied fills in range. System accounts are excluded unless user_id names one (then none)."""
-    q: Dict[str, Any] = {"status": "applied", "user_id": _user_clause(list(system_ids), user_id)}
+    """Applied MANUAL fills in range. System accounts are excluded unless user_id names one
+    (then none). bucket copy/basket match nothing, because manual fills are bucket self."""
+    q: Dict[str, Any] = {"status": "applied", "source": MANUAL,
+                         "user_id": _user_clause(list(system_ids), user_id)}
     since = since_for(range_)
     if since:
         q["ts"] = {"$gte": since}
@@ -189,34 +226,7 @@ def fill_query(range_: str, asset_class: Optional[str] = None, side: str = "all"
     return q
 
 
-def _pos_query(asset_class: Optional[str], system_ids: List[str], open_only: bool = False) -> Dict:
-    q: Dict[str, Any] = {"user_id": {"$nin": system_ids}}
-    if open_only:
-        q["open"] = True
-    if asset_class:
-        q["asset_class"] = asset_class
-    return q
-
-
-def _labels_map(pairs: Iterable[Tuple[str, str]]) -> Dict[str, Dict[str, str]]:
-    """Copy-bucket labels per user. DB read: call from a worker thread."""
-    uids = {uid for uid, bucket in pairs if bucket.startswith("copy:")}
-    return {uid: copy_engine.labels_for(uid) for uid in uids}
-
-
-def _label(uid: str, bucket: str, labels: Dict[str, Dict[str, str]]) -> str:
-    if bucket.startswith("copy:"):
-        return (labels.get(uid) or {}).get(bucket) or portfolio.bucket_label(bucket)
-    return portfolio.bucket_label(bucket)
-
-
-def _rank_desc_nulls_last(items: List, key) -> List:
-    """Stable descending sort; items whose key is None go last."""
-    keyed = [(key(i), i) for i in items]
-    present = sorted((kv for kv in keyed if kv[0] is not None), key=lambda kv: kv[0], reverse=True)
-    return [i for _, i in present] + [i for k, i in keyed if k is None]
-
-
+# ------------------------------------------------------------------ valuation helpers
 def _unrealized_of(rows: List[Dict]) -> Optional[Decimal]:
     """Sum of unrealised P&L over priced positions. None when positions exist but none is priced;
     zero when there are no open positions."""
@@ -227,7 +237,7 @@ def _unrealized_of(rows: List[Dict]) -> Optional[Decimal]:
 
 
 def _value_of(rows: List[Dict]) -> Decimal:
-    """Portfolio convention: unpriced positions count at cost basis (see portfolio.summary)."""
+    """Unpriced positions count at cost basis (the convention used by portfolio.summary)."""
     return sum((dec(r["market_value"]) if r["market_value"] is not None else dec(r["cost_basis"])
                 for r in rows), ZERO)
 
@@ -250,7 +260,7 @@ def _tally(fills: List[Dict]) -> Dict[str, Any]:
     return t
 
 
-def trade_row(f: Dict, users: Dict[str, Dict], labels: Dict[str, Dict[str, str]]) -> Dict:
+def trade_row(f: Dict, users: Dict[str, Dict]) -> Dict:
     uid = f["user_id"]
     bucket = f.get("bucket", "self")
     rp = dec(f.get("realized_pnl"))
@@ -261,9 +271,16 @@ def trade_row(f: Dict, users: Dict[str, Dict], labels: Dict[str, Dict[str, str]]
         "qty": qty_str(dec(f["qty"])), "price": px(dec(f["price"])), "gross": money(dec(f["gross"])),
         "fee": money(dec(f.get("fee"))), "net_cash": money(D(int(f.get("cash_delta_cents") or 0)) / 100),
         "realized_pnl": None if rp == 0 else money(rp),
-        "bucket": bucket, "bucket_label": _label(uid, bucket, labels),
-        "kind": f.get("kind", "trade"), "source": f.get("source", "manual"),
+        "bucket": bucket, "bucket_label": portfolio.bucket_label(bucket),
+        "kind": f.get("kind", "trade"), "source": f.get("source", MANUAL),
     }
+
+
+def _rank_desc_nulls_last(items: List, key) -> List:
+    """Stable descending sort; items whose key is None go last."""
+    keyed = [(key(i), i) for i in items]
+    present = sorted((kv for kv in keyed if kv[0] is not None), key=lambda kv: kv[0], reverse=True)
+    return [i for _, i in present] + [i for k, i in keyed if k is None]
 
 
 def _quote_block(q: Optional[Dict]) -> Optional[Dict]:
@@ -281,8 +298,9 @@ async def summary(range: str = "1M", asset_class: Optional[str] = "all") -> Dict
 
     def load():
         sys = _system_ids()
+        keys = manual_keys(sys)
         fills = list(_fills().find(fill_query(range_, ac, system_ids=sys), _TALLY_FIELDS))
-        open_pos = list(positions.col().find(_pos_query(ac, sys, open_only=True), {"user_id": 1}))
+        open_pos = manual_positions(_pos_query(ac, sys, open_only=True), keys)
         return fills, open_pos
 
     fills, open_pos = await asyncio.to_thread(load)
@@ -326,8 +344,7 @@ async def trades(range: str = "1M", asset_class: Optional[str] = "all", side: st
         total = _fills().count_documents(q)
         docs = list(_fills().find(q).sort([("ts", -1), ("_id", -1)]).skip(offset).limit(limit))
         users = _users({d["user_id"] for d in docs})
-        labels = _labels_map((d["user_id"], d.get("bucket", "self")) for d in docs)
-        return total, [trade_row(d, users, labels) for d in docs]
+        return total, [trade_row(d, users) for d in docs]
 
     total, items = await asyncio.to_thread(load)
     return {"range": range_, "asset_class": ac or "all", "as_of": _now_iso(), "total": total,
@@ -347,7 +364,8 @@ async def holdings(asset_class: Optional[str] = "all", sort: str = "market_value
 
     def load():
         sys = _system_ids()
-        return list(positions.col().find(_pos_query(ac, sys)))
+        keys = manual_keys(sys)
+        return manual_positions(_pos_query(ac, sys), keys)
 
     all_pos = await asyncio.to_thread(load)
     open_pos = [p for p in all_pos if p.get("open")]
@@ -430,26 +448,24 @@ async def asset_detail(symbol: str, range: str = "1M") -> Dict:
 
     def load():
         sys = _system_ids()
+        keys = manual_keys(sys)
         range_fills = list(_fills().find(fill_query(range_, symbol=sym, system_ids=sys), _TALLY_FIELDS))
         marker_docs = list(_fills().find(fill_query(range_, symbol=sym, system_ids=sys))
                            .sort([("ts", -1), ("_id", -1)]).limit(MARKER_CAP))
-        pos_all = list(positions.col().find({"symbol": sym, "user_id": {"$nin": sys}}))
-        open_pos = [p for p in pos_all if p.get("open")]
-        uids = {f["user_id"] for f in range_fills} | {p["user_id"] for p in open_pos}
-        users = _users(uids)
-        labels = _labels_map([(p["user_id"], p.get("bucket", "self")) for p in open_pos])
-        return range_fills, marker_docs, pos_all, open_pos, users, labels
+        pos_all = manual_positions(_pos_query(None, sys, symbol=sym), keys)
+        users = _users({f["user_id"] for f in range_fills} | {p["user_id"] for p in pos_all})
+        return range_fills, marker_docs, pos_all, users
 
-    range_fills, marker_docs, pos_all, open_pos, users, labels = await asyncio.to_thread(load)
+    range_fills, marker_docs, pos_all, users = await asyncio.to_thread(load)
+    open_pos = [p for p in pos_all if p.get("open")]
     day_start = portfolio.day_start_utc()
     holders, rows = [], []
     for p in open_pos:
         row = positions.serialize(p, quote, day_start)
         rows.append(row)
-        uid = p["user_id"]
         holders.append({
-            "user": _ref(uid, users), "bucket": row["bucket"],
-            "bucket_label": _label(uid, row["bucket"], labels), "qty": row["qty"],
+            "user": _ref(p["user_id"], users), "bucket": row["bucket"],
+            "bucket_label": portfolio.bucket_label(row["bucket"]), "qty": row["qty"],
             "avg_cost": row["avg_cost"], "mark": row["mark"], "market_value": row["market_value"],
             "unrealized_pnl": row["unrealized_pnl"], "unrealized_pnl_percent": row["unrealized_pnl_percent"],
             "realized_pnl": row["realized_pnl"], "opened_at": row["opened_at"],
@@ -490,29 +506,18 @@ async def traders(range: str = "1M", asset_class: Optional[str] = "all", sort: s
 
     def load():
         sys = _system_ids()
+        keys = manual_keys(sys)
         fills = list(_fills().find(fill_query(range_, ac, system_ids=sys), _TALLY_FIELDS))
         last = {r["_id"]: r["last"] for r in _fills().aggregate([
             {"$match": fill_query("ALL", ac, system_ids=sys)},
             {"$group": {"_id": "$user_id", "last": {"$max": "$ts"}}}])}
-        all_pos = list(positions.col().find(_pos_query(ac, sys)))
+        all_pos = manual_positions(_pos_query(ac, sys), keys)
         open_uids = {p["user_id"] for p in all_pos if p.get("open")}
         candidates = {f["user_id"] for f in fills} | open_uids
         users = _users(candidates)
         # Accounts that cannot be identified (no users document) are left out.
         uids = {u for u in candidates if u in users}
-        baseline: Dict[str, int] = {}
-        if uids:
-            since = since_for(range_)
-            match: Dict[str, Any] = {"user_id": {"$in": list(uids)}}
-            if since:
-                match["ts"] = {"$gte": since}
-            for r in portfolio.snaps().aggregate([
-                    {"$match": match}, {"$sort": {"ts": 1}},
-                    {"$group": {"_id": "$user_id", "value": {"$first": "$total_value_cents"}}}]):
-                baseline[r["_id"]] = int(r["value"])
-        plans = {u: portfolio.plans_value(u)["value"] for u in uids}
-        return {"fills": fills, "last": last, "all_pos": all_pos, "uids": uids, "users": users,
-                "baseline": baseline, "plans": plans}
+        return {"fills": fills, "last": last, "all_pos": all_pos, "uids": uids, "users": users}
 
     d = await asyncio.to_thread(load)
     uids = d["uids"]
@@ -533,33 +538,21 @@ async def traders(range: str = "1M", asset_class: Optional[str] = "all", sort: s
     entries = []
     for uid in sorted(uids, key=lambda u: (d["users"][u].get("email") or "", u)):
         rows = open_rows.get(uid, [])
-        cash = D(_cash_cents(d["users"][uid])) / 100
         pv = _value_of(rows)
-        equity = cash + pv
-        total = equity + d["plans"][uid]
-        base = d["baseline"].get(uid)
-        ret = change = None
-        if base:
-            first = D(base) / 100
-            change = total - first
-            ret = change / first * 100
+        upnl = _unrealized_of(rows)
         t = _tally(fills_by.get(uid, []))
         last_at = d["last"].get(uid)
-        upnl = _unrealized_of(rows)
-        raw = {"equity": equity, "return": ret, "realized": realized[uid], "trades": t["count"], "last": last_at}
         item = {
             "user": _ref(uid, d["users"]), "open_positions": len(rows),
-            "cash": money(cash), "positions_value": money(pv), "equity": money(equity),
-            "total_value": money(total), "unrealized_pnl": None if upnl is None else money(upnl),
+            "positions_value": money(pv), "unrealized_pnl": None if upnl is None else money(upnl),
             "realized_pnl": money(realized[uid]), "trades": t["count"], "volume": money(t["volume"]),
             "realized_pnl_range": money(t["realized_pnl"]), "last_trade_at": _iso(last_at),
-            "return_percent": pct(ret), "change": None if change is None else money(change),
         }
+        raw = {"positions_value": pv, "unrealized_pnl": upnl, "realized_pnl": realized[uid],
+               "trades": t["count"], "last_trade_at": last_at}
         entries.append((raw, item))
-    keys = {"equity": lambda r: r["equity"], "return": lambda r: r["return"],
-            "realized": lambda r: r["realized"], "trades": lambda r: D(r["trades"]),
-            "last_trade": lambda r: r["last"]}
-    ranked = _rank_desc_nulls_last(entries, lambda e: keys[sort](e[0]))
+    field = TRADER_SORT_FIELD[sort]
+    ranked = _rank_desc_nulls_last(entries, lambda e: e[0][field] if field != "trades" else D(e[0]["trades"]))
     page = [item for _, item in ranked][offset:offset + limit]
     return {"range": range_, "asset_class": ac or "all", "sort": sort, "as_of": _now_iso(),
             "total": len(ranked), "limit": limit, "offset": offset, "items": page}
@@ -570,14 +563,9 @@ def _user_or_404(user_id: str) -> Dict:
     if not ObjectId.is_valid(user_id):
         raise ActivityError(404, "not_found", "User not found")
     u = get_collection(USERS_COLLECTION).find_one(
-        {"_id": ObjectId(user_id)},
-        {"email": 1, "full_name": 1, "is_system": 1, "cash_cents": 1, "wallet_balance": 1})
+        {"_id": ObjectId(user_id)}, {"email": 1, "full_name": 1, "is_system": 1})
     if not u or u.get("is_system"):
         raise ActivityError(404, "not_found", "User not found")
-    if "cash_cents" not in u:
-        # portfolio.summary would migrate the account (a write); an admin view must not.
-        raise ActivityError(409, "ledger_not_initialised",
-                            "This account has no ledger balance yet, so its portfolio cannot be read.")
     return u
 
 
@@ -585,37 +573,239 @@ async def trader_portfolio(user_id: str, range: str = "1M") -> Dict:
     range_ = parse_range(range)
     uid = str(ObjectId(user_id)) if ObjectId.is_valid(user_id) else user_id
     user = await asyncio.to_thread(_user_or_404, uid)
-    rows = await portfolio.positions_view(uid)
-    summ = await portfolio.summary(uid, rows)
-    hist = await portfolio.history(uid, range_)
 
     def load():
+        sys = _system_ids()
+        keys = manual_keys(sys)
+        pos_all = manual_positions({"user_id": uid}, keys)
         range_fills = list(_fills().find(fill_query(range_, user_id=uid, system_ids=[]), _TALLY_FIELDS))
         recent = list(_fills().find(fill_query(range_, user_id=uid, system_ids=[]))
                       .sort([("ts", -1), ("_id", -1)]).limit(PORTFOLIO_TRADES))
-        pos_all = list(positions.col().find({"user_id": uid}, {"realized_pnl": 1}))
-        labels = _labels_map((uid, f.get("bucket", "self")) for f in recent)
-        return range_fills, recent, pos_all, labels
+        return pos_all, range_fills, recent
 
-    range_fills, recent, pos_all, labels = await asyncio.to_thread(load)
+    pos_all, range_fills, recent = await asyncio.to_thread(load)
+    open_pos = [p for p in pos_all if p.get("open")]
+    quotes = await portfolio.quotes_for({p["symbol"] for p in open_pos})
+    day_start = portfolio.day_start_utc()
+    rows = []
+    for p in open_pos:
+        row = positions.serialize(p, quotes.get(p["symbol"]), day_start)
+        row["name"] = _name(p["symbol"])
+        row["bucket_label"] = portfolio.bucket_label(row["bucket"])
+        row["change_percent"] = (quotes.get(p["symbol"]) or {}).get("change_percent")
+        rows.append(row)
+    total_pv = _value_of(rows)
+    by_class: Dict[str, List[Dict]] = defaultdict(list)
+    for r in rows:
+        by_class[r["asset_class"]].append(r)
+    allocation = []
+    for ac in sorted(by_class):
+        v = _value_of(by_class[ac])
+        allocation.append({"asset_class": ac, "value": money(v),
+                           "percent": f"{v / total_pv * 100:.2f}" if total_pv != 0 else None})
     t = _tally(range_fills)
     lifetime = sum((dec(p.get("realized_pnl")) for p in pos_all), ZERO)
     upnl = _unrealized_of(rows)
+    users = {uid: user}
+    history = await manual_history(uid, range_, {"positions_value": total_pv, "unrealized": upnl,
+                                                  "realized": lifetime})
     return {
         "user": {"id": uid, "email": user.get("email"), "full_name": user.get("full_name"),
                  "is_system": bool(user.get("is_system"))},
-        "range": range_, "as_of": summ["as_of"],
+        "as_of": _now_iso(),
         "summary": {
-            "total_value": summ["total_value"], "equity": summ["equity"], "cash": summ["cash"],
-            "positions_value": summ["positions_value"],
+            "positions_value": money(total_pv),
             "unrealized_pnl": None if upnl is None else money(upnl),
             "realized_pnl_lifetime": money(lifetime), "realized_pnl_range": money(t["realized_pnl"]),
             "trades_range": t["count"], "volume_range": money(t["volume"]),
-            "buying_power": summ["buying_power"],
         },
-        "allocation": [{"asset_class": a["asset_class"], "value": a["value"], "percent": a["percent"]}
-                       for a in summ["by_asset_class"]],
-        "history": hist,
+        "allocation": allocation,
+        "history": history,
         "positions": rows,
-        "trades": [trade_row(f, {uid: user}, labels) for f in recent],
+        "trades": [trade_row(f, users) for f in recent],
     }
+
+
+# ------------------------------------------------------------------ manual snapshots
+# A separate series (manual_snapshots) of the manual-only valuation, recorded going forward.
+# Account-level snapshots cannot be split into manual and automated parts, so they are not used.
+SNAPSHOT_RETENTION_DAYS = 30
+SERIES_MAX_POINTS = 300  # including the live point
+_manual_daily_done: Set[str] = set()
+
+
+def manual_snaps():
+    return get_collection(MANUAL_SNAPSHOTS_COLLECTION)
+
+
+def ensure_indexes() -> None:
+    """Called from the engine start-up, like portfolio.ensure_indexes (never at import time)."""
+    c = manual_snaps()
+    c.create_index([("user_id", ASCENDING), ("ts", ASCENDING)], name="user_time")
+    # one daily snapshot per user and NY date (the upsert key); minute docs are not constrained
+    c.create_index([("user_id", ASCENDING), ("kind", ASCENDING), ("date", ASCENDING)], unique=True,
+                   partialFilterExpression={"kind": "daily"}, name="uniq_daily")
+    try:
+        c.create_index([("expire_at", ASCENDING)], expireAfterSeconds=0, name="ttl")
+    except Exception:
+        pass
+
+
+def _cents(v: Decimal) -> int:
+    return int((v * 100).quantize(D("1"), rounding=ROUND_HALF_UP))
+
+
+def _values(rows: List[Dict], pos_all: List[Dict]) -> Dict[str, Any]:
+    return {"positions_value": _value_of(rows),
+            "cost_basis": sum((dec(r["cost_basis"]) for r in rows), ZERO),
+            "unrealized": _unrealized_of(rows),          # None when open rows exist but none is priced
+            "unpriced": sum(1 for r in rows if r["market_value"] is None),
+            "realized": sum((dec(p.get("realized_pnl")) for p in pos_all), ZERO),
+            "open": len(rows)}
+
+
+async def manual_book(user_id: str, keys: Optional[Set[Tuple[str, str]]] = None) -> Dict:
+    """Manual-only valuation of one account: its manual self positions, rows priced via one
+    batch quote call, and the summary values (unpriced positions at cost basis)."""
+    def load():
+        k = keys if keys is not None else manual_keys(_system_ids(), user_id)
+        return manual_positions({"user_id": user_id}, k)
+
+    pos_all = await asyncio.to_thread(load)
+    open_pos = [p for p in pos_all if p.get("open")]
+    quotes = await portfolio.quotes_for({p["symbol"] for p in open_pos})
+    day = portfolio.day_start_utc()
+    rows = [positions.serialize(p, quotes.get(p["symbol"]), day) for p in open_pos]
+    return {"pos_all": pos_all, "rows": rows, "quotes": quotes, "values": _values(rows, pos_all)}
+
+
+def eligible_manual_users() -> Tuple[List[str], Set[Tuple[str, str]]]:
+    """Non-system users with a manual fill or a manual open position, plus the manual key set."""
+    sys = _system_ids()
+    keys = manual_keys(sys)
+    fill_users = _fills().distinct("user_id", {"status": "applied", "source": MANUAL,
+                                               "user_id": {"$nin": sys}})
+    return sorted(set(fill_users) | {u for u, _ in keys}), keys
+
+
+async def build_manual_snapshot(user_id: str, kind: str = "minute", keys=None,
+                                date_str: Optional[str] = None) -> Dict:
+    """The snapshot document for one user, without writing it."""
+    if kind not in ("minute", "daily"):
+        raise ValueError("kind must be minute or daily")
+    book = await manual_book(str(user_id), keys)
+    v = book["values"]
+    now = datetime.now(timezone.utc).replace(tzinfo=None)
+    doc = {"user_id": str(user_id), "ts": now, "kind": kind,
+           "date": date_str or datetime.now(calendar.NY).date().isoformat(),
+           "positions_value_cents": _cents(v["positions_value"]), "cost_basis_cents": _cents(v["cost_basis"]),
+           "unrealized_cents": None if v["unrealized"] is None else _cents(v["unrealized"]),
+           "unpriced_positions": v["unpriced"], "realized_cents": _cents(v["realized"]),
+           "open_positions": v["open"]}
+    if kind == "minute":
+        doc["expire_at"] = now + timedelta(days=SNAPSHOT_RETENTION_DAYS)
+    return doc
+
+
+def store_snapshot(doc: Dict) -> None:
+    if doc["kind"] == "minute":
+        manual_snaps().insert_one(doc)
+    else:  # idempotent: one daily document per user and date
+        manual_snaps().update_one({"user_id": doc["user_id"], "kind": "daily", "date": doc["date"]},
+                                  {"$set": doc}, upsert=True)
+
+
+async def snapshot_manual_user(user_id: str, kind: str = "minute", keys=None,
+                               date_str: Optional[str] = None) -> Dict:
+    doc = await build_manual_snapshot(user_id, kind, keys, date_str)
+    await asyncio.to_thread(store_snapshot, doc)
+    return doc
+
+
+async def snapshot_all_manual(kind: str = "minute") -> int:
+    """Minute snapshots for every eligible user; after the close, the daily close (once per day).
+    Per-user failures are logged and do not stop the others."""
+    uids, keys = await asyncio.to_thread(eligible_manual_users)
+    n = 0
+    for uid in uids:
+        try:
+            await snapshot_manual_user(uid, kind, keys)
+            n += 1
+        except Exception as exc:
+            print(f"manual snapshot error {uid}: {exc}")
+    if kind == "minute":
+        now = datetime.now(calendar.NY)
+        if calendar.is_trading_day(now.date()) and \
+                now >= calendar.session_times(now.date())["close"] + timedelta(minutes=5):
+            await daily_manual_close(now.date().isoformat())
+    return n
+
+
+async def daily_manual_close(date_str: str) -> int:
+    if date_str in _manual_daily_done:
+        return 0
+    uids, keys = await asyncio.to_thread(eligible_manual_users)
+    n, failed = 0, 0
+    for uid in uids:
+        try:
+            await snapshot_manual_user(uid, "daily", keys, date_str)
+            n += 1
+        except Exception as exc:
+            failed += 1
+            print(f"manual daily snapshot error {uid}: {exc}")
+    if not failed:
+        _manual_daily_done.add(date_str)  # a failed day is retried on the next sweep (upserts are idempotent)
+    return n
+
+
+async def safe_snapshot_all_manual(kind: str = "minute") -> int:
+    """Hook for the engine sweep: never raises, so account snapshots are never affected."""
+    try:
+        return await snapshot_all_manual(kind)
+    except Exception as exc:
+        print(f"manual snapshot hook failed: {exc}")
+        return -1
+
+
+def _stored_points(uid: str, range_: str) -> List[Dict]:
+    span = portfolio.RANGES[range_]
+    q: Dict[str, Any] = {"user_id": uid}
+    if span:
+        q["ts"] = {"$gte": datetime.now(timezone.utc).replace(tzinfo=None) - span}
+    rows = list(manual_snaps().find(q).sort("ts", ASCENDING))
+    if range_ not in ("1D", "1W"):  # one point per day: the daily snapshot, else the day's last minute
+        per_day: Dict[Any, Dict] = {}
+        for r in rows:
+            day = r["ts"].date()
+            if r["kind"] == "daily" or day not in per_day or per_day[day]["kind"] != "daily":
+                per_day[day] = r
+        rows = [per_day[d] for d in sorted(per_day)]
+    cap = SERIES_MAX_POINTS - 1
+    if len(rows) > cap:
+        step = len(rows) / cap
+        rows = [rows[int(i * step)] for i in range(cap - 1)] + [rows[-1]]
+    return rows
+
+
+async def manual_history(user_id: str, range_: str, live: Dict[str, Any]) -> Dict:
+    """Manual positions value over time. The series ends with a live point from the current
+    valuation. change is only reported with at least two stored points (never fabricated)."""
+    range_ = parse_range(range_)
+    rows = await asyncio.to_thread(_stored_points, str(user_id), range_)
+    points = [{"t": int(r["ts"].replace(tzinfo=timezone.utc).timestamp()),
+               "value": money(D(r["positions_value_cents"]) / 100),
+               "unrealized": None if r.get("unrealized_cents") is None else money(D(r["unrealized_cents"]) / 100),
+               "realized": money(D(r.get("realized_cents") or 0) / 100), "live": False} for r in rows]
+    value = live["positions_value"]
+    u = live.get("unrealized")
+    points.append({"t": int(datetime.now(timezone.utc).timestamp()), "value": money(value),
+                   "unrealized": None if u is None else money(u), "realized": money(live["realized"]),
+                   "live": True})
+    change = change_pct = None
+    if len(rows) >= 2:
+        first = D(points[0]["value"])
+        delta = value - first
+        change = money(delta)
+        change_pct = None if first == 0 else f"{delta / first * 100:.2f}"
+    return {"range": range_, "series": "manual_positions_value", "points": points, "change": change,
+            "change_percent": change_pct, "kinds": sorted({r["kind"] for r in rows}), "count": len(rows)}

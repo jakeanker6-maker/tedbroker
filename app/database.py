@@ -90,3 +90,5 @@ TOKEN_BLACKLIST_COLLECTION = "token_blacklist"
 
 # Trading Hub / unified ledger
 LEDGER_ENTRIES_COLLECTION = "ledger_entries"
+# Manual-only trading activity series (admin trader history); see app/trading/admin_activity.py
+MANUAL_SNAPSHOTS_COLLECTION = "manual_snapshots"

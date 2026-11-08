@@ -22,7 +22,7 @@ from typing import Dict, Optional, Set
 
 from app.market_data import calendar, service
 from app.market_data.bus import bus as default_bus
-from app.trading import alerts, baskets, borrow, recurring, bots, copy_engine, dividends, expiration, orders, portfolio, risk_monitor
+from app.trading import admin_activity, alerts, baskets, borrow, recurring, bots, copy_engine, dividends, expiration, orders, portfolio, risk_monitor
 from app.trading import matching
 from app.trading import options as opt
 from app.trading.models import OPEN_STATUSES
@@ -233,6 +233,8 @@ class Engine:
                 if now - last_snapshot > 60:
                     last_snapshot = now
                     await portfolio.snapshot_all()
+                    # manual-activity series: never raises, so it cannot break the account snapshots above
+                    await admin_activity.safe_snapshot_all_manual("minute")
             except Exception as exc:
                 self.stats["errors"] += 1
                 self.stats["last_error"] = f"sweep {type(exc).__name__}: {exc}"
@@ -285,6 +287,7 @@ class Engine:
         self.loop = asyncio.get_running_loop()
         await asyncio.to_thread(orders.ensure_indexes)
         await asyncio.to_thread(portfolio.ensure_indexes)
+        await asyncio.to_thread(admin_activity.ensure_indexes)
         await asyncio.to_thread(risk_monitor.ensure_indexes)
         await asyncio.to_thread(copy_engine.ensure_indexes)
         await self.bots.start()

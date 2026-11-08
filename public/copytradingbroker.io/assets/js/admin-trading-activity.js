@@ -12,8 +12,9 @@
   const SVG_NS = 'http://www.w3.org/2000/svg';
   const TRADES_PAGE = 50;
   const TRADERS_PAGE = 100;
-  const CLASS_LABELS = { stock: 'Stock', etf: 'ETF', option: 'Option', crypto: 'Crypto', cash: 'Cash', managed_plans: 'Managed plans' };
+  const CLASS_LABELS = { stock: 'Stock', etf: 'ETF', option: 'Option', crypto: 'Crypto' };
   const BUCKET_LABELS = { self: 'Self-directed', copy: 'Copy trading', basket: 'ETF basket', all: 'All' };
+  const MANUAL_NOTE = 'Manual trades only. Automated trading (bots, copy trading, ETF baskets, recurring orders) is excluded.';
   const RANGE_LABELS = { '1D': 'today', '1W': 'the last week', '1M': 'the last month', '3M': 'the last 3 months', '1Y': 'the last year', ALL: 'all time' };
 
   const state = {
@@ -113,7 +114,9 @@
       ? d.toLocaleString('en-US', { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' })
       : d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
   }
-  function classLabel(c) { return CLASS_LABELS[c] || (c ? String(c) : '—'); }
+  // Text for any server field: a missing or empty value renders as "—", never "undefined".
+  function txt(v) { return v == null || v === '' ? '—' : String(v); }
+  function classLabel(c) { return CLASS_LABELS[c] || txt(c); }
   function bucketText(item) {
     return item.bucket_label || BUCKET_LABELS[item.bucket] || item.bucket || '—';
   }
@@ -310,7 +313,7 @@
     }
 
     const wrap = el('div', null, svg);
-    if (changePct != null || change !== 0) {
+    if (opts.showTotals !== false && (changePct != null || change !== 0)) {
       wrap.prepend(el('p', { class: 'ta-totals' },
         `${opts.ariaName || 'Price'} ${change >= 0 ? '+' : '−'}${usd(Math.abs(change))}`
         + (changePct == null ? '' : ` (${pct(changePct)})`) + ` over ${RANGE_LABELS[opts.range] || 'the range'}`));
@@ -381,7 +384,7 @@
       cells: [
         when(it.ts),
         linkButton((it.user && it.user.email) || '—', () => openTrader(it.user && it.user.id)),
-        linkButton(it.symbol || '—', () => openAsset(it.symbol), `Open ${it.symbol} asset detail`),
+        linkButton(txt(it.symbol), () => openAsset(it.symbol), `Open ${txt(it.symbol)} asset detail`),
         classLabel(it.asset_class),
         badge(it.direction === 'buy' ? 'buy' : it.direction === 'sell' ? 'sell' : 'neutral', sideText(it.direction)),
         qty(it.qty),
@@ -429,7 +432,7 @@
       onClick: () => openAsset(h.symbol),
       cells: [
         el('div', null,
-          el('button', { type: 'button', class: 'ta-btn-link', 'aria-label': `Open ${h.symbol} asset detail` }, h.symbol || '—'),
+          el('button', { type: 'button', class: 'ta-btn-link', 'aria-label': `Open ${txt(h.symbol)} asset detail` }, txt(h.symbol)),
           h.name ? el('div', { class: 'ta-muted', style: 'font-size:12px;' }, h.name) : null),
         classLabel(h.asset_class),
         int(h.holders),
@@ -476,32 +479,28 @@
       onClick: () => openTrader(t.user && t.user.id),
       cells: [
         el('div', null,
-          el('button', { type: 'button', class: 'ta-btn-link' },
-            (t.user && t.user.email) || '—'),
+          el('button', { type: 'button', class: 'ta-btn-link' }, txt(t.user && t.user.email)),
           t.user && t.user.full_name ? el('div', { class: 'ta-muted', style: 'font-size:12px;' }, t.user.full_name) : null),
         int(t.open_positions),
-        usd(t.cash),
         usd(t.positions_value),
-        usd(t.equity),
         el('span', { class: signClass(t.unrealized_pnl) }, usd(t.unrealized_pnl)),
         el('span', { class: signClass(t.realized_pnl_range) }, usd(t.realized_pnl_range)),
+        el('span', { class: signClass(t.realized_pnl) }, usd(t.realized_pnl)),
         int(t.trades),
-        el('span', { class: signClass(t.return_percent) }, pct(t.return_percent)),
+        usd(t.volume),
         when(t.last_trade_at),
       ],
     }));
     const cols = [
-      { label: 'Trader' }, { label: 'Open positions', num: true }, { label: 'Cash', num: true },
-      { label: 'Positions value', num: true }, { label: 'Equity', num: true }, { label: 'Unrealized', num: true },
-      { label: 'Realized (range)', num: true }, { label: 'Trades (range)', num: true },
-      { label: 'Return (range)', num: true }, { label: 'Last trade' },
+      { label: 'Trader' }, { label: 'Open positions', num: true }, { label: 'Positions value', num: true },
+      { label: 'Unrealized', num: true }, { label: 'Realized (range)', num: true }, { label: 'Realized (lifetime)', num: true },
+      { label: 'Trades (range)', num: true }, { label: 'Volume (range)', num: true }, { label: 'Last trade' },
     ];
-    const table = buildTable('Traders', cols, rows, 'No traders with activity in this range.');
+    const table = buildTable('Traders', cols, rows, 'No manual trading activity in this range.');
     const container = $('ta-traders-table');
     const existingBody = append ? container.querySelector('tbody') : null;
     if (existingBody && rows.length) {
       // Load more: append the new rows to the existing table body.
-      existingBody.querySelectorAll('.ta-empty-row').forEach((r) => r.remove());
       table.querySelectorAll('tbody tr').forEach((tr) => existingBody.append(tr));
     } else {
       container.replaceChildren(table);
@@ -579,7 +578,7 @@
       el('section', { class: 'ta-card', 'aria-labelledby': 'ta-asset-chart-title' },
         el('div', { class: 'ta-card-head' },
           el('h3', { id: 'ta-asset-chart-title' }, 'Price'),
-          candles && candles.source ? el('span', { class: 'ta-muted', style: 'font-size:12px;' }, `Source: ${candles.source}`) : null),
+          candles && candles.source ?         el('span', { class: 'ta-muted', style: 'font-size:12px;' }, `Source: ${txt(candles.source)}`) : null),
         chartBody,
         el('p', { class: 'ta-totals' }, 'Buy markers ▲ green, sell markers ▼ red, at the trade price and time.')),
       el('section', { class: 'ta-card', 'aria-labelledby': 'ta-asset-trades-title' },
@@ -614,27 +613,51 @@
       .then((d) => { if (isCurrent('detail', n)) renderTraderDetail(d); });
   }
 
+  // Manual positions value over time. Only recorded snapshots are plotted, never a fake line.
+  function buildHistoryCard(hist) {
+    const range = state.range;
+    const points = (Array.isArray(hist.points) ? hist.points : [])
+      .map((p) => ({ t: p.t, v: p.value }))
+      .filter((p) => num(p.v) != null && Number.isFinite(toMs(p.t)));
+    let body;
+    if (points.length === 0) {
+      body = emptyNote('Manual value history starts with the first snapshot; nothing recorded yet for this range.');
+    } else if (points.length === 1) {
+      body = el('div', { class: 'ta-chart-empty' },
+        `Current value ${usd(points[0].v)}. Manual value history is not yet available for this range.`);
+    } else {
+      body = lineChart({
+        points, markers: [], ariaName: 'Manual positions value', range, showTotals: false,
+        formatTime: (ms) => whenShort(ms, range === '1D'),
+      });
+    }
+    const changeNum = num(hist.change);
+    const changePctNum = num(hist.change_percent);
+    const changeText = changeNum == null ? '—' : `${changeNum >= 0 ? '+' : '−'}${usd(Math.abs(changeNum))}`;
+    return el('section', { class: 'ta-card', 'aria-labelledby': 'ta-trader-chart-title' },
+      el('div', { class: 'ta-card-head' },
+        el('h3', { id: 'ta-trader-chart-title' }, 'Manual positions value'),
+        el('span', { class: 'ta-muted', style: 'font-size:12px;' }, 'Manual trades only')),
+      body,
+      el('p', { class: 'ta-totals' },
+        `Change ${changeText} · ${changePctNum == null ? '—' : pct(changePctNum)} over ${RANGE_LABELS[range] || 'the range'}`));
+  }
+
   function renderTraderDetail(d) {
     const body = $('ta-detail-body');
     const s = d.summary || {};
     const user = d.user || {};
-    const hist = d.history || {};
-    const points = (hist.points || []).map((p) => ({ t: p.t, v: p.value }));
-    const lastPoint = hist.points && hist.points.length ? hist.points[hist.points.length - 1] : null;
 
-    const chartBody = lineChart({
-      points, markers: [], ariaName: 'Portfolio value', range: state.range,
-      emptyText: 'No portfolio history for this range yet.',
-      formatTime: (ms) => whenShort(ms, state.range === '1D'),
-    });
-
+    // Allocation is manual positions by asset class: value and an unsigned share of the total.
     const allocation = (d.allocation || []).map((a) => {
-      const p = Math.max(0, Math.min(100, num(a.percent) || 0));
+      const share = num(a.percent);
+      const p = share == null ? 0 : Math.max(0, Math.min(100, share));
       return el('li', { class: 'ta-alloc-row' },
         el('span', null, classLabel(a.asset_class)),
         el('span', { class: 'ta-alloc-bar', role: 'presentation' },
           el('span', { class: 'ta-alloc-fill', style: `width:${p.toFixed(2)}%` })),
-        el('span', { style: 'text-align:right; font-variant-numeric:tabular-nums;' }, `${usd(a.value)} · ${p.toFixed(2)}%`));
+        el('span', { style: 'text-align:right; font-variant-numeric:tabular-nums;' },
+          `${usd(a.value)} · ${share == null ? '—' : `${share.toFixed(2)}%`}`));
     });
 
     const positions = (d.positions || []).map((p) => ({
@@ -669,43 +692,31 @@
           t.realized_pnl == null ? '—' : usd(t.realized_pnl)))))
       : emptyNote(`No trades in ${RANGE_LABELS[state.range] || 'this range'}.`);
 
-    const changeNum = num(hist.change);
-    const changePctNum = num(hist.change_percent);
-
+    const historyCard = buildHistoryCard(d.history || {});
     body.replaceChildren(
       el('div', { class: 'ta-detail-head' },
         el('div', null,
-          el('h2', { class: 'ta-detail-title', id: 'ta-detail-heading', tabindex: '-1' }, user.email || '—'),
-          el('p', { class: 'ta-detail-meta' }, user.full_name || '')),
-        el('div', { style: 'text-align:right;' },
-          el('div', { class: 'ta-price' }, usd(s.total_value)),
-          el('div', { class: 'ta-stat-sub' }, 'Total value'))),
+          el('h2', { class: 'ta-detail-title', id: 'ta-detail-heading', tabindex: '-1' }, txt(user.email)),
+          el('p', { class: 'ta-detail-meta' }, user.full_name || ''))),
+      el('p', { class: 'ta-scope-note' }, MANUAL_NOTE),
       el('div', { class: 'ta-stats' },
-        statCard('Total value', usd(s.total_value)),
-        statCard('Equity', usd(s.equity)),
-        statCard('Cash', usd(s.cash)),
         statCard('Positions value', usd(s.positions_value)),
-        statCard('Unrealized', usd(s.unrealized_pnl), null, signClass(s.unrealized_pnl)),
+        statCard('Unrealized P&L', usd(s.unrealized_pnl), null, signClass(s.unrealized_pnl)),
         statCard('Realized (lifetime)', usd(s.realized_pnl_lifetime), null, signClass(s.realized_pnl_lifetime)),
-        statCard('Trades in range', int(s.trades_range), `Volume ${usd(s.volume_range)}`)),
-      el('section', { class: 'ta-card', 'aria-labelledby': 'ta-trader-chart-title' },
-        el('div', { class: 'ta-card-head' },
-          el('h3', { id: 'ta-trader-chart-title' }, 'Portfolio value'),
-          lastPoint && lastPoint.live ? el('span', { class: 'ta-muted', style: 'font-size:12px;' }, 'Last point is live') : null),
-        chartBody,
-        el('p', { class: 'ta-totals' },
-          changeNum == null ? '' : `Change ${changeNum >= 0 ? '+' : '−'}${usd(Math.abs(changeNum))}`
-          + (changePctNum == null ? '' : ` (${pct(changePctNum)})`) + ` over ${RANGE_LABELS[state.range] || 'the range'}`)),
+        statCard('Realized (range)', usd(s.realized_pnl_range), null, signClass(s.realized_pnl_range)),
+        statCard('Trades (range)', int(s.trades_range)),
+        statCard('Volume (range)', usd(s.volume_range))),
+      historyCard,
       el('div', { class: 'ta-two-col' },
         el('section', { class: 'ta-card', 'aria-labelledby': 'ta-trader-alloc-title' },
           el('h3', { id: 'ta-trader-alloc-title' }, 'Allocation'),
-          allocation.length ? el('ul', { class: 'ta-alloc' }, ...allocation) : emptyNote('No allocation to show.')),
+          allocation.length ? el('ul', { class: 'ta-alloc' }, ...allocation) : emptyNote('No manual positions to allocate.')),
         el('section', { class: 'ta-card', 'aria-labelledby': 'ta-trader-trades-title' },
           el('h3', { id: 'ta-trader-trades-title' }, `Trades in ${RANGE_LABELS[state.range] || 'range'}`),
           tradeList)),
       el('section', { class: 'ta-card', 'aria-labelledby': 'ta-trader-pos-title' },
         el('h3', { id: 'ta-trader-pos-title' }, 'Open positions'),
-        buildTable('Open positions', posCols, positions, 'No open positions.')),
+        buildTable('Open positions', posCols, positions, 'No manual open positions.')),
     );
   }
 
