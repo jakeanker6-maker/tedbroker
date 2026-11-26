@@ -376,6 +376,43 @@ def test_pending_fill_is_recovered_exactly_once(db):
     recon(uid)
 
 
+def test_duplicate_pending_fill_on_filled_order_is_voided(db):
+    uid = user()
+    o = orders.place(uid, req(qty=D("3")), q())
+    applied = orders.fills_col().find_one({"order_id": o["_id"], "status": "applied"})
+    duplicate = dict(applied)
+    duplicate["_id"] = ObjectId()
+    duplicate["status"] = "pending"
+    duplicate["qty"] = "1"
+    duplicate["cash_delta_cents"] = -10_000
+    duplicate["reserved_release_cents"] = 10_000
+    orders.fills_col().insert_one(duplicate)
+
+    assert orders.recover_pending_fills() == 1
+    stored = orders.fills_col().find_one({"_id": duplicate["_id"]})
+    assert stored["status"] == "void" and stored["void_reason"] == "duplicate_retry_of_applied_fill"
+    assert positions.open_qty(uid, "AAPL") == 3
+    recon(uid)
+
+
+def test_ledger_error_during_recovery_does_not_abort_startup(db):
+    uid = user()
+    o = orders.place(uid, req(qty=D("3"), type="limit", limit_price=D("90"), tif="gtc"), q())
+    fill = {"_id": ObjectId(), "order_id": o["_id"], "user_id": uid, "bucket": "self", "symbol": "AAPL",
+            "asset_class": "stock", "multiplier": 1, "side": "buy", "is_buy": True, "qty": "3", "price": "89",
+            "gross": "267.00", "fee": "0", "fee_items": {}, "cash_delta_cents": 0,
+            "reserved_release_cents": 99_999_999, "kind": "trade", "liquidity": "maker", "quote": None,
+            "settles_at": None, "source": "manual", "status": "pending", "ts": datetime.utcnow()}
+    orders.fills_col().insert_one(fill)
+
+    assert orders.recover_pending_fills() == 1
+    stored = orders.fills_col().find_one({"_id": fill["_id"]})
+    assert stored["status"] == "void" and stored["void_reason"] == "ledger_error"
+    assert bal(uid)["reserved_cents"] == 27_000
+    assert positions.open_qty(uid, "AAPL") == 0
+    recon(uid)
+
+
 # ------------------------------------------------------------------ pure position math
 @pytest.mark.parametrize("start,delta,price,fee,expect_qty,expect_basis,expect_realized", [
     ((0, 0), 10, 100, 0, 10, 1000, 0),

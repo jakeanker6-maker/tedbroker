@@ -775,6 +775,14 @@ def _execute(order: Dict, price: Decimal, quote: Dict, kind: str = "trade", no_f
 def apply_fill(fill: Dict) -> Optional[Dict]:
     """Steps 2-4 of the fill pipeline. Idempotent."""
     order = orders_col().find_one({"_id": fill["order_id"]})
+    if fill.get("leg_index") is None and order and order.get("status") in FINAL_STATUSES:
+        applied = {str(fid) for fid in order.get("applied_fills") or []}
+        if applied and str(fill["_id"]) not in applied:
+            fills_col().update_one(
+                {"_id": fill["_id"], "status": "pending"},
+                {"$set": {"status": "void", "void_reason": "duplicate_retry_of_applied_fill"}},
+            )
+            return None
     # 2. cash
     if fill["cash_delta_cents"] != 0 or fill["reserved_release_cents"]:
         try:
@@ -790,6 +798,13 @@ def apply_fill(fill: Dict) -> Optional[Dict]:
             fills_col().update_one({"_id": fill["_id"]}, {"$set": {"status": "void", "void_reason": "insufficient_funds"}})
             if order and order["status"] in OPEN_STATUSES and fill.get("leg_index") is None:
                 _finalize(order, "canceled", "insufficient_funds_at_execution")
+            return None
+        except ledger.LedgerError as exc:
+            print(f"voiding fill {fill['_id']}: ledger rejected posting: {exc}")
+            fills_col().update_one(
+                {"_id": fill["_id"]},
+                {"$set": {"status": "void", "void_reason": "ledger_error"}},
+            )
             return None
     # 3. position
     pos = positions.apply_fill(fill)
@@ -884,7 +899,11 @@ def recover_pending_fills() -> int:
     parents = set()
     for f in sorted(fills_col().find({"status": "pending"}), key=lambda f: -f["cash_delta_cents"]):
         with user_lock(f["user_id"]):
-            apply_fill(f)
+            try:
+                apply_fill(f)
+            except Exception as exc:
+                print(f"recover_pending_fills: skipping fill {f['_id']}: {exc}")
+                continue
             n += 1
             if f.get("leg_index") is not None:
                 parents.add(f["order_id"])
